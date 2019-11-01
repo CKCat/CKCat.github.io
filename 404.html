@@ -304,9 +304,12 @@
 
   
     <div class="comments" id="comments">
-      
-        <div id="gitment-container"></div>
-      
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     </div>
 
   
@@ -566,6 +569,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/404.html';
+          this.page.identifier = '404.html';
+          this.page.title = '';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -581,49 +604,8 @@
 
 
 
-  
 
 
-
-
-
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-    
-        
-        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
-        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
-    
-<!-- END LOCAL -->
-
-    
-
-    
-      <script type="text/javascript">
-      function renderGitment(){
-        var gitment = new Gitmint({
-            id: window.location.pathname, 
-            owner: 'CKCat',
-            repo: 'https://ckcat.github.io/',
-            
-            lang: "zh-Hans" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
-            
-            oauth: {
-            
-            
-                client_secret: 'a821668faaa114cb7b55657b71571b07f02a8915',
-            
-                client_id: '5af88f6d2e51af64984d'
-            }});
-        gitment.render('gitment-container');
-      }
-
-      
-      renderGitment();
-      
-      </script>
-    
 
 
 
