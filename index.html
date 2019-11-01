@@ -371,16 +371,86 @@
 
       
         
-          
-          一、准备工作
-安装nodejs
-安装git
-注册github账号
+          <h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><ul>
+<li>安装<a href="https://nodejs.org/en/" target="_blank" rel="noopener">nodejs</a></li>
+<li>安装<a href="https://git-scm.com/" target="_blank" rel="noopener">git</a></li>
+<li>注册<a href="https://github.com/" target="_blank" rel="noopener">github</a>账号</li>
+</ul>
+<h1 id="二、申请github博客"><a href="#二、申请github博客" class="headerlink" title="二、申请github博客"></a>二、申请github博客</h1><h2 id="1-创建github仓库"><a href="#1-创建github仓库" class="headerlink" title="1.创建github仓库"></a>1.创建github仓库</h2><p>创建一个新的github仓库，仓库名为<code>username.github.io</code>,其他选项可以默认。</p>
+<p><img src="/2019/11/01/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/new_repository.png" alt></p>
+<p>创建按仓库成功后，进入设置页面GitHub Pages 选项，出现如下界面则表示博客页面创建成功。</p>
+<p><img src="/2019/11/01/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/github_pages.png" alt></p>
+<h1 id="三、安装Hexo"><a href="#三、安装Hexo" class="headerlink" title="三、安装Hexo"></a>三、安装Hexo</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
 
-二、申请github博客1.创建github仓库创建一个新的github仓库，仓库名为username.github.io,其他选项可以默认。
+<h2 id="1-初始化"><a href="#1-初始化" class="headerlink" title="1. 初始化"></a>1. 初始化</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo  init blog</span><br><span class="line">$ <span class="built_in">cd</span> blog</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
 
-创建按仓库成功后，进入设置页面GitHub Pages 选项，出现如下界面则表示博客页
-          ...
+<h2 id="2-新建文章"><a href="#2-新建文章" class="headerlink" title="2. 新建文章"></a>2. 新建文章</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"Hello-Hexo"</span></span><br></pre></td></tr></table></figure>
+<p>会在根目录下source/_posts/ 生成Hello-Hexo.md文件，使用markdown编辑器非常方便。</p>
+<h2 id="3-开启服务"><a href="#3-开启服务" class="headerlink" title="3. 开启服务"></a>3. 开启服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>会看到提示<code>INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</code> 代表博客已经正常运行，在浏览器打开<code>http://0.0.0.0:4000/</code> 即可预览博客的初始状态。</p>
+<p>了解更多Hexo的信息和其他步骤请参考官网的这篇文档。<a href="https://hexo.io/zh-cn/docs/setup.html。" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/setup.html。</a></p>
+<h1 id="四、配置Hexo与Github-pages进行关联"><a href="#四、配置Hexo与Github-pages进行关联" class="headerlink" title="四、配置Hexo与Github pages进行关联"></a>四、配置Hexo与Github pages进行关联</h1><h2 id="1-配置关联"><a href="#1-配置关联" class="headerlink" title="1. 配置关联"></a>1. 配置关联</h2><p>进入<code>Blog</code>目录，然后以文本编辑器打开_config.yml文件，修改deploy配置如下，rego为CKCat.github.io.git仓库提交代码的git地址。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/CKCat/CKCat.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-发布"><a href="#2-发布" class="headerlink" title="2. 发布"></a>2. 发布</h2><p>当然这只是本地跑起来了，而你的github pages服务器上并没有，所以你就需要在你的站点里使用终端命令进行发布：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean  <span class="comment"># 清除缓存</span></span><br><span class="line">hexo g      <span class="comment"># 生成本地发布文件夹</span></span><br><span class="line">hexo d      <span class="comment"># 发布到github pages上</span></span><br></pre></td></tr></table></figure>
+<p>更多的hexo命令操作请参考<a href="https://hexo.io/zh-cn/docs/commands.html" target="_blank" rel="noopener">Hexo官方文档</a>即可。</p>
+<h1 id="五、更换NexT主题"><a href="#五、更换NexT主题" class="headerlink" title="五、更换NexT主题"></a>五、更换NexT主题</h1><h2 id="1-下载主题"><a href="#1-下载主题" class="headerlink" title="1. 下载主题"></a>1. 下载主题</h2><p>在Blog目录运行下列命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-设置主题"><a href="#2-设置主题" class="headerlink" title="2. 设置主题"></a>2. 设置主题</h2><p>克隆完成以后打开站点配置 <code>_config.yml</code>，找到theme字段，值改为<code>next</code>。<br>运行<code>hexo server --debug</code>，访问<code>http://0.0.0.0:4000/</code> 查看主题是否生效。</p>
+<h2 id="3-配置主题"><a href="#3-配置主题" class="headerlink" title="3. 配置主题"></a>3. 配置主题</h2><p>常用的配置可以直接按照主题的官方<a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">参考手册</a>配置。<br>下面介绍一下常用配置：</p>
+<h3 id="标签云页面"><a href="#标签云页面" class="headerlink" title="标签云页面"></a>标签云页面</h3><ol>
+<li><p>新建一个页面，命名为tags。命令如下：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page <span class="string">"tags"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑刚新建的页面，将页面的类型设置为tags，主题将自动为这个页面显示标签云。页面内容如下：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"></span><br><span class="line">title: 标签</span><br><span class="line">date: 2019-11-01 11:46:23</span><br><span class="line"><span class="built_in">type</span>: <span class="string">"tags"</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p> 注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段 comments 并将值设置为 false，如：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: 标签</span><br><span class="line">date: 2019-11-01 11:46:23</span><br><span class="line"><span class="built_in">type</span>: <span class="string">"tags"</span></span><br><span class="line">comments: <span class="literal">false</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在菜单中添加链接。编辑 <strong>主题配置文件</strong> ，添加tags到 menu中，如下:</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">menu: </span><br><span class="line">home: / </span><br><span class="line">archives: /archives </span><br><span class="line">tags: /tags</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="分类页面"><a href="#分类页面" class="headerlink" title="分类页面"></a>分类页面</h3><ol>
+<li><p>新建一个页面，命名为categories。命令如下：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page categories</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑刚新建的页面，将页面的类型设置为categories，主题将自动为这个页面显示所有分类。</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line">date: 2019-11-01 12:03:27</span><br><span class="line"><span class="built_in">type</span>: <span class="string">"categories"</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p> 注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段comments并将值设置为false，如：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line">date: 2019-11-01 12:03:27</span><br><span class="line"><span class="built_in">type</span>: <span class="string">"categories"</span></span><br><span class="line">comments: <span class="literal">false</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在菜单中添加链接。编辑 <strong>主题配置文件</strong> ，将menu中的categories: /categories注释去掉，如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">menu: </span><br><span class="line">home: / </span><br><span class="line">categories: /categories </span><br><span class="line">archives: /archives </span><br><span class="line">tags: /tags</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="About页面"><a href="#About页面" class="headerlink" title="About页面"></a>About页面</h3><ol>
+<li>新建一个 about页面： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page <span class="string">"about"</span></span><br></pre></td></tr></table></figure></li>
+<li>菜单显示about链接，在 <strong>主题配置文件</strong> 设置中将menu中about<br>前面的注释去掉即可。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">menu: </span><br><span class="line">home: / </span><br><span class="line">archives: /archives </span><br><span class="line">tags: /tags </span><br><span class="line">about: /about</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>友情链接编辑 <strong>站点配置文件</strong> 添加：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># title, chinese available</span><br><span class="line">links_title: Links</span><br><span class="line"># links</span><br><span class="line">links: </span><br><span class="line">MacTalk: http://macshuo.com/</span><br></pre></td></tr></table></figure></p>
+<h3 id="腾讯公益404页面"><a href="#腾讯公益404页面" class="headerlink" title="腾讯公益404页面"></a>腾讯公益404页面</h3><p>简体中文增加腾讯公益404页面，寻找丢失儿童，让大家一起关注此项公益事业！效果如下<a href="http://www.ixirong.com/404.html" target="_blank" rel="noopener">http://www.ixirong.com/404.html</a></p>
+<p>使用方法，新建 404.html 页面，放到主题的source目录下，内容如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE HTML&gt;</span><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"content-type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8;"</span>/&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge,chrome=1"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"robots"</span> <span class="attr">content</span>=<span class="string">"all"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"robots"</span> <span class="attr">content</span>=<span class="string">"index,follow"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"http://www.qq.com/404/search_children.js"</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span> <span class="attr">homePageUrl</span>=<span class="string">"your site url "</span> <span class="attr">homePageName</span>=<span class="string">"回到我的主页"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="代码高亮主题"><a href="#代码高亮主题" class="headerlink" title="代码高亮主题"></a>代码高亮主题</h3><p>NexT 使用 <a href="https://github.com/chriskempson/tomorrow-theme" target="_blank" rel="noopener">Tomorrow Theme0</a> 作为代码高亮，共有5款主题供你选择。<br>默认使用的是白色的 normal。</p>
+<h3 id="站点建立时间"><a href="#站点建立时间" class="headerlink" title="站点建立时间"></a>站点建立时间</h3><p>这个时间将在站点的底部显示，例如<code>© 2013 - 2019</code>编辑 <strong>站点配置文件</strong>，新增字段since。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">since: 2013</span><br></pre></td></tr></table></figure>
+
+<h3 id="数学公式显示"><a href="#数学公式显示" class="headerlink" title="数学公式显示"></a>数学公式显示</h3><p>NexT 借助于 MathJax 来显示数学公式，此选项默认关闭。<br>编辑 <strong>主题配置文件</strong>，将mathjax设定为true即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># MathJax Support</span><br><span class="line">mathjax: true</span><br></pre></td></tr></table></figure>
+<p>ProTip: <a href="https://github.com/iissnan/hexo-theme-next/pull/363" target="_blank" rel="noopener">使用七牛 CDN 来加速 MathJax 脚本的加载</a></p>
+<h3 id="侧边栏社交链接"><a href="#侧边栏社交链接" class="headerlink" title="侧边栏社交链接"></a>侧边栏社交链接</h3><p>编辑 <strong>站点配置文件</strong> ，新增字段social，然后添加社交站点名称与地址即可。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#Social linkssocial: </span><br><span class="line">  github: https://github.com/your-user-name </span><br><span class="line">  twitter: https://twitter.com/your-user-name </span><br><span class="line">  weibo: http://weibo.com/your-user-name </span><br><span class="line">  douban: http://douban.com/people/your-user-name </span><br><span class="line">  zhihu: http://www.zhihu.com/people/your-user-name </span><br><span class="line">  # 等等</span><br></pre></td></tr></table></figure>
+
+<h3 id="首页显示文章摘录"><a href="#首页显示文章摘录" class="headerlink" title="首页显示文章摘录"></a>首页显示文章摘录</h3><p>NexT 支持三种方式来控制首页文章的显示方式。若需要在首页显示摘录，可以通过以下方法：</p>
+<p>在文章中使用</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/11/01/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/#more" rel="contents">
