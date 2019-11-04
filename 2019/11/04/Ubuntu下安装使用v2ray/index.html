@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Android系统编译," />
+  <meta name="keywords" content="Ubuntu," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 7.1.2  一、下载源码由于国内网络环境问题，下列下载源码方式均未采用google官方提供的方式。 1. 下载repo工具使用清华mirror下载repo工具 12$ curl https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;git&#x2F;git-repo -o repo$ chmod +x repo 然">
-<meta name="keywords" content="Android系统编译">
+<meta name="description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。 1.安装v2ray安装的过程比较简单，可直接按照官方教程。 ubu">
+<meta name="keywords" content="Ubuntu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="编译Android系统">
-<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;index.html">
+<meta property="og:title" content="Ubuntu下安装使用v2ray">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 7.1.2  一、下载源码由于国内网络环境问题，下列下载源码方式均未采用google官方提供的方式。 1. 下载repo工具使用清华mirror下载repo工具 12$ curl https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;git&#x2F;git-repo -o repo$ chmod +x repo 然">
+<meta property="og:description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。 1.安装v2ray安装的过程比较简单，可直接按照官方教程。 ubu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-03T09:05:23.757Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;UbuntuUseV2ray.png">
+<meta property="og:updated_time" content="2019-11-04T04:28:56.252Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;UbuntuUseV2ray.png">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://ckcat.github.io/2019/11/03/编译Android系统/"/>
+  <link rel="canonical" href="https://ckcat.github.io/2019/11/04/Ubuntu下安装使用v2ray/"/>
 
 
 
 
 
-  <title>编译Android系统 | CKCat的博客</title>
+  <title>Ubuntu下安装使用v2ray | CKCat的博客</title>
   
 
 
@@ -271,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CKCat">
@@ -288,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">编译Android系统</h1>
+          <h1 class="post-title" itemprop="name headline">Ubuntu下安装使用v2ray</h1>
         
 
         <div class="post-meta">
@@ -300,8 +302,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-03T13:03:10+08:00">
-                2019-11-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-04T12:18:56+08:00">
+                2019-11-04
               </time>
             
 
@@ -323,8 +325,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91/" itemprop="url" rel="index">
-                    <span itemprop="name">Android系统编译</span>
+                  <a href="/categories/linux%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">linux使用</span>
                   </a>
                 </span>
 
@@ -341,9 +343,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/#comments" itemprop="discussionUrl">
+                <a href="/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/11/03/编译Android系统/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/11/04/Ubuntu下安装使用v2ray/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -377,28 +379,26 @@
 
       
         <blockquote>
-<p>系统环境：Ubuntu 18.04.3</p>
-<p>编译Android系统版本： 7.1.2</p>
+<p>文章转载自：<a href="https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/" target="_blank" rel="noopener">https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/</a></p>
 </blockquote>
-<h1 id="一、下载源码"><a href="#一、下载源码" class="headerlink" title="一、下载源码"></a>一、下载源码</h1><p>由于国内网络环境问题，下列下载源码方式均未采用google官方提供的方式。</p>
-<h2 id="1-下载repo工具"><a href="#1-下载repo工具" class="headerlink" title="1. 下载repo工具"></a>1. 下载repo工具</h2><p>使用清华mirror下载repo工具</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo -o repo</span><br><span class="line">$ chmod +x repo</span><br></pre></td></tr></table></figure>
-<p>然后设置更新源：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export REPO_URL=&apos;https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/&apos;</span><br></pre></td></tr></table></figure>
+<p>由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。</p>
+<h1 id="1-安装v2ray"><a href="#1-安装v2ray" class="headerlink" title="1.安装v2ray"></a>1.安装v2ray</h1><p>安装的过程比较简单，可直接按照官方教程。</p>
+<p>ubuntu系统下使用命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -L -s https://install.direct/go.sh)</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-下载Android源码"><a href="#2-下载Android源码" class="headerlink" title="2. 下载Android源码"></a>2. 下载Android源码</h2><p>因为Android的源码越来越大，repo sync失败的概率也越来越高。<br>所以我们可以避开使用repo sync的方式，而采用下载预下载包的方式来实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget -c https://mirrors.tuna.tsinghua.edu.cn/aosp-monthly/aosp-latest.tar # 下载初始化包</span><br><span class="line">$ tar xf aosp-latest.tar</span><br><span class="line">$ cd aosp   # 解压得到的 aosp 工程目录</span><br><span class="line">$ repo sync # 正常同步一遍即可得到完整目录</span><br></pre></td></tr></table></figure>
+<p>命令执行完之后，会自动生成如下文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/v2ray/v2ray：V2Ray 程序；</span><br><span class="line">/etc/v2ray/config.json：配置文件；</span><br></pre></td></tr></table></figure>
 
-<p>如果不想使用上述方式下载源码，可以使用国内用户提供的百度云盘连接下载：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://pan.baidu.com/s/1ngsZs</span><br></pre></td></tr></table></figure>
-<p>以上连接来源自<a href="https://testerhome.com/topics/2229" target="_blank" rel="noopener">此处</a>。</p>
-<h2 id="3-android源码查看所有分支切换分支"><a href="#3-android源码查看所有分支切换分支" class="headerlink" title="3. android源码查看所有分支切换分支"></a>3. android源码查看所有分支切换分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd .repo/manifests</span><br><span class="line">git branch -a   #查看所有分支</span><br><span class="line"></span><br><span class="line">repo init -b android-4.1.2_r1   # 切换分支</span><br><span class="line">repo sync</span><br></pre></td></tr></table></figure>
-
-<h1 id="二、配置编译环境"><a href="#二、配置编译环境" class="headerlink" title="二、配置编译环境"></a>二、配置编译环境</h1><h2 id="1-安装-JDK"><a href="#1-安装-JDK" class="headerlink" title="1. 安装 JDK"></a>1. 安装 JDK</h2><p>官方Android版本与JDK版本说明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Android 7.0 (Nougat) - Android 8.0 (O)：Ubuntu - OpenJDK 8；Mac OS - jdk 8u45 或更高版本</span><br><span class="line">Android 5.x (Lollipop) - Android 6.0 (Marshmallow)：Ubuntu - OpenJDK 7；Mac OS - jdk-7u71-macosx-x64.dmg</span><br><span class="line">Android 2.3.x (Gingerbread) - Android 4.4.x (KitKat)：Ubuntu - Java JDK 6；Mac OS - Java JDK 6</span><br><span class="line">Android 1.5 (Cupcake) - Android 2.2.x (Froyo)：Ubuntu - Java JDK 5</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-安装JDK"><a href="#2-安装JDK" class="headerlink" title="2. 安装JDK"></a>2. 安装JDK</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
-
+<h1 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h1><p>找了很多教程，在配置这一块都比较模糊，特别是linux环境下的配置。</p>
+<p>很多教程说是去下载官方的<code>v2ray-core</code>包，之后的步骤就没详细说了，我也在这一块浪费了很多时间，部署起来后才知道确实是自己想复杂了</p>
+<p>还记得我们第一步的安装过程吗，安装成功后会生成<code>/etc/v2ray/config.json</code>文件，其实在ubuntu系统下这个文件不需要，因为本身是当做客户端来使用的，这时候去看下载的核心包</p>
+<p>下载核心包后，解压出来会有一些配置文件，核心包里面我们需要的文件是：<code>vpoint_socks_vmess.json</code> ，这个文件才是最终要使用的配置文件，把这个文件改名为<code>config.json</code>，并替换第一步安装的<code>/etc/v2ray/config.json</code></p>
+<p>vpoint_socks_vmess.json文件截图如下：<br><img src="/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/UbuntuUseV2ray.png" alt></p>
+<p>这就和windows下的配置是一样的了。</p>
+<p>上面截图我有一块注释掉了，主要是不太了解这里的配置，不注释跑不起来</p>
+<p>其实可以用偷懒的方法，如果之前在windows下部署过了，直接把config.json文件拿过来，放到<code>/etc/v2ray</code>目录下即可（删除该目录下原有的配置文件）</p>
+<h2 id="1-启动服务"><a href="#1-启动服务" class="headerlink" title="1. 启动服务"></a>1. 启动服务</h2><p>文件替换之后，就可以使用<code>service v2ray start</code>来启动 V2Ray 进程，chrome下配合SwitchyOmega扩展来使用，剩下的应该都会了。</p>
+<p>其他的命令可以参考官方文档，以上就是ubuntu下使用的办法了。</p>
 
       
     </div>
@@ -416,7 +416,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91/" rel="tag"># Android系统编译</a>
+            <a href="/tags/Ubuntu/" rel="tag"># Ubuntu</a>
           
         </div>
       
@@ -429,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/1970/01/01/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/" rel="next" title="Hexo｜快速搭建自己（Github）博客">
-                <i class="fa fa-chevron-left"></i> Hexo｜快速搭建自己（Github）博客
+              <a href="/2019/11/03/linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="next" title="linux使用记录">
+                <i class="fa fa-chevron-left"></i> linux使用记录
               </a>
             
           </div>
@@ -438,10 +438,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/03/linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="prev" title="linux使用记录">
-                linux使用记录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -599,7 +595,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、下载源码"><span class="nav-number">1.</span> <span class="nav-text">一、下载源码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载repo工具"><span class="nav-number">1.1.</span> <span class="nav-text">1. 下载repo工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-下载Android源码"><span class="nav-number">1.2.</span> <span class="nav-text">2. 下载Android源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-android源码查看所有分支切换分支"><span class="nav-number">1.3.</span> <span class="nav-text">3. android源码查看所有分支切换分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、配置编译环境"><span class="nav-number">2.</span> <span class="nav-text">二、配置编译环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-安装-JDK"><span class="nav-number">2.1.</span> <span class="nav-text">1. 安装 JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-安装JDK"><span class="nav-number">2.2.</span> <span class="nav-text">2. 安装JDK</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-安装v2ray"><span class="nav-number">1.</span> <span class="nav-text">1.安装v2ray</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置"><span class="nav-number">2.</span> <span class="nav-text">2.配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-启动服务"><span class="nav-number">2.1.</span> <span class="nav-text">1. 启动服务</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -789,9 +785,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://ckcat.github.io/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/';
-          this.page.identifier = '2019/11/03/编译Android系统/';
-          this.page.title = '编译Android系统';
+          this.page.url = 'https://ckcat.github.io/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/';
+          this.page.identifier = '2019/11/04/Ubuntu下安装使用v2ray/';
+          this.page.title = 'Ubuntu下安装使用v2ray';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://CKCat.disqus.com/embed.js';
