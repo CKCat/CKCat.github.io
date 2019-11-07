@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。 1.安装v2ray安装的过程比较简单，可直接按照官方教程。 ubu">
+<meta name="description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F; https:&#x2F;&#x2F;www.imcaviare.com&#x2F;2018-12-18-1&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ra">
 <meta name="keywords" content="Ubuntu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu下安装使用v2ray">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。 1.安装v2ray安装的过程比较简单，可直接按照官方教程。 ubu">
+<meta property="og:description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F; https:&#x2F;&#x2F;www.imcaviare.com&#x2F;2018-12-18-1&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ra">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;UbuntuUseV2ray.png">
-<meta property="og:updated_time" content="2019-11-04T04:28:56.252Z">
+<meta property="og:updated_time" content="2019-11-06T13:15:04.266Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;UbuntuUseV2ray.png">
 
@@ -380,6 +380,7 @@
       
         <blockquote>
 <p>文章转载自：<a href="https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/" target="_blank" rel="noopener">https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/</a></p>
+<p><a href="https://www.imcaviare.com/2018-12-18-1/" target="_blank" rel="noopener">https://www.imcaviare.com/2018-12-18-1/</a></p>
 </blockquote>
 <p>由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。</p>
 <h1 id="1-安装v2ray"><a href="#1-安装v2ray" class="headerlink" title="1.安装v2ray"></a>1.安装v2ray</h1><p>安装的过程比较简单，可直接按照官方教程。</p>
@@ -398,7 +399,20 @@
 <p>上面截图我有一块注释掉了，主要是不太了解这里的配置，不注释跑不起来</p>
 <p>其实可以用偷懒的方法，如果之前在windows下部署过了，直接把config.json文件拿过来，放到<code>/etc/v2ray</code>目录下即可（删除该目录下原有的配置文件）</p>
 <h2 id="1-启动服务"><a href="#1-启动服务" class="headerlink" title="1. 启动服务"></a>1. 启动服务</h2><p>文件替换之后，就可以使用<code>service v2ray start</code>来启动 V2Ray 进程，chrome下配合SwitchyOmega扩展来使用，剩下的应该都会了。</p>
+<p>使用以下命令启动 V2Ray:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start v2ray</span><br></pre></td></tr></table></figure>
+<p>停止运行 V2Ray：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop v2ray</span><br></pre></td></tr></table></figure>
+<p>重启 V2Ray:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart v2ray</span><br></pre></td></tr></table></figure>
 <p>其他的命令可以参考官方文档，以上就是ubuntu下使用的办法了。</p>
+<h1 id="3-配置PAC"><a href="#3-配置PAC" class="headerlink" title="3. 配置PAC"></a>3. 配置PAC</h1><p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ pip install genpac</span><br><span class="line"></span><br><span class="line"># 从gfwlist生成代理信息为SOCKS5 127.0.0.1:1080的PAC文件</span><br><span class="line">genpac --format=pac --pac-proxy=&quot;SOCKS5 127.0.0.1:1080&quot; -o /etc/v2ray/autoproxy.pac</span><br></pre></td></tr></table></figure>
+<p>为避免不必要的bug请注意以下两点：</p>
+<ul>
+<li>文件有足够的读写权限</li>
+<li>配置URL以file://开头电脑根目录为起始。</li>
+</ul>
 
       
     </div>
@@ -595,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-安装v2ray"><span class="nav-number">1.</span> <span class="nav-text">1.安装v2ray</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置"><span class="nav-number">2.</span> <span class="nav-text">2.配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-启动服务"><span class="nav-number">2.1.</span> <span class="nav-text">1. 启动服务</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-安装v2ray"><span class="nav-number">1.</span> <span class="nav-text">1.安装v2ray</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置"><span class="nav-number">2.</span> <span class="nav-text">2.配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-启动服务"><span class="nav-number">2.1.</span> <span class="nav-text">1. 启动服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-配置PAC"><span class="nav-number">3.</span> <span class="nav-text">3. 配置PAC</span></a></li></ol></div>
             
 
           </div>
