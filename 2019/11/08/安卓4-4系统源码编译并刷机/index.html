@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android系统编译," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="安卓4.4系统源码编译一. 安装Java JDK 6环境1. 复制JDK到安装目录假设JDK安装文件放在桌面，我们要安装的目录为：&#x2F;usr&#x2F;local&#x2F;Java。我们先在 &#x2F;usr&#x2F;local&#x2F;目录下创建java文件夹： 123456ckcat@ubuntu-machine:~$ cd &#x2F;usr&#x2F;localckcat@ubuntu-machine:&#x2F;usr&#x2F;local$ lsbin  etc  g">
+<meta name="keywords" content="Android系统编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓4.4系统源码编译并刷机">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="安卓4.4系统源码编译一. 安装Java JDK 6环境1. 复制JDK到安装目录假设JDK安装文件放在桌面，我们要安装的目录为：&#x2F;usr&#x2F;local&#x2F;Java。我们先在 &#x2F;usr&#x2F;local&#x2F;目录下创建java文件夹： 123456ckcat@ubuntu-machine:~$ cd &#x2F;usr&#x2F;localckcat@ubuntu-machine:&#x2F;usr&#x2F;local$ lsbin  etc  g">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA&#x2F;2019-11-08-11-02-34.png">
+<meta property="og:updated_time" content="2019-11-08T03:07:32.466Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA&#x2F;2019-11-08-11-02-34.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2019/11/08/安卓4-4系统源码编译并刷机/"/>
+
+
+
+
+
+  <title>安卓4.4系统源码编译并刷机 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/08/%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓4.4系统源码编译并刷机</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-08T10:48:08+08:00">
+                2019-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91/" itemprop="url" rel="index">
+                    <span itemprop="name">Android系统编译</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/08/%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/08/安卓4-4系统源码编译并刷机/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="安卓4-4系统源码编译"><a href="#安卓4-4系统源码编译" class="headerlink" title="安卓4.4系统源码编译"></a>安卓4.4系统源码编译</h1><h2 id="一-安装Java-JDK-6环境"><a href="#一-安装Java-JDK-6环境" class="headerlink" title="一. 安装Java JDK 6环境"></a>一. 安装Java JDK 6环境</h2><h3 id="1-复制JDK到安装目录"><a href="#1-复制JDK到安装目录" class="headerlink" title="1. 复制JDK到安装目录"></a>1. 复制JDK到安装目录</h3><p>假设JDK安装文件放在桌面，我们要安装的目录为：/usr/local/Java。<br>我们先在 /usr/local/目录下创建java文件夹：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ckcat@ubuntu-machine:~$ cd /usr/local</span><br><span class="line">ckcat@ubuntu-machine:/usr/local$ ls</span><br><span class="line">bin  etc  games  include  lib  man  sbin  share  src</span><br><span class="line">ckcat@ubuntu-machine:/usr/local$ sudo mkdir java</span><br><span class="line">ckcat@ubuntu-machine:/usr/local$ ls</span><br><span class="line">bin  etc  games  include  java  lib  man  sbin  share  src</span><br></pre></td></tr></table></figure>
+<h3 id="2-切换到桌面，复制安卓文件到安装目录"><a href="#2-切换到桌面，复制安卓文件到安装目录" class="headerlink" title="2. 切换到桌面，复制安卓文件到安装目录"></a>2. 切换到桌面，复制安卓文件到安装目录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ckcat@ubuntu-machine:~$ sudo cp jdk-6u45-linux-x64.bin /usr/local/java</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-安装jdk"><a href="#3-安装jdk" class="headerlink" title="3. 安装jdk"></a>3. 安装jdk</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ckcat@ubuntu-machine:~$ cd /usr/local</span><br><span class="line">ckcat@ubuntu-machine:/usr/local$ ls</span><br><span class="line">bin  etc  games  include  java  lib  man  sbin  share  src</span><br><span class="line">ckcat@ubuntu-machine:/usr/local$ cd java/</span><br><span class="line">ckcat@ubuntu-machine:/usr/local/java$ sudo chmod 777 jdk-6u45-linux-x64.bin </span><br><span class="line">ckcat@ubuntu-machine:/usr/local/java$ sudo ./jdk-6u45-linux-x64.bin</span><br></pre></td></tr></table></figure>
+<h3 id="4-配置环境变量"><a href="#4-配置环境变量" class="headerlink" title="4. 配置环境变量"></a>4. 配置环境变量</h3><ol>
+<li><p>打开/ect/profile 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/profile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加下面的环境变量，要根据安装目录修改，并保存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Java Environment</span><br><span class="line">export JAVA_HOME=/usr/local/java/jdk1.6.0_45  </span><br><span class="line">export JRE_HOME=/usr/local/java/jdk1.6.0_45/jre  </span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH  </span><br><span class="line">export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$JAVA_HOME:$PATH</span><br></pre></td></tr></table></figure></li>
+<li><p>重启后使其生效并进行验证<br>也可使用下面的命令不重启使其生效，不过只针对当前域有效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ckcat@ubuntu-machine:/usr/local/java$ source /etc/profile</span><br><span class="line">ckcat@ubuntu-machine:/usr/local/java$</span><br></pre></td></tr></table></figure>
+<p>输入java -version 进行验证，成功后如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ckcat@ubuntu-machine:~$ java -version</span><br><span class="line">java version &quot;1.6.0_45&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.6.0_45-b06)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 20.45-b01, mixed mode)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置默认的Java版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --config java</span><br><span class="line">sudo update-alternatives --config javac</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<h2 id="二、安装依赖库"><a href="#二、安装依赖库" class="headerlink" title="二、安装依赖库"></a>二、安装依赖库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y git flex bison gperf build-essential libncurses5-dev:i386 </span><br><span class="line">sudo apt-get install libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev g++-multilib </span><br><span class="line">sudo apt-get install tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 </span><br><span class="line">sudo apt-get install dpkg-dev libsdl1.2-dev libesd0-dev</span><br><span class="line">sudo apt-get install git-core gnupg flex bison gperf build-essential  </span><br><span class="line">sudo apt-get install zip curl zlib1g-dev gcc-multilib g++-multilib </span><br><span class="line">sudo apt-get install libc6-dev-i386 </span><br><span class="line">sudo apt-get install lib32ncurses5-dev x11proto-core-dev libx11-dev </span><br><span class="line">sudo apt-get install lib32z-dev ccache</span><br><span class="line">sudo apt-get install libgl1-mesa-dev libxml2-utils xsltproc unzip m4</span><br></pre></td></tr></table></figure>
+<p>Ubuntu 16.04以上的系统请务必使用上面的依赖，Ubuntu 16.04需要的依赖和Ubuntu 14.04所需要的依赖是不同的。<br>以下是Ubuntu 14.04所需要的依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git-core gnupg flex bison gperf build-essential \</span><br><span class="line">    zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 \</span><br><span class="line">    lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache \</span><br><span class="line">    libgl1-mesa-dev libxml2-utils xsltproc unzip</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、降级make"><a href="#三、降级make" class="headerlink" title="三、降级make"></a>三、降级make</h2><p>编译android4.4.4需要make 3.81或3.82 ，所以要降级make。</p>
+<blockquote>
+<p>下载  make-3.82.tar.gz</p>
+</blockquote>
+<blockquote>
+<p><a href="ftp://ftp.gnu.org/gnu/make/" target="_blank" rel="noopener">ftp://ftp.gnu.org/gnu/make/</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf make-3.82.tar.gz</span><br><span class="line">cd make-3.82</span><br><span class="line">sudo ./configure</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<p>如果出现错误，可以按如下方式修改源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">diff --git a/glob/glob.c b/glob/glob.c</span><br><span class="line">index f3911bc..e4d551e 100644</span><br><span class="line">--- a/glob/glob.c</span><br><span class="line">+++ b/glob/glob.c</span><br><span class="line">@@ -208,8 +208,6 @@ my_realloc (p, n)</span><br><span class="line">    #endif /* __GNU_LIBRARY__ || __DJGPP__ */</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-#if !defined __alloca &amp;&amp; !defined __GNU_LIBRARY__</span><br><span class="line">-</span><br><span class="line">    # ifdef    __GNUC__</span><br><span class="line">    #  undef alloca</span><br><span class="line">    #  define alloca(n)        __builtin_alloca (n)</span><br><span class="line">@@ -229,8 +227,6 @@ extern char *alloca ();</span><br><span class="line"></span><br><span class="line">    # define __alloca  alloca</span><br><span class="line"></span><br><span class="line">-#endif</span><br><span class="line">-</span><br><span class="line">    #ifndef __GNU_LIBRARY__</span><br><span class="line">    # define __stat stat</span><br><span class="line">    # ifdef STAT_MACROS_BROKEN</span><br></pre></td></tr></table></figure>
+<h2 id="四、源码下载"><a href="#四、源码下载" class="headerlink" title="四、源码下载"></a>四、源码下载</h2><ol>
+<li><p>使用已经打包好的源码<br><a href="https://testerhome.com/topics/2229" target="_blank" rel="noopener">下载地址</a></p>
+</li>
+<li><p>使用清华源下载</p>
+<ul>
+<li><p>使用curl下载repo到指定的目录<br><code>curl https://storage-googleapis.lug.ustc.edu.cn/git-repo-downloads/repo &gt; ~/AOSP/repo</code></p>
+</li>
+<li><p>修改repo文件：是以哦那个清华源下载<br><code>sudo gedit ~/AOSP/repo</code><br>设置REPO_URL 为：<code>git://aosp.tuna.tsinghua.edu.cn/android/git-repo</code></p>
+<p><img src="/2019/11/08/%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA/2019-11-08-11-02-34.png" alt></p>
+</li>
+<li><p>添加权限<br><code>chmod a+x ~/AOSP/repo</code></p>
+</li>
+<li><p>初始化仓库<br><code>repo init -u git://aosp.tuna.tsinghua.edu.cn/android/platform/manifest -b android-4.4.4_r1</code><br>后面 -b 参数 是取的源码中的一个分支，较稳定的版本，而不加 -b 则会下载Android主线上正在开发中的最新代码.可以参看<a href="https://source.android.com/source/build-numbers" target="_blank" rel="noopener">Android版本与代号对应关系 </a>。<br>如果提示需要验证信息，使用命令：<br><code>git config --global user.email &quot;your email address&quot;</code><br><code>git config --global user.name &quot;your name&quot;</code></p>
+</li>
+<li><p>开始漫长的下载<br><code>repo sync</code><br>如果中途中断，重新执行repo sync即可。以后需要更新代码的话，同样运行这个命令即可。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="五、下载驱动"><a href="#五、下载驱动" class="headerlink" title="五、下载驱动"></a>五、下载驱动</h2><ul>
+<li>由于我使用的是NEXUS 5 设备，并且打算编译Android 4.4.4_r1版本，所以去官方 Nexus 和 Pixel 设备的二进制驱动下载页面：<a href="https://developers.google.com/android/drivers" target="_blank" rel="noopener">https://developers.google.com/android/drivers</a> 下载了相应的二进制驱动。</li>
+<li>将三个压缩包解压出的自解压脚本放在源码树的根目录下并运行将会得到一个<code>Vendor</code>目录 。</li>
+</ul>
+<h2 id="六、开始编译"><a href="#六、开始编译" class="headerlink" title="六、开始编译"></a>六、开始编译</h2><ul>
+<li><p>命令删除所有以前编译操作的已有输出：<br><code>make clobber</code></p>
+</li>
+<li><p>使用<code>build</code>目录中的<code>envsetup.sh</code>脚本初始化环境<br><code>source build/envsetup.sh</code></p>
+</li>
+<li><p>使用lunch选择要编译的目标<br><code>lunch</code><br>选择你想编译的版本，这里我选的是 aosp_hammerhead-userdebug,所以输入13，</p>
+</li>
+<li><p>编译代码<br><code>make -j4</code></p>
+</li>
+</ul>
+<p>  -j4的意思是4个线程同步编译<br>  关于cpu个数，可以用下面命令查看:<br>  <code>cat /proc/cpuinfo | grep processor</code><br>  经过漫长的等待后就编译完成界面，如果中途出错就根据错误信息谷歌一下或者重新编译。</p>
+<pre><code>![](安卓4-4系统源码编译并刷机/2019-11-08-11-05-30.png)</code></pre><h2 id="七、刷入目标机器"><a href="#七、刷入目标机器" class="headerlink" title="七、刷入目标机器"></a>七、刷入目标机器</h2><ol>
+<li>手机开启调试模式，连上电脑，执行<code>adb devices</code>命令将会显示连接的机器。</li>
+</ol>
+<ol start="2">
+<li><p>以fastboot模式启动手机，然后进行刷机<br> <code>adb reboot bootloader</code></p>
+</li>
+<li><p>刷机<br> <code>fastboot -w flashall</code></p>
+</li>
+</ol>
+<p>至此整个编译源码并刷机的过成圆满结束了。</p>
+<h2 id="八、遇到的一些坑"><a href="#八、遇到的一些坑" class="headerlink" title="八、遇到的一些坑"></a>八、遇到的一些坑</h2><h3 id="1-编译过程种突然中止，怎么都找不到原因"><a href="#1-编译过程种突然中止，怎么都找不到原因" class="headerlink" title="1. 编译过程种突然中止，怎么都找不到原因"></a>1. 编译过程种突然中止，怎么都找不到原因</h3><ul>
+<li>可能是给的内存太小，重新编译几次就好了。</li>
+</ul>
+<h3 id="2-adb-devices-出现了-nopermissions没有权限的问题"><a href="#2-adb-devices-出现了-nopermissions没有权限的问题" class="headerlink" title="2. adb devices 出现了?????,nopermissions没有权限的问题"></a>2. <code>adb devices</code> 出现了<code>?????,nopermissions</code>没有权限的问题</h3><p>经过百度得，原因是ubuntu这样的系统都是默认以非root身份在运行的，要使用usb调试，需要sudo支持。</p>
+<p>解决方法:</p>
+<pre><code>1. 输入命令lsusb，查看usb的使用情况,记录下android设备的ID
+2. 输入命令sudo vim /etc/udev/rules.d/70-android.rules，在里面输入以下内容并且保存，需要注意的是，下面内容中的ATTRS{}中的内容为ID的值。</code></pre><p><code>SUBSYSTEM==&quot;usb&quot;,ATTRS{idVendor}==&quot;18d1&quot;,ATTRS{idProduct}==&quot;9025&quot;,MODE=&quot;0666&quot;</code><br>    3. 保存之后就给该文件赋予相关权限sudo chmod a+rx /etc/udev/rules.d/70-android.rules<br>    4.输入命令sudo service udev restart重启udev<br>    5. 不需要重启计算机，重新启动adb server，拔掉usb重新连上再执行adb devices即可。<br>    参考：<a href="http://www.cnblogs.com/xiaoxuetu/p/3224386.html" target="_blank" rel="noopener">http://www.cnblogs.com/xiaoxuetu/p/3224386.html</a></p>
+<h3 id="4-adb以及fastboot运行后提示需要安装"><a href="#4-adb以及fastboot运行后提示需要安装" class="headerlink" title="4. adb以及fastboot运行后提示需要安装"></a>4. adb以及fastboot运行后提示需要安装</h3><p>此时可以到android源码目录运行<code>build</code>目录中的<code>envsetup.sh</code>脚本初始化环境<br>    <code>source build/envsetup.sh</code></p>
+<h3 id="3-adb和fastboot都没有权限"><a href="#3-adb和fastboot都没有权限" class="headerlink" title="3. adb和fastboot都没有权限"></a>3. adb和fastboot都没有权限</h3><blockquote>
+<p>可以参考<a href="https://github.com/snowdream/51-android" target="_blank" rel="noopener">https://github.com/snowdream/51-android</a></p>
+</blockquote>
+<h3 id="4-刷机后进不了系统，可能是fastboot版本过高的原因。"><a href="#4-刷机后进不了系统，可能是fastboot版本过高的原因。" class="headerlink" title="4. 刷机后进不了系统，可能是fastboot版本过高的原因。"></a>4. 刷机后进不了系统，可能是fastboot版本过高的原因。</h3><p><strong>参考：</strong></p>
+<p><a href="https://www.jianshu.com/p/6471bab49cb1" target="_blank" rel="noopener">xposed源码编译与集成</a></p>
+<p><a href="https://bbs.pediy.com/thread-218366.htm" target="_blank" rel="noopener">记一次安卓系统源码下载过程</a></p>
+<p><a href="https://bbs.pediy.com/thread-218513.htm" target="_blank" rel="noopener">记一次安卓系统源码编译刷机过程</a></p>
+<p><a href="https://bbs.pediy.com/thread-219233.htm" target="_blank" rel="noopener">记一次安卓内核源码编译刷机过程(修改反调试标志位)</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91/" rel="tag"># Android系统编译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/" rel="next" title="UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统">
+                <i class="fa fa-chevron-left"></i> UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安卓4-4系统源码编译"><span class="nav-number">1.</span> <span class="nav-text">安卓4.4系统源码编译</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-安装Java-JDK-6环境"><span class="nav-number">1.1.</span> <span class="nav-text">一. 安装Java JDK 6环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-复制JDK到安装目录"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 复制JDK到安装目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-切换到桌面，复制安卓文件到安装目录"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 切换到桌面，复制安卓文件到安装目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-安装jdk"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 安装jdk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-配置环境变量"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 配置环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、安装依赖库"><span class="nav-number">1.2.</span> <span class="nav-text">二、安装依赖库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、降级make"><span class="nav-number">1.3.</span> <span class="nav-text">三、降级make</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、源码下载"><span class="nav-number">1.4.</span> <span class="nav-text">四、源码下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、下载驱动"><span class="nav-number">1.5.</span> <span class="nav-text">五、下载驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、开始编译"><span class="nav-number">1.6.</span> <span class="nav-text">六、开始编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、刷入目标机器"><span class="nav-number">1.7.</span> <span class="nav-text">七、刷入目标机器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、遇到的一些坑"><span class="nav-number">1.8.</span> <span class="nav-text">八、遇到的一些坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-编译过程种突然中止，怎么都找不到原因"><span class="nav-number">1.8.1.</span> <span class="nav-text">1. 编译过程种突然中止，怎么都找不到原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-adb-devices-出现了-nopermissions没有权限的问题"><span class="nav-number">1.8.2.</span> <span class="nav-text">2. adb devices 出现了?????,nopermissions没有权限的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-adb以及fastboot运行后提示需要安装"><span class="nav-number">1.8.3.</span> <span class="nav-text">4. adb以及fastboot运行后提示需要安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-adb和fastboot都没有权限"><span class="nav-number">1.8.4.</span> <span class="nav-text">3. adb和fastboot都没有权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-刷机后进不了系统，可能是fastboot版本过高的原因。"><span class="nav-number">1.8.5.</span> <span class="nav-text">4. 刷机后进不了系统，可能是fastboot版本过高的原因。</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2019/11/08/%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA/';
+          this.page.identifier = '2019/11/08/安卓4-4系统源码编译并刷机/';
+          this.page.title = '安卓4.4系统源码编译并刷机';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
