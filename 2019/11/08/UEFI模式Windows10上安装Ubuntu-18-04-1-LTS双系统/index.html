@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Ubuntu," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="转载自：https:&#x2F;&#x2F;www.mzihen.com&#x2F;how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi&#x2F;  一、制作支持UEFI启动的Ubuntu USB启动盘我使用了开源软件Rufus（Rufus官网）创建的USB启动盘，Ubuntu使用了最新版的Ubuntu 18.04.1 LTS（ubuntu官网）。 现有台式机是SSD硬盘加机">
+<meta name="keywords" content="Ubuntu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;www.mzihen.com&#x2F;how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi&#x2F;  一、制作支持UEFI启动的Ubuntu USB启动盘我使用了开源软件Rufus（Rufus官网）创建的USB启动盘，Ubuntu使用了最新版的Ubuntu 18.04.1 LTS（ubuntu官网）。 现有台式机是SSD硬盘加机">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-42-00.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-45-27.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-46-16.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-47-09.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-47-43.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-48-11.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-48-42.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-51-09.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-56-30.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-57-03.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-57-37.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-58-00.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-58-27.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-58-57.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-59-17.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-59-35.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-59-58.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-11-00-21.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-11-01-00.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-11-01-26.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-11-01-54.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-11-02-17.png">
+<meta property="og:updated_time" content="2019-11-08T03:04:16.935Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;08&#x2F;UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F&#x2F;2019-11-08-10-42-00.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2019/11/08/UEFI模式Windows10上安装Ubuntu-18-04-1-LTS双系统/"/>
+
+
+
+
+
+  <title>UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-08T10:40:16+08:00">
+                2019-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">linux使用</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/08/UEFI模式Windows10上安装Ubuntu-18-04-1-LTS双系统/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>转载自：<a href="https://www.mzihen.com/how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi/" target="_blank" rel="noopener">https://www.mzihen.com/how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi/</a></p>
+</blockquote>
+<h1 id="一、制作支持UEFI启动的Ubuntu-USB启动盘"><a href="#一、制作支持UEFI启动的Ubuntu-USB启动盘" class="headerlink" title="一、制作支持UEFI启动的Ubuntu USB启动盘"></a>一、制作支持UEFI启动的Ubuntu USB启动盘</h1><p>我使用了开源软件Rufus（<a href="https://rufus.akeo.ie/?locale=zh_CN" target="_blank" rel="noopener">Rufus官网</a>）创建的USB启动盘，Ubuntu使用了最新版的Ubuntu 18.04.1 LTS（<a href="https://www.ubuntu.com/download/desktop" target="_blank" rel="noopener">ubuntu官网</a>）。</p>
+<p>现有台式机是SSD硬盘加机械硬盘，win10系统安装在SSD硬盘，SSD是MBR分区的，机械硬盘是GPT分区，主板使用的UEFI启动模式。因为要将Ubuntu安装在机械硬盘上，所以制作启动盘选择的 <strong>分区类型选择GPT，目标系统类型选择UEFI(非CSM)</strong> ，其它都按照我设置的即可，如下图。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-42-00.png" alt></p>
+<p>需要注意的是，建议使用新版本的Ubuntu，因为低版本的Ubuntu不支持UEFI+GPT，比如Ubuntu16.04 386（32bit），而Ubuntu 18.04版本是64位的，支持UEFI+GPT。</p>
+<h1 id="二、Windows10中的设置"><a href="#二、Windows10中的设置" class="headerlink" title="二、Windows10中的设置"></a>二、Windows10中的设置</h1><p>在“控制面板\硬件和声音\电源选项\系统设置”去掉勾选“启用快速启动（推荐）”</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-45-27.png" alt></p>
+<p>取消”启用快速启动(推荐)”的原因是： “快速启动”是Windows8时代引进的新特性，“快速启动”会影响Grub开机引导过程，可能出现无法载入Ubuntu的状况，最后选择“保存修改”。（<a href="https://www.jianshu.com/p/0ccf1778d8ae" target="_blank" rel="noopener">点击浏览更多…</a>）</p>
+<p>另外还要禁用主板上的“安全启动（Secure Boot）”，而我的主板B150-Plus安全启动是默认勾选且灰色不可修改的，便没有更改此项。但是可以选择Windows系统或者其它操作系统。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-46-16.png" alt></p>
+<h1 id="三、分区"><a href="#三、分区" class="headerlink" title="三、分区"></a>三、分区</h1><p>准备工作：备份好数据。<br>使用软件DiskGenius（<a href="http://www.diskgenius.cn/" target="_blank" rel="noopener">官网</a>）将机械硬盘第一个分区压缩出80G空闲区出来，网上有说30G就够了，具体看硬盘容量情况。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-47-09.png" alt></p>
+<h1 id="四、安装Ubuntu系统"><a href="#四、安装Ubuntu系统" class="headerlink" title="四、安装Ubuntu系统"></a>四、安装Ubuntu系统</h1><p>进入BIOS，设置boot启动选项，选择从U盘启动，或者第一启动盘为U盘，保存并退出。<br>进入Ubuntu安装界面，有提示试用还是安装。我先进入了试用界面，然后在试用界面里选择的安装。</p>
+<p>选择好语言，点击继续。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-47-43.png" alt></p>
+<p>选择好键盘布局，点击继续。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-48-11.png" alt></p>
+<p>这里选择“正常安装”，在其他选项中，如果网络不好或者想安装速度快一些，不勾选“安装 Ubuntu时下载更新”。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-48-42.png" alt></p>
+<p>因为是安装到指定盘里，并不是全新安装，也不希望清除掉硬盘里其它分区的数据，所以这里选择“其他选项”。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-51-09.png" alt></p>
+<p>选择“其他选项”后，开始给硬盘进行分区。跟安装Windows类似，Windows会自动分成几个隐藏的区：450 MB恢复分区、100 MB系统分区和16 MB的MSR (保留)分区，Ubuntu略微不同，需要手动划分。</p>
+<p>一般Linux设置4个分区：</p>
+<blockquote>
+<p>/ ：根分区，一般分8G就可以，如果磁盘空间足够，10G~16G也可以，甚至有人分了30G，这里最好选择30G。</p>
+</blockquote>
+<blockquote>
+<p>swap ：交换空间，即虚拟内存，建议是你机器的物理内存小于1G的话虚拟内存设置为物理内存的2倍；如果物理内存大于1G，建议在物理内存的基础上加2G，最大不要超过两倍。我的物理内存是16g，只要20g足矣。因磁盘空间又够，所以分了32G。</p>
+</blockquote>
+<blockquote>
+<p>/boot ：启动分区，系统的启动文件，大小一般分200M。</p>
+</blockquote>
+<blockquote>
+<p><del>efi ：EFI系统分区，系统的启动文件，大小一般分200M。</del></p>
+</blockquote>
+<blockquote>
+<p>/home ：home目录，文件分区，存放个人文件，分完其他所有区之后，剩下的空间全部给它即可。</p>
+</blockquote>
+<p>我第一次设置了/boot分区而不是设置的efi分区，出现了错误：</p>
+<blockquote>
+<blockquote>
+<p>在复制系统文件的时候出现了“无法将 grub-efi-amd64-signed 软件包安装到 /target/中。如果没有 GRUB 启动引导器，所安装的系统将无法启动。”</p>
+</blockquote>
+</blockquote>
+<p>重新安装了两次出现一样的错误结果。参考<a href="https://www.zhihu.com/question/36811339" target="_blank" rel="noopener">知乎上这个答案后</a>，使用eif系统分区取代了boot分区，最后安装成功。后面截图有出现错误的地方</p>
+<p>选择125G的空闲区（前文分了80G的空闲区，再加上其它的空闲区，有了125G多点），点击下面“+”号，添加/分区，依次选择 大小10240MB（10GB）、主分区、空间起始位置，Ext4日志文件系统、挂载点/，然后点击OK。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-56-30.png" alt></p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-57-03.png" alt></p>
+<p>继续点击“+”号，添加swap分区（交换分区），大小填32768MB（32G），（如果你的物理内存是16G，建议此处填写20480MB（20G）），逻辑分区，空间起始位置，交换空间，点击OK。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-57-37.png" alt></p>
+<p>点击“+”号，添加EFI系统分区，大小200MB，逻辑分区，空间起始位置，EFI系统分区，点击OK。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-58-00.png" alt></p>
+<p>点击“+”号，添加/home分区，大小直接默认，也就是剩余的所有空间，逻辑分区，空间起始位置，挂载点选择/home，点击OK。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-58-27.png" alt></p>
+<p>注意最下面的“安装启动引导器的设备”，要选择跟efi一致，选择好后点击现在安装。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-58-57.png" alt></p>
+<p>接下来就提示哪些分区被会操作。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-59-17.png" alt></p>
+<p>你在什么地方，选择shanghai，也可依据自己需要选择其它地区。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-59-35.png" alt></p>
+<p>填写用户名和密码。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-10-59-58.png" alt></p>
+<p>接下来就静静等待安装即可。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-11-00-21.png" alt></p>
+<p>下面一个截图是特地截取的，前几次安装都是失败在此处。前面有错误说明</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-11-01-00.png" alt></p>
+<p>安装成功。因为在试用界面安装的Ubuntu，所以会提示继续试用，还是重启。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-11-01-26.png" alt></p>
+<p>重启，按住del键进入BIOS，将Ubuntu系统所在的硬盘拖到第一位，保存并退出，就会进入Ubuntu系统。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-11-01-54.png" alt></p>
+<p>删掉分区，只设置了EFI系统分区，系统完全可以安装，且Windows10可见4个区分。</p>
+<p><img src="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/2019-11-08-11-02-17.png" alt></p>
+<h1 id="存在的问题。"><a href="#存在的问题。" class="headerlink" title="存在的问题。"></a>存在的问题。</h1><p>1、Ubuntu 18.04.1 LTS下建 /boot 和 分区是无效的，需要建EFI系统分区。</p>
+<p>2、有人将启动引导向设置在wi10的启动引导分区里，而我是单独建了一个引导分区，导致的结果就是开机直接进入系统，如果要切换Window10系统，需要到BIOS里切换。</p>
+<p>3、进入系统后经常死机，可能跟显卡驱动有关，可以去更新显卡驱动，选择（tested)。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ubuntu/" rel="tag"># Ubuntu</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/08/Ubuntu%E6%AD%BB%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/" rel="next" title="Ubuntu死机解决方法汇总">
+                <i class="fa fa-chevron-left"></i> Ubuntu死机解决方法汇总
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、制作支持UEFI启动的Ubuntu-USB启动盘"><span class="nav-number">1.</span> <span class="nav-text">一、制作支持UEFI启动的Ubuntu USB启动盘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Windows10中的设置"><span class="nav-number">2.</span> <span class="nav-text">二、Windows10中的设置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、分区"><span class="nav-number">3.</span> <span class="nav-text">三、分区</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、安装Ubuntu系统"><span class="nav-number">4.</span> <span class="nav-text">四、安装Ubuntu系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#存在的问题。"><span class="nav-number">5.</span> <span class="nav-text">存在的问题。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/';
+          this.page.identifier = '2019/11/08/UEFI模式Windows10上安装Ubuntu-18-04-1-LTS双系统/';
+          this.page.title = 'UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
