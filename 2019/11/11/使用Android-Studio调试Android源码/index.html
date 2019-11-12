@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Ubuntu," />
+  <meta name="keywords" content="Android 调试," />
 
 
 
@@ -79,18 +79,26 @@
 
 
 
-<meta name="description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F; https:&#x2F;&#x2F;www.imcaviare.com&#x2F;2018-12-18-1&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ra">
-<meta name="keywords" content="Ubuntu">
+<meta name="description" content="一、导入源码到 Android Studio导入源码到 Android Studio要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。 1. 编译 idegen对于 Android 源码的导入， Google 官方给我们提供了一个很方便的工具idegen 它位于我们所下载的系统源码路径中： 1developement&#x2F;tools&#x2F;id">
+<meta name="keywords" content="Android 调试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu下安装使用v2ray">
-<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;index.html">
+<meta property="og:title" content="使用Android Studio调试Android源码">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="文章转载自：https:&#x2F;&#x2F;deng55.github.io&#x2F;2017&#x2F;12&#x2F;04&#x2F;Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray&#x2F; https:&#x2F;&#x2F;www.imcaviare.com&#x2F;2018-12-18-1&#x2F;  由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ra">
+<meta property="og:description" content="一、导入源码到 Android Studio导入源码到 Android Studio要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。 1. 编译 idegen对于 Android 源码的导入， Google 官方给我们提供了一个很方便的工具idegen 它位于我们所下载的系统源码路径中： 1developement&#x2F;tools&#x2F;id">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;UbuntuUseV2ray.png">
-<meta property="og:updated_time" content="2019-11-06T13:15:04.266Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-31-55.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-20-30.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-42-05.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-23-53.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-57-37.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-07-04.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-08-51.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-11-23.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-13-00.png">
+<meta property="og:updated_time" content="2019-11-11T13:24:30.961Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;04&#x2F;Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray&#x2F;UbuntuUseV2ray.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-31-55.png">
 
 
 
@@ -120,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="https://ckcat.github.io/2019/11/04/Ubuntu下安装使用v2ray/"/>
+  <link rel="canonical" href="https://ckcat.github.io/2019/11/11/使用Android-Studio调试Android源码/"/>
 
 
 
 
 
-  <title>Ubuntu下安装使用v2ray | CKCat的博客</title>
+  <title>使用Android Studio调试Android源码 | CKCat的博客</title>
   
 
 
@@ -273,7 +281,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CKCat">
@@ -290,7 +298,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Ubuntu下安装使用v2ray</h1>
+          <h1 class="post-title" itemprop="name headline">使用Android Studio调试Android源码</h1>
         
 
         <div class="post-meta">
@@ -302,8 +310,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-04T12:18:56+08:00">
-                2019-11-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-11T20:08:15+08:00">
+                2019-11-11
               </time>
             
 
@@ -325,8 +333,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index">
-                    <span itemprop="name">linux使用</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -343,9 +351,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/#comments" itemprop="discussionUrl">
+                <a href="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/11/04/Ubuntu下安装使用v2ray/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/11/11/使用Android-Studio调试Android源码/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -378,41 +386,61 @@
       
 
       
-        <blockquote>
-<p>文章转载自：<a href="https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/" target="_blank" rel="noopener">https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/</a></p>
-<p><a href="https://www.imcaviare.com/2018-12-18-1/" target="_blank" rel="noopener">https://www.imcaviare.com/2018-12-18-1/</a></p>
+        <h1 id="一、导入源码到-Android-Studio"><a href="#一、导入源码到-Android-Studio" class="headerlink" title="一、导入源码到 Android Studio"></a>一、导入源码到 Android Studio</h1><p>导入源码到 Android Studio<br>要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。</p>
+<h2 id="1-编译-idegen"><a href="#1-编译-idegen" class="headerlink" title="1. 编译 idegen"></a>1. 编译 idegen</h2><p>对于 Android 源码的导入， Google 官方给我们提供了一个很方便的工具idegen</p>
+<p>它位于我们所下载的系统源码路径中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">developement/tools/idegen</span><br></pre></td></tr></table></figure>
+<p>引用 README 的一句话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IDEGen automatically generates Android IDE configurations for IntelliJ IDEA and Eclipse.</span><br></pre></td></tr></table></figure>
+<p>idegen 工具会自动生成针对 Android 开发工具（Android Studio和Eclipse）的配置文件。 既然如此，那我们就来使用 idegen 工具生成导入源码所需的配置文件。</p>
+<p>首先打开命令行工具，cd 进入到源码路径下，</p>
+<p>执行如下指令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#初始化命令工具</span><br><span class="line">soruce build/envsetup.sh </span><br><span class="line"></span><br><span class="line">#编译 idegen 模块，生成idegen.jar</span><br><span class="line">mmm development/tools/idegen/</span><br><span class="line"></span><br><span class="line">#生成针对 Android 开发工具的配置文件 </span><br><span class="line">sudo ./development/tools/idegen/idegen.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-20-31-55.png" alt></p>
+<p>在执行完上述指令后，会在源码路径下生成下面三个文件</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-20-20-30.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">android.ipr：工程相关的设置，比如编译器配置、入口，相关的libraries等。</span><br><span class="line"></span><br><span class="line">android.iml：描述了modules，比如modules的路径,依赖关系等。</span><br><span class="line"></span><br><span class="line">android.iws：包含了一些个人工作区的设置。</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-导入源码"><a href="#2-导入源码" class="headerlink" title="2. 导入源码"></a>2. 导入源码</h2><p>接下来我们可以开始导入源码了.</p>
+<p>由于Android太大了,所以我们需要给IDE更多的内存，在Help &gt; Edit Custom VM 中添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-Xms1g</span><br><span class="line">-Xmx5g</span><br></pre></td></tr></table></figure>
+<p>这两个参数的意思是初始堆内存为1G,最大堆内存为5G，其实不设置也没什么问题,但是经常会在看代码的时候,出现内存不够的错误信息,所以换个大内存还是很有必要的。</p>
+<p>然后是AndroidStudio的类大小配置,在Help -&gt; Edit custom properties中添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idea.max.intellisense.filesize=100000</span><br></pre></td></tr></table></figure>
+<p>这个参数是定义AS默认的类大小的,默认值是2500,会导致太大的Java文件不能被识别,把这个数调大,<br>配置完成后重启IDE。</p>
+<p>使用 <code>AndroidStudio</code> 打开 <code>android.ipr</code> ，之后AndroidStudio就开始打开项目了,这个过程会比较缓慢,有时,AS会出现如下信息:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Extnrnal file changes sync may be slow:The current inotify(7) watch limit is too low.</span><br></pre></td></tr></table></figure>
+<p>大致的意思就是由于项目过于庞大,现在AS没有办法很好的监视整个项目的改变了,可以通过如下方式解决:</p>
+<ol>
+<li><p>在/etc/sysctl.conf 文件末尾中添加如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fs.inotify.max_user_watches = 524288</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后在终端执行以下命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sysctl -p --system</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>最后重启AS，等待源码加载完成。</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-20-42-05.png" alt></p>
+<p>由于 Android 的系统源码非常庞大，一次性导入 Android Studio 的话需要加载非常长的时间</p>
+<p>因此，在正式开始导入前，我们可以打开 android.iml 文件根据自己需要调整要加载的源码。</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-21-23-53.png" alt></p>
+<p>这里<code>&lt;excludeFolder&gt;</code> 表示不需要加载的目录，我们根据自己的需要使用 <code>&lt;excludeFolder&gt;</code> 标签添加对应的目录地址即可。</p>
+<p>在加载完源码后，我们也可以在 Project Structure 中的 Module 选项中右键 exclude 来排除不需要加载的源码目录，如图：</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-20-57-37.png" alt></p>
+<h2 id="3-开始调试"><a href="#3-开始调试" class="headerlink" title="3. 开始调试"></a>3. 开始调试</h2><p>调试前要设置 Project 的 SDK ，File -&gt; Project 下打开 Project Structure，选中 Project 设置对应版本的 SDK，于系统版本一致：</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-21-07-04.png" alt></p>
+<p>此时点击 <code>Android Studio</code> 工具栏的 <code>run -&gt; attach debugger to Android process</code> 按钮，会打开 <code>Choose Process</code> 窗口，我们根据自己需要调试的代码选择对应的进程：</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-21-08-51.png" alt></p>
+<p>这里假设我们要调试 <code>Android</code> 自带浏览器的源码，如图，我们在它的入口文件 <code>WebViewBrowserActivity</code> 中的 <code>loadUrlFromUrlBar</code> 方法中打上断点。</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-21-11-23.png" alt></p>
+<p>然后我们在 <code>app</code> 的 <code>url</code> 输入栏输入 网址进行跳转,我们可以看到，代码成功进入了断点，然后我们就可以随心所欲地调试我们想要的调试的 Java 代码了。</p>
+<p><img src="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/2019-11-11-21-13-00.png" alt></p>
+<blockquote>
+<p>参考：</p>
+<p><a href="https://www.jianshu.com/p/4ab864caefb2" target="_blank" rel="noopener">https://www.jianshu.com/p/4ab864caefb2</a></p>
+<p><a href="http://gityuan.com/2016/08/13/android-os-env/" target="_blank" rel="noopener">http://gityuan.com/2016/08/13/android-os-env/</a></p>
 </blockquote>
-<p>由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。</p>
-<h1 id="1-安装v2ray"><a href="#1-安装v2ray" class="headerlink" title="1.安装v2ray"></a>1.安装v2ray</h1><p>安装的过程比较简单，可直接按照官方教程。</p>
-<p>ubuntu系统下使用命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -L -s https://install.direct/go.sh)</span><br></pre></td></tr></table></figure>
-
-<p>命令执行完之后，会自动生成如下文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/v2ray/v2ray：V2Ray 程序；</span><br><span class="line">/etc/v2ray/config.json：配置文件；</span><br></pre></td></tr></table></figure>
-
-<h1 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h1><p>找了很多教程，在配置这一块都比较模糊，特别是linux环境下的配置。</p>
-<p>很多教程说是去下载官方的<code>v2ray-core</code>包，之后的步骤就没详细说了，我也在这一块浪费了很多时间，部署起来后才知道确实是自己想复杂了</p>
-<p>还记得我们第一步的安装过程吗，安装成功后会生成<code>/etc/v2ray/config.json</code>文件，其实在ubuntu系统下这个文件不需要，因为本身是当做客户端来使用的，这时候去看下载的核心包</p>
-<p>下载核心包后，解压出来会有一些配置文件，核心包里面我们需要的文件是：<code>vpoint_socks_vmess.json</code> ，这个文件才是最终要使用的配置文件，把这个文件改名为<code>config.json</code>，并替换第一步安装的<code>/etc/v2ray/config.json</code></p>
-<p>vpoint_socks_vmess.json文件截图如下：<br><img src="/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/UbuntuUseV2ray.png" alt></p>
-<p>这就和windows下的配置是一样的了。</p>
-<p>上面截图我有一块注释掉了，主要是不太了解这里的配置，不注释跑不起来</p>
-<p>其实可以用偷懒的方法，如果之前在windows下部署过了，直接把config.json文件拿过来，放到<code>/etc/v2ray</code>目录下即可（删除该目录下原有的配置文件）</p>
-<h2 id="1-启动服务"><a href="#1-启动服务" class="headerlink" title="1. 启动服务"></a>1. 启动服务</h2><p>文件替换之后，就可以使用<code>service v2ray start</code>来启动 V2Ray 进程，chrome下配合SwitchyOmega扩展来使用，剩下的应该都会了。</p>
-<p>使用以下命令启动 V2Ray:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start v2ray</span><br></pre></td></tr></table></figure>
-<p>停止运行 V2Ray：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop v2ray</span><br></pre></td></tr></table></figure>
-<p>重启 V2Ray:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart v2ray</span><br></pre></td></tr></table></figure>
-<p>其他的命令可以参考官方文档，以上就是ubuntu下使用的办法了。</p>
-<h1 id="3-配置PAC"><a href="#3-配置PAC" class="headerlink" title="3. 配置PAC"></a>3. 配置PAC</h1><p>安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ pip install genpac</span><br><span class="line"></span><br><span class="line"># 从gfwlist生成代理信息为SOCKS5 127.0.0.1:1080的PAC文件</span><br><span class="line">genpac --format=pac --pac-proxy=&quot;SOCKS5 127.0.0.1:1080&quot; -o /etc/v2ray/autoproxy.pac</span><br></pre></td></tr></table></figure>
-<p>为避免不必要的bug请注意以下两点：</p>
-<ul>
-<li>文件有足够的读写权限</li>
-<li>配置URL以file://开头电脑根目录为起始。</li>
-</ul>
 
       
     </div>
@@ -430,7 +458,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Ubuntu/" rel="tag"># Ubuntu</a>
+            <a href="/tags/Android-%E8%B0%83%E8%AF%95/" rel="tag"># Android 调试</a>
           
         </div>
       
@@ -443,8 +471,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/03/linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="next" title="linux使用记录">
-                <i class="fa fa-chevron-left"></i> linux使用记录
+              <a href="/2019/11/09/Ubuntu-18-4%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AETensorFlow-GPU%E7%8E%AF%E5%A2%83/" rel="next" title="Ubuntu 18.4使用docker配置TensorFlow GPU环境">
+                <i class="fa fa-chevron-left"></i> Ubuntu 18.4使用docker配置TensorFlow GPU环境
               </a>
             
           </div>
@@ -452,10 +480,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/08/Ubuntu%E6%AD%BB%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/" rel="prev" title="Ubuntu死机解决方法汇总">
-                Ubuntu死机解决方法汇总 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -613,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-安装v2ray"><span class="nav-number">1.</span> <span class="nav-text">1.安装v2ray</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置"><span class="nav-number">2.</span> <span class="nav-text">2.配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-启动服务"><span class="nav-number">2.1.</span> <span class="nav-text">1. 启动服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-配置PAC"><span class="nav-number">3.</span> <span class="nav-text">3. 配置PAC</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、导入源码到-Android-Studio"><span class="nav-number">1.</span> <span class="nav-text">一、导入源码到 Android Studio</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-编译-idegen"><span class="nav-number">1.1.</span> <span class="nav-text">1. 编译 idegen</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-导入源码"><span class="nav-number">1.2.</span> <span class="nav-text">2. 导入源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-开始调试"><span class="nav-number">1.3.</span> <span class="nav-text">3. 开始调试</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -803,9 +827,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://ckcat.github.io/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/';
-          this.page.identifier = '2019/11/04/Ubuntu下安装使用v2ray/';
-          this.page.title = 'Ubuntu下安装使用v2ray';
+          this.page.url = 'https://ckcat.github.io/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/';
+          this.page.identifier = '2019/11/11/使用Android-Studio调试Android源码/';
+          this.page.title = '使用Android Studio调试Android源码';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://CKCat.disqus.com/embed.js';
