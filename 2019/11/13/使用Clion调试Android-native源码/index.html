@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android 源码调试," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、Clion配置1.编写CMakelists.txt目前CLion只能识别CMake项目，所以为了使用CLion调试AOSP，需要编写CMakeList.txt。否则无法使用远程调试功能。参考这篇博客Android Native C&#x2F;C++ 使用CLion阅读&#x2F;编译技巧 直接下载此地址的配置文件android-cmake-project，并拷贝至Android源码根目录。 配置env_andro">
+<meta name="keywords" content="Android 源码调试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Clion调试Android native源码">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="一、Clion配置1.编写CMakelists.txt目前CLion只能识别CMake项目，所以为了使用CLion调试AOSP，需要编写CMakeList.txt。否则无法使用远程调试功能。参考这篇博客Android Native C&#x2F;C++ 使用CLion阅读&#x2F;编译技巧 直接下载此地址的配置文件android-cmake-project，并拷贝至Android源码根目录。 配置env_andro">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-11-03.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-28-38.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-29-40.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-30-57.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-31-16.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-32-26.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-57-32.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-58-32.png">
+<meta property="og:updated_time" content="2019-11-13T12:20:39.425Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81&#x2F;2019-11-13-19-11-03.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2019/11/13/使用Clion调试Android-native源码/"/>
+
+
+
+
+
+  <title>使用Clion调试Android native源码 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Clion调试Android native源码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-13T18:56:45+08:00">
+                2019-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/13/使用Clion调试Android-native源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、Clion配置"><a href="#一、Clion配置" class="headerlink" title="一、Clion配置"></a>一、Clion配置</h1><h2 id="1-编写CMakelists-txt"><a href="#1-编写CMakelists-txt" class="headerlink" title="1.编写CMakelists.txt"></a>1.编写<code>CMakelists.txt</code></h2><p>目前CLion只能识别CMake项目，所以为了使用CLion调试AOSP，需要编写CMakeList.txt。否则无法使用远程调试功能。<br>参考这篇博客<a href="https://blog.csdn.net/li864804994/article/details/79487834" target="_blank" rel="noopener">Android Native C/C++ 使用CLion阅读/编译技巧</a></p>
+<p>直接下载此地址的配置文件<a href="https://github.com/Ahren-Li/android-cmake-project" target="_blank" rel="noopener">android-cmake-project</a>，并拷贝至Android源码根目录。</p>
+<p>配置<code>env_android.cmake</code>文件，我的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">set(ANDROID_SDK_VERSION 27)</span><br><span class="line">set(ANDROID_LUNCH sailfish) # 编译目标</span><br><span class="line">set(ANDROID_TARGET_ARCH arm64)</span><br><span class="line">#set(ANDROID_ABI &quot;armeabi-v7a&quot;)</span><br><span class="line">#set(ANDROID_ABI &quot;armeabi-v7a with NEON&quot;)</span><br><span class="line">set(ANDROID_ABI &quot;arm64-v8a&quot;)</span><br><span class="line">set(ANDROID_TOOLCHAIN_NAME &quot;clang&quot;)</span><br><span class="line">set(ANDROID_STL c++_static)</span><br><span class="line">set(ANDROID_CLANG_VERSION &quot;clang-4053586&quot;)</span><br><span class="line">#set(ANDROID_PLATFORM android-25)</span><br><span class="line">#set(ANDROID_NATIVE_API_LEVEL 25)</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、-导入Aosp项目，配置远程调试"><a href="#二、-导入Aosp项目，配置远程调试" class="headerlink" title="二、 导入Aosp项目，配置远程调试"></a>二、 导入Aosp项目，配置远程调试</h1><p>导入aosp需要等待index完成。</p>
+<h2 id="1-配置gdb远程调试环境"><a href="#1-配置gdb远程调试环境" class="headerlink" title="1. 配置gdb远程调试环境"></a>1. 配置gdb远程调试环境</h2><p>选择 <code>Edit Configurations</code> -&gt; <code>GDB Remote Debug</code> 按照下图进行配置：</p>
+<p><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-11-03.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GDB: 这里我配置的为源码目录下的gdb</span><br><span class="line">‘target remote’ args: 这里填的端口号</span><br><span class="line">Sysroot: 这里填源码路径下的symbols</span><br><span class="line">Path mappings: 根据自己的源码填相应的path</span><br></pre></td></tr></table></figure>
+<h2 id="2-编写android-gdbserver脚本"><a href="#2-编写android-gdbserver脚本" class="headerlink" title="2. 编写android_gdbserver脚本"></a>2. 编写android_gdbserver脚本</h2><p>这里我对<a href="https://blog.csdn.net/lylwo317/article/details/86545130" target="_blank" rel="noopener">原博</a>中的脚本做了一点小修改，将 <code>gdbserver</code> 改为了 <code>gdbserver64</code> 。原因是后面调试时使用<code>gdb</code>连接不上远程的<code>gdbserver</code>，报错信息为<code>Reply contains invalid hex digit 59</code>，然后改为<code>gdbserver64</code>就可以了。猜测与<code>init</code>为64位程序有关。</p>
+<p><code>-s ~/script/start_android_gdb_server.sh</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env bash</span><br><span class="line">gdbServerPid=`adb shell ps | grep gdbserver | awk &apos;&#123;print $2&#125;&apos;`</span><br><span class="line"></span><br><span class="line">if [[ &quot;&quot; != $&#123;gdbServerPid&#125; ]]; then</span><br><span class="line">    adb shell su -c &quot;kill $&#123;gdbServerPid&#125;&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">adb forward tcp:1234 tcp:1234</span><br><span class="line"></span><br><span class="line">if [[ `adb shell whoami` == &apos;root&apos;  ]]; then</span><br><span class="line">    is_root=true</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [[ -n $1 ]]; then</span><br><span class="line">	appPid=`adb shell ps | grep $&#123;1&#125; | awk &apos;&#123;print $2&#125;&apos;`</span><br><span class="line">	if [[ -n $&#123;appPid&#125; ]]; then</span><br><span class="line">        if [[ $is_root == true  ]]; then</span><br><span class="line">            adb shell gdbserver64 :1234 --attach $&#123;appPid&#125;</span><br><span class="line">        else</span><br><span class="line">            adb shell su -c &quot;gdbserver64 :1234 --attach $&#123;appPid&#125; &quot;</span><br><span class="line">        fi</span><br><span class="line">    else</span><br><span class="line">    	echo &quot;$1 进程没有启动！&quot;</span><br><span class="line">	fi</span><br><span class="line">else</span><br><span class="line">	echo &quot;请设置要调试的进程名（app的进程名是包名）。例如 $0 &lt;process name&gt;&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>通过软连接连接到 ~/bin目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s ~/script/start_android_gdb_server.sh ~/bin/android_gdb_server</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-调试"><a href="#3-调试" class="headerlink" title="3. 调试"></a>3. 调试</h2><p>这里通过调试zygote来演示如何使用CLion调试</p>
+<ol>
+<li><p>先停止zygote服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell stop zygote</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动gdbserver</p>
+</li>
+</ol>
+<p><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-28-38.png" alt></p>
+<ol start="3">
+<li>点击调试按钮（右边绿色按钮）</li>
+</ol>
+<p><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-29-40.png" alt></p>
+<p>如下图表示连接成功</p>
+<p><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-30-57.png" alt><br><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-31-16.png" alt></p>
+<ol start="4">
+<li><p>设置断点位置如下<br><code>system/core/init/service.cpp</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">bool Service::Start() &#123;</span><br><span class="line">    // Starting a service removes it from the disabled or reset state and</span><br><span class="line">    // immediately takes it out of the restarting state if it was in there.</span><br><span class="line">    flags_ &amp;= (~(SVC_DISABLED|SVC_RESTARTING|SVC_RESET|SVC_RESTART|SVC_DISABLED_START));</span><br><span class="line"></span><br><span class="line">    // Running processes require no additional work --- if they&apos;re in the</span><br><span class="line">    // process of exiting, we&apos;ve ensured that they will immediately restart</span><br><span class="line">    // on exit, unless they are ONESHOT.</span><br><span class="line">    if (flags_ &amp; SVC_RUNNING) &#123;//在这里断点</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动zygote服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell start zygote</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>停止在断点处</p>
+</li>
+</ol>
+<p><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-32-26.png" alt></p>
+<blockquote>
+<p>参考：<a href="https://blog.csdn.net/lylwo317/article/details/86545130" target="_blank" rel="noopener">https://blog.csdn.net/lylwo317/article/details/86545130</a></p>
+</blockquote>
+<h1 id="三、其他"><a href="#三、其他" class="headerlink" title="三、其他"></a>三、其他</h1><p>使用<a href="https://www.lili.kim/2019/01/28/android/Debug%20Android%20Native%20with%20LLDB/" target="_blank" rel="noopener">此链接</a>的方法进行调试，记录以下使用过程，虽然未成功。</p>
+<h2 id="1-打开调试"><a href="#1-打开调试" class="headerlink" title="1. 打开调试"></a>1. 打开调试</h2><p>将下列内容添加至 <code>aosp/build/core/binary.mk</code> 中， 加了之后编译的系统暂时未感觉有什么不同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line"># No one should ever use this flag. On GCC it&apos;s mere presence will disable all</span><br><span class="line"># warnings, even those that are specified after it (contrary to typical warning</span><br><span class="line"># flag behavior). This circumvents CFLAGS_NO_OVERRIDE from forcibly enabling the</span><br><span class="line"># warnings that are *always* bugs.</span><br><span class="line">my_illegal_flags := -w</span><br><span class="line">my_cflags := $(filter-out $(my_illegal_flags),$(my_cflags))</span><br><span class="line">my_cppflags := $(filter-out $(my_illegal_flags),$(my_cppflags))</span><br><span class="line">my_conlyflags := $(filter-out $(my_illegal_flags),$(my_conlyflags))</span><br><span class="line"></span><br><span class="line">#调试信息</span><br><span class="line">ifndef LOCAL_IS_HOST_MODULE</span><br><span class="line">    lili_test_so := libsurfaceflinger libcutils liblog libbinder libutils \</span><br><span class="line">                    libc++ libc libm libhardware libui libgui libpowermanager \</span><br><span class="line">                    libvulkan libbacktrace libsync libnativeloader libbase libz \</span><br><span class="line">                    gralloc.msm8974 libmemalloc hwcomposer.msm8974 liboverlay libhdmi \</span><br><span class="line">                    libhardware_legacy libmedia libskia libvirtual libstdc++</span><br><span class="line"></span><br><span class="line">    ifneq (,$(filter $(LOCAL_MODULE), $(lili_test_so)))</span><br><span class="line">            my_cflags_no_override += -O0 -g3 -Wno-error</span><br><span class="line">            ifeq ($(my_clang),true)</span><br><span class="line">                my_cflags_no_override += -fno-limit-debug-info -glldb</span><br><span class="line">            else</span><br><span class="line">                my_cflags_no_override += -ggdb3</span><br><span class="line">            endif</span><br><span class="line">    endif</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_YACCFLAGS := $(LOCAL_YACCFLAGS)</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-配置CMakeList-并导入源码"><a href="#2-配置CMakeList-并导入源码" class="headerlink" title="2. 配置CMakeList,并导入源码"></a>2. 配置CMakeList,并导入源码</h2><p>这个和之前的没有区别，略。</p>
+<h2 id="3-安装AndroidNativeDebug插件，并配置"><a href="#3-安装AndroidNativeDebug插件，并配置" class="headerlink" title="3. 安装AndroidNativeDebug插件，并配置"></a>3. 安装<code>AndroidNativeDebug</code>插件，并配置</h2><p><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-57-32.png" alt></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SDK</td>
+<td>Android SDK Path</td>
+<td>none</td>
+</tr>
+<tr>
+<td>NDK</td>
+<td>Android NDK Path (Auto gen when ndk-bundle exist in SDK)</td>
+<td>none</td>
+</tr>
+<tr>
+<td>LLDB</td>
+<td>LLDB Path (Auto gen when lldb exist in SDK)</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Remote</td>
+<td>LLDB Target Remote</td>
+<td>unix-abstract-connect:///sdcard/debug.sock</td>
+</tr>
+<tr>
+<td>Adb Root</td>
+<td>The adb can root?</td>
+<td>false</td>
+</tr>
+<tr>
+<td>Process Name</td>
+<td>The name of debug process</td>
+<td>none</td>
+</tr>
+</tbody></table>
+<p><img src="/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/2019-11-13-19-58-32.png" alt></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Android Source</td>
+<td>Android Source Tree Path</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Lunch</td>
+<td>Android target lunch</td>
+<td>none</td>
+</tr>
+</tbody></table>
+<p>后续直接进行调试就可以了。</p>
+<p>我这里遇到的问题，可以启动调试，但是断点无法段下来，后续有时间再研究。</p>
+<blockquote>
+<p>参考：<a href="https://www.lili.kim/2019/01/28/android/Debug%20Android%20Native%20with%20LLDB/" target="_blank" rel="noopener">https://www.lili.kim/2019/01/28/android/Debug%20Android%20Native%20with%20LLDB/</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-%E6%BA%90%E7%A0%81%E8%B0%83%E8%AF%95/" rel="tag"># Android 源码调试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/11/%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81/" rel="next" title="使用Android Studio调试Android源码">
+                <i class="fa fa-chevron-left"></i> 使用Android Studio调试Android源码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Clion配置"><span class="nav-number">1.</span> <span class="nav-text">一、Clion配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-编写CMakelists-txt"><span class="nav-number">1.1.</span> <span class="nav-text">1.编写CMakelists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、-导入Aosp项目，配置远程调试"><span class="nav-number">2.</span> <span class="nav-text">二、 导入Aosp项目，配置远程调试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-配置gdb远程调试环境"><span class="nav-number">2.1.</span> <span class="nav-text">1. 配置gdb远程调试环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-编写android-gdbserver脚本"><span class="nav-number">2.2.</span> <span class="nav-text">2. 编写android_gdbserver脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-调试"><span class="nav-number">2.3.</span> <span class="nav-text">3. 调试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、其他"><span class="nav-number">3.</span> <span class="nav-text">三、其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-打开调试"><span class="nav-number">3.1.</span> <span class="nav-text">1. 打开调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-配置CMakeList-并导入源码"><span class="nav-number">3.2.</span> <span class="nav-text">2. 配置CMakeList,并导入源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-安装AndroidNativeDebug插件，并配置"><span class="nav-number">3.3.</span> <span class="nav-text">3. 安装AndroidNativeDebug插件，并配置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2019/11/13/%E4%BD%BF%E7%94%A8Clion%E8%B0%83%E8%AF%95Android-native%E6%BA%90%E7%A0%81/';
+          this.page.identifier = '2019/11/13/使用Clion调试Android-native源码/';
+          this.page.title = '使用Clion调试Android native源码';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
