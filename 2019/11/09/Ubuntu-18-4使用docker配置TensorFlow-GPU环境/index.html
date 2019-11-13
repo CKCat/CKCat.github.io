@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="一、安装nvidia显卡驱动1. 首先，将ppa:graphics-drivers&#x2F;ppa存储库添加到您的系统中：12$ sudo add-apt-repository ppa:graphics-drivers&#x2F;ppa$ sudo apt update  2. 接下来，确定您的图形卡型号和推荐的驱动程序：123456789101112$ ubuntu-drivers devices== &#x2F;sys&#x2F;">
+<meta name="description" content="一、安装nvidia显卡驱动 1. 首先，将ppa:graphics-drivers&#x2F;ppa存储库添加到您的系统中： 2. 接下来，确定您的图形卡型号和推荐的驱动程序： 3. 与上面的标准Ubuntu存储库示例相同，可以自动安装所有推荐的驱动程序： 4. 完成后，重新启动系统。   二、安装docker 1. 设置Docker存储库 1. 更新apt包索引： 2. 安装软件包以允许apt通过">
 <meta name="keywords" content="Ubuntu Docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu 18.4使用docker配置TensorFlow GPU环境">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;09&#x2F;Ubuntu-18-4%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AETensorFlow-GPU%E7%8E%AF%E5%A2%83&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="一、安装nvidia显卡驱动1. 首先，将ppa:graphics-drivers&#x2F;ppa存储库添加到您的系统中：12$ sudo add-apt-repository ppa:graphics-drivers&#x2F;ppa$ sudo apt update  2. 接下来，确定您的图形卡型号和推荐的驱动程序：123456789101112$ ubuntu-drivers devices== &#x2F;sys&#x2F;">
+<meta property="og:description" content="一、安装nvidia显卡驱动 1. 首先，将ppa:graphics-drivers&#x2F;ppa存储库添加到您的系统中： 2. 接下来，确定您的图形卡型号和推荐的驱动程序： 3. 与上面的标准Ubuntu存储库示例相同，可以自动安装所有推荐的驱动程序： 4. 完成后，重新启动系统。   二、安装docker 1. 设置Docker存储库 1. 更新apt包索引： 2. 安装软件包以允许apt通过">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;09&#x2F;Ubuntu-18-4%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AETensorFlow-GPU%E7%8E%AF%E5%A2%83&#x2F;2019-11-09-17-06-46.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;09&#x2F;Ubuntu-18-4%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AETensorFlow-GPU%E7%8E%AF%E5%A2%83&#x2F;2019-11-09-17-34-09.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;09&#x2F;Ubuntu-18-4%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AETensorFlow-GPU%E7%8E%AF%E5%A2%83&#x2F;2019-11-09-17-37-14.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;09&#x2F;Ubuntu-18-4%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AETensorFlow-GPU%E7%8E%AF%E5%A2%83&#x2F;2019-11-09-17-39-56.png">
-<meta property="og:updated_time" content="2019-11-12T11:47:06.698Z">
+<meta property="og:updated_time" content="2019-11-13T13:36:39.204Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;09&#x2F;Ubuntu-18-4%E4%BD%BF%E7%94%A8docker%E9%85%8D%E7%BD%AETensorFlow-GPU%E7%8E%AF%E5%A2%83&#x2F;2019-11-09-17-06-46.png">
 
@@ -381,7 +381,57 @@
       
 
       
-        <h1 id="一、安装nvidia显卡驱动"><a href="#一、安装nvidia显卡驱动" class="headerlink" title="一、安装nvidia显卡驱动"></a>一、安装nvidia显卡驱动</h1><h2 id="1-首先，将ppa-graphics-drivers-ppa存储库添加到您的系统中："><a href="#1-首先，将ppa-graphics-drivers-ppa存储库添加到您的系统中：" class="headerlink" title="1. 首先，将ppa:graphics-drivers/ppa存储库添加到您的系统中："></a>1. 首先，将ppa:graphics-drivers/ppa存储库添加到您的系统中：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo add-apt-repository ppa:graphics-drivers/ppa</span><br><span class="line">$ sudo apt update</span><br></pre></td></tr></table></figure>
+        <!-- TOC -->
+
+<ul>
+<li><a href="#一安装nvidia显卡驱动">一、安装nvidia显卡驱动</a><ul>
+<li><a href="#1-首先将ppagraphics-driversppa存储库添加到您的系统中">1. 首先，将ppa:graphics-drivers/ppa存储库添加到您的系统中：</a></li>
+<li><a href="#2-接下来确定您的图形卡型号和推荐的驱动程序">2. 接下来，确定您的图形卡型号和推荐的驱动程序：</a></li>
+<li><a href="#3-与上面的标准ubuntu存储库示例相同可以自动安装所有推荐的驱动程序">3. 与上面的标准Ubuntu存储库示例相同，可以自动安装所有推荐的驱动程序：</a></li>
+<li><a href="#4-完成后重新启动系统">4. 完成后，重新启动系统。</a></li>
+</ul>
+</li>
+<li><a href="#二安装docker">二、安装docker</a><ul>
+<li><a href="#1-设置docker存储库">1. 设置Docker存储库</a><ul>
+<li><a href="#1-更新apt包索引">1. 更新apt包索引：</a></li>
+<li><a href="#2-安装软件包以允许apt通过https使用存储库">2. 安装软件包以允许apt通过HTTPS使用存储库：</a></li>
+<li><a href="#3-添加docker的官方gpg密钥">3. 添加Docker的官方GPG密钥：</a></li>
+<li><a href="#4-使用以下命令来设置稳定的存储库">4. 使用以下命令来设置稳定的存储库。</a></li>
+</ul>
+</li>
+<li><a href="#2-安装docker-engine-社区">2. 安装DOCKER ENGINE-社区</a><ul>
+<li><a href="#1-更新apt包索引">1. 更新apt包索引。</a></li>
+<li><a href="#2-安装最新版本的docker-engine-community和containerd或者转到下一步安装特定版本">2. 安装最新版本的Docker Engine-Community和containerd，或者转到下一步安装特定版本：</a></li>
+<li><a href="#3-要安装特定版本的docker-engine-community请在存储库中列出可用版本然后选择并安装">3. 要安装特定版本的Docker Engine-Community，请在存储库中列出可用版本，然后选择并安装：</a></li>
+<li><a href="#4-通过运行hello-world-映像来验证是否正确安装了docker-engine-community-">4. 通过运行hello-world 映像来验证是否正确安装了Docker Engine-Community 。</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#三nvidia-docker和nvidia-container-runtime安装和配置">三、<code>nvidia-docker</code>和<code>nvidia-container-runtime</code>安装和配置</a><ul>
+<li><a href="#1-安装nvidia-docker-">1. 安装<code>nvidia-docker</code> 。</a></li>
+<li><a href="#2-安装nvidia-container-runtime">2. 安装nvidia-container-runtime</a></li>
+<li><a href="#3-docker引擎配置">3. Docker引擎配置</a><ul>
+<li><a href="#1-systemd-drop-in-file">1. Systemd drop-in file</a></li>
+<li><a href="#2-daemon-configuration-file">2. Daemon configuration file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#四配置tensorflow">四、配置tensorflow</a><ul>
+<li><a href="#1-验证-nvidia-docker-安装">1. 验证 nvidia-docker 安装</a></li>
+<li><a href="#2-下载并运行支持-gpu-的-tensorflow-映像">2. 下载并运行支持 <code>GPU</code> 的 <code>TensorFlow</code> 映像</a><ul>
+<li><a href="#1-下载支持-gpu-的-tensorflow-映像">1. 下载支持 <code>GPU</code> 的 <code>TensorFlow</code> 映像</a></li>
+<li><a href="#2-环境测试">2. 环境测试</a></li>
+<li><a href="#3-使用最新的-tensorflow-gpu-映像在容器中启动-bash-shell-会话">3. 使用最新的 TensorFlow GPU 映像在容器中启动 bash shell 会话</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#五通过软链接修改docker配置本地镜像与容器的存储位置">五、通过软链接修改Docker配置本地镜像与容器的存储位置</a></li>
+</ul>
+<!-- /TOC -->
+<h1 id="一、安装nvidia显卡驱动"><a href="#一、安装nvidia显卡驱动" class="headerlink" title="一、安装nvidia显卡驱动"></a>一、安装nvidia显卡驱动</h1><h2 id="1-首先，将ppa-graphics-drivers-ppa存储库添加到您的系统中："><a href="#1-首先，将ppa-graphics-drivers-ppa存储库添加到您的系统中：" class="headerlink" title="1. 首先，将ppa:graphics-drivers/ppa存储库添加到您的系统中："></a>1. 首先，将ppa:graphics-drivers/ppa存储库添加到您的系统中：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo add-apt-repository ppa:graphics-drivers/ppa</span><br><span class="line">$ sudo apt update</span><br></pre></td></tr></table></figure>
 
 <h2 id="2-接下来，确定您的图形卡型号和推荐的驱动程序："><a href="#2-接下来，确定您的图形卡型号和推荐的驱动程序：" class="headerlink" title="2. 接下来，确定您的图形卡型号和推荐的驱动程序："></a>2. 接下来，确定您的图形卡型号和推荐的驱动程序：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ ubuntu-drivers devices</span><br><span class="line">== /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==</span><br><span class="line">modalias : pci:v000010DEd00001C8Csv00001558sd000055A1bc03sc00i00</span><br><span class="line">vendor   : NVIDIA Corporation</span><br><span class="line">model    : GP107M [GeForce GTX 1050 Ti Mobile]</span><br><span class="line">driver   : nvidia-driver-415 - third-party free</span><br><span class="line">driver   : nvidia-driver-390 - third-party free</span><br><span class="line">driver   : nvidia-driver-440 - third-party free recommended</span><br><span class="line">driver   : nvidia-driver-430 - distro non-free</span><br><span class="line">driver   : nvidia-driver-410 - third-party free</span><br><span class="line">driver   : nvidia-driver-435 - distro non-free</span><br><span class="line">driver   : xserver-xorg-video-nouveau - distro free <span class="built_in">builtin</span></span><br></pre></td></tr></table></figure>
 
@@ -588,7 +638,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -599,7 +649,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -610,7 +660,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

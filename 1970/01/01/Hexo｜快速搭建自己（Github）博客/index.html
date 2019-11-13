@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="一、准备工作 安装nodejs 安装git 注册github账号  二、申请github博客1.创建github仓库创建一个新的github仓库，仓库名为username.github.io,其他选项可以默认。  创建按仓库成功后，进入设置页面GitHub Pages 选项，出现如下界面则表示博客页面创建成功。  三、安装Hexo1$ npm install hexo-cli -g  1. 初始化">
+<meta name="description" content="一、准备工作 二、申请github博客 1.创建github仓库   三、安装Hexo 1. 初始化 2. 新建文章 3. 开启服务   四、配置Hexo与Github pages进行关联 1. 配置关联 2. 发布   五、更换NexT主题 1. 下载主题 2. 设置主题 3. 配置主题 1. 标签云页面 2. 分类页面 3. About页面 4. 腾讯公益404页面 5. 代码高亮主题">
 <meta name="keywords" content="博客">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo｜快速搭建自己（Github）博客">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="一、准备工作 安装nodejs 安装git 注册github账号  二、申请github博客1.创建github仓库创建一个新的github仓库，仓库名为username.github.io,其他选项可以默认。  创建按仓库成功后，进入设置页面GitHub Pages 选项，出现如下界面则表示博客页面创建成功。  三、安装Hexo1$ npm install hexo-cli -g  1. 初始化">
+<meta property="og:description" content="一、准备工作 二、申请github博客 1.创建github仓库   三、安装Hexo 1. 初始化 2. 新建文章 3. 开启服务   四、配置Hexo与Github pages进行关联 1. 配置关联 2. 发布   五、更换NexT主题 1. 下载主题 2. 设置主题 3. 配置主题 1. 标签云页面 2. 分类页面 3. About页面 4. 腾讯公益404页面 5. 代码高亮主题">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2&#x2F;new_repository.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2&#x2F;github_pages.png">
-<meta property="og:updated_time" content="2019-11-01T12:44:17.778Z">
+<meta property="og:updated_time" content="2019-11-13T13:36:27.391Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2&#x2F;new_repository.png">
 
@@ -379,7 +379,55 @@
       
 
       
-        <h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><ul>
+        <!-- TOC -->
+
+<ul>
+<li><a href="#一准备工作">一、准备工作</a></li>
+<li><a href="#二申请github博客">二、申请github博客</a><ul>
+<li><a href="#1创建github仓库">1.创建github仓库</a></li>
+</ul>
+</li>
+<li><a href="#三安装hexo">三、安装Hexo</a><ul>
+<li><a href="#1-初始化">1. 初始化</a></li>
+<li><a href="#2-新建文章">2. 新建文章</a></li>
+<li><a href="#3-开启服务">3. 开启服务</a></li>
+</ul>
+</li>
+<li><a href="#四配置hexo与github-pages进行关联">四、配置Hexo与Github pages进行关联</a><ul>
+<li><a href="#1-配置关联">1. 配置关联</a></li>
+<li><a href="#2-发布">2. 发布</a></li>
+</ul>
+</li>
+<li><a href="#五更换next主题">五、更换NexT主题</a><ul>
+<li><a href="#1-下载主题">1. 下载主题</a></li>
+<li><a href="#2-设置主题">2. 设置主题</a></li>
+<li><a href="#3-配置主题">3. 配置主题</a><ul>
+<li><a href="#1-标签云页面">1. 标签云页面</a></li>
+<li><a href="#2-分类页面">2. 分类页面</a></li>
+<li><a href="#3-about页面">3. About页面</a></li>
+<li><a href="#4-腾讯公益404页面">4. 腾讯公益404页面</a></li>
+<li><a href="#5-代码高亮主题">5. 代码高亮主题</a></li>
+<li><a href="#6-站点建立时间">6. 站点建立时间</a></li>
+<li><a href="#7-数学公式显示">7. 数学公式显示</a></li>
+<li><a href="#8-侧边栏社交链接">8. 侧边栏社交链接</a></li>
+<li><a href="#9-首页显示文章摘录">9. 首页显示文章摘录</a></li>
+<li><a href="#10-设置-favicon">10. 设置 favicon</a></li>
+<li><a href="#11-配置不蒜子计数">11. 配置不蒜子计数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#六问题">六、问题</a><ul>
+<li><a href="#1hexo引用本地图片无法显示">1.hexo引用本地图片无法显示</a><ul>
+<li><a href="#插件安装与配置">插件安装与配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><ul>
 <li>安装<a href="https://nodejs.org/en/" target="_blank" rel="noopener">nodejs</a></li>
 <li>安装<a href="https://git-scm.com/" target="_blank" rel="noopener">git</a></li>
 <li>注册<a href="https://github.com/" target="_blank" rel="noopener">github</a>账号</li>
@@ -396,7 +444,7 @@
 <p>会在根目录下source/_posts/ 生成Hello-Hexo.md文件，使用markdown编辑器非常方便。</p>
 <h2 id="3-开启服务"><a href="#3-开启服务" class="headerlink" title="3. 开启服务"></a>3. 开启服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 <p>会看到提示<code>INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</code> 代表博客已经正常运行，在浏览器打开<code>http://0.0.0.0:4000/</code> 即可预览博客的初始状态。</p>
-<p>了解更多Hexo的信息和其他步骤请参考官网的这篇文档。<a href="https://hexo.io/zh-cn/docs/setup.html。" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/setup.html。</a></p>
+<p>了解更多Hexo的信息和其他步骤请参考官网的<a href="https://hexo.io/zh-cn/docs/setup.html" target="_blank" rel="noopener">这篇文档</a> 。</p>
 <h1 id="四、配置Hexo与Github-pages进行关联"><a href="#四、配置Hexo与Github-pages进行关联" class="headerlink" title="四、配置Hexo与Github pages进行关联"></a>四、配置Hexo与Github pages进行关联</h1><h2 id="1-配置关联"><a href="#1-配置关联" class="headerlink" title="1. 配置关联"></a>1. 配置关联</h2><p>进入<code>Blog</code>目录，然后以文本编辑器打开_config.yml文件，修改deploy配置如下，rego为CKCat.github.io.git仓库提交代码的git地址。</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/CKCat/CKCat.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
 <h2 id="2-发布"><a href="#2-发布" class="headerlink" title="2. 发布"></a>2. 发布</h2><p>当然这只是本地跑起来了，而你的github pages服务器上并没有，所以你就需要在你的站点里使用终端命令进行发布：</p>
@@ -407,7 +455,7 @@
 
 <h2 id="2-设置主题"><a href="#2-设置主题" class="headerlink" title="2. 设置主题"></a>2. 设置主题</h2><p>克隆完成以后打开站点配置 <code>_config.yml</code>，找到theme字段，值改为<code>next</code>。<br>运行<code>hexo server --debug</code>，访问<code>http://0.0.0.0:4000/</code> 查看主题是否生效。</p>
 <h2 id="3-配置主题"><a href="#3-配置主题" class="headerlink" title="3. 配置主题"></a>3. 配置主题</h2><p>常用的配置可以直接按照主题的官方<a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">参考手册</a>配置。<br>下面介绍一下常用配置：</p>
-<h3 id="标签云页面"><a href="#标签云页面" class="headerlink" title="标签云页面"></a>标签云页面</h3><ol>
+<h3 id="1-标签云页面"><a href="#1-标签云页面" class="headerlink" title="1. 标签云页面"></a>1. 标签云页面</h3><ol>
 <li><p>新建一个页面，命名为tags。命令如下：</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page <span class="string">"tags"</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -421,7 +469,7 @@
 
 </li>
 </ol>
-<h3 id="分类页面"><a href="#分类页面" class="headerlink" title="分类页面"></a>分类页面</h3><ol>
+<h3 id="2-分类页面"><a href="#2-分类页面" class="headerlink" title="2. 分类页面"></a>2. 分类页面</h3><ol>
 <li><p>新建一个页面，命名为categories。命令如下：</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page categories</span><br></pre></td></tr></table></figure>
 </li>
@@ -436,7 +484,7 @@
 
 </li>
 </ol>
-<h3 id="About页面"><a href="#About页面" class="headerlink" title="About页面"></a>About页面</h3><ol>
+<h3 id="3-About页面"><a href="#3-About页面" class="headerlink" title="3. About页面"></a>3. About页面</h3><ol>
 <li><p>新建一个 about页面：</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new page <span class="string">"about"</span></span><br></pre></td></tr></table></figure></li>
 <li><p>菜单显示about链接，在 <strong>主题配置文件</strong> 设置中将menu中about<br>前面的注释去掉即可。</p>
@@ -447,25 +495,41 @@
 
 </li>
 </ol>
-<h3 id="腾讯公益404页面"><a href="#腾讯公益404页面" class="headerlink" title="腾讯公益404页面"></a>腾讯公益404页面</h3><p>简体中文增加腾讯公益404页面，寻找丢失儿童，让大家一起关注此项公益事业！效果如下<a href="http://www.ixirong.com/404.html" target="_blank" rel="noopener">http://www.ixirong.com/404.html</a></p>
+<h3 id="4-腾讯公益404页面"><a href="#4-腾讯公益404页面" class="headerlink" title="4. 腾讯公益404页面"></a>4. 腾讯公益404页面</h3><p>简体中文增加腾讯公益404页面，寻找丢失儿童，让大家一起关注此项公益事业！效果如下<a href="http://www.ixirong.com/404.html" target="_blank" rel="noopener">http://www.ixirong.com/404.html</a></p>
 <p>使用方法，新建 404.html 页面，放到主题的source目录下，内容如下：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE HTML&gt;</span><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"content-type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8;"</span>/&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge,chrome=1"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"robots"</span> <span class="attr">content</span>=<span class="string">"all"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"robots"</span> <span class="attr">content</span>=<span class="string">"index,follow"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"http://www.qq.com/404/search_children.js"</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span> <span class="attr">homePageUrl</span>=<span class="string">"your site url "</span> <span class="attr">homePageName</span>=<span class="string">"回到我的主页"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="代码高亮主题"><a href="#代码高亮主题" class="headerlink" title="代码高亮主题"></a>代码高亮主题</h3><p>NexT 使用 <a href="https://github.com/chriskempson/tomorrow-theme" target="_blank" rel="noopener">Tomorrow Theme0</a> 作为代码高亮，共有5款主题供你选择。<br>默认使用的是白色的 normal。</p>
-<h3 id="站点建立时间"><a href="#站点建立时间" class="headerlink" title="站点建立时间"></a>站点建立时间</h3><p>这个时间将在站点的底部显示，例如<code>© 2013 - 2019</code>编辑 <strong>站点配置文件</strong>，新增字段since。</p>
+<h3 id="5-代码高亮主题"><a href="#5-代码高亮主题" class="headerlink" title="5. 代码高亮主题"></a>5. 代码高亮主题</h3><p>NexT 使用 <a href="https://github.com/chriskempson/tomorrow-theme" target="_blank" rel="noopener">Tomorrow Theme0</a> 作为代码高亮，共有5款主题供你选择。<br>默认使用的是白色的 normal。</p>
+<h3 id="6-站点建立时间"><a href="#6-站点建立时间" class="headerlink" title="6. 站点建立时间"></a>6. 站点建立时间</h3><p>这个时间将在站点的底部显示，例如<code>© 2013 - 2019</code>编辑 <strong>站点配置文件</strong>，新增字段since。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">since: 2013</span><br></pre></td></tr></table></figure>
 
-<h3 id="数学公式显示"><a href="#数学公式显示" class="headerlink" title="数学公式显示"></a>数学公式显示</h3><p>NexT 借助于 MathJax 来显示数学公式，此选项默认关闭。<br>编辑 <strong>主题配置文件</strong>，将mathjax设定为true即可。</p>
+<h3 id="7-数学公式显示"><a href="#7-数学公式显示" class="headerlink" title="7. 数学公式显示"></a>7. 数学公式显示</h3><p>NexT 借助于 MathJax 来显示数学公式，此选项默认关闭。<br>编辑 <strong>主题配置文件</strong>，将mathjax设定为true即可。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># MathJax Support</span><br><span class="line">mathjax: true</span><br></pre></td></tr></table></figure>
 <p>ProTip: <a href="https://github.com/iissnan/hexo-theme-next/pull/363" target="_blank" rel="noopener">使用七牛 CDN 来加速 MathJax 脚本的加载</a></p>
-<h3 id="侧边栏社交链接"><a href="#侧边栏社交链接" class="headerlink" title="侧边栏社交链接"></a>侧边栏社交链接</h3><p>编辑 <strong>站点配置文件</strong> ，新增字段social，然后添加社交站点名称与地址即可。例如：</p>
+<h3 id="8-侧边栏社交链接"><a href="#8-侧边栏社交链接" class="headerlink" title="8. 侧边栏社交链接"></a>8. 侧边栏社交链接</h3><p>编辑 <strong>站点配置文件</strong> ，新增字段social，然后添加社交站点名称与地址即可。例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#Social linkssocial: </span><br><span class="line">  github: https://github.com/your-user-name </span><br><span class="line">  twitter: https://twitter.com/your-user-name </span><br><span class="line">  weibo: http://weibo.com/your-user-name </span><br><span class="line">  douban: http://douban.com/people/your-user-name </span><br><span class="line">  zhihu: http://www.zhihu.com/people/your-user-name </span><br><span class="line">  # 等等</span><br></pre></td></tr></table></figure>
 
-<h3 id="首页显示文章摘录"><a href="#首页显示文章摘录" class="headerlink" title="首页显示文章摘录"></a>首页显示文章摘录</h3><p>NexT 支持三种方式来控制首页文章的显示方式。若需要在首页显示摘录，可以通过以下方法：</p>
+<h3 id="9-首页显示文章摘录"><a href="#9-首页显示文章摘录" class="headerlink" title="9. 首页显示文章摘录"></a>9. 首页显示文章摘录</h3><p>NexT 支持三种方式来控制首页文章的显示方式。若需要在首页显示摘录，可以通过以下方法：</p>
 <p>在文章中使用<code>&lt;!-- more --&gt;</code>手动进行截断<br>在文章的 <a href="https://hexo.io/docs/front-matter.html" target="_blank" rel="noopener">front-matter</a> 中添加description，并提供文章摘录<br>自动形成摘要，在 主题配置文件 中添加：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_excerpt: </span><br><span class="line">enable: true </span><br><span class="line">length: 150</span><br></pre></td></tr></table></figure>
 <p>默认截取的长度为150字符，可以根据需要自行设定。</p>
-<h3 id="设置-favicon"><a href="#设置-favicon" class="headerlink" title="设置 favicon"></a>设置 favicon</h3><p>将<code>favicon</code>放置到站点的 <code>source</code>目录下即可。</p>
+<h3 id="10-设置-favicon"><a href="#10-设置-favicon" class="headerlink" title="10. 设置 favicon"></a>10. 设置 favicon</h3><p>将<code>favicon</code>放置到站点的 <code>source</code>目录下即可。</p>
+<h3 id="11-配置不蒜子计数"><a href="#11-配置不蒜子计数" class="headerlink" title="11. 配置不蒜子计数"></a>11. 配置不蒜子计数</h3><ol>
+<li>安装脚本（必选）<br>要使用不蒜子必须在页面中引入busuanzi.js，代码如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>本人使用的是next主题，所以在themes/next/layout/_partial/footer.swig中添加上述脚本，也可以把脚本添加在header中，如果使用的是其他主题，大致也是一样的，不过可能后缀是ejs，没有影响。</p>
+<ol start="2">
+<li>配置方式使用不蒜子计数<br>第一种引入脚本的方法适用于任何类型的个人站点，如果你使用的主题是NexT，那么你可以很方便的进行不蒜子的访客统计设置，仅仅只需要一步：</li>
+</ol>
+<p>打开主题的配置文件<code>/theme/next/_config.yml</code>，配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Show PV/UV of the website/page with busuanzi.</span><br><span class="line"># Get more information on http://ibruce.info/2015/04/04/busuanzi/</span><br><span class="line">busuanzi_count:</span><br><span class="line">  # count values only if the other configs are false</span><br><span class="line">  enable: true</span><br><span class="line">  # custom uv span for the whole site</span><br><span class="line">  site_uv: true</span><br><span class="line">  site_uv_header: &lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 访客数</span><br><span class="line">  site_uv_footer: 人</span><br><span class="line">  # custom pv span for the whole site</span><br><span class="line">  site_pv: true</span><br><span class="line">  site_pv_header: &lt;i class=&quot;fa fa-eye&quot;&gt;&lt;/i&gt; 总访问量</span><br><span class="line">  site_pv_footer: 次</span><br><span class="line">  # custom pv span for one page only</span><br><span class="line">  page_pv: true</span><br><span class="line">  page_pv_header: &lt;i class=&quot;fa fa-file-o&quot;&gt;&lt;/i&gt;</span><br><span class="line">  page_pv_footer: 次</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>site_uv表示是否显示整个网站的UV数</p>
+<p>site_pv表示是否显示整个网站的PV数</p>
+<p>page_pv表示是否显示每个页面的PV数</p>
+</blockquote>
 <h1 id="六、问题"><a href="#六、问题" class="headerlink" title="六、问题"></a>六、问题</h1><h2 id="1-hexo引用本地图片无法显示"><a href="#1-hexo引用本地图片无法显示" class="headerlink" title="1.hexo引用本地图片无法显示"></a>1.hexo引用本地图片无法显示</h2><h3 id="插件安装与配置"><a href="#插件安装与配置" class="headerlink" title="插件安装与配置"></a>插件安装与配置</h3><p>首先我们需要安装一个图片路径转换的插件，这个插件名字是hexo-asset-image</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install https://github.com/CodeFalling/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
 <p>但是这个插件的内容需要修改【不然可能会出Bug】</p>
@@ -604,7 +668,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -615,7 +679,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -626,7 +690,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -675,7 +739,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、准备工作"><span class="nav-number">1.</span> <span class="nav-text">一、准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、申请github博客"><span class="nav-number">2.</span> <span class="nav-text">二、申请github博客</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-创建github仓库"><span class="nav-number">2.1.</span> <span class="nav-text">1.创建github仓库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、安装Hexo"><span class="nav-number">3.</span> <span class="nav-text">三、安装Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-初始化"><span class="nav-number">3.1.</span> <span class="nav-text">1. 初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-新建文章"><span class="nav-number">3.2.</span> <span class="nav-text">2. 新建文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-开启服务"><span class="nav-number">3.3.</span> <span class="nav-text">3. 开启服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、配置Hexo与Github-pages进行关联"><span class="nav-number">4.</span> <span class="nav-text">四、配置Hexo与Github pages进行关联</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-配置关联"><span class="nav-number">4.1.</span> <span class="nav-text">1. 配置关联</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-发布"><span class="nav-number">4.2.</span> <span class="nav-text">2. 发布</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、更换NexT主题"><span class="nav-number">5.</span> <span class="nav-text">五、更换NexT主题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载主题"><span class="nav-number">5.1.</span> <span class="nav-text">1. 下载主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-设置主题"><span class="nav-number">5.2.</span> <span class="nav-text">2. 设置主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置主题"><span class="nav-number">5.3.</span> <span class="nav-text">3. 配置主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标签云页面"><span class="nav-number">5.3.1.</span> <span class="nav-text">标签云页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类页面"><span class="nav-number">5.3.2.</span> <span class="nav-text">分类页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#About页面"><span class="nav-number">5.3.3.</span> <span class="nav-text">About页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#腾讯公益404页面"><span class="nav-number">5.3.4.</span> <span class="nav-text">腾讯公益404页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码高亮主题"><span class="nav-number">5.3.5.</span> <span class="nav-text">代码高亮主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#站点建立时间"><span class="nav-number">5.3.6.</span> <span class="nav-text">站点建立时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数学公式显示"><span class="nav-number">5.3.7.</span> <span class="nav-text">数学公式显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#侧边栏社交链接"><span class="nav-number">5.3.8.</span> <span class="nav-text">侧边栏社交链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#首页显示文章摘录"><span class="nav-number">5.3.9.</span> <span class="nav-text">首页显示文章摘录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置-favicon"><span class="nav-number">5.3.10.</span> <span class="nav-text">设置 favicon</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、问题"><span class="nav-number">6.</span> <span class="nav-text">六、问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-hexo引用本地图片无法显示"><span class="nav-number">6.1.</span> <span class="nav-text">1.hexo引用本地图片无法显示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插件安装与配置"><span class="nav-number">6.1.1.</span> <span class="nav-text">插件安装与配置</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、准备工作"><span class="nav-number">1.</span> <span class="nav-text">一、准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、申请github博客"><span class="nav-number">2.</span> <span class="nav-text">二、申请github博客</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-创建github仓库"><span class="nav-number">2.1.</span> <span class="nav-text">1.创建github仓库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、安装Hexo"><span class="nav-number">3.</span> <span class="nav-text">三、安装Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-初始化"><span class="nav-number">3.1.</span> <span class="nav-text">1. 初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-新建文章"><span class="nav-number">3.2.</span> <span class="nav-text">2. 新建文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-开启服务"><span class="nav-number">3.3.</span> <span class="nav-text">3. 开启服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、配置Hexo与Github-pages进行关联"><span class="nav-number">4.</span> <span class="nav-text">四、配置Hexo与Github pages进行关联</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-配置关联"><span class="nav-number">4.1.</span> <span class="nav-text">1. 配置关联</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-发布"><span class="nav-number">4.2.</span> <span class="nav-text">2. 发布</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、更换NexT主题"><span class="nav-number">5.</span> <span class="nav-text">五、更换NexT主题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载主题"><span class="nav-number">5.1.</span> <span class="nav-text">1. 下载主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-设置主题"><span class="nav-number">5.2.</span> <span class="nav-text">2. 设置主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置主题"><span class="nav-number">5.3.</span> <span class="nav-text">3. 配置主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-标签云页面"><span class="nav-number">5.3.1.</span> <span class="nav-text">1. 标签云页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-分类页面"><span class="nav-number">5.3.2.</span> <span class="nav-text">2. 分类页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-About页面"><span class="nav-number">5.3.3.</span> <span class="nav-text">3. About页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-腾讯公益404页面"><span class="nav-number">5.3.4.</span> <span class="nav-text">4. 腾讯公益404页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-代码高亮主题"><span class="nav-number">5.3.5.</span> <span class="nav-text">5. 代码高亮主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-站点建立时间"><span class="nav-number">5.3.6.</span> <span class="nav-text">6. 站点建立时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-数学公式显示"><span class="nav-number">5.3.7.</span> <span class="nav-text">7. 数学公式显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-侧边栏社交链接"><span class="nav-number">5.3.8.</span> <span class="nav-text">8. 侧边栏社交链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-首页显示文章摘录"><span class="nav-number">5.3.9.</span> <span class="nav-text">9. 首页显示文章摘录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-设置-favicon"><span class="nav-number">5.3.10.</span> <span class="nav-text">10. 设置 favicon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-配置不蒜子计数"><span class="nav-number">5.3.11.</span> <span class="nav-text">11. 配置不蒜子计数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、问题"><span class="nav-number">6.</span> <span class="nav-text">六、问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-hexo引用本地图片无法显示"><span class="nav-number">6.1.</span> <span class="nav-text">1.hexo引用本地图片无法显示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插件安装与配置"><span class="nav-number">6.1.1.</span> <span class="nav-text">插件安装与配置</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
