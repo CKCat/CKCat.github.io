@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="一、导入源码到 Android Studio导入源码到 Android Studio要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。 1. 编译 idegen对于 Android 源码的导入， Google 官方给我们提供了一个很方便的工具idegen 它位于我们所下载的系统源码路径中： 1developement&#x2F;tools&#x2F;id">
+<meta name="description" content="一、导入源码到 Android Studio 1. 编译 idegen 2. 导入源码 3. 开始调试     一、导入源码到 Android Studio导入源码到 Android Studio要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。 1. 编译 idegen对于 Android 源码的导入， Google 官方给我">
 <meta name="keywords" content="Android 源码调试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Android Studio调试Android源码">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="一、导入源码到 Android Studio导入源码到 Android Studio要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。 1. 编译 idegen对于 Android 源码的导入， Google 官方给我们提供了一个很方便的工具idegen 它位于我们所下载的系统源码路径中： 1developement&#x2F;tools&#x2F;id">
+<meta property="og:description" content="一、导入源码到 Android Studio 1. 编译 idegen 2. 导入源码 3. 开始调试     一、导入源码到 Android Studio导入源码到 Android Studio要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。 1. 编译 idegen对于 Android 源码的导入， Google 官方给我">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-31-55.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-20-30.png">
@@ -96,7 +96,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-08-51.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-11-23.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-21-13-00.png">
-<meta property="og:updated_time" content="2019-11-13T13:37:32.198Z">
+<meta property="og:updated_time" content="2019-11-14T02:09:53.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;11&#x2F;%E4%BD%BF%E7%94%A8Android-Studio%E8%B0%83%E8%AF%95Android%E6%BA%90%E7%A0%81&#x2F;2019-11-11-20-31-55.png">
 
@@ -386,7 +386,18 @@
       
 
       
-        <h1 id="一、导入源码到-Android-Studio"><a href="#一、导入源码到-Android-Studio" class="headerlink" title="一、导入源码到 Android Studio"></a>一、导入源码到 Android Studio</h1><p>导入源码到 Android Studio<br>要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。</p>
+        <!-- TOC -->
+
+<ul>
+<li><a href="#一导入源码到-android-studio">一、导入源码到 Android Studio</a><ul>
+<li><a href="#1-编译-idegen">1. 编译 idegen</a></li>
+<li><a href="#2-导入源码">2. 导入源码</a></li>
+<li><a href="#3-开始调试">3. 开始调试</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<h1 id="一、导入源码到-Android-Studio"><a href="#一、导入源码到-Android-Studio" class="headerlink" title="一、导入源码到 Android Studio"></a>一、导入源码到 Android Studio</h1><p>导入源码到 Android Studio<br>要在 Android Studio 中调试源码，那第一步自然是导入系统源码到 Android Studio 中了。</p>
 <h2 id="1-编译-idegen"><a href="#1-编译-idegen" class="headerlink" title="1. 编译 idegen"></a>1. 编译 idegen</h2><p>对于 Android 源码的导入， Google 官方给我们提供了一个很方便的工具idegen</p>
 <p>它位于我们所下载的系统源码路径中：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">developement/tools/idegen</span><br></pre></td></tr></table></figure>
@@ -570,7 +581,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -581,7 +592,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -592,7 +603,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

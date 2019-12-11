@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1  一、下载源码由于国内网络环境问题，下列下载源码方式均未采用google官方提供的方式。 1. 下载repo工具使用清华mirror下载repo工具 12$ curl https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;git&#x2F;git-repo -o repo$ chmod +x repo 然后设">
+<meta name="description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1     一、下载源码 1. 下载repo工具 2. 下载Android源码 3. android源码查看所有分支切换分支   二、配置编译环境 1. 安装 JDK 2. 安装编译所需要的包 3. 下载驱动 4. 编译 5. 刷机   6.编译内核并刷机 1. 获取内核源码 2. 编译 6.错误处理 1. flex-2.">
 <meta name="keywords" content="Android系统编译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="编译Android系统">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1  一、下载源码由于国内网络环境问题，下列下载源码方式均未采用google官方提供的方式。 1. 下载repo工具使用清华mirror下载repo工具 12$ curl https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;git&#x2F;git-repo -o repo$ chmod +x repo 然后设">
+<meta property="og:description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1     一、下载源码 1. 下载repo工具 2. 下载Android源码 3. android源码查看所有分支切换分支   二、配置编译环境 1. 安装 JDK 2. 安装编译所需要的包 3. 下载驱动 4. 编译 5. 刷机   6.编译内核并刷机 1. 获取内核源码 2. 编译 6.错误处理 1. flex-2.">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;Screenshot&amp;#32;from&amp;#32;2019-11-05&amp;#32;22-52-59.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;Screenshot&amp;#32;from&amp;#32;2019-11-05&amp;#32;23-36-27.png">
@@ -98,7 +98,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-07-15-38-29.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-07-15-48-06.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-10-14-07-09.png">
-<meta property="og:updated_time" content="2019-11-13T13:38:00.613Z">
+<meta property="og:updated_time" content="2019-11-14T02:10:09.405Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;Screenshot&amp;#32;from&amp;#32;2019-11-05&amp;#32;22-52-59.png">
 
@@ -392,6 +392,36 @@
 <p>系统环境：Ubuntu 18.04.3</p>
 <p>编译Android系统版本： 8.1</p>
 </blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#一下载源码">一、下载源码</a><ul>
+<li><a href="#1-下载repo工具">1. 下载repo工具</a></li>
+<li><a href="#2-下载android源码">2. 下载Android源码</a></li>
+<li><a href="#3-android源码查看所有分支切换分支">3. android源码查看所有分支切换分支</a></li>
+</ul>
+</li>
+<li><a href="#二配置编译环境">二、配置编译环境</a><ul>
+<li><a href="#1-安装-jdk">1. 安装 JDK</a></li>
+<li><a href="#2-安装编译所需要的包">2. 安装编译所需要的包</a></li>
+<li><a href="#3-下载驱动">3. 下载驱动</a></li>
+<li><a href="#4-编译">4. 编译</a></li>
+<li><a href="#5-刷机">5. 刷机</a></li>
+</ul>
+</li>
+<li><a href="#6编译内核并刷机">6.编译内核并刷机</a><ul>
+<li><a href="#1-获取内核源码">1. 获取内核源码</a></li>
+<li><a href="#2-编译">2. 编译</a></li>
+<li><a href="#6错误处理">6.错误处理</a><ul>
+<li><a href="#1-flex-2539-loadlocalec130-_nl_intern_locale_data-assertioncnt--sizeof-_nl_value_type_lc_time--sizeof-_nl_value_type_lc_time0-failed-错误">1. <code>flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))&#39; failed.</code> 错误。</a></li>
+<li><a href="#2-adb和fastboot都没有权限">2. adb和fastboot都没有权限</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
 <h1 id="一、下载源码"><a href="#一、下载源码" class="headerlink" title="一、下载源码"></a>一、下载源码</h1><p>由于国内网络环境问题，下列下载源码方式均未采用google官方提供的方式。</p>
 <h2 id="1-下载repo工具"><a href="#1-下载repo工具" class="headerlink" title="1. 下载repo工具"></a>1. 下载repo工具</h2><p>使用清华mirror下载repo工具</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo -o repo</span><br><span class="line">$ chmod +x repo</span><br></pre></td></tr></table></figure>
@@ -618,7 +648,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -629,7 +659,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -640,7 +670,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
