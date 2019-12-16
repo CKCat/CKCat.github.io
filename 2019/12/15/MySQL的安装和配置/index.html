@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. MySQL服务其安装与配置 1.1. 安装MySQL 1.2. 配置MySQL 1.3. 调整用户身份验证和特权 1.4. 测试MySQL 1.5. 使用 MySQL Workbench 连接数据库   2. 将MySQL数据目录移动到新位置 2.1. 介绍 2.2. 先决条件 2.3. 第1步-移动MySQL数据目录 2.4. 第2步-指向新数据位置 2.5. 步骤3 —配置 App">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL的安装和配置">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;15&#x2F;MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="1. MySQL服务其安装与配置 1.1. 安装MySQL 1.2. 配置MySQL 1.3. 调整用户身份验证和特权 1.4. 测试MySQL 1.5. 使用 MySQL Workbench 连接数据库   2. 将MySQL数据目录移动到新位置 2.1. 介绍 2.2. 先决条件 2.3. 第1步-移动MySQL数据目录 2.4. 第2步-指向新数据位置 2.5. 步骤3 —配置 App">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;15&#x2F;MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE&#x2F;2019-12-15-11-30-54.png">
+<meta property="og:updated_time" content="2019-12-15T04:20:41.742Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;15&#x2F;MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE&#x2F;2019-12-15-11-30-54.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2019/12/15/MySQL的安装和配置/"/>
+
+
+
+
+
+  <title>MySQL的安装和配置 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL的安装和配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T11:31:55+08:00">
+                2019-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/12/15/MySQL的安装和配置/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- TOC -->
+
+<ul>
+<li><a href="#1-mysql服务其安装与配置">1. MySQL服务其安装与配置</a><ul>
+<li><a href="#11-安装mysql">1.1. 安装MySQL</a></li>
+<li><a href="#12-配置mysql">1.2. 配置MySQL</a></li>
+<li><a href="#13-调整用户身份验证和特权">1.3. 调整用户身份验证和特权</a></li>
+<li><a href="#14-测试mysql">1.4. 测试MySQL</a></li>
+<li><a href="#15-使用-mysql-workbench-连接数据库">1.5. 使用 MySQL Workbench 连接数据库</a></li>
+</ul>
+</li>
+<li><a href="#2-将mysql数据目录移动到新位置">2. 将MySQL数据目录移动到新位置</a><ul>
+<li><a href="#21-介绍">2.1. 介绍</a></li>
+<li><a href="#22-先决条件">2.2. 先决条件</a></li>
+<li><a href="#23-第1步-移动mysql数据目录">2.3. 第1步-移动MySQL数据目录</a></li>
+<li><a href="#24-第2步-指向新数据位置">2.4. 第2步-指向新数据位置</a></li>
+<li><a href="#25-步骤3-配置-apparmor-访问控制规则">2.5. 步骤3 —配置 AppArmor 访问控制规则</a></li>
+<li><a href="#26-第4步-重新启动mysql">2.6. 第4步-重新启动MySQL</a></li>
+<li><a href="#27-结论">2.7. 结论</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<h1 id="1-MySQL服务其安装与配置"><a href="#1-MySQL服务其安装与配置" class="headerlink" title="1. MySQL服务其安装与配置"></a>1. MySQL服务其安装与配置</h1><blockquote>
+<p>转载：<a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04" target="_blank" rel="noopener">https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04</a></p>
+</blockquote>
+<h2 id="1-1-安装MySQL"><a href="#1-1-安装MySQL" class="headerlink" title="1.1. 安装MySQL"></a>1.1. 安装MySQL</h2><p>要安装它，请使用以下命令更新服务器上的软件包索引apt：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt update</span><br></pre></td></tr></table></figure>
+<p>然后安装默认软件包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install mysql-server</span><br></pre></td></tr></table></figure>
+<p>这将安装MySQL，但不会提示您设置密码或进行任何其他配置更改。因为这会使您的MySQL安装不安全，所以我们接下来将解决此问题。</p>
+<h2 id="1-2-配置MySQL"><a href="#1-2-配置MySQL" class="headerlink" title="1.2. 配置MySQL"></a>1.2. 配置MySQL</h2><p>对于全新安装，您将需要运行随附的安全脚本。这会更改一些不太安全的默认选项，例如远程root登录和样本用户。在旧版本的MySQL上，您也需要手动初始化数据目录，但是现在这是自动完成的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<p>这将引导您完成一系列提示，在其中您可以对MySQL安装的安全性选项进行一些更改。第一个提示将询问您是否要设置验证密码插件，该插件可用于测试MySQL密码的强度。无论您选择什么，下一个提示都是为MySQL root 用户设置密码。输入，然后确认您选择的安全密码。</p>
+<p>要初始化MySQL数据目录，5.7.6之前的版本您将使用<code>mysql_install_db</code>,5.7.6以及更高版本使用<code>mysqld --initialize</code>。但是，如果按照步骤1中的说明从Debian发行版中安装了MySQL，则数据目录将自动初始化；您无需执行任何操作。如果仍然尝试运行该命令，则会看到以下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysqld: Can&apos;t create directory &apos;/var/lib/mysql/&apos; (Errcode: 17 - File exists)</span><br><span class="line">. . .</span><br><span class="line">2018-04-23T13:48:00.572066Z 0 [ERROR] Aborting</span><br></pre></td></tr></table></figure>
+<p>请注意，即使您已经为 MySQL root 用户设置了密码，但在连接到 MySQL Shell 时，该用户仍未配置为使用密码进行身份验证。如果需要，可以按照步骤1.3调整此设置。</p>
+<h2 id="1-3-调整用户身份验证和特权"><a href="#1-3-调整用户身份验证和特权" class="headerlink" title="1.3. 调整用户身份验证和特权"></a>1.3. 调整用户身份验证和特权</h2><p>在运行MySQL 5.7（及更高版本）的Ubuntu系统中，默认情况下，MySQL root 用户设置为使用 <code>auth_socket</code> 插件而不是密码进行身份验证。在许多情况下，这可以提高安全性和可用性，但是在需要允许外部程序（例如phpMyAdmin）访问用户时，也可能使事情复杂化。</p>
+<p>为了使用密码以root用户身份连接到MySQL ，您需要将其身份验证方法从切换 <code>auth_socket</code> 为 <code>mysql_native_password</code> 。为此，请从终端打开 MySQL 提示符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mysql</span><br></pre></td></tr></table></figure>
+<p>接下来，使用以下命令检查每个MySQL用户帐户使用的身份验证方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT user,authentication_string,plugin,host FROM mysql.user;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| user             | authentication_string                     | plugin                | host      |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| root             |                                           | auth_socket           | localhost |</span><br><span class="line">| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| debian-sys-maint | *CC744277A401A7D25BE1CA89AFF17BF607F876FF | mysql_native_password | localhost |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>在此示例中，您可以看到 root 用户实际上使用 auth_socket 插件进行了身份验证。要将根帐户配置为使用密码进行身份验证，请运行以下 ALTER USER 命令。确保更改 password 为您选择的强密码，并注意此命令将更改您在步骤1.2中设置的root密码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER USER &apos;root&apos;@&apos;localhost&apos; IDENTIFIED WITH mysql_native_password BY &apos;password&apos;;</span><br></pre></td></tr></table></figure>
+<p>然后，运行FLUSH PRIVILEGES告诉服务器重新加载授权表并使新的更改生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+<p>再次检查每个用户使用的身份验证方法，以确认root不再使用该auth_socket插件进行身份验证：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT user,authentication_string,plugin,host FROM mysql.user;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| user             | authentication_string                     | plugin                | host      |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| root             | *3636DACC8616D997782ADD0839F92C1571D6D78F | mysql_native_password | localhost |</span><br><span class="line">| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| debian-sys-maint | *CC744277A401A7D25BE1CA89AFF17BF607F876FF | mysql_native_password | localhost |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>您可以在此示例输出中看到，MySQL 根用户现在使用密码进行了身份验证。一旦在自己的服务器上确认了这一点，就可以退出MySQL Shell：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; exit</span><br></pre></td></tr></table></figure>
+<p>另外，有些人可能会发现以通过专用用户连接到 MySQL 更适合他们的工作流程。要创建这样的用户，请再次打开MySQL Shell：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mysql</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果您如前段所述为root启用了密码认证，则将需要使用其他命令来访问MySQL Shell。以下内容将以常规用户权限运行您的MySQL客户端，并且您将仅通过身份验证在数据库内获得管理员权限：</p>
+</blockquote>
+<blockquote>
+<p><code>mysql -u root -p</code></p>
+</blockquote>
+<p>从那里，创建一个新用户并为其设置一个强密码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE USER &apos;ckcat&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;;</span><br></pre></td></tr></table></figure>
+<p>然后，为新用户授予适当的特权。例如，您可以使用以下命令向数据库内的所有表授予用户特权，以及添加，更改和删除用户特权的能力：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT ALL PRIVILEGES ON *.* TO &apos;ckcat&apos;@&apos;localhost&apos; WITH GRANT OPTION;</span><br></pre></td></tr></table></figure>
+<p>请注意，此时，您无需 <code>FLUSH PRIVILEGES</code> 再次运行该命令。当你修改使用语句授权表喜欢，才需要此命令 <code>INSERT</code>， <code>UPDATE</code> 或 <code>DELETE</code> 。因为您创建了一个新用户，而不需要修改现有用户， <code>FLUSH PRIVILEGES</code> 所以这里不需要。</p>
+<p>接下来，退出 MySQL shell：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; exit</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-4-测试MySQL"><a href="#1-4-测试MySQL" class="headerlink" title="1.4. 测试MySQL"></a>1.4. 测试MySQL</h2><p>无论您如何安装，MySQL都应该已经开始自动运行。要对此进行测试，请检查其状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  systemctl status mysql.service</span><br></pre></td></tr></table></figure>
+<p>您将看到类似于以下内容的输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">● mysql.service - MySQL Community Server</span><br><span class="line">   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: en</span><br><span class="line">   Active: active (running) since Sun 2019-12-15 10:36:06 CST; 32min ago</span><br><span class="line"> Main PID: 8876 (mysqld)</span><br><span class="line">    Tasks: 35 (limit: 4915)</span><br><span class="line">   CGroup: /system.slice/mysql.service</span><br><span class="line">           └─8876 /usr/sbin/mysqld --daemonize --pid-file=/run/mysqld/mysqld.pid</span><br><span class="line"></span><br><span class="line">Dec 15 10:36:05 ckcat-ubuntu systemd[1]: Starting MySQL Community Server...</span><br><span class="line">Dec 15 10:36:06 ckcat-ubuntu systemd[1]: Started MySQL Community Server.</span><br></pre></td></tr></table></figure>
+<p>如果MySQL未运行，则可以使用来启动它 <code>sudo systemctl start mysql</code> ，也可以通过下列方法进行操作。</p>
+<p>启动服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql start</span><br></pre></td></tr></table></figure>
+<p>停止服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql stop</span><br></pre></td></tr></table></figure>
+<p>重启服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql restart</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-5-使用-MySQL-Workbench-连接数据库"><a href="#1-5-使用-MySQL-Workbench-连接数据库" class="headerlink" title="1.5. 使用 MySQL Workbench 连接数据库"></a>1.5. 使用 MySQL Workbench 连接数据库</h2><p>安装 MySQL Workbench </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install mysql-workbench</span><br></pre></td></tr></table></figure>
+<p>启动 MySQL Workbench ，选择ip、端口、用户名，输入密码连接对应的数据库<br><img src="/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/2019-12-15-11-30-54.png" alt></p>
+<h1 id="2-将MySQL数据目录移动到新位置"><a href="#2-将MySQL数据目录移动到新位置" class="headerlink" title="2. 将MySQL数据目录移动到新位置"></a>2. 将MySQL数据目录移动到新位置</h1><blockquote>
+<p>参考：<a href="https://www.digitalocean.com/community/tutorials/how-to-move-a-mysql-data-directory-to-a-new-location-on-ubuntu-18-04" target="_blank" rel="noopener">https://www.digitalocean.com/community/tutorials/how-to-move-a-mysql-data-directory-to-a-new-location-on-ubuntu-18-04</a></p>
+</blockquote>
+<h2 id="2-1-介绍"><a href="#2-1-介绍" class="headerlink" title="2.1. 介绍"></a>2.1. 介绍</h2><p>数据库会随着时间增长，有时会超出文件系统上的空间。当 I/O 与操作系统的其余部分位于同一分区时，您也可能会遇到 I/O 竞争。 RAID 、网络块存储和其他设备可以提供冗余和其他所需的功能。无论您是要添加更多空间，评估优化性能的方式还是希望利用其他存储功能，本教程都将指导您重新定位MySQL的数据目录。</p>
+<h2 id="2-2-先决条件"><a href="#2-2-先决条件" class="headerlink" title="2.2. 先决条件"></a>2.2. 先决条件</h2><p>要完成本指南，您将需要：</p>
+<ul>
+<li>具有非root用户sudo特权的Ubuntu 18.04服务器。</li>
+<li>一个MySQL服务器</li>
+</ul>
+<p>在此示例中，我们将数据移至 <code>~/.mysqldata</code> 目录中。</p>
+<h2 id="2-3-第1步-移动MySQL数据目录"><a href="#2-3-第1步-移动MySQL数据目录" class="headerlink" title="2.3. 第1步-移动MySQL数据目录"></a>2.3. 第1步-移动MySQL数据目录</h2><p>为了准备移动 MySQL 的数据目录，让我们通过使用管理凭据启动交互式 MySQL 会话来验证当前位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>出现提示时，提供MySQL root密码。然后在MySQL提示符下，选择数据目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@datadir;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">+-----------------+</span><br><span class="line">| @@datadir       |</span><br><span class="line">+-----------------+</span><br><span class="line">| /var/lib/mysql/ |</span><br><span class="line">+-----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>此输出确认 MySQL 已配置为使用默认数据目录， <code>/var/lib/mysql/</code> ,因此这是我们需要移动的目录。</p>
+<p>为了确保数据的完整性，在实际更改数据目录之前，我们将关闭MySQL：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl stop mysql</span><br></pre></td></tr></table></figure>
+<p><code>systemctl</code> 不会显示所有服务管理命令的结果，因此，如果要确保成功，请使用以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+<p>如果输出的最后一行告诉您服务器已停止，则可以确定它已关闭：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">. . .</span><br><span class="line">Dec 15 11:42:15 ckcat-ubuntu systemd[1]: Stopped MySQL Community Server.</span><br></pre></td></tr></table></figure>
+<p>现在服务器已关闭，我们将使用 <code>rsync</code> 将现有数据库目录复制到新位置。使用该 <code>-a</code> 标志保留权限和其他目录属性，同时 <code>-v</code> 提供详细的输出，以便您可以跟踪进度。</p>
+<blockquote>
+<p>注意：请确保目录上没有斜杠，如果使用制表符补全，可以添加斜杠。当出现斜杠时，rsync会将目录的内容转储到安装点，而不是将其传输到包含mysql目录.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rsync -av /var/lib/mysql ~/.mysqldata</span><br></pre></td></tr></table></figure>
+<p>一旦rsync完成，用.bak扩展名重命名当前文件夹中保存，直到我们已经证实，此举是成功的。通过重命名，我们可以避免新旧位置文件引起的混乱：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mv /var/lib/mysql /var/lib/mysql.bak</span><br></pre></td></tr></table></figure>
+<p>现在，我们准备将注意力转向配置。</p>
+<h2 id="2-4-第2步-指向新数据位置"><a href="#2-4-第2步-指向新数据位置" class="headerlink" title="2.4. 第2步-指向新数据位置"></a>2.4. 第2步-指向新数据位置</h2><p>MySQL有几种方法可以覆盖配置值。默认情况下， <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> 在文件中 <code>datadir</code> 设置为 <code>/var/lib/mysql</code> 。编辑此文件以反映新的数据目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf</span><br></pre></td></tr></table></figure>
+<p>找到开头的行， <code>datadir=</code> 并更改其后的路径以反映新位置。</p>
+<p>在我们的例子中，更新后的文件如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">datadir=~/.mysqldata/mysql</span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
+<p>这似乎是重新启动MySQL的正确时机，但是在成功完成此配置之前，还需要配置一件事。</p>
+<h2 id="2-5-步骤3-—配置-AppArmor-访问控制规则"><a href="#2-5-步骤3-—配置-AppArmor-访问控制规则" class="headerlink" title="2.5. 步骤3 —配置 AppArmor 访问控制规则"></a>2.5. 步骤3 —配置 AppArmor 访问控制规则</h2><p>我们需要告诉 AppArmor 通过在默认目录和新位置之间创建别名来让 MySQL 写入新目录。为此，请编辑 AppArmor <code>alias</code> 文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/apparmor.d/tunables/alias</span><br></pre></td></tr></table></figure>
+<p>在文件底部，添加以下别名规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">alias /var/lib/mysql/ -&gt; ~/.mysqldata/mysql,</span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
+<p>为了使更改生效，请重新启动 AppArmor：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl restart apparmor</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果跳过AppArmor配置步骤，则会遇到以下错误消息：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">Job for mysql.service failed because the control process </span><br><span class="line">exited with error code. See &quot;systemctl status mysql.service&quot; </span><br><span class="line">and &quot;journalctl -xe&quot; for details.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>从 <code>systemctl</code> 和<code>journalctl</code> 两者的输出结尾判断：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">Jul 18 11:03:24 ubuntu-512mb-nyc1-01 systemd[1]: </span><br><span class="line">mysql.service: Main process exited, code=exited, status=1/FAILURE</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于消息没有在 AppArmor 和数据目录之间建立显式连接，因此该错误可能需要一些时间才能弄清楚。</p>
+</blockquote>
+<h2 id="2-6-第4步-重新启动MySQL"><a href="#2-6-第4步-重新启动MySQL" class="headerlink" title="2.6. 第4步-重新启动MySQL"></a>2.6. 第4步-重新启动MySQL</h2><p>下一步是启动 MySQL ，但如果这样做，则会遇到另一个错误。这次不是发生 AppArmor 问题，而是因为该脚本 <code>mysql-systemd-start</code> 检查是否存在与两个默认路径匹配的目录 <code>-d</code> 或符号链接 <code>-L</code> 。如果找不到它们，它将失败：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">if [ ! -d /var/lib/mysql ] &amp;&amp; [ ! -L /var/lib/mysql ]; then</span><br><span class="line"> echo &quot;MySQL data dir not found at /var/lib/mysql. Please create one.&quot;</span><br><span class="line"> exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ ! -d /var/lib/mysql/mysql ] &amp;&amp; [ ! -L /var/lib/mysql/mysql ]; then</span><br><span class="line"> echo &quot;MySQL system database not found. Please run mysql_install_db tool.&quot;</span><br><span class="line"> exit 1</span><br><span class="line">fi</span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
+<p>因为我们需要这些来启动服务器，所以我们将创建最小的目录结构以通过脚本的环境检查。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkdir /var/lib/mysql/mysql -p</span><br></pre></td></tr></table></figure>
+<p>现在我们准备启动MySQL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl start mysql</span><br><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+<p>为了确保确实使用了新的数据目录，请启动MySQL监视器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>再次查看数据目录的值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@datadir;</span><br><span class="line"></span><br><span class="line">+-------------------------------+</span><br><span class="line">| @@datadir                     |</span><br><span class="line">+-------------------------------+</span><br><span class="line">| /home/ckcat/.mysqldata/mysql/ |</span><br><span class="line">+-------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>现在，您已经重新启动了 MySQL 并确认它正在使用新位置，请借此机会确保您的数据库可以正常运行。验证所有现有数据的完整性后，即可删除备份数据目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rm -Rf /var/lib/mysql.bak</span><br></pre></td></tr></table></figure>
+<p>最后一次重启MySQL，以确保它能按预期运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl restart mysql</span><br><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+<h2 id="2-7-结论"><a href="#2-7-结论" class="headerlink" title="2.7. 结论"></a>2.7. 结论</h2><p>在本教程中，我们将MySQL的数据目录移动到了新位置，并更新了Ubuntu的AppArmor ACL以适应该调整。尽管我们使用的是块存储设备，但无论底层技术如何，此处的说明都应适用于重新定义数据目录的位置。</p>
+<p>有关管理MySQL数据目录的更多信息，请参见MySQL官方文档中的以下部分：</p>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/data-directory.html" target="_blank" rel="noopener">Mysql数据目录</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/multiple-data-directories.html" target="_blank" rel="noopener">设置多个数据目录</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/14/MySQL%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" rel="next" title="MySQL基本使用">
+                <i class="fa fa-chevron-left"></i> MySQL基本使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MySQL服务其安装与配置"><span class="nav-number">1.</span> <span class="nav-text">1. MySQL服务其安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-安装MySQL"><span class="nav-number">1.1.</span> <span class="nav-text">1.1. 安装MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-配置MySQL"><span class="nav-number">1.2.</span> <span class="nav-text">1.2. 配置MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-调整用户身份验证和特权"><span class="nav-number">1.3.</span> <span class="nav-text">1.3. 调整用户身份验证和特权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-测试MySQL"><span class="nav-number">1.4.</span> <span class="nav-text">1.4. 测试MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-使用-MySQL-Workbench-连接数据库"><span class="nav-number">1.5.</span> <span class="nav-text">1.5. 使用 MySQL Workbench 连接数据库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-将MySQL数据目录移动到新位置"><span class="nav-number">2.</span> <span class="nav-text">2. 将MySQL数据目录移动到新位置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-介绍"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-先决条件"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 先决条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-第1步-移动MySQL数据目录"><span class="nav-number">2.3.</span> <span class="nav-text">2.3. 第1步-移动MySQL数据目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-第2步-指向新数据位置"><span class="nav-number">2.4.</span> <span class="nav-text">2.4. 第2步-指向新数据位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-步骤3-—配置-AppArmor-访问控制规则"><span class="nav-number">2.5.</span> <span class="nav-text">2.5. 步骤3 —配置 AppArmor 访问控制规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-第4步-重新启动MySQL"><span class="nav-number">2.6.</span> <span class="nav-text">2.6. 第4步-重新启动MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-结论"><span class="nav-number">2.7.</span> <span class="nav-text">2.7. 结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/';
+          this.page.identifier = '2019/12/15/MySQL的安装和配置/';
+          this.page.title = 'MySQL的安装和配置';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
