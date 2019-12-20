@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="CKCat的博客">
 <meta property="og:description" content="本文章记录使用pytho过程中易忘的知识，方便自己查阅。 Python中join函数和os.path.join用法 join ： 连接字符串数组。将字符串、元组、列表中的元素以指定的字符(分隔符)连接生成一个新的字符串   os.path.join() ： 将多个路径组合后返回  12345678语法：‘sep’.join（seq）参数说明：    sep：分隔符。可以为空    seq：要连接的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-15T04:29:36.286Z">
+<meta property="og:updated_time" content="2019-12-18T08:58:01.583Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -276,7 +276,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CKCat">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/human.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -395,6 +395,10 @@
 <p>settings -&gt; Editor -&gt; General -&gt; Code Completion</p>
 </blockquote>
 <p>将 <code>Match case</code> 不勾选就可以忽略大小写进行自动补齐了。</p>
+<h1 id="pycharm-设置-python-代码模板"><a href="#pycharm-设置-python-代码模板" class="headerlink" title="pycharm 设置 python 代码模板"></a>pycharm 设置 python 代码模板</h1><p>设置 File &gt; Settings &gt; File and Code Template &gt; Python Script</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python3</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># File Name : $&#123;NAME&#125;</span><br><span class="line"># Created by $&#123;USER&#125; on $DATE</span><br><span class="line"></span><br><span class="line">__author__ = &apos;$&#123;USER&#125;&apos;</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
+<p>一些模板变量含义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$&#123;PROJECT_NAME&#125; - 当前Project名称;</span><br><span class="line"> $&#123;NAME&#125; - 在创建文件的对话框中指定的文件名;</span><br><span class="line"> $&#123;USER&#125; - 当前用户名;</span><br><span class="line"> $&#123;DATE&#125; - 当前系统日期;</span><br><span class="line"> $&#123;TIME&#125; - 当前系统时间;</span><br><span class="line"> $&#123;YEAR&#125; - 年;</span><br><span class="line"> $&#123;MONTH&#125; - 月;</span><br><span class="line"> $&#123;DAY&#125; - 日;</span><br><span class="line"> $&#123;HOUR&#125; - 小时;</span><br><span class="line"> $&#123;MINUTE&#125; - 分钟；</span><br><span class="line"> $&#123;PRODUCT_NAME&#125; - 创建文件的IDE名称;</span><br><span class="line"> $&#123;MONTH_NAME_SHORT&#125; - 英文月份缩写, 如: Jan, Feb, etc;</span><br><span class="line"> $&#123;MONTH_NAME_FULL&#125; - 英文月份全称, 如: January, February, etc；</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -513,6 +517,10 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image"
+                src="/images/human.png"
+                alt="CKCat" />
+            
               <p class="site-author-name" itemprop="name">CKCat</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
@@ -524,7 +532,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -535,7 +543,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -546,7 +554,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -595,7 +603,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python中join函数和os-path-join用法"><span class="nav-number">1.</span> <span class="nav-text">Python中join函数和os.path.join用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-设置忽略大小写进行自动补齐"><span class="nav-number">2.</span> <span class="nav-text">pycharm 设置忽略大小写进行自动补齐</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python中join函数和os-path-join用法"><span class="nav-number">1.</span> <span class="nav-text">Python中join函数和os.path.join用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-设置忽略大小写进行自动补齐"><span class="nav-number">2.</span> <span class="nav-text">pycharm 设置忽略大小写进行自动补齐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-设置-python-代码模板"><span class="nav-number">3.</span> <span class="nav-text">pycharm 设置 python 代码模板</span></a></li></ol></div>
             
 
           </div>
