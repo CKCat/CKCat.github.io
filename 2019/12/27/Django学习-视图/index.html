@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Django," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="视图视图的功能 视图负责接受Web请求HttpRequest，进行逻辑处理，返回Web响应HttpResponse给请求者。 创建示例项目1. 创建项目 test31django-admin startproject test3  2. 进入项目目录，创建应用 booktest12cd test3test3 python manage.py startapp booktest  3. 在 test">
+<meta name="keywords" content="Django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django学习-视图">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="视图视图的功能 视图负责接受Web请求HttpRequest，进行逻辑处理，返回Web响应HttpResponse给请求者。 创建示例项目1. 创建项目 test31django-admin startproject test3  2. 进入项目目录，创建应用 booktest12cd test3test3 python manage.py startapp booktest  3. 在 test">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-30T08:45:04.887Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2019/12/27/Django学习-视图/"/>
+
+
+
+
+
+  <title>Django学习-视图 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/human.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Django学习-视图</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-27T17:07:47+08:00">
+                2019-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/12/27/Django学习-视图/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>视图的功能</p>
+<p>视图负责接受Web请求HttpRequest，进行逻辑处理，返回Web响应HttpResponse给请求者。</p>
+<h2 id="创建示例项目"><a href="#创建示例项目" class="headerlink" title="创建示例项目"></a>创建示例项目</h2><h3 id="1-创建项目-test3"><a href="#1-创建项目-test3" class="headerlink" title="1. 创建项目 test3"></a>1. 创建项目 test3</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject test3</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-进入项目目录，创建应用-booktest"><a href="#2-进入项目目录，创建应用-booktest" class="headerlink" title="2. 进入项目目录，创建应用 booktest"></a>2. 进入项目目录，创建应用 booktest</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd test3</span><br><span class="line">test3 python manage.py startapp booktest</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-在-test3-settings-py-中-INSTALLED-APPS-项安装应用"><a href="#3-在-test3-settings-py-中-INSTALLED-APPS-项安装应用" class="headerlink" title="3. 在 test3/settings.py 中 INSTALLED_APPS 项安装应用"></a>3. 在 <code>test3/settings.py</code> 中 <code>INSTALLED_APPS</code> 项安装应用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    &apos;django.contrib.auth&apos;,</span><br><span class="line">    &apos;django.contrib.contenttypes&apos;,</span><br><span class="line">    &apos;django.contrib.sessions&apos;,</span><br><span class="line">    &apos;django.contrib.messages&apos;,</span><br><span class="line">    &apos;django.contrib.staticfiles&apos;,</span><br><span class="line">    &apos;booktest&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-在-test3-settings-py-中DATABASES项配置使用-MySQL-数据库-test2"><a href="#4-在-test3-settings-py-中DATABASES项配置使用-MySQL-数据库-test2" class="headerlink" title="4. 在 test3/settings.py 中DATABASES项配置使用 MySQL 数据库 test2"></a>4. 在 <code>test3/settings.py</code> 中DATABASES项配置使用 MySQL 数据库 <code>test2</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DATABASES = &#123;</span><br><span class="line">    &apos;default&apos;: &#123;</span><br><span class="line">        &apos;ENGINE&apos;: &apos;django.db.backends.mysql&apos;,</span><br><span class="line">        &apos;NAME&apos;: &apos;test2&apos;,</span><br><span class="line">        &apos;HOST&apos;: &apos;localhost&apos;,</span><br><span class="line">        &apos;PORT&apos;: &apos;3306&apos;,</span><br><span class="line">        &apos;USER&apos;: &apos;ckcat&apos;,</span><br><span class="line">        &apos;PASSWORD&apos;: &apos;mysql&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并在 <code>test/__init__.py</code> 中加入以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line"></span><br><span class="line">pymysql.install_as_MySQLdb()</span><br></pre></td></tr></table></figure>
+<h3 id="5-在-test3-settings-py-中-TEMPLATES-项配置模板查找路径"><a href="#5-在-test3-settings-py-中-TEMPLATES-项配置模板查找路径" class="headerlink" title="5. 在 test3/settings.py 中 TEMPLATES 项配置模板查找路径"></a>5. 在 <code>test3/settings.py</code> 中 <code>TEMPLATES</code> 项配置模板查找路径</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        &apos;BACKEND&apos;: &apos;django.template.backends.django.DjangoTemplates&apos;,</span><br><span class="line">        &apos;DIRS&apos;: [os.path.join(BASE_DIR, &apos;templates&apos;)],</span><br><span class="line">        &apos;APP_DIRS&apos;: True,</span><br><span class="line">        ...</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-创建模板目录-test3-templates-booktest-。"><a href="#6-创建模板目录-test3-templates-booktest-。" class="headerlink" title="6. 创建模板目录 test3/templates/booktest 。"></a>6. 创建模板目录 <code>test3/templates/booktest</code> 。</h3><h3 id="7-使用视图"><a href="#7-使用视图" class="headerlink" title="7. 使用视图"></a>7. 使用视图</h3><ol>
+<li><p>在 <code>booktest/views.py</code> 中定义视图函数index：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render, HttpResponse</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    return HttpResponse(&quot;视图函数Index&quot;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 <code>test3/urls.py</code> 中编辑加入如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import include, url</span><br><span class="line">from django.contrib import admin</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^admin/&apos;, include(admin.site.urls)),</span><br><span class="line">    url(r&apos;^&apos;, include(&apos;booktest.urls&apos;))</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 booktest 目录下创建 <code>urls.py</code> 文件并编辑其内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import url</span><br><span class="line">from booktest import views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^$&apos;, views.index)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="8-启动服务"><a href="#8-启动服务" class="headerlink" title="8. 启动服务"></a>8. 启动服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure>
+
+<h1 id="URLconf"><a href="#URLconf" class="headerlink" title="URLconf"></a>URLconf</h1><p>用户通过在浏览器的地址栏中输入网址请求网站，对于Django开发的网站，由哪一个视图进行处理请求，是由url匹配找到的。</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1-在-test3-settings-py-中通过ROOT-URLCONF指定url配置，默认已经有此配置。"><a href="#1-在-test3-settings-py-中通过ROOT-URLCONF指定url配置，默认已经有此配置。" class="headerlink" title="1. 在 test3/settings.py 中通过ROOT_URLCONF指定url配置，默认已经有此配置。"></a>1. 在 <code>test3/settings.py</code> 中通过ROOT_URLCONF指定url配置，默认已经有此配置。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROOT_URLCONF = &apos;test3.urls&apos;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-打开-test3-urls-py-可以看到默认配置。"><a href="#2-打开-test3-urls-py-可以看到默认配置。" class="headerlink" title="2. 打开 test3/urls.py 可以看到默认配置。"></a>2. 打开 <code>test3/urls.py</code> 可以看到默认配置。</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import include, url</span><br><span class="line">from django.contrib import admin</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^admin/&apos;, include(admin.site.urls)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意点</strong></p>
+<ul>
+<li>在 <code>test3/urls.py</code> 中进行包含配置，在各自应用中创建具体配置。</li>
+<li>定义 <code>urlpatterns</code> 列表，存储 <code>url()</code> 对象，这个名称是固定的。<blockquote>
+<p>urlpatterns 中的每个正则表达式在第一次访问它们时被编译，这使得运行很快。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p> <code>url()</code> 对象，被定义在 <code>django.conf.urls</code> 包中，有两种语法结构：</p>
+<h3 id="语法一"><a href="#语法一" class="headerlink" title="语法一"></a>语法一</h3><p>包含，一般在自定义应用中创建一个urls.py来定义url。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(正则,include(&apos;应用.urls&apos;))</span><br></pre></td></tr></table></figure>
+<h3 id="语法二"><a href="#语法二" class="headerlink" title="语法二"></a>语法二</h3><p>定义，指定URL和视图函数的对应关系。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(正则,&apos;视图函数名称&apos;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>说明1：正则部分推荐使用r，表示字符串不转义，这样在正则表达式中使用\只写一个就可以。 </p>
+</blockquote>
+<blockquote>
+<p>说明2：不能在开始加反斜杠，推荐在结束加反斜杠。</p>
+</blockquote>
+<h2 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h2><p>请求的url被看做是一个普通的python字符串，进行匹配时不包括域名、get或post参数。 如请求地址如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/delete1/?a=10</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Django/" rel="tag"># Django</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/21/r2Frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8/" rel="next" title="r2Frida环境配置及使用">
+                <i class="fa fa-chevron-left"></i> r2Frida环境配置及使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/31/Python-%E5%BA%93%E6%89%93%E5%8C%85%E5%88%86%E5%8F%91-setup-py-%E7%BC%96%E5%86%99-%E7%AE%80%E6%98%93%E6%8C%87%E5%8D%97/" rel="prev" title="Python 库打包分发(setup.py 编写)简易指南">
+                Python 库打包分发(setup.py 编写)简易指南 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/human.png"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#视图"><span class="nav-number">1.</span> <span class="nav-text">视图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建示例项目"><span class="nav-number">1.1.</span> <span class="nav-text">创建示例项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建项目-test3"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 创建项目 test3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-进入项目目录，创建应用-booktest"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 进入项目目录，创建应用 booktest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-在-test3-settings-py-中-INSTALLED-APPS-项安装应用"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 在 test3/settings.py 中 INSTALLED_APPS 项安装应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-在-test3-settings-py-中DATABASES项配置使用-MySQL-数据库-test2"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 在 test3/settings.py 中DATABASES项配置使用 MySQL 数据库 test2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-在-test3-settings-py-中-TEMPLATES-项配置模板查找路径"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 在 test3/settings.py 中 TEMPLATES 项配置模板查找路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-创建模板目录-test3-templates-booktest-。"><span class="nav-number">1.1.6.</span> <span class="nav-text">6. 创建模板目录 test3/templates/booktest 。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-使用视图"><span class="nav-number">1.1.7.</span> <span class="nav-text">7. 使用视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-启动服务"><span class="nav-number">1.1.8.</span> <span class="nav-text">8. 启动服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#URLconf"><span class="nav-number">2.</span> <span class="nav-text">URLconf</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-在-test3-settings-py-中通过ROOT-URLCONF指定url配置，默认已经有此配置。"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 在 test3/settings.py 中通过ROOT_URLCONF指定url配置，默认已经有此配置。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-打开-test3-urls-py-可以看到默认配置。"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 打开 test3/urls.py 可以看到默认配置。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">2.2.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法一"><span class="nav-number">2.2.1.</span> <span class="nav-text">语法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法二"><span class="nav-number">2.2.2.</span> <span class="nav-text">语法二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取值"><span class="nav-number">2.3.</span> <span class="nav-text">获取值</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/';
+          this.page.identifier = '2019/12/27/Django学习-视图/';
+          this.page.title = 'Django学习-视图';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

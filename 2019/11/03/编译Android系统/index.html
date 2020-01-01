@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1     一、下载源码 1. 下载repo工具 2. 下载Android源码 3. android源码查看所有分支切换分支   二、配置编译环境 1. 安装 JDK 2. 安装编译所需要的包 3. 下载驱动 4. 编译 5. 刷机   6.编译内核并刷机 1. 获取内核源码 2. 编译 6.错误处理 1. flex-2.">
+<meta name="description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1     一、下载源码 1. 下载repo工具 2. 下载Android源码 3. android源码查看所有分支切换分支   二、配置编译环境 1. 安装 JDK 2. 安装编译所需要的包 3. 下载驱动 4. 编译 5. 刷机   三、编译内核并刷机 1. 获取内核源码 2. 编译   四、错误处理 1. flex-">
 <meta name="keywords" content="Android系统编译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="编译Android系统">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1     一、下载源码 1. 下载repo工具 2. 下载Android源码 3. android源码查看所有分支切换分支   二、配置编译环境 1. 安装 JDK 2. 安装编译所需要的包 3. 下载驱动 4. 编译 5. 刷机   6.编译内核并刷机 1. 获取内核源码 2. 编译 6.错误处理 1. flex-2.">
+<meta property="og:description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： 8.1     一、下载源码 1. 下载repo工具 2. 下载Android源码 3. android源码查看所有分支切换分支   二、配置编译环境 1. 安装 JDK 2. 安装编译所需要的包 3. 下载驱动 4. 编译 5. 刷机   三、编译内核并刷机 1. 获取内核源码 2. 编译   四、错误处理 1. flex-">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;Screenshot&amp;#32;from&amp;#32;2019-11-05&amp;#32;22-52-59.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;Screenshot&amp;#32;from&amp;#32;2019-11-05&amp;#32;23-36-27.png">
@@ -97,8 +97,9 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-07-15-36-55.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-07-15-38-29.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-07-15-48-06.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-12-26-16-26-31.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-10-14-07-09.png">
-<meta property="og:updated_time" content="2019-12-16T03:18:01.854Z">
+<meta property="og:updated_time" content="2019-12-26T08:28:31.910Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;Screenshot&amp;#32;from&amp;#32;2019-11-05&amp;#32;22-52-59.png">
 
@@ -409,14 +410,14 @@
 <li><a href="#5-刷机">5. 刷机</a></li>
 </ul>
 </li>
-<li><a href="#6编译内核并刷机">6.编译内核并刷机</a><ul>
+<li><a href="#三编译内核并刷机">三、编译内核并刷机</a><ul>
 <li><a href="#1-获取内核源码">1. 获取内核源码</a></li>
 <li><a href="#2-编译">2. 编译</a></li>
-<li><a href="#6错误处理">6.错误处理</a><ul>
-<li><a href="#1-flex-2539-loadlocalec130-_nl_intern_locale_data-assertioncnt-lt-sizeof-_nl_value_type_lc_time--sizeof-_nl_value_type_lc_time0-failed-错误">1. flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))’ failed. 错误。</a></li>
-<li><a href="#2-adb和fastboot都没有权限">2. adb和fastboot都没有权限</a></li>
 </ul>
 </li>
+<li><a href="#四错误处理">四、错误处理</a><ul>
+<li><a href="#1-flex-2539-loadlocalec130-_nl_intern_locale_data-assertioncnt-lt-sizeof-_nl_value_type_lc_time--sizeof-_nl_value_type_lc_time0-failed-错误">1. flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))’ failed. 错误。</a></li>
+<li><a href="#2-adb和fastboot都没有权限">2. adb和fastboot都没有权限</a></li>
 </ul>
 </li>
 </ul>
@@ -491,32 +492,35 @@
 <p><strong>解决</strong></p>
 <p>先刷官方8.1的系统，在刷自己编译的8.1系统就可以了，具体原因就是bootloader没有更新到相应的版本。</p>
 <p>下图为刷机成功的的手机系统信息。<br><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/2019-11-10-14-05-29.png" alt></p>
-<h1 id="6-编译内核并刷机"><a href="#6-编译内核并刷机" class="headerlink" title="6.编译内核并刷机"></a>6.编译内核并刷机</h1><h2 id="1-获取内核源码"><a href="#1-获取内核源码" class="headerlink" title="1. 获取内核源码"></a>1. 获取内核源码</h2><p>进入到源码根目录下的kernel文件夹中执行<code>git clone https://aosp.tuna.tsinghua.edu.cn/kernel/msm</code>,就可以下载到相应msm的内核源码了。<br>通过<code>https://source.android.com/source/building-kernels</code>页面找到设备对应的源码位置。</p>
+<h1 id="三、编译内核并刷机"><a href="#三、编译内核并刷机" class="headerlink" title="三、编译内核并刷机"></a>三、编译内核并刷机</h1><h2 id="1-获取内核源码"><a href="#1-获取内核源码" class="headerlink" title="1. 获取内核源码"></a>1. 获取内核源码</h2><p>进入到源码根目录下的kernel文件夹中执行<code>git clone https://aosp.tuna.tsinghua.edu.cn/kernel/msm</code>,就可以下载到相应msm的内核源码了。<br>通过<code>https://source.android.com/source/building-kernels</code>页面找到设备对应的源码位置。</p>
 <p><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/2019-11-07-18-13-31.png" alt></p>
 <p>通过<code>git branch -r|grep marlin-kernel</code>命令查找对应的分支，然后通过<code>git checkout remotes/origin/android-msm-marlin-3.18-oreo-mr1</code>切换分支获取到源码。</p>
-<h2 id="2-编译"><a href="#2-编译" class="headerlink" title="2. 编译"></a>2. 编译</h2><p>修改内核目录下的Makefile文件，修改内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile</span><br><span class="line">-ARCH           ?= $(SUBARCH)</span><br><span class="line">-CROSS_COMPILE  ?= $(CONFIG_CROSS_COMPILE:&quot;%&quot;=%)</span><br><span class="line">+ARCH           ?= arm64</span><br><span class="line">+CROSS_COMPILE  ?= aarch64-linux-android-</span><br><span class="line"> </span><br><span class="line"> # Architecture as present in compile.</span><br></pre></td></tr></table></figure>
+<h2 id="2-编译"><a href="#2-编译" class="headerlink" title="2. 编译"></a>2. 编译</h2><p>修改内核目录下的 <code>Makefile</code> 文件，修改内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile</span><br><span class="line">- ARCH           ?= $(SUBARCH)</span><br><span class="line">- CROSS_COMPILE  ?= $(CONFIG_CROSS_COMPILE:&quot;%&quot;=%)</span><br><span class="line">+ ARCH           ?= arm64</span><br><span class="line">+ CROSS_COMPILE  ?= aarch64-linux-android-</span><br><span class="line">+ SUBARCH           ?= arm64</span><br><span class="line">+ CROSS_COMPILE_ARM32  ?= arm-linux-androideabi-</span><br><span class="line"> </span><br><span class="line"> # Architecture as present in compile.</span><br></pre></td></tr></table></figure>
 <p>回到<code>aosp</code>目录进行<code>source</code>，<code>lunch</code>操作，然后进入msm目录执行<code>make marlin_defconfig</code>，得到<code>.config</code>文件后，直接执行<code>make -j4</code>即可。</p>
 <p>在编译过程中出现如下错误：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh: 1: lz4c: not found</span><br><span class="line">arch/arm64/boot/Makefile:36: recipe for target &apos;arch/arm64/boot/Image.lz4&apos; failed</span><br></pre></td></tr></table></figure>
 <p><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/2019-11-07-15-36-55.png" alt></p>
 <p>显然是<code>lz4c</code>没有找到，应该就是有依赖工具没有安装，通过<code>sudo apt-get install liblz4-tool</code> 安装即可，继续<code>make -j4</code>编译，最后得到<code>arch/arm64/boot/Image.lz4-dtb</code> 。</p>
 <p><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/2019-11-07-15-38-29.png" alt></p>
-<p>将上面编译得到的Image.lz4-deb文件复制到aosp源码目录下的device/google/marlin-kernel路径即可，然后到aosp源码根目录下执行make bootimage。</p>
+<p>将上面编译得到的Image.lz4-deb文件复制到aosp源码目录下的device/google/marlin-kernel路径即可，然后到aosp源码根目录下执行 <code>make bootimage</code> 。</p>
 <p><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/2019-11-07-15-48-06.png" alt></p>
+<p>或者按下列命令生成 boot.img </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export TARGET_PREBUILT_KERNEL=/media/ckcat/other/aosp/msm/arch/arm64/boot/Image.lz4-dtb</span><br><span class="line">rm out/target/product/sailfish/boot.img &amp;&amp;  make bootimage</span><br></pre></td></tr></table></figure>
+<p>如果想要替换 <code>boot.img</code> 中的 <code>default.prop</code>,可以在 <code>build/core/Makefile</code> 中搜索关键字 <code>TARGET_RECOVERY_ROOT_OUT)/default.prop</code> 做如下修改，<a href="https://blog.csdn.net/XXOOYC/article/details/85679143" target="_blank" rel="noopener">参考</a>:<br><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/2019-12-26-16-26-31.png" alt></p>
 <p>最后按照前面所写的内容，使用<code>fastboot flash boot_a boot.img</code> 和 <code>fastboot flash boot_b boot.img</code> 刷入即可。如下截图可以看到kernel是使用<code>ckcat</code>的机器编译的。</p>
 <p><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/2019-11-10-14-07-09.png" alt></p>
 <blockquote>
 <p>参考: <a href="https://blog4jimmy.com/2018/02/418.html" target="_blank" rel="noopener">https://blog4jimmy.com/2018/02/418.html</a></p>
 </blockquote>
-<h2 id="6-错误处理"><a href="#6-错误处理" class="headerlink" title="6.错误处理"></a>6.错误处理</h2><h3 id="1-flex-2-5-39-loadlocale-c-130-nl-intern-locale-data-Assertioncnt-lt-sizeof-nl-value-type-LC-TIME-sizeof-nl-value-type-LC-TIME-0-39-failed-错误。"><a href="#1-flex-2-5-39-loadlocale-c-130-nl-intern-locale-data-Assertioncnt-lt-sizeof-nl-value-type-LC-TIME-sizeof-nl-value-type-LC-TIME-0-39-failed-错误。" class="headerlink" title="1. flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))&#39; failed. 错误。"></a>1. <code>flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))&#39; failed.</code> 错误。</h3><p>bing 搜索之，在这个<a href="https://stackoverflow.com/questions/49955137/error-when-build-lineageos-make-ninja-wrapper-error-1" target="_blank" rel="noopener">链接中找到解法</a>。</p>
+<h1 id="四、错误处理"><a href="#四、错误处理" class="headerlink" title="四、错误处理"></a>四、错误处理</h1><h2 id="1-flex-2-5-39-loadlocale-c-130-nl-intern-locale-data-Assertioncnt-lt-sizeof-nl-value-type-LC-TIME-sizeof-nl-value-type-LC-TIME-0-39-failed-错误。"><a href="#1-flex-2-5-39-loadlocale-c-130-nl-intern-locale-data-Assertioncnt-lt-sizeof-nl-value-type-LC-TIME-sizeof-nl-value-type-LC-TIME-0-39-failed-错误。" class="headerlink" title="1. flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))&#39; failed. 错误。"></a>1. <code>flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))&#39; failed.</code> 错误。</h2><p>bing 搜索之，在这个<a href="https://stackoverflow.com/questions/49955137/error-when-build-lineageos-make-ninja-wrapper-error-1" target="_blank" rel="noopener">链接中找到解法</a>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=C</span><br></pre></td></tr></table></figure>
 <p>把这行代码添加到bashrc 文件中。<br>实测有效。</p>
 <p>那么这句配置是什么意思呢？<br>搜索得到：<br>LC_ALL=C 是为了去除所有本地化的设置，让命令能正确执行。</p>
 <blockquote>
 <p>原文链接：<a href="https://blog.csdn.net/aaa111/article/details/80330848" target="_blank" rel="noopener">https://blog.csdn.net/aaa111/article/details/80330848</a></p>
 </blockquote>
-<h3 id="2-adb和fastboot都没有权限"><a href="#2-adb和fastboot都没有权限" class="headerlink" title="2. adb和fastboot都没有权限"></a>2. adb和fastboot都没有权限</h3><blockquote>
+<h2 id="2-adb和fastboot都没有权限"><a href="#2-adb和fastboot都没有权限" class="headerlink" title="2. adb和fastboot都没有权限"></a>2. adb和fastboot都没有权限</h2><blockquote>
 <p>可以参考<a href="https://github.com/snowdream/51-android" target="_blank" rel="noopener">https://github.com/snowdream/51-android</a></p>
 </blockquote>
 
@@ -652,7 +656,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -663,7 +667,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -674,7 +678,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -723,7 +727,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、下载源码"><span class="nav-number">1.</span> <span class="nav-text">一、下载源码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载repo工具"><span class="nav-number">1.1.</span> <span class="nav-text">1. 下载repo工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-下载Android源码"><span class="nav-number">1.2.</span> <span class="nav-text">2. 下载Android源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-android源码查看所有分支切换分支"><span class="nav-number">1.3.</span> <span class="nav-text">3. android源码查看所有分支切换分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、配置编译环境"><span class="nav-number">2.</span> <span class="nav-text">二、配置编译环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-安装-JDK"><span class="nav-number">2.1.</span> <span class="nav-text">1. 安装 JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-安装编译所需要的包"><span class="nav-number">2.2.</span> <span class="nav-text">2. 安装编译所需要的包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-下载驱动"><span class="nav-number">2.3.</span> <span class="nav-text">3. 下载驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-编译"><span class="nav-number">2.4.</span> <span class="nav-text">4. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-刷机"><span class="nav-number">2.5.</span> <span class="nav-text">5. 刷机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-编译内核并刷机"><span class="nav-number">3.</span> <span class="nav-text">6.编译内核并刷机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-获取内核源码"><span class="nav-number">3.1.</span> <span class="nav-text">1. 获取内核源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-编译"><span class="nav-number">3.2.</span> <span class="nav-text">2. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-错误处理"><span class="nav-number">3.3.</span> <span class="nav-text">6.错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-flex-2-5-39-loadlocale-c-130-nl-intern-locale-data-Assertioncnt-lt-sizeof-nl-value-type-LC-TIME-sizeof-nl-value-type-LC-TIME-0-39-failed-错误。"><span class="nav-number">3.3.1.</span> <span class="nav-text">1. flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))&#39; failed. 错误。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-adb和fastboot都没有权限"><span class="nav-number">3.3.2.</span> <span class="nav-text">2. adb和fastboot都没有权限</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、下载源码"><span class="nav-number">1.</span> <span class="nav-text">一、下载源码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载repo工具"><span class="nav-number">1.1.</span> <span class="nav-text">1. 下载repo工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-下载Android源码"><span class="nav-number">1.2.</span> <span class="nav-text">2. 下载Android源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-android源码查看所有分支切换分支"><span class="nav-number">1.3.</span> <span class="nav-text">3. android源码查看所有分支切换分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、配置编译环境"><span class="nav-number">2.</span> <span class="nav-text">二、配置编译环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-安装-JDK"><span class="nav-number">2.1.</span> <span class="nav-text">1. 安装 JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-安装编译所需要的包"><span class="nav-number">2.2.</span> <span class="nav-text">2. 安装编译所需要的包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-下载驱动"><span class="nav-number">2.3.</span> <span class="nav-text">3. 下载驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-编译"><span class="nav-number">2.4.</span> <span class="nav-text">4. 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-刷机"><span class="nav-number">2.5.</span> <span class="nav-text">5. 刷机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、编译内核并刷机"><span class="nav-number">3.</span> <span class="nav-text">三、编译内核并刷机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-获取内核源码"><span class="nav-number">3.1.</span> <span class="nav-text">1. 获取内核源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-编译"><span class="nav-number">3.2.</span> <span class="nav-text">2. 编译</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、错误处理"><span class="nav-number">4.</span> <span class="nav-text">四、错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-flex-2-5-39-loadlocale-c-130-nl-intern-locale-data-Assertioncnt-lt-sizeof-nl-value-type-LC-TIME-sizeof-nl-value-type-LC-TIME-0-39-failed-错误。"><span class="nav-number">4.1.</span> <span class="nav-text">1. flex-2.5.39: loadlocale.c:130: _nl_intern_locale_data: Assertioncnt &lt; (sizeof (_nl_value_type_LC_TIME) / sizeof (_nl_value_type_LC_TIME[0]))&#39; failed. 错误。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-adb和fastboot都没有权限"><span class="nav-number">4.2.</span> <span class="nav-text">2. adb和fastboot都没有权限</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -745,7 +749,7 @@
       <div class="footer-inner">
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
