@@ -79,16 +79,42 @@
 
 
 
-<meta name="description" content="视图视图的功能 视图负责接受Web请求HttpRequest，进行逻辑处理，返回Web响应HttpResponse给请求者。 创建示例项目1. 创建项目 test31django-admin startproject test3  2. 进入项目目录，创建应用 booktest12cd test3test3 python manage.py startapp booktest  3. 在 test">
+<meta name="description" content="视图 创建示例项目 1. 创建项目 test3 2. 进入项目目录，创建应用 booktest 3. 在 test3&#x2F;settings.py 中 INSTALLED_APPS 项安装应用 4. 在 test3&#x2F;settings.py 中DATABASES项配置使用 MySQL 数据库 test2 5. 在 test3&#x2F;settings.py 中 TEMPLATES 项配置模板查找路径 6.">
 <meta name="keywords" content="Django">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Django学习-视图">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="视图视图的功能 视图负责接受Web请求HttpRequest，进行逻辑处理，返回Web响应HttpResponse给请求者。 创建示例项目1. 创建项目 test31django-admin startproject test3  2. 进入项目目录，创建应用 booktest12cd test3test3 python manage.py startapp booktest  3. 在 test">
+<meta property="og:description" content="视图 创建示例项目 1. 创建项目 test3 2. 进入项目目录，创建应用 booktest 3. 在 test3&#x2F;settings.py 中 INSTALLED_APPS 项安装应用 4. 在 test3&#x2F;settings.py 中DATABASES项配置使用 MySQL 数据库 test2 5. 在 test3&#x2F;settings.py 中 TEMPLATES 项配置模板查找路径 6.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-30T08:45:04.887Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-17-53-06.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-17-59-28.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-20-39-52.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-20-48-14.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-20-58-29.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-21-13-19.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-21-13-35.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-21-15-00.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-21-17-57.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-21-50-00.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-21-52-51.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-21-53-51.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-16-34-14.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-16-42-09.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-17-01-45.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-17-06-43.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-17-14-33.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-17-15-45.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;sessionid.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-20-26-26.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-20-32-08.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-20-37-08.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-20-39-46.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-20-40-21.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-04-20-44-49.png">
+<meta property="og:updated_time" content="2020-01-04T12:47:54.479Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;12&#x2F;27&#x2F;Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE&#x2F;2020-01-02-17-53-06.png">
 
 
 
@@ -376,7 +402,111 @@
       
 
       
-        <h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>视图的功能</p>
+        <!-- TOC -->
+
+<ul>
+<li><a href="#视图">视图</a><ul>
+<li><a href="#创建示例项目">创建示例项目</a><ul>
+<li><a href="#1-创建项目-test3">1. 创建项目 test3</a></li>
+<li><a href="#2-进入项目目录创建应用-booktest">2. 进入项目目录，创建应用 booktest</a></li>
+<li><a href="#3-在-test3settingspy-中-installed_apps-项安装应用">3. 在 test3/settings.py 中 INSTALLED_APPS 项安装应用</a></li>
+<li><a href="#4-在-test3settingspy-中databases项配置使用-mysql-数据库-test2">4. 在 test3/settings.py 中DATABASES项配置使用 MySQL 数据库 test2</a></li>
+<li><a href="#5-在-test3settingspy-中-templates-项配置模板查找路径">5. 在 test3/settings.py 中 TEMPLATES 项配置模板查找路径</a></li>
+<li><a href="#6-创建模板目录-test3templatesbooktest-">6. 创建模板目录 test3/templates/booktest 。</a></li>
+<li><a href="#7-使用视图">7. 使用视图</a></li>
+<li><a href="#8-启动服务">8. 启动服务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#urlconf">URLconf</a><ul>
+<li><a href="#配置">配置</a><ul>
+<li><a href="#1-在-test3settingspy-中通过root_urlconf指定url配置默认已经有此配置">1. 在 test3/settings.py 中通过ROOT_URLCONF指定url配置，默认已经有此配置。</a></li>
+<li><a href="#2-打开-test3urlspy-可以看到默认配置">2. 打开 test3/urls.py 可以看到默认配置。</a></li>
+</ul>
+</li>
+<li><a href="#语法">语法</a><ul>
+<li><a href="#语法一">语法一</a></li>
+<li><a href="#语法二">语法二</a></li>
+</ul>
+</li>
+<li><a href="#获取值">获取值</a><ul>
+<li><a href="#方式一位置参数">方式一：位置参数</a></li>
+<li><a href="#方式二关键字参数">方式二：关键字参数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#视图-1">视图</a><ul>
+<li><a href="#内置错误视图">内置错误视图</a><ul>
+<li><a href="#404错误及视图">404错误及视图</a></li>
+<li><a href="#500错误及视图">500错误及视图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#httpreqeust对象">HttpReqeust对象</a><ul>
+<li><a href="#属性">属性</a></li>
+<li><a href="#示例">示例</a><ul>
+<li><a href="#pathencoding">path、encoding</a></li>
+<li><a href="#method">method</a></li>
+</ul>
+</li>
+<li><a href="#querydict对象">QueryDict对象</a></li>
+<li><a href="#get属性">GET属性</a></li>
+<li><a href="#post属性">POST属性</a><ul>
+<li><a href="#示例-1">示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#httpresponse对象">HttpResponse对象</a><ul>
+<li><a href="#属性-1">属性</a></li>
+<li><a href="#方法">方法</a></li>
+<li><a href="#示例-2">示例</a><ul>
+<li><a href="#直接返回数据">直接返回数据</a></li>
+<li><a href="#调用模板">调用模板</a></li>
+<li><a href="#调用模板简写函数render">调用模板简写函数render</a></li>
+</ul>
+</li>
+<li><a href="#子类jsonresponse">子类JsonResponse</a><ul>
+<li><a href="#示例-3">示例</a></li>
+</ul>
+</li>
+<li><a href="#子类httpresponseredirect">子类HttpResponseRedirect</a><ul>
+<li><a href="#示例-4">示例</a></li>
+<li><a href="#重定向简写函数redirect">重定向简写函数redirect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#状态保持">状态保持</a><ul>
+<li><a href="#cookie">Cookie</a><ul>
+<li><a href="#cookie的特点">Cookie的特点</a></li>
+<li><a href="#设置cookie">设置Cookie</a></li>
+<li><a href="#读取cookie">读取Cookie</a></li>
+</ul>
+</li>
+<li><a href="#session">Session</a><ul>
+<li><a href="#启用session">启用Session</a></li>
+<li><a href="#存储方式">存储方式</a></li>
+<li><a href="#依赖于cookie">依赖于Cookie</a></li>
+<li><a href="#对象及方法">对象及方法</a></li>
+<li><a href="#示例-5">示例</a><ul>
+<li><a href="#写session">写session</a></li>
+<li><a href="#读session">读session</a></li>
+<li><a href="#删除">删除</a></li>
+<li><a href="#删除session">删除session</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>视图的功能</p>
 <p>视图负责接受Web请求HttpRequest，进行逻辑处理，返回Web响应HttpResponse给请求者。</p>
 <h2 id="创建示例项目"><a href="#创建示例项目" class="headerlink" title="创建示例项目"></a>创建示例项目</h2><h3 id="1-创建项目-test3"><a href="#1-创建项目-test3" class="headerlink" title="1. 创建项目 test3"></a>1. 创建项目 test3</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject test3</span><br></pre></td></tr></table></figure>
 
@@ -429,7 +559,344 @@
 </blockquote>
 <h2 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h2><p>请求的url被看做是一个普通的python字符串，进行匹配时不包括域名、get或post参数。 如请求地址如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/delete1/?a=10</span><br></pre></td></tr></table></figure>
+<p>1）去除掉域名和参数部分，并将最前面的/去除后，只剩下如下部分与正则匹配。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete1/</span><br></pre></td></tr></table></figure>
 
+<p>2）打开booktest/urls.py文件，定义与这个地址匹配的url如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^delete\d+/$&apos;, views.show_args),</span><br></pre></td></tr></table></figure>
+<p>3）在booktest/views.py中创建视图show_arg。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def show_args(request):</span><br><span class="line">    return HttpResponse(&apos;show_args&apos;)</span><br></pre></td></tr></table></figure>
+<p>4）启动服务器，输入上面的网址，浏览器中效果如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-17-53-06.png" alt></p>
+<p>可以在匹配过程中从url中捕获参数，每个捕获的参数都作为一个普通的python字符串传递给视图。</p>
+<p>获取值需要在正则表达式中使用小括号，分为两种方式：</p>
+<ul>
+<li>位置参数</li>
+<li>关键字参数</li>
+</ul>
+<blockquote>
+<p>注意：两种参数的方式不要混合使用，在一个正则表达式中只能使用一种参数方式。</p>
+</blockquote>
+<h3 id="方式一：位置参数"><a href="#方式一：位置参数" class="headerlink" title="方式一：位置参数"></a>方式一：位置参数</h3><p>直接使用小括号，通过位置参数传递给视图。</p>
+<p>1）为了提取参数，修改上面的正则表达式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^delete(\d+)/$&apos;,views.show_args),</span><br></pre></td></tr></table></figure>
+<p>2）修改视图show_arg如下：</p>
+<blockquote>
+<p>注意：参数的名字是任意的如a1、b8，尽量做到见名知意。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def show_args(request,id):</span><br><span class="line">    return HttpResponse(&apos;show args %s&apos;%id)</span><br></pre></td></tr></table></figure>
+<p>3）刷新浏览器页面，效果如下图：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-17-59-28.png" alt></p>
+<h3 id="方式二：关键字参数"><a href="#方式二：关键字参数" class="headerlink" title="方式二：关键字参数"></a>方式二：关键字参数</h3><p>在正则表达式部分为组命名。</p>
+<p>1）修改正则表达式如下：</p>
+<blockquote>
+<p>其中 <code>?P</code> 部分表示为这个参数定义的名称为 id ，可以是其它名称，起名做到见名知意。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^add(?P&lt;id1&gt;\d+)/&apos;, views.show_arg),</span><br></pre></td></tr></table></figure>
+<p>2）修改视图show_arg如下：</p>
+<blockquote>
+<p>注意：视图show_arg此时必须要有一个参数名为id1，否则报错。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def show_arg(requset, id1):</span><br><span class="line">    return HttpResponse(&apos;show_arg %s&apos; % id1)</span><br></pre></td></tr></table></figure>
+<p>3）刷新浏览器页面，效果如下图</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-20-39-52.png" alt></p>
+<h1 id="视图-1"><a href="#视图-1" class="headerlink" title="视图"></a>视图</h1><p>视图就是python中的函数，视图一般被定义在”应用/views.py”文件中，此例中为”booktest/views.py”文件。视图必须返回一个 HttpResponse 对象或子对象作为响应。响应可以是一张网页的HTML内容，一个重定向，一个404错误等。</p>
+<p>视图的第一个参数必须为HttpRequest实例，还可能包含下参数如：</p>
+<ul>
+<li>通过正则表达式组获得的关键字参数。</li>
+<li>通过正则表达式组获取的位置参数。</li>
+</ul>
+<h2 id="内置错误视图"><a href="#内置错误视图" class="headerlink" title="内置错误视图"></a>内置错误视图</h2><p>Django内置处理HTTP错误的视图，主要错误及视图包括：</p>
+<ul>
+<li>404错误：page not found视图</li>
+<li>500错误：server error视图</li>
+</ul>
+<p>如果想看到错误视图而不是调试信息，需要修改 <code>test3/setting.py</code>文件的 DEBUG 项。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEBUG = False</span><br><span class="line">ALLOWED_HOSTS = [&apos;*&apos;, ]</span><br></pre></td></tr></table></figure>
+<h3 id="404错误及视图"><a href="#404错误及视图" class="headerlink" title="404错误及视图"></a>404错误及视图</h3><p>将请求地址进行 url 匹配后，没有找到匹配的正则表达式，则调用 404 视图，这个视图会调用 <code>404.html</code> 的模板进行渲染。视图传递变量 request_path 给模板，表示导致错误的 URL 。</p>
+<p>1）在 templates 中创建 <code>404.html</code> 。</p>
+<p>2）定义代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;404 Page&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">找不到了...</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>3）在浏览器中输入无效网址，效果如下：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-20-48-14.png" alt></p>
+<h3 id="500错误及视图"><a href="#500错误及视图" class="headerlink" title="500错误及视图"></a>500错误及视图</h3><p>在视图中代码运行报错会发生500错误，调用内置错误视图，使用 <code>templates/500.html</code> 模板渲染。</p>
+<h1 id="HttpReqeust对象"><a href="#HttpReqeust对象" class="headerlink" title="HttpReqeust对象"></a>HttpReqeust对象</h1><p>服务器接收到 http 协议的请求后，会根据报文创建 HttpRequest 对象，这个对象不需要我们创建，直接使用服务器构造好的对象就可以。<strong>视图的第一个参数必须是HttpRequest对象</strong>，在 django.http 模块中定义了 HttpRequest 对象的API。</p>
+<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><blockquote>
+<p>下面除非特别说明，属性都是只读的。</p>
+</blockquote>
+<ul>
+<li><p>path：一个字符串，表示请求的页面的完整路径，不包含域名和参数部分。</p>
+</li>
+<li><p>method：一个字符串，表示请求使用的HTTP方法，常用值包括：’GET’、’POST’。</p>
+<ul>
+<li>在浏览器中给出地址发出请求采用get方式，如超链接。</li>
+<li>在浏览器中点击表单的提交按钮发起请求，如果表单的method设置为post则为post请求。</li>
+</ul>
+</li>
+<li><p>encoding：一个字符串，表示提交的数据的编码方式。</p>
+<ul>
+<li>如果为None则表示使用浏览器的默认设置，一般为utf-8。</li>
+<li>这个属性是可写的，可以通过修改它来修改访问表单数据使用的编码，接下来对属性的任何访问将使用新的encoding值。</li>
+</ul>
+</li>
+<li><p>GET：QueryDict类型对象，类似于字典，包含get请求方式的所有参数。</p>
+</li>
+<li><p>POST：QueryDict类型对象，类似于字典，包含post请求方式的所有参数。</p>
+</li>
+<li><p>FILES：一个类似于字典的对象，包含所有的上传文件。</p>
+</li>
+<li><p>COOKIES：一个标准的Python字典，包含所有的cookie，键和值都为字符串。</p>
+</li>
+<li><p>session：一个既可读又可写的类似于字典的对象，表示当前的会话，只有当Django 启用会话的支持时才可用，详细内容见”状态保持”。</p>
+</li>
+</ul>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>接下来演示属性 path 、 method 、 encoding ，对于 GET 、 POST 、 FILES 、 COOKIES 、 session 后面会有详细讲解。</p>
+<h3 id="path、encoding"><a href="#path、encoding" class="headerlink" title="path、encoding"></a>path、encoding</h3><p>1）打开 <code>booktest/views.py</code> 文件，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def index(request):</span><br><span class="line">    str=&apos;%s,%s&apos;%(request.path,request.encoding)</span><br><span class="line">    return render(request, &apos;booktest/index.html&apos;, &#123;&apos;str&apos;:str&#125;)</span><br></pre></td></tr></table></figure>
+<p>2）在 <code>templates/booktest/</code> 下创建 <code>index.html</code> 文件，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">1. request对象的path,encoding属性：&lt;br/&gt;</span><br><span class="line">&#123;&#123; str &#125;&#125;</span><br><span class="line">&lt;br/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>3）打开浏览器请求，运行效果如下图：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-20-58-29.png" alt></p>
+<h3 id="method"><a href="#method" class="headerlink" title="method"></a>method</h3><p>1）打开 <code>booktest/views.py</code> 文件，编写视图method_show，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def method_show(request):</span><br><span class="line">    return HttpResponse(request.method)</span><br></pre></td></tr></table></figure>
+<p>2）打开 <code>booktest/urls.py</code> 文件，新增配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^method_show/$&apos;, views.method_show),</span><br></pre></td></tr></table></figure>
+<p>3）在 <code>templates/booktest/</code>下创建 <code>method_show.html</code> 文件，添加代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">2.request对象的method属性：&lt;br/&gt;</span><br><span class="line">&lt;a href=&apos;/method_show/&apos;&gt;get方式&lt;/a&gt;&lt;br/&gt;</span><br><span class="line">&lt;form method=&quot;post&quot; action=&quot;/method_show/&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;post方式&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;br/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>4）打开浏览器请求，点击 “get方式” 运行效果如下图：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-21-13-19.png" alt><br><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-21-13-35.png" alt></p>
+<p>5) 回到method_test页面，点击按钮，转到method_post，浏览效果如下图，报错了。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-21-15-00.png" alt></p>
+<p>6）打开 <code>test3/settings.py</code> 文件，将 MIDDLEWARE_CLASSES 项的 csrf 注释。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MIDDLEWARE_CLASSES = (</span><br><span class="line">    &apos;django.contrib.sessions.middleware.SessionMiddleware&apos;,</span><br><span class="line">    &apos;django.middleware.common.CommonMiddleware&apos;,</span><br><span class="line">     #&apos;django.middleware.csrf.CsrfViewMiddleware&apos;, # 注释</span><br><span class="line">    &apos;django.contrib.auth.middleware.AuthenticationMiddleware&apos;,</span><br><span class="line">    &apos;django.contrib.auth.middleware.SessionAuthenticationMiddleware&apos;,</span><br><span class="line">    &apos;django.contrib.messages.middleware.MessageMiddleware&apos;,</span><br><span class="line">    &apos;django.middleware.clickjacking.XFrameOptionsMiddleware&apos;,</span><br><span class="line">    &apos;django.middleware.security.SecurityMiddleware&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>6）回到浏览器中点击 “post方式”，浏览效果如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-21-17-57.png" alt></p>
+<h2 id="QueryDict对象"><a href="#QueryDict对象" class="headerlink" title="QueryDict对象"></a>QueryDict对象</h2><ul>
+<li>定义在django.http.QueryDict</li>
+<li>HttpRequest对象的属性GET、POST都是QueryDict类型的对象</li>
+<li>与python字典不同，QueryDict类型的对象用来处理同一个键带有多个值的情况</li>
+<li>方法get()：根据键获取值</li>
+<li>如果一个键同时拥有多个值将获取最后一个值</li>
+<li>如果键不存在则返回None值，可以设置默认值进行后续处理</li>
+<li>方法getlist()：根据键获取值，值以列表返回，可以获取指定键的所有值</li>
+<li>如果键不存在则返回空列表[]，可以设置默认值进行后续处理</li>
+</ul>
+<h2 id="GET属性"><a href="#GET属性" class="headerlink" title="GET属性"></a>GET属性</h2><p>请求格式：在请求地址结尾使用?，之后以”键=值”的格式拼接，多个键值对之间以&amp;连接。</p>
+<p>例：网址如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.itcast.cn/?a=10&amp;b=20&amp;c=python</span><br></pre></td></tr></table></figure>
+<p>其中的请求参数为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a=10&amp;b=20&amp;c=python</span><br></pre></td></tr></table></figure>
+<ul>
+<li>分析请求参数，键为’a’、’b’、’c’，值为’10’、’20’、’python’。</li>
+<li>在Django中可以使用HttpRequest对象的GET属性获得get方方式请求的参数。</li>
+<li>GET属性是一个QueryDict类型的对象，键和值都是字符串类型。</li>
+<li>键是开发人员在编写代码时确定下来的。</li>
+<li>值是根据数据生成的。</li>
+</ul>
+<h2 id="POST属性"><a href="#POST属性" class="headerlink" title="POST属性"></a>POST属性</h2><p>使用form表单请求时，method方式为post则会发起post方式的请求，需要使用HttpRequest对象的POST属性接收参数，POST属性是一个QueryDict类型的对象。</p>
+<p>问：表单form如何提交参数呢？</p>
+<p>答：表单控件name属性的值作为键，value属性的值为值，构成键值对提交。</p>
+<ul>
+<li>如果表单控件没有name属性则不提交。</li>
+<li>对于checkbox控件，name属性的值相同为一组，被选中的项会被提交，出现一键多值的情况。</li>
+<li>键是表单控件name属性的值，是由开发人员编写的。</li>
+<li>值是用户填写或选择的。</li>
+</ul>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><p>1）打开 <code>booktest/views.py</code> 文件，创建视图 show_reqarg 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#接收请求参数</span><br><span class="line">def show_reqarg(request):</span><br><span class="line">    if request.method == &apos;GET&apos;:</span><br><span class="line">        a = request.GET.get(&apos;a&apos;) #获取请求参数a</span><br><span class="line">        b = request.GET.get(&apos;b&apos;) #获取请求参数b</span><br><span class="line">        c = request.GET.get(&apos;c&apos;) #获取请求参数c</span><br><span class="line">        return render(request, &apos;booktest/show_getarg.html&apos;, &#123;&apos;a&apos;:a, &apos;b&apos;:b, &apos;c&apos;:c&#125;)</span><br><span class="line">    else:</span><br><span class="line">        name = request.POST.get(&apos;uname&apos;) #获取name</span><br><span class="line">        gender = request.POST.get(&apos;gender&apos;) #获取gender</span><br><span class="line">        hobbys = request.POST.getlist(&apos;hobby&apos;) #获取hobby</span><br><span class="line">        return render(request, &apos;booktest/show_postarg.html&apos;, &#123;&apos;name&apos;:name, &apos;gender&apos;:gender, &apos;hobbys&apos;:hobbys&#125;)</span><br></pre></td></tr></table></figure>
+<p>2）打开 <code>booktest/urls.py</code> 文件，配置 url 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^show_reqarg/$&apos;, views.show_reqarg),</span><br></pre></td></tr></table></figure>
+<p>3）修改 <code>templates/booktest</code> 目录下的 <code>index.html</code> ，添加代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;首页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">3.提交数据的两种方式：</span><br><span class="line">get方式:&lt;br/&gt;</span><br><span class="line">&lt;a href=&quot;/show_reqarg/?a=1&amp;b=2&amp;c=python&quot;&gt;get方式提交数据&lt;/a&gt;&lt;br/&gt;</span><br><span class="line">post方式:&lt;br/&gt;</span><br><span class="line">&lt;form method=&quot;post&quot; action=&quot;/show_reqarg/&quot;&gt;</span><br><span class="line">    姓名：&lt;input type=&quot;text&quot; name=&quot;uname&quot;&gt;&lt;br/&gt;</span><br><span class="line">    性别：男&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;男&quot;/&gt;</span><br><span class="line">    女&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;女&quot;/&gt;&lt;br/&gt;</span><br><span class="line">    爱好：</span><br><span class="line">    吃饭&lt;input type=&quot;checkbox&quot; name=&quot;hobby&quot; value=&quot;吃饭&quot;/&gt;</span><br><span class="line">    睡觉&lt;input type=&quot;checkbox&quot; name=&quot;hobby&quot; value=&quot;睡觉&quot;/&gt;</span><br><span class="line">    打豆豆&lt;input type=&quot;checkbox&quot; name=&quot;hobby&quot; value=&quot;打豆豆&quot;/&gt;&lt;br&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;br/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>4）运行服务器，浏览效果如下图：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-21-50-00.png" alt></p>
+<p>5）在 <code>templates/booktest</code> 目录下创建 <code>show_getarg.html，show_postarg.html</code> ，代码如下:</p>
+<p>show_getarg.html:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;GET方式提交数据&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">a:&#123;&#123; a &#125;&#125;&lt;br/&gt;</span><br><span class="line">b:&#123;&#123; b &#125;&#125;&lt;br/&gt;</span><br><span class="line">c:&#123;&#123; c &#125;&#125;&lt;br/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>show_postarg.html:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;POST方式提交数据&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">name:&#123;&#123; name &#125;&#125;&lt;br/&gt;</span><br><span class="line">gender:&#123;&#123; gender &#125;&#125;&lt;br/&gt;</span><br><span class="line">hobbys:</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">    &#123;% for hobby in hobbys %&#125;</span><br><span class="line">        &lt;li&gt;&#123;&#123; hobby &#125;&#125;&lt;/li&gt;</span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>6）点击链接GET方式提交数据，浏览效果如下图：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-21-52-51.png" alt></p>
+<p>7）点击POST方式提交数据，浏览效果如下图：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-02-21-53-51.png" alt></p>
+<h1 id="HttpResponse对象"><a href="#HttpResponse对象" class="headerlink" title="HttpResponse对象"></a>HttpResponse对象</h1><p>视图在接收请求并处理后，必须返回 HttpResponse 对象或子对象。在 <code>django.http</code> 模块中定义了 HttpResponse 对象的 API 。 HttpRequest 对象由 Django 创建，HttpResponse 对象由开发人员创建。</p>
+<h2 id="属性-1"><a href="#属性-1" class="headerlink" title="属性"></a>属性</h2><ul>
+<li><code>content</code>：表示返回的内容。</li>
+<li><code>charset</code>：表示 response 采用的编码字符集，默认为 utf-8 。</li>
+<li><code>status_code</code>：返回的 HTTP 响应状态码。</li>
+<li><code>content-type</code>：指定返回数据的的MIME类型，默认为’text/html’。</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ul>
+<li><code>_init_</code>：创建 HttpResponse 对象后完成返回内容的初始化。</li>
+<li><code>set_cookie</code>：设置 Cookie 信息。</li>
+<li>cookie是网站以键值对格式存储在浏览器中的一段纯文本信息，用于实现用户跟踪。<ul>
+<li><code>max_age</code> 是一个整数，表示在指定秒数后过期。</li>
+<li><code>expires</code> 是一个 datetime 或 timedelta l对象，会话将在这个指定的日期/时间过期。</li>
+<li>max_age与expires二选一。</li>
+<li>如果不指定过期时间，在关闭浏览器时cookie会过期。</li>
+</ul>
+</li>
+<li>delete_cookie(key)：删除指定的key的Cookie，如果key不存在则什么也不发生。</li>
+<li>write：向响应体中写数据。</li>
+</ul>
+<h2 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h2><h3 id="直接返回数据"><a href="#直接返回数据" class="headerlink" title="直接返回数据"></a>直接返回数据</h3><p>1）打开 <code>booktest/views.py</code> 文件，定义视图 <code>index2</code> 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def index2(request):</span><br><span class="line">    str=&apos;&lt;h1&gt;hello world&lt;/h1&gt;&apos;</span><br><span class="line">    return HttpResponse(str)</span><br></pre></td></tr></table></figure>
+<p>2）打开booktest/urls.py文件，配置url。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^index2/$&apos;,views.index2),</span><br></pre></td></tr></table></figure>
+<p>3）运行服务器，在浏览器中打开如下网址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/index2/</span><br></pre></td></tr></table></figure>
+
+<h3 id="调用模板"><a href="#调用模板" class="headerlink" title="调用模板"></a>调用模板</h3><p>可以将 html、css、js 定义到一个 html 文件中，然后由视图来调用。</p>
+<p>1）打开 <code>booktest/views.py</code> 文件，定义视图 index3 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from django.template import RequestContext, loader</span><br><span class="line">...</span><br><span class="line">def index3(request):</span><br><span class="line">    #加载模板</span><br><span class="line">    t1=loader.get_template(&apos;booktest/index3.html&apos;)</span><br><span class="line">    #构造上下文</span><br><span class="line">    context=RequestContext(request,&#123;&apos;h1&apos;:&apos;hello&apos;&#125;)</span><br><span class="line">    #使用上下文渲染模板，生成字符串后返回响应对象</span><br><span class="line">    return HttpResponse(t1.render(context))</span><br></pre></td></tr></table></figure>
+<p>2）打开 <code>booktest/urls.py</code> 文件，配置 url 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^index3/$&apos;,views.index3),</span><br></pre></td></tr></table></figure>
+<p>3）在 <code>templates/booktest/</code> 目录下创建 <code>index3.html</code> ，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;使用模板&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;&#123;&#123;h1&#125;&#125;&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>4）运行服务器，在浏览器中打开如下网址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/index3/</span><br></pre></td></tr></table></figure>
+
+<h3 id="调用模板简写函数render"><a href="#调用模板简写函数render" class="headerlink" title="调用模板简写函数render"></a>调用模板简写函数render</h3><p>每次调用模板时都要执行加载、上下文、渲染三个步骤，为了简化操作， Django 定义了 <code>render()</code> 函数封装了以上三个步骤的代码，定义在 <code>django.shortcuts</code> 模块中。</p>
+<p>1）打开 <code>booktest/views.py</code> 文件，定义视图 index3 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render</span><br><span class="line">...</span><br><span class="line">def index3(request):</span><br><span class="line">    return render(request, &apos;booktest/index3.html&apos;, &#123;&apos;h1&apos;: &apos;hello&apos;&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="子类JsonResponse"><a href="#子类JsonResponse" class="headerlink" title="子类JsonResponse"></a>子类JsonResponse</h2><p>在浏览器中使用javascript发起ajax请求时，返回json格式的数据，此处以jquery的get()方法为例。类JsonResponse继承自HttpResponse对象，被定义在django.http模块中，创建对象时接收字典作为参数。</p>
+<blockquote>
+<p>JsonResponse对象的content-type为’application/json’。</p>
+</blockquote>
+<h3 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h3><p>1）在booktest/views.py文件中定义视图json1、json2，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.http import JsonResponse</span><br><span class="line">...</span><br><span class="line">def json1(request):</span><br><span class="line">    return render(request,&apos;booktest/json1.html&apos;)</span><br><span class="line">def json2(request):</span><br><span class="line">    return JsonResponse(&#123;&apos;h1&apos;:&apos;hello&apos;,&apos;h2&apos;:&apos;world&apos;&#125;)</span><br></pre></td></tr></table></figure>
+<p>2）在booktest/urls.py文件中配置url。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^json1/$&apos;, views.json1),</span><br><span class="line">url(r&apos;^json2/$&apos;, views.json2),</span><br></pre></td></tr></table></figure>
+<p>3）创建目录static/js/，把jquery文件拷贝到这个目录下。</p>
+<p>4）打开test3/settings.py文件，在文件最底部，配置静态文件查找路径，并且要求开启调试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DEBUG = True</span><br><span class="line">...</span><br><span class="line">STATICFILES_DIRS = [</span><br><span class="line">    os.path.join(BASE_DIR, &apos;static&apos;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>s 5）在templates/booktest/目录下创建json1.html，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;json&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;/static/js/jquery-1.12.4.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(function () &#123;</span><br><span class="line">            $(&apos;#btnJson&apos;).click(function () &#123;</span><br><span class="line">                $.get(&apos;/json2/&apos;,function (data) &#123;</span><br><span class="line">                    ul=$(&apos;#jsonList&apos;);</span><br><span class="line">                    ul.append(&apos;&lt;li&gt;&apos;+data[&apos;h1&apos;]+&apos;&lt;/li&gt;&apos;)</span><br><span class="line">                    ul.append(&apos;&lt;li&gt;&apos;+data[&apos;h2&apos;]+&apos;&lt;/li&gt;&apos;)</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;input type=&quot;button&quot; id=&quot;btnJson&quot; value=&quot;获取json数据&quot;&gt;</span><br><span class="line">&lt;ul id=&quot;jsonList&quot;&gt;&lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>6）运行服务器，在浏览器中输入如下地址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/json1/</span><br></pre></td></tr></table></figure>
+<p>7）点击按钮”获取json数据”后浏览如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-16-34-14.png" alt></p>
+<h2 id="子类HttpResponseRedirect"><a href="#子类HttpResponseRedirect" class="headerlink" title="子类HttpResponseRedirect"></a>子类HttpResponseRedirect</h2><p>当一个逻辑处理完成后，不需要向客户端呈现数据，而是转回到其它页面，如添加成功、修改成功、删除成功后显示数据列表，而数据的列表视图已经开发完成，此时不需要重新编写列表的代码，而是转到这个视图就可以，此时就需要模拟一个用户请求的效果，从一个视图转到另外一个视图，就称为重定向。</p>
+<p>Django中提供了HttpResponseRedirect对象实现重定向功能，这个类继承自HttpResponse，被定义在django.http模块中，返回的状态码为302。</p>
+<h3 id="示例-4"><a href="#示例-4" class="headerlink" title="示例"></a>示例</h3><p>1）在booktest/views.py文件中定义视图red1，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpResponseRedirect</span><br><span class="line">...</span><br><span class="line"># 定义重定义向视图，转向首页</span><br><span class="line">def red1(request):</span><br><span class="line">    return HttpResponseRedirect(&apos;/&apos;)</span><br></pre></td></tr></table></figure>
+<p>2）在booktest/urls.py文件中配置url。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^red1/$&apos;, views.red1),</span><br></pre></td></tr></table></figure>
+<p>3）在地址栏中输入网址如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/red1/</span><br></pre></td></tr></table></figure>
+<p>4）回车后，浏览器地址栏如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-16-42-09.png" alt></p>
+<h3 id="重定向简写函数redirect"><a href="#重定向简写函数redirect" class="headerlink" title="重定向简写函数redirect"></a>重定向简写函数redirect</h3><p>在django.shortcuts模块中为重定向类提供了简写函数redirect。</p>
+<p>1）修改booktest/views.py文件中red1视图，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import redirect</span><br><span class="line">...</span><br><span class="line">def red1(request):</span><br><span class="line">    return redirect(&apos;/&apos;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="状态保持"><a href="#状态保持" class="headerlink" title="状态保持"></a>状态保持</h1><p>浏览器请求服务器是无状态的。无状态指一次用户请求时，浏览器、服务器无法知道之前这个用户做过什么，每次请求都是一次新的请求。无状态的应用层面的原因是：浏览器和服务器之间的通信都遵守HTTP协议。根本原因是：浏览器与服务器是使用Socket套接字进行通信的，服务器将请求结果返回给浏览器之后，会关闭当前的Socket连接，而且服务器也会在处理页面完毕之后销毁页面对象。</p>
+<p>有时需要保存下来用户浏览的状态，比如用户是否登录过，浏览过哪些商品等。 实现状态保持主要有两种方式：</p>
+<ul>
+<li>在客户端存储信息使用Cookie。</li>
+<li>在服务器端存储信息使用Session。</li>
+</ul>
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p>Cookie，有时也用其复数形式 Cookies ，指某些网站为了辨别用户身份、进行 session 跟踪而储存在用户本地终端上的数据（通常经过加密）。 Cookie 最早是网景公司的前雇员 Lou Montulli 在1993年3月的发明。Cookie 是由服务器端生成，发送给 <code>User-Agent</code>（一般是浏览器），浏览器会将 Cookie 的 <code>key/value</code> 保存到某个目录下的文本文件内，下次请求同一网站时就发送该 Cookie 给服务器（前提是浏览器设置为启用 cookie ）。Cookie 名称和值可以由服务器端开发自己定义，这样服务器可以知道该用户是否是合法用户以及是否需要重新登录等。服务器可以利用 Cookies 包含信息的任意性来筛选并经常性维护这些信息，以判断在 HTTP 传输中的状态。Cookies  最典型记住用户名。</p>
+<p>Cookie 是存储在浏览器中的一段纯文本信息，建议不要存储敏感信息如密码，因为电脑上的浏览器可能被其它人使用。</p>
+<h3 id="Cookie的特点"><a href="#Cookie的特点" class="headerlink" title="Cookie的特点"></a>Cookie的特点</h3><ul>
+<li>Cookie 以键值对的格式进行信息的存储。</li>
+<li>Cookie 基于域名安全，不同域名的 Cookie 是不能互相访问的，如访问 <code>google.com</code> 时向浏览器中写了 Cookie 信息，使用同一浏览器访问 <code>baidu.com</code> 时，无法访问到 <code>google.com</code> 写的 Cookie 信息。</li>
+<li>当浏览器请求某网站时，会将浏览器存储的跟网站相关的所有 Cookie 信息提交给网站服务器。</li>
+</ul>
+<h3 id="设置Cookie"><a href="#设置Cookie" class="headerlink" title="设置Cookie"></a>设置Cookie</h3><p>1）打开booktest/views.py文件，创建视图cookie_set。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def cookie_set(request):</span><br><span class="line">    response = HttpResponse(&quot;&lt;h1&gt;设置Cooki&lt;/h1&gt;&quot;)</span><br><span class="line">    response.set_cookie(&apos;h1&apos;, &apos;hellworld&apos;)</span><br><span class="line">    return response</span><br></pre></td></tr></table></figure>
+<p>2）打开booktest/urls.py文件，配置url。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^cookie_set/$&apos;,views.cookie_set),</span><br></pre></td></tr></table></figure>
+<p>3）在浏览器输入如下网址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/cookie_set/</span><br></pre></td></tr></table></figure>
+<p>在”开发者工具”中可以在响应头中查看到设置的Cookie信息。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-17-01-45.png" alt></p>
+<h3 id="读取Cookie"><a href="#读取Cookie" class="headerlink" title="读取Cookie"></a>读取Cookie</h3><p>Cookie信息被包含在请求头中，使用request对象的COOKIES属性访问。</p>
+<p>1）打开booktest/views.py文件，创建视图cookie_get。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def cookie_get(request):</span><br><span class="line">    response = HttpResponse(&quot;读取Cookie，数据如下：&lt;br&gt;&quot;)</span><br><span class="line">    if &apos;h1&apos; in request.COOKIES:</span><br><span class="line">        response.write(&apos;&lt;h1&gt;&apos; + request.COOKIES[&apos;h1&apos;] + &apos;&lt;/h1&gt;&apos;)</span><br><span class="line">    return response</span><br></pre></td></tr></table></figure>
+<p>2）打开booktest/urls.py文件，配置url。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^cookie_get/$&apos;,views.cookie_get),</span><br></pre></td></tr></table></figure>
+<p>3）在浏览器输入如下网址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/cookie_get/</span><br></pre></td></tr></table></figure>
+<p>4）打开“开发者工具”，在请求头中可以查看Cookie信息，浏览效果如下图：</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-17-06-43.png" alt></p>
+<h2 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h2><p>对于敏感、重要的信息，建议要储在服务器端，不能存储在浏览器中，如用户名、余额、等级、验证码等信息。</p>
+<blockquote>
+<p>在服务器端进行状态保持的方案就是Session。</p>
+</blockquote>
+<h3 id="启用Session"><a href="#启用Session" class="headerlink" title="启用Session"></a>启用Session</h3><p>Django项目默认启用Session。</p>
+<p>打开 <code>test3/settings.py</code> 文件，在项 MIDDLEWARE_CLASSES 中启用 Session 中间件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MIDDLEWARE_CLASSES = (</span><br><span class="line">    &apos;django.contrib.sessions.middleware.SessionMiddleware&apos;,#默认启动</span><br><span class="line">    &apos;django.middleware.common.CommonMiddleware&apos;,</span><br><span class="line">     #&apos;django.middleware.csrf.CsrfViewMiddleware&apos;,</span><br><span class="line">    &apos;django.contrib.auth.middleware.AuthenticationMiddleware&apos;,</span><br><span class="line">    &apos;django.contrib.auth.middleware.SessionAuthenticationMiddleware&apos;,</span><br><span class="line">    &apos;django.contrib.messages.middleware.MessageMiddleware&apos;,</span><br><span class="line">    &apos;django.middleware.clickjacking.XFrameOptionsMiddleware&apos;,</span><br><span class="line">    &apos;django.middleware.security.SecurityMiddleware&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>禁用Session：将Session中间件删除。</p>
+<h3 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h3><p>打开 <code>test3/settings.py</code> 文件，设置 SESSION_ENGINE 项指定 Session 数据存储的方式，可以存储在数据库、缓存、Redis 等。</p>
+<p>1）存储在数据库中，如下设置可以写，也可以不写，这是默认存储方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE=&apos;django.contrib.sessions.backends.db&apos;</span><br></pre></td></tr></table></figure>
+<p>2）存储在缓存中：存储在本机内存中，如果丢失则不能找回，比数据库的方式读写更快。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE=&apos;django.contrib.sessions.backends.cache&apos;</span><br></pre></td></tr></table></figure>
+<p>3）混合存储：优先从本机内存中存取，如果没有则从数据库中存取。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE=&apos;django.contrib.sessions.backends.cached_db&apos;</span><br></pre></td></tr></table></figure>
+<p>4）如果存储在数据库中，需要在项INSTALLED_APPS中安装Session应用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    &apos;django.contrib.auth&apos;,</span><br><span class="line">    &apos;django.contrib.contenttypes&apos;,</span><br><span class="line">    &apos;django.contrib.sessions&apos;, # 如果sessions存储在数据库中，则需要安装该应用</span><br><span class="line">    &apos;django.contrib.messages&apos;,</span><br><span class="line">    &apos;django.contrib.staticfiles&apos;,</span><br><span class="line">    &apos;booktest&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>5）迁移后会在数据库中创建出存储Session的表。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-17-14-33.png" alt></p>
+<p>6）表结构如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-17-15-45.png" alt></p>
+<blockquote>
+<p>由表结构可知，操作Session包括三个数据：键，值，过期时间。</p>
+</blockquote>
+<h3 id="依赖于Cookie"><a href="#依赖于Cookie" class="headerlink" title="依赖于Cookie"></a>依赖于Cookie</h3><p>所有请求者的Session都会存储在服务器中，服务器如何区分请求者和Session数据的对应关系呢？</p>
+<p>答：在使用Session后，会在Cookie中存储一个sessionid的数据，每次请求时浏览器都会将这个数据发给服务器，服务器在接收到sessionid后，会根据这个值找出这个请求者的Session。</p>
+<p>结果：如果想使用Session，浏览器必须支持Cookie，否则就无法使用Session了。</p>
+<p>存储Session时，键与Cookie中的sessionid相同，值是开发人员设置的键值对信息，进行了base64编码，过期时间由开发人员设置。</p>
+<h3 id="对象及方法"><a href="#对象及方法" class="headerlink" title="对象及方法"></a>对象及方法</h3><p>通过HttpRequest对象的session属性进行会话的读写操作。</p>
+<p>1） 以键值对的格式写session。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request.session[&apos;键&apos;]=值</span><br></pre></td></tr></table></figure>
+<p>2）根据键读取值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request.session.get(&apos;键&apos;,默认值)</span><br></pre></td></tr></table></figure>
+<p>3）清除所有session，在存储中删除值部分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request.session.clear()</span><br></pre></td></tr></table></figure>
+<p>4）清除session数据，在存储中删除session的整条数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request.session.flush()</span><br></pre></td></tr></table></figure>
+<p>5）删除session中的指定键及值，在存储中只删除某个键及对应的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">del request.session[&apos;键&apos;]</span><br></pre></td></tr></table></figure>
+<p>6）设置会话的超时时间，如果没有指定过期时间则两个星期后过期。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request.session.set_expiry(value)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果value是一个整数，会话将在value秒没有活动后过期。</li>
+<li>如果value为0，那么用户会话的Cookie将在用户的浏览器关闭时过期。</li>
+<li>如果value为None，那么会话永不过期。</li>
+</ul>
+<h3 id="示例-5"><a href="#示例-5" class="headerlink" title="示例"></a>示例</h3><h4 id="写session"><a href="#写session" class="headerlink" title="写session"></a>写session</h4><p>1）打开 <code>booktest/views.py</code> 文件，创建视图 session_test ，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def session_test(request):</span><br><span class="line">    request.session[&apos;h1&apos;] = &apos;hello django&apos;</span><br><span class="line">    return HttpResponse(&quot;写 Session&quot;)</span><br></pre></td></tr></table></figure>
+<p>2）打开 <code>booktest/urls.py</code> 文件，配置 url 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^session_test/$&apos;,views.session_test),</span><br></pre></td></tr></table></figure>
+<p>3）运行服务器，打开浏览器请求如下网址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/session_test/</span><br></pre></td></tr></table></figure>
+<p>4）浏览效果如下图，在”开发者工具”中可以查看到响应头中创建了 Cookie ，里面有个键为 sessionid 。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/sessionid.png" alt></p>
+<p>5）打开MySQL数据库命令行，查询数据如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-20-26-26.png" alt></p>
+<p>查看 Cookie 中的 sessionid 值为 <code>v5w6h9k1b12kfkncvjmqa0yj2x5egt0h</code> ，数据表中 session 的键为 <code>v5w6h9k1b12kfkncvjmqa0yj2x5egt0h</code> ，是一样的，这样，服务器就可以在众多的请求者中找到对应的 Session 数据。</p>
+<p>在MySQL数据库命令行中复制值，在Base64解码中进行解码查看如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-20-32-08.png" alt></p>
+<h4 id="读session"><a href="#读session" class="headerlink" title="读session"></a>读session</h4><p>1）打开 <code>booktest/views.py</code> 文件，添加 session_read 视图如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def session_read(request):</span><br><span class="line">    h1 = request.session.get(&quot;h1&quot;)</span><br><span class="line">    return HttpResponse(h1)</span><br></pre></td></tr></table></figure>
+<p>2）刷新浏览器效果如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-20-37-08.png" alt></p>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p>1）打开 <code>booktest/views.py</code> 文件，添加 session_del 视图如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def session_del(request):</span><br><span class="line">    del request.session[&quot;h1&quot;]</span><br><span class="line">    return HttpResponse(&quot;del OK&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>2）刷新浏览器，在数据库命令行中查询，base64解码后如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-20-39-46.png" alt></p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-20-40-21.png" alt></p>
+<p>如果将所有的键及值都删除，逐个调用del太麻烦，可以使用clear()方法。</p>
+<h4 id="删除session"><a href="#删除session" class="headerlink" title="删除session"></a>删除session</h4><p>1）打开 <code>booktest/views.py</code> 文件，添加 del_session 视图如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def del_session(request):</span><br><span class="line">    request.session.flush()</span><br><span class="line">    return HttpResponse(&quot;Del session OK&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>2）刷新浏览器，在数据库命令行中查询如下图。</p>
+<p><img src="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/2020-01-04-20-44-49.png" alt></p>
 
       
     </div>
@@ -563,7 +1030,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -634,7 +1101,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#视图"><span class="nav-number">1.</span> <span class="nav-text">视图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建示例项目"><span class="nav-number">1.1.</span> <span class="nav-text">创建示例项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建项目-test3"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 创建项目 test3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-进入项目目录，创建应用-booktest"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 进入项目目录，创建应用 booktest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-在-test3-settings-py-中-INSTALLED-APPS-项安装应用"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 在 test3/settings.py 中 INSTALLED_APPS 项安装应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-在-test3-settings-py-中DATABASES项配置使用-MySQL-数据库-test2"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 在 test3/settings.py 中DATABASES项配置使用 MySQL 数据库 test2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-在-test3-settings-py-中-TEMPLATES-项配置模板查找路径"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 在 test3/settings.py 中 TEMPLATES 项配置模板查找路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-创建模板目录-test3-templates-booktest-。"><span class="nav-number">1.1.6.</span> <span class="nav-text">6. 创建模板目录 test3/templates/booktest 。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-使用视图"><span class="nav-number">1.1.7.</span> <span class="nav-text">7. 使用视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-启动服务"><span class="nav-number">1.1.8.</span> <span class="nav-text">8. 启动服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#URLconf"><span class="nav-number">2.</span> <span class="nav-text">URLconf</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-在-test3-settings-py-中通过ROOT-URLCONF指定url配置，默认已经有此配置。"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 在 test3/settings.py 中通过ROOT_URLCONF指定url配置，默认已经有此配置。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-打开-test3-urls-py-可以看到默认配置。"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 打开 test3/urls.py 可以看到默认配置。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">2.2.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法一"><span class="nav-number">2.2.1.</span> <span class="nav-text">语法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法二"><span class="nav-number">2.2.2.</span> <span class="nav-text">语法二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取值"><span class="nav-number">2.3.</span> <span class="nav-text">获取值</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#视图"><span class="nav-number">1.</span> <span class="nav-text">视图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建示例项目"><span class="nav-number">1.1.</span> <span class="nav-text">创建示例项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建项目-test3"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 创建项目 test3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-进入项目目录，创建应用-booktest"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 进入项目目录，创建应用 booktest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-在-test3-settings-py-中-INSTALLED-APPS-项安装应用"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 在 test3/settings.py 中 INSTALLED_APPS 项安装应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-在-test3-settings-py-中DATABASES项配置使用-MySQL-数据库-test2"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 在 test3/settings.py 中DATABASES项配置使用 MySQL 数据库 test2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-在-test3-settings-py-中-TEMPLATES-项配置模板查找路径"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 在 test3/settings.py 中 TEMPLATES 项配置模板查找路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-创建模板目录-test3-templates-booktest-。"><span class="nav-number">1.1.6.</span> <span class="nav-text">6. 创建模板目录 test3/templates/booktest 。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-使用视图"><span class="nav-number">1.1.7.</span> <span class="nav-text">7. 使用视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-启动服务"><span class="nav-number">1.1.8.</span> <span class="nav-text">8. 启动服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#URLconf"><span class="nav-number">2.</span> <span class="nav-text">URLconf</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-在-test3-settings-py-中通过ROOT-URLCONF指定url配置，默认已经有此配置。"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 在 test3/settings.py 中通过ROOT_URLCONF指定url配置，默认已经有此配置。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-打开-test3-urls-py-可以看到默认配置。"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 打开 test3/urls.py 可以看到默认配置。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">2.2.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法一"><span class="nav-number">2.2.1.</span> <span class="nav-text">语法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法二"><span class="nav-number">2.2.2.</span> <span class="nav-text">语法二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取值"><span class="nav-number">2.3.</span> <span class="nav-text">获取值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方式一：位置参数"><span class="nav-number">2.3.1.</span> <span class="nav-text">方式一：位置参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方式二：关键字参数"><span class="nav-number">2.3.2.</span> <span class="nav-text">方式二：关键字参数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#视图-1"><span class="nav-number">3.</span> <span class="nav-text">视图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内置错误视图"><span class="nav-number">3.1.</span> <span class="nav-text">内置错误视图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#404错误及视图"><span class="nav-number">3.1.1.</span> <span class="nav-text">404错误及视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#500错误及视图"><span class="nav-number">3.1.2.</span> <span class="nav-text">500错误及视图</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HttpReqeust对象"><span class="nav-number">4.</span> <span class="nav-text">HttpReqeust对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性"><span class="nav-number">4.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">4.2.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#path、encoding"><span class="nav-number">4.2.1.</span> <span class="nav-text">path、encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#method"><span class="nav-number">4.2.2.</span> <span class="nav-text">method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QueryDict对象"><span class="nav-number">4.3.</span> <span class="nav-text">QueryDict对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GET属性"><span class="nav-number">4.4.</span> <span class="nav-text">GET属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POST属性"><span class="nav-number">4.5.</span> <span class="nav-text">POST属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#示例-1"><span class="nav-number">4.5.1.</span> <span class="nav-text">示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HttpResponse对象"><span class="nav-number">5.</span> <span class="nav-text">HttpResponse对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#属性-1"><span class="nav-number">5.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">5.2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例-2"><span class="nav-number">5.3.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接返回数据"><span class="nav-number">5.3.1.</span> <span class="nav-text">直接返回数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用模板"><span class="nav-number">5.3.2.</span> <span class="nav-text">调用模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用模板简写函数render"><span class="nav-number">5.3.3.</span> <span class="nav-text">调用模板简写函数render</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子类JsonResponse"><span class="nav-number">5.4.</span> <span class="nav-text">子类JsonResponse</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#示例-3"><span class="nav-number">5.4.1.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子类HttpResponseRedirect"><span class="nav-number">5.5.</span> <span class="nav-text">子类HttpResponseRedirect</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#示例-4"><span class="nav-number">5.5.1.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向简写函数redirect"><span class="nav-number">5.5.2.</span> <span class="nav-text">重定向简写函数redirect</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#状态保持"><span class="nav-number">6.</span> <span class="nav-text">状态保持</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie"><span class="nav-number">6.1.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie的特点"><span class="nav-number">6.1.1.</span> <span class="nav-text">Cookie的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置Cookie"><span class="nav-number">6.1.2.</span> <span class="nav-text">设置Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取Cookie"><span class="nav-number">6.1.3.</span> <span class="nav-text">读取Cookie</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session"><span class="nav-number">6.2.</span> <span class="nav-text">Session</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启用Session"><span class="nav-number">6.2.1.</span> <span class="nav-text">启用Session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储方式"><span class="nav-number">6.2.2.</span> <span class="nav-text">存储方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖于Cookie"><span class="nav-number">6.2.3.</span> <span class="nav-text">依赖于Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象及方法"><span class="nav-number">6.2.4.</span> <span class="nav-text">对象及方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例-5"><span class="nav-number">6.2.5.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#写session"><span class="nav-number">6.2.5.1.</span> <span class="nav-text">写session</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读session"><span class="nav-number">6.2.5.2.</span> <span class="nav-text">读session</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除"><span class="nav-number">6.2.5.3.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除session"><span class="nav-number">6.2.5.4.</span> <span class="nav-text">删除session</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>

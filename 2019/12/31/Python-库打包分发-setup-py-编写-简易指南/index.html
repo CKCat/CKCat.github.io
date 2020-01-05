@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="CKCat的博客">
 <meta property="og:description" content="转载 http:&#x2F;&#x2F;blog.konghy.cn&#x2F;2018&#x2F;04&#x2F;29&#x2F;setup-dot-py&#x2F;  Python 有非常丰富的第三方库可以使用，很多开发者会向 pypi 上提交自己的 Python 包。要想向 pypi 包仓库提交自己开发的包，首先要将自己的代码打包，才能上传分发。 distutils 简介distutils 是标准库中负责建立 Python 第三方库的安装器，使用它能够进行">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-31T10:02:27.526Z">
+<meta property="og:updated_time" content="2020-01-02T09:04:35.475Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -656,7 +656,8 @@
 <blockquote>
 <p>python setup.py sdist upload</p>
 </blockquote>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子:"></a>例子:</h2>
+<p><a href="https://github.com/CKCat/Note/tree/master/Python/setups" target="_blank" rel="noopener">例子</a></p>
+
       
     </div>
     
@@ -695,6 +696,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/Django%E5%AD%A6%E4%B9%A0-%E6%A8%A1%E6%9D%BF/" rel="prev" title="Django学习-模板">
+                Django学习-模板 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -785,7 +790,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -856,7 +861,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#distutils-简介"><span class="nav-number">1.</span> <span class="nav-text">distutils 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#setuptools-简介"><span class="nav-number">2.</span> <span class="nav-text">setuptools 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#包格式"><span class="nav-number">3.</span> <span class="nav-text">包格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#setup-py-文件"><span class="nav-number">4.</span> <span class="nav-text">setup.py 文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数概述"><span class="nav-number">4.1.</span> <span class="nav-text">参数概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find-packages"><span class="nav-number">4.2.</span> <span class="nav-text">find_packages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含数据文件"><span class="nav-number">4.3.</span> <span class="nav-text">包含数据文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成脚本"><span class="nav-number">4.4.</span> <span class="nav-text">生成脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ext-modules"><span class="nav-number">4.5.</span> <span class="nav-text">ext_modules</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zip-safe"><span class="nav-number">4.6.</span> <span class="nav-text">zip_safe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义命令"><span class="nav-number">4.7.</span> <span class="nav-text">自定义命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖关系"><span class="nav-number">4.8.</span> <span class="nav-text">依赖关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类信息"><span class="nav-number">4.9.</span> <span class="nav-text">分类信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setup-py-命令"><span class="nav-number">4.10.</span> <span class="nav-text">setup.py 命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setup-cfg-文件"><span class="nav-number">4.11.</span> <span class="nav-text">setup.cfg 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本命名"><span class="nav-number">4.12.</span> <span class="nav-text">版本命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#easy-install-与-pip"><span class="nav-number">4.13.</span> <span class="nav-text">easy_install 与 pip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布包"><span class="nav-number">4.14.</span> <span class="nav-text">发布包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">4.15.</span> <span class="nav-text">例子:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#distutils-简介"><span class="nav-number">1.</span> <span class="nav-text">distutils 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#setuptools-简介"><span class="nav-number">2.</span> <span class="nav-text">setuptools 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#包格式"><span class="nav-number">3.</span> <span class="nav-text">包格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#setup-py-文件"><span class="nav-number">4.</span> <span class="nav-text">setup.py 文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数概述"><span class="nav-number">4.1.</span> <span class="nav-text">参数概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find-packages"><span class="nav-number">4.2.</span> <span class="nav-text">find_packages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含数据文件"><span class="nav-number">4.3.</span> <span class="nav-text">包含数据文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成脚本"><span class="nav-number">4.4.</span> <span class="nav-text">生成脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ext-modules"><span class="nav-number">4.5.</span> <span class="nav-text">ext_modules</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zip-safe"><span class="nav-number">4.6.</span> <span class="nav-text">zip_safe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义命令"><span class="nav-number">4.7.</span> <span class="nav-text">自定义命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖关系"><span class="nav-number">4.8.</span> <span class="nav-text">依赖关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类信息"><span class="nav-number">4.9.</span> <span class="nav-text">分类信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setup-py-命令"><span class="nav-number">4.10.</span> <span class="nav-text">setup.py 命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setup-cfg-文件"><span class="nav-number">4.11.</span> <span class="nav-text">setup.cfg 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#版本命名"><span class="nav-number">4.12.</span> <span class="nav-text">版本命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#easy-install-与-pip"><span class="nav-number">4.13.</span> <span class="nav-text">easy_install 与 pip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布包"><span class="nav-number">4.14.</span> <span class="nav-text">发布包</span></a></li></ol></li></ol></div>
             
 
           </div>
