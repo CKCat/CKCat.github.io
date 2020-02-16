@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="dex字符串解密," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="dexsim简介dexsim 是利用动态调用实现字符串解密的工具，需要配合 DSS 使用。作者为 mikusjelly 。 dexsim 源码浅析dexsim 源码结构如下图所示，  其中关键解密方法在 dexsim&#x2F;Plugins 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。 首先来看 main 方法 1234567891011121314151617if __name__">
+<meta name="keywords" content="dex字符串解密">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dexsim浅析">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="dexsim简介dexsim 是利用动态调用实现字符串解密的工具，需要配合 DSS 使用。作者为 mikusjelly 。 dexsim 源码浅析dexsim 源码结构如下图所示，  其中关键解密方法在 dexsim&#x2F;Plugins 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。 首先来看 main 方法 1234567891011121314151617if __name__">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-13-59-53.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-15-17-58.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-15-17-13.png">
+<meta property="og:updated_time" content="2020-02-16T07:22:00.792Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-13-59-53.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/02/16/dexsim浅析/"/>
+
+
+
+
+
+  <title>dexsim浅析 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/16/dexsim%E6%B5%85%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/human.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">dexsim浅析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-16T13:46:57+08:00">
+                2020-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index">
+                    <span itemprop="name">Android逆向</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/16/dexsim浅析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="dexsim简介"><a href="#dexsim简介" class="headerlink" title="dexsim简介"></a>dexsim简介</h1><p><a href="https://github.com/mikusjelly/dexsim" target="_blank" rel="noopener">dexsim</a> 是利用动态调用实现字符串解密的工具，需要配合 <a href="https://github.com/mikusjelly/DSS" target="_blank" rel="noopener">DSS</a> 使用。作者为 <code>mikusjelly</code> 。</p>
+<h2 id="dexsim-源码浅析"><a href="#dexsim-源码浅析" class="headerlink" title="dexsim 源码浅析"></a>dexsim 源码浅析</h2><p><code>dexsim</code> 源码结构如下图所示，</p>
+<p><img src="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/2020-02-16-13-59-53.png" alt></p>
+<p>其中关键解密方法在 <code>dexsim/Plugins</code> 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。</p>
+<p>首先来看 <code>main</code> 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    parser = argparse.ArgumentParser(prog=&apos;dexsim&apos;, description=&apos;&apos;)</span><br><span class="line">    parser.add_argument(&apos;f&apos;, help=&apos;APK 文件&apos;)</span><br><span class="line">    parser.add_argument(&apos;-i&apos;, &apos;--includes&apos;, nargs=&apos;*&apos;,</span><br><span class="line">                        help=&apos;仅解密包含的类，如abc, a.b.c&apos;)</span><br><span class="line">    parser.add_argument(&apos;-o&apos;, help=&apos;output file path&apos;)</span><br><span class="line">    parser.add_argument(&apos;-d&apos;, &apos;--debug&apos;, action=&apos;store_true&apos;, help=&apos;开启调试模式&apos;)</span><br><span class="line">    parser.add_argument(&apos;-s&apos;, required=False, help=&apos;指定smali目录&apos;)</span><br><span class="line">    parser.add_argument(&apos;-p&apos;, &apos;--pname&apos;, required=False, help=&apos;加载指定插件，根据插件名字&apos;)</span><br><span class="line">    # TODO parser.add_argument(&apos;-b&apos;, action=&apos;store_true&apos;, help=&apos;开启STEP_BY_STEP插件&apos;)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    start = time.time()</span><br><span class="line">    main(args)</span><br><span class="line">    finish = time.time()</span><br><span class="line">    print(&apos;\n%fs&apos; % (finish - start))</span><br></pre></td></tr></table></figure>
+<p>该方法主要是解析参数</p>
+<ul>
+<li>-i 仅解密包含的类 参数格式为 <code>a.b.c</code> <code>a.b</code>， 后面会将其转换为 <code>a/b/c.smali</code> <code>a/b.smali</code> 。</li>
+<li>-o 解密后输出文件的路径</li>
+<li>-s 指定smali目录</li>
+<li>-p 加载指定插件，根据插件名字</li>
+</ul>
+<p>在 <code>main()</code> 方法中，将 apk 中的多个 dex 合并为一个名为 <code>new.dex</code> 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ptn = re.compile(r&apos;classes\d*.dex&apos;)</span><br><span class="line"></span><br><span class="line">zipFile = zipfile.ZipFile(apk_path)</span><br><span class="line">for item in zipFile.namelist():</span><br><span class="line">    if ptn.match(item):</span><br><span class="line">        output_path = zipFile.extract(item, tempdir)</span><br><span class="line">        baksmali(output_path, smali_dir)</span><br><span class="line">zipFile.close()</span><br><span class="line"></span><br><span class="line">dex_file = os.path.join(tempdir, &apos;new.dex&apos;)</span><br></pre></td></tr></table></figure>
+<p>然后在使用 <code>smali</code> 将合并的 <code>dex</code> 转为 <code>samli</code> 文件, 并进一步解析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">smali(smali_dir, dex_file)</span><br><span class="line">dexsim_apk(args.f, smali_dir, includes, output_dex)</span><br></pre></td></tr></table></figure>
+<p>上面的方法可以进行一下优化，没有必要合并 <code>dex</code> ,并且只能针对 <code>apk</code> 文件进行解密，可以增加对 <code>dex</code> 文件的解密。</p>
+<p>接着看 <code>dexsim_apk</code> 方法.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dexsim(apk_file, smali_dir, includes)</span><br><span class="line">if output_dex:</span><br><span class="line">    smali(smali_dir, output_dex)</span><br><span class="line">else:</span><br><span class="line">    smali(smali_dir,</span><br><span class="line">          os.path.splitext(os.path.basename(apk_file))[0] + &apos;.sim.dex&apos;)</span><br></pre></td></tr></table></figure>
+<p>发现该方法直接调用 <code>dexsim</code> 方法，然后解密完成，那么关键方法为 <code>dexsim</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def dexsim(apk_file, smali_dir, includes):</span><br><span class="line">    &quot;&quot;&quot;推送到手机/模拟器，动态解密</span><br><span class="line"></span><br><span class="line">    Args:</span><br><span class="line">        apk_file (TYPE): Description</span><br><span class="line">        smali_dir (TYPE): Description</span><br><span class="line">        includes (TYPE): Description</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    driver = Driver()</span><br><span class="line">    driver.push_to_dss(apk_file)</span><br><span class="line"></span><br><span class="line">    oracle = Oracle(smali_dir, driver, includes)</span><br><span class="line">    oracle.divine()</span><br></pre></td></tr></table></figure>
+<p>在该方法中将 <code>dex</code> 文件推送到手机中，然后调用创建 <code>Oracle</code> 对象向，调用该对象的 <code>divine</code> 进行解密.</p>
+<p>接下来看 Oracle 对象的 <code>__init__</code> 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def __init__(self, smali_dir, driver, includes):</span><br><span class="line">     &apos;&apos;&apos;</span><br><span class="line">     &apos;&apos;&apos;</span><br><span class="line">     self.driver = driver</span><br><span class="line">     # 下面一段代码可以删除，因为我们传的includes参数已经去掉了 L</span><br><span class="line">     paths = []</span><br><span class="line">     if includes:</span><br><span class="line">         for item in includes:</span><br><span class="line">             paths.append(item[1:].split(&apos;;&apos;)[0])</span><br><span class="line"></span><br><span class="line">     self.smalidir = SmaliDir(smali_dir, include=paths, exclude=FILTERS)</span><br><span class="line">     self.plugin_manager = PluginManager(self.driver, self.smalidir)</span><br></pre></td></tr></table></figure>
+<p>调用 <code>SmaliDir</code> 读取 smali 代码， 然后调用 <code>PluginManager</code> 加载插件。</p>
+<p>接下来看看 <code>PluginManager</code> 如何加载所有插件的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">def __init__plugins(self):</span><br><span class="line">    for path in sys.path:</span><br><span class="line">        if path and path in __file__:</span><br><span class="line">            pkg = __file__.replace(path, &apos;&apos;)</span><br><span class="line">            break</span><br><span class="line">    module_path = os.path.dirname(pkg)[1:].replace(</span><br><span class="line">        os.sep, &apos;.&apos;) + &apos;.&apos; + self.plugin_dir + &apos;.&apos;</span><br><span class="line"></span><br><span class="line">    tmp = [None] * len(self.plugin_filenames)</span><br><span class="line">    # 开始加载所有插件</span><br><span class="line">    for name in self.plugin_filenames:</span><br><span class="line">        spec = importlib.util.find_spec(module_path + name)</span><br><span class="line">        mod = spec.loader.load_module()</span><br><span class="line">        clazz = getattr(mod, mod.PLUGIN_CLASS_NAME)</span><br><span class="line">        if not issubclass(clazz, Plugin):</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">        if not clazz.enabled:</span><br><span class="line">            print(&quot;Don&apos;t load plugin&quot;, clazz.name)</span><br><span class="line">            continue</span><br><span class="line">        tmp[clazz.index] = clazz(self.driver, self.smalidir)</span><br><span class="line"></span><br><span class="line">    for item in tmp:</span><br><span class="line">        if item:</span><br><span class="line">            self.__plugins.append(item)</span><br></pre></td></tr></table></figure>
+<p>首先获取插件名，然后调用 <code>importlib.util.find_spec(module_path + name)</code> 加载插件，完成插件的加载。</p>
+<p>接下来回到 <code>oracle.divine()</code> 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">def divine(self):</span><br><span class="line">    plugins = self.plugin_manager.get_plugins()</span><br><span class="line"></span><br><span class="line">    flag = True</span><br><span class="line">    smali_mtds = set()  # 存放已被修改的smali方法</span><br><span class="line">    while flag:</span><br><span class="line">        flag = False</span><br><span class="line">        for plugin in plugins:</span><br><span class="line">            # 调用插件的run方法</span><br><span class="line">            plugin.run()</span><br><span class="line">            # 更新smali_mtds 文件</span><br><span class="line">            smali_mtds = smali_mtds.union(plugin.smali_mtd_updated_set)</span><br><span class="line">            print(plugin.make_changes)</span><br><span class="line">            flag = flag | plugin.make_changes</span><br><span class="line">            plugin.make_changes = False</span><br><span class="line"></span><br><span class="line">    self.driver.adb.run_shell_cmd([&apos;rm&apos;, DSS_APK_PATH])</span><br></pre></td></tr></table></figure>
+<p>关键的加密方法还是要看插件。</p>
+<p>接下来看 Plugin 类，该类是所有插件的基类。先看看两个关键的成员变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># [&#123;&apos;className&apos;:&apos;&apos;, &apos;methodName&apos;:&apos;&apos;, &apos;arguments&apos;:&apos;&apos;, &apos;id&apos;:&apos;&apos;&#125;, ..., ]</span><br><span class="line">json_list = []  # 存放解密对象</span><br><span class="line"></span><br><span class="line"># [(mtd, old_content, new_content), ..., ]</span><br><span class="line"># [(方法体， 原始的内容，解密后的内容)，...,]</span><br><span class="line">target_contexts = &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>json_list 存放解密对象，将转成文件推送到手机中让 DSS 解析并动态执行，其格式如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[&#123;</span><br><span class="line">		&quot;className&quot;: &quot;othn.iclauncher&quot;,</span><br><span class="line">		&quot;methodName&quot;: &quot;Ez&quot;,</span><br><span class="line">		&quot;arguments&quot;: [&quot;java.lang.String:FK9FD0004670751372201EA6&quot;],</span><br><span class="line">		&quot;id&quot;: &quot;a439b0d815c9a0a972c6b0dc69ec7bee5663ae9b65294b2828fbb8aaa098ce70&quot;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		&quot;className&quot;: &quot;othn.iclauncher&quot;,</span><br><span class="line">		&quot;methodName&quot;: &quot;EA&quot;,</span><br><span class="line">		&quot;arguments&quot;: [&quot;java.lang.String:FKBEFCC3DA309EDA1B6FC62DF7E3EBECB5&quot;],</span><br><span class="line">		&quot;id&quot;: &quot;cdfcbfd5a872408ba4cc06b6f5a1fb48f1c5e18d5c36deb6e6fe41bd6b3d5c8c&quot;</span><br><span class="line">	&#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>target_contexts 存放解密前后的代码和方法体，方便后续替换。</p>
+<p>几个关键的成员变量高清楚之后，剩下的东西也比较好理解，所以就不多说了，最后就是看看替换方法体</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">for key, value in outputs.items():</span><br><span class="line">    if key not in self.target_contexts:</span><br><span class="line">        print(key, value, &quot;not in&quot;)</span><br><span class="line">        continue</span><br><span class="line">    for mtd, old_content, new_content in self.target_contexts[key]:</span><br><span class="line">        old_body = mtd.get_body()</span><br><span class="line">        new_content = old_content + &quot;\n&quot; + new_content.format(value[0])</span><br><span class="line">        body = old_body.replace(old_content, new_content)</span><br><span class="line">        mtd.set_body(body)</span><br><span class="line">        self.make_changes = True</span><br><span class="line">      </span><br><span class="line"></span><br><span class="line">self.smali_files_update()</span><br></pre></td></tr></table></figure>
+<p>outputs 为动态执行后的结果，主要格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;7b842f01264dc1d1a5089da9e86f531e90f5affe9ef36ecade2e2878a306ae7a&quot;: [&quot;sender&quot;],</span><br><span class="line">	&quot;5f0edfa5e4249ff38f5918e9b27197aec7aaeeed6c7c604a109bdfb21d9b7dc5&quot;: [&quot;ss&quot;],</span><br><span class="line">	&quot;642ed422a84d5ccab9e8fb27813c17d80b346af15295ffdc72dbd09d8662e34c&quot;: [&quot;raw_data&quot;],</span><br><span class="line">	&quot;e19e1215be04291d5a0c61232a7ae933a3ad6c6e760e7b86ccc2800f0350730a&quot;: [&quot;SUCCEED&quot;],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过相同的key进行替换，上面为了避免回编译为dex文件的时报错，直接使用的追加方式。</p>
+<p>整个代码的原理大概就是这样，关键就是写插件，这一块就不详细说了，有兴趣可以看看 <code>Plugin</code> 目录中的插件.</p>
+<p>最后看看解密后的效果吧。</p>
+<p>解密前</p>
+<p><img src="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/2020-02-16-15-17-58.png" alt></p>
+<p>解密后</p>
+<p><img src="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/2020-02-16-15-17-13.png" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/dex%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E5%AF%86/" rel="tag"># dex字符串解密</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/12/python-Cheat-Sheet/" rel="next" title="python Cheat Sheet">
+                <i class="fa fa-chevron-left"></i> python Cheat Sheet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/human.png"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#dexsim简介"><span class="nav-number">1.</span> <span class="nav-text">dexsim简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dexsim-源码浅析"><span class="nav-number">1.1.</span> <span class="nav-text">dexsim 源码浅析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/02/16/dexsim%E6%B5%85%E6%9E%90/';
+          this.page.identifier = '2020/02/16/dexsim浅析/';
+          this.page.title = 'dexsim浅析';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

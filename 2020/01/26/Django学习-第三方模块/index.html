@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Django," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="富文本编辑器借助富文本编辑器，网站的编辑人员能够像使用offfice一样编写出漂亮的、所见即所得的页面。此处以tinymce为例，其它富文本编辑器的使用也是类似的。 在虚拟环境中安装包。 1pip install django-tinymce==2.6.0 安装完成后，可以使用在Admin管理中，也可以自定义表单使用。 示例1）在 test6&#x2F;settings.py 中为 INSTALLED_AP">
+<meta name="keywords" content="Django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django学习-第三方模块">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="富文本编辑器借助富文本编辑器，网站的编辑人员能够像使用offfice一样编写出漂亮的、所见即所得的页面。此处以tinymce为例，其它富文本编辑器的使用也是类似的。 在虚拟环境中安装包。 1pip install django-tinymce==2.6.0 安装完成后，可以使用在Admin管理中，也可以自定义表单使用。 示例1）在 test6&#x2F;settings.py 中为 INSTALLED_AP">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-28-05.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-28-49.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-29-59.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-30-48.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-36-06.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-37-02.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-54-29.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-15-50-10.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-18-42-12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-20-16-58.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-20-24-18.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-20-25-07.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-20-37-53.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-20-38-29.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-20-41-53.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-20-50-06.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-28-21-17-27.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-29-13-47-34.png">
+<meta property="og:updated_time" content="2020-01-29T05:47:44.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;26&#x2F;Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97&#x2F;2020-01-27-21-28-05.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/01/26/Django学习-第三方模块/"/>
+
+
+
+
+
+  <title>Django学习-第三方模块 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/human.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Django学习-第三方模块</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-26T21:01:20+08:00">
+                2020-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/01/26/Django学习-第三方模块/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h1><p>借助富文本编辑器，网站的编辑人员能够像使用offfice一样编写出漂亮的、所见即所得的页面。此处以tinymce为例，其它富文本编辑器的使用也是类似的。</p>
+<p>在虚拟环境中安装包。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-tinymce==2.6.0</span><br></pre></td></tr></table></figure>
+<p>安装完成后，可以使用在Admin管理中，也可以自定义表单使用。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>1）在 <code>test6/settings.py</code> 中为 INSTALLED_APPS 添加编辑器应用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    ...</span><br><span class="line">    &apos;tinymce&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>2）在 <code>test6/settings.py</code> 中添加编辑器配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TINYMCE_DEFAULT_CONFIG = &#123;</span><br><span class="line">    &apos;theme&apos;: &apos;advanced&apos;,</span><br><span class="line">    &apos;width&apos;: 600,</span><br><span class="line">    &apos;height&apos;: 400,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3）在 <code>test6/urls.py</code> 中配置编辑器 url。</p>
+<p>urlpatterns = [<br>    …<br>    url(r’^tinymce/‘, include(‘tinymce.urls’)),<br>]</p>
+<p>接下来介绍在 Admin 页面、自定义表单页面的使用方式。</p>
+<h3 id="在Admin中使用"><a href="#在Admin中使用" class="headerlink" title="在Admin中使用"></a>在Admin中使用</h3><p>1）在 <code>booktest/models.py</code> 中，定义模型的属性为 <code>HTMLField()</code> 类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line">from tinymce.models import HTMLField</span><br><span class="line"></span><br><span class="line">class GoodsInfo(models.Model):</span><br><span class="line">    gcontent=HTMLField()</span><br></pre></td></tr></table></figure>
+
+<p>2）生成迁移文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py makemigrations</span><br><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
+
+<p>4）在本示例中没有定义其它的模型类，但是数据库中有这些表，提示是否删除，输入no后回车，表示不删除，因为其它的示例中需要使用这些表。</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-27-21-28-05.png" alt></p>
+<p>5）迁移完成，新开终端，连接 mysql ，使用 test2 数据库，查看表如下：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-27-21-28-49.png" alt></p>
+<p>6）发现并没有表 GoodsInfo ，解决办法是删除迁移表中关于 booktest 应用的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from django_migrations where app=&apos;booktest&apos;;</span><br></pre></td></tr></table></figure>
+<p>7）再次执行迁移。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
+<p>成功完成迁移，记得不删除no。</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-27-21-29-59.png" alt></p>
+<p>8）在 <code>booktest/admin.py</code> 中注册模型类 GoodsInfo </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib import admin</span><br><span class="line">from booktest.models import *</span><br><span class="line">class GoodsInfoAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = [&apos;id&apos;]</span><br><span class="line"></span><br><span class="line">admin.site.register(GoodsInfo,GoodsInfoAdmin)</span><br></pre></td></tr></table></figure>
+<p>9）运行服务器，进入 admin 后台管理，点击 GoodsInfo 的添加，效果如下图</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-27-21-30-48.png" alt></p>
+<p>在编辑器中编辑内容后保存。</p>
+<h3 id="自定义使用"><a href="#自定义使用" class="headerlink" title="自定义使用"></a>自定义使用</h3><p>1）在 <code>booktest/views.py</code> 中定义视图 editor ，用于显示编辑器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def editor(request):</span><br><span class="line">    return render(request, &apos;booktest/editor.html&apos;)</span><br></pre></td></tr></table></figure>
+<p>2）在 <code>booktest/urls.py</code> 中配置 url 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^editor/&apos;,views.editor),</span><br></pre></td></tr></table></figure>
+<p>3）在项目目录下创建静态文件目录如下图：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-27-21-36-06.png" alt></p>
+<p>4）打开py_django虚拟环境的目录，找到tinymce的目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.virtualenvs/py_django/lib/python3.5/site-packages/tinymce/static/tiny_mce</span><br></pre></td></tr></table></figure>
+<p>5）拷贝 <code>tiny_mce_src.js</code> 文件、langs文件夹以及themes文件夹拷贝到项目目录下的 <code>static/js/</code> 目录下。</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-27-21-37-02.png" alt></p>
+<p>6）在 <code>test6/settings.py</code> 中配置静态文件查找路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">STATICFILES_DIRS=[</span><br><span class="line">    os.path.join(BASE_DIR,&apos;statics&apos;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>7）在 <code>templates/booktest/</code> 目录下创建 <code>editor.html</code> 模板。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;自定义使用tinymce&lt;/title&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot; src=&apos;/statics/js/tiny_mce_src.js&apos;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">        tinyMCE.init(&#123;</span><br><span class="line">            &apos;mode&apos;:&apos;textareas&apos;,</span><br><span class="line">            &apos;theme&apos;:&apos;advanced&apos;,</span><br><span class="line">            &apos;width&apos;:400,</span><br><span class="line">            &apos;height&apos;:100</span><br><span class="line">        &#125;);</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;form method=&quot;post&quot; action=&quot;#&quot;&gt;</span><br><span class="line">    &lt;textarea name=&apos;gcontent&apos;&gt;哈哈，这是啥呀&lt;/textarea&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>8）运行服务器，在浏览器中输入如下网址：</p>
+<p><a href="http://127.0.0.1:8000/editor/" target="_blank" rel="noopener">http://127.0.0.1:8000/editor/</a></p>
+<p>浏览效果如下图：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-27-21-54-29.png" alt></p>
+<h3 id="显示"><a href="#显示" class="headerlink" title="显示"></a>显示</h3><p>通过富文本编辑器产生的字符串是包含html的。 在数据库中查询如下图：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-15-50-10.png" alt></p>
+<p>在模板中显示字符串时，默认会进行html转义，如果想正常显示需要关闭转义。</p>
+<p>问：在模板中怎么关闭转义</p>
+<ul>
+<li>方式一：过滤器safe</li>
+<li>方式二：标签autoescape off</li>
+</ul>
+<p>1）在 <code>booktest/views.py</code> 中定义视图 show，用于显示富文本编辑器的内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from booktest.models import *</span><br><span class="line">...</span><br><span class="line">def show(request):</span><br><span class="line">    goods=GoodsInfo.objects.get(pk=1)</span><br><span class="line">    context=&#123;&apos;g&apos;:goods&#125;</span><br><span class="line">    return render(request,&apos;booktest/show.html&apos;,context)</span><br></pre></td></tr></table></figure>
+
+<p>2）在 <code>booktest/urls.py</code> 中配置url。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^show/&apos;, views.show),</span><br></pre></td></tr></table></figure>
+<p>3）在 <code>templates/booktest/</code> 目录下创建 <code>show.html</code> 模板。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;展示富文本编辑器内容&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">id:&#123;&#123;g.id&#125;&#125;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">&#123;%autoescape off%&#125;</span><br><span class="line">&#123;&#123;g.gcontent&#125;&#125;</span><br><span class="line">&#123;%endautoescape%&#125;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">&#123;&#123;g.gcontent|safe&#125;&#125;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>4）运行服务器，在浏览器中输入如下网址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/show/</span><br></pre></td></tr></table></figure>
+<p>浏览效果如下图：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-18-42-12.png" alt></p>
+<h1 id="全文检索"><a href="#全文检索" class="headerlink" title="全文检索"></a>全文检索</h1><p>全文检索不同于特定字段的模糊查询，使用全文检索的效率更高，并且能够对于中文进行分词处理。</p>
+<p>haystack：全文检索的框架，支持whoosh、solr、Xapian、Elasticsearc四种全文检索引擎，点击查看<a href="http://haystacksearch.org/" target="_blank" rel="noopener">官方网站</a>。<br>whoosh：纯Python编写的全文搜索引擎，虽然性能比不上sphinx、xapian、Elasticsearc等，但是无二进制包，程序不会莫名其妙的崩溃，对于小型的站点，whoosh已经足够使用，点击查看<a href="https://whoosh.readthedocs.io/en/latest/" target="_blank" rel="noopener">whoosh文档</a>。<br>jieba：一款免费的中文分词包，如果觉得不好用可以使用一些收费产品。</p>
+<p>1）在虚拟环境中依次安装需要的包。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install django-haystack</span><br><span class="line">pip install whoosh</span><br><span class="line">pip install jieba</span><br></pre></td></tr></table></figure>
+<p>2）修改 <code>test6/settings.py</code> 文件，安装应用 haystack 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    ...</span><br><span class="line">    &apos;haystack&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>3）在 <code>test6/settings.py</code> 文件中配置搜索引擎。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">HAYSTACK_CONNECTIONS = &#123;</span><br><span class="line">    &apos;default&apos;: &#123;</span><br><span class="line">        #使用whoosh引擎</span><br><span class="line">        &apos;ENGINE&apos;: &apos;haystack.backends.whoosh_cn_backend.WhooshEngine&apos;,</span><br><span class="line">        #索引文件路径</span><br><span class="line">        &apos;PATH&apos;: os.path.join(BASE_DIR, &apos;whoosh_index&apos;),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#当添加、修改、删除数据时，自动生成索引</span><br><span class="line">HAYSTACK_SIGNAL_PROCESSOR = &apos;haystack.signals.RealtimeSignalProcessor&apos;</span><br></pre></td></tr></table></figure>
+<p>4）在 <code>test6/urls.py</code> 中添加搜索的配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^search/&apos;, include(&apos;haystack.urls&apos;)),</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建引擎及索引"><a href="#创建引擎及索引" class="headerlink" title="创建引擎及索引"></a>创建引擎及索引</h2><p>1）在 booktest 目录下创建 <code>search_indexes.py</code> 文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from haystack import indexes</span><br><span class="line">from booktest.models import GoodsInfo</span><br><span class="line">#指定对于某个类的某些数据建立索引</span><br><span class="line">class GoodsInfoIndex(indexes.SearchIndex, indexes.Indexable):</span><br><span class="line">    text = indexes.CharField(document=True, use_template=True)</span><br><span class="line"></span><br><span class="line">    def get_model(self):</span><br><span class="line">        return GoodsInfo</span><br><span class="line"></span><br><span class="line">    def index_queryset(self, using=None):</span><br><span class="line">        return self.get_model().objects.all()</span><br></pre></td></tr></table></figure>
+<p>2）在 templates 目录下创建 <code>search/indexes/booktest/</code> 目录, 并在该目录中创建 <code>goodsinfo_text.txt</code> 文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#指定索引的属性</span><br><span class="line">&#123;&#123;object.gcontent&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-20-16-58.png" alt></p>
+<p>4）找到虚拟环境 py_django 下的 haystack 目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.virtualenvs/py_django/lib/python3.5/site-packages/haystack/backends/</span><br></pre></td></tr></table></figure>
+<p>5）在上面的目录中创建 <code>ChineseAnalyzer.py</code> 文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import jieba</span><br><span class="line">from whoosh.analysis import Tokenizer, Token</span><br><span class="line"></span><br><span class="line">class ChineseTokenizer(Tokenizer):</span><br><span class="line">    def __call__(self, value, positions=False, chars=False,</span><br><span class="line">                 keeporiginal=False, removestops=True,</span><br><span class="line">                 start_pos=0, start_char=0, mode=&apos;&apos;, **kwargs):</span><br><span class="line">        t = Token(positions, chars, removestops=removestops, mode=mode,</span><br><span class="line">                  **kwargs)</span><br><span class="line">        seglist = jieba.cut(value, cut_all=True)</span><br><span class="line">        for w in seglist:</span><br><span class="line">            t.original = t.text = w</span><br><span class="line">            t.boost = 1.0</span><br><span class="line">            if positions:</span><br><span class="line">                t.pos = start_pos + value.find(w)</span><br><span class="line">            if chars:</span><br><span class="line">                t.startchar = start_char + value.find(w)</span><br><span class="line">                t.endchar = start_char + value.find(w) + len(w)</span><br><span class="line">            yield t</span><br><span class="line"></span><br><span class="line">def ChineseAnalyzer():</span><br><span class="line">    return ChineseTokenizer()</span><br></pre></td></tr></table></figure>
+<p>6）复制 <code>whoosh_backend.py</code> 文件，改为 <code>whoosh_cn_backend.py</code> 名称：</p>
+<p>7）打开复制出来的新文件，引入中文分析类，内部采用jieba分词。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from .ChineseAnalyzer import ChineseAnalyzer</span><br></pre></td></tr></table></figure>
+<p>8）更改词语分析类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">查找</span><br><span class="line">analyzer=StemmingAnalyzer()</span><br><span class="line">改为</span><br><span class="line">analyzer=ChineseAnalyzer()</span><br></pre></td></tr></table></figure>
+
+<p>9）初始化索引数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py rebuild_index</span><br></pre></td></tr></table></figure>
+<p>10）按提示输入y后回车，生成索引。</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-20-24-18.png" alt></p>
+<p>11）索引生成后目录结构如下图：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-20-25-07.png" alt></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>按照配置，在admin管理中添加数据后，会自动为数据创建索引，可以直接进行搜索，可以先创建一些测试数据。</p>
+<p>1）在 <code>booktest/views.py</code> 中定义视图 query 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def query(request):</span><br><span class="line">    return render(request,&apos;booktest/query.html&apos;)</span><br></pre></td></tr></table></figure>
+<p>2）在 <code>booktest/urls.py</code> 中配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^query/&apos;, views.query),</span><br></pre></td></tr></table></figure>
+<p>3）在 <code>templates/booktest/</code> 目录中创建模板 <code>query.html</code> 。</p>
+<blockquote>
+<p>参数q表示搜索内容，传递到模板中的数据为query。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;全文检索&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;form method=&apos;get&apos; action=&quot;/search/&quot; target=&quot;_blank&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; name=&quot;q&quot;&gt;</span><br><span class="line">    &lt;br&gt;</span><br><span class="line">    &lt;input type=&quot;submit&quot; value=&quot;查询&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>4）自定义搜索结果模板：在templates/search/目录下创建search.html。</p>
+<p>搜索结果进行分页，视图向模板中传递的上下文如下：</p>
+<ul>
+<li>query：搜索关键字</li>
+<li>page：当前页的page对象</li>
+<li>paginator：分页paginator对象</li>
+</ul>
+<p>视图接收的参数如下：</p>
+<ul>
+<li>参数q表示搜索内容，传递到模板中的数据为query</li>
+<li>参数page表示当前页码<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;全文检索--结果页&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;搜索&amp;nbsp;&lt;b&gt;&#123;&#123;query&#125;&#125;&lt;/b&gt;&amp;nbsp;结果如下：&lt;/h1&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">&#123;%for item in page%&#125;</span><br><span class="line">    &lt;li&gt;&#123;&#123;item.object.id&#125;&#125;--&#123;&#123;item.object.gcontent|safe&#125;&#125;&lt;/li&gt;</span><br><span class="line">&#123;%empty%&#125;</span><br><span class="line">    &lt;li&gt;啥也没找到&lt;/li&gt;</span><br><span class="line">&#123;%endfor%&#125;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line">&#123;%for pindex in page.paginator.page_range%&#125;</span><br><span class="line">    &#123;%if pindex == page.number%&#125;</span><br><span class="line">        &#123;&#123;pindex&#125;&#125;&amp;nbsp;&amp;nbsp;</span><br><span class="line">    &#123;%else%&#125;</span><br><span class="line">        &lt;a href=&quot;?q=&#123;&#123;query&#125;&#125;&amp;amp;page=&#123;&#123;pindex&#125;&#125;&quot;&gt;&#123;&#123;pindex&#125;&#125;&lt;/a&gt;&amp;nbsp;&amp;nbsp;</span><br><span class="line">    &#123;%endif%&#125;</span><br><span class="line">&#123;%endfor%&#125;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+5）运行服务器，在浏览器中输入如下地址：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/query/</span><br></pre></td></tr></table></figure>
+在文本框中填写要搜索的信息，点击”搜索“按钮。</li>
+</ul>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-20-37-53.png" alt></p>
+<p>搜索结果如下：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-20-38-29.png" alt></p>
+<h1 id="发送邮件"><a href="#发送邮件" class="headerlink" title="发送邮件"></a>发送邮件</h1><p>Django中内置了邮件发送功能，被定义在django.core.mail模块中。发送邮件需要使用SMTP服务器，常用的免费服务器有：163、126、QQ，下面以163邮件为例。</p>
+<p>1）注册163邮箱，登录后设置。</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-20-41-53.png" alt></p>
+<p>2）在新页面中点击“客户端授权密码”，开启授权码。</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-20-50-06.png" alt></p>
+<p>3）打开 <code>test6/settings.py</code>文件，点击下图配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">EMAIL_BACKEND = &apos;django.core.mail.backends.smtp.EmailBackend&apos;</span><br><span class="line">EMAIL_HOST = &apos;smtp.163.com&apos;</span><br><span class="line">EMAIL_PORT = 25</span><br><span class="line">#发送邮件的邮箱</span><br><span class="line">EMAIL_HOST_USER = &apos;xxx@163.com&apos;</span><br><span class="line">#在邮箱中设置的客户端授权密码</span><br><span class="line">EMAIL_HOST_PASSWORD = &apos;xxx&apos;</span><br><span class="line">#收件人看到的发件人</span><br><span class="line">EMAIL_FROM = &apos;python&lt;xxx@163.com&gt;&apos;</span><br></pre></td></tr></table></figure>
+<p>6）在 <code>booktest/views.py</code> 文件中新建视图 send。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from django.conf import settings</span><br><span class="line">from django.core.mail import send_mail</span><br><span class="line">from django.http import HttpResponse</span><br><span class="line">...</span><br><span class="line">def send(request):</span><br><span class="line">    msg = msg=&apos;&lt;a href=&quot;https://ckcat.github.io/&quot; target=&quot;_blank&quot;&gt;点击激活&lt;/a&gt;&apos;</span><br><span class="line">    send_mail(&apos;注册激活&apos;, &apos;&apos;, settings.EMAIL_FROM,</span><br><span class="line">              [&apos;ckcatck@qq.com&apos;],</span><br><span class="line">              html_message=msg)</span><br><span class="line">    return HttpResponse(&quot;OK&quot;)</span><br></pre></td></tr></table></figure>
+<p>7）在 <code>booktest/urls.py</code> 文件中配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^send/$&apos;,views.send),</span><br></pre></td></tr></table></figure>
+<p>8）启动服务器，在浏览器中输入如下网址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8000/send/</span><br></pre></td></tr></table></figure>
+<p>邮件发送成功后，在邮箱中查看邮件如下图：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-21-17-27.png" alt></p>
+<h1 id="celery"><a href="#celery" class="headerlink" title="celery"></a>celery</h1><p>情景：用户发起request，并等待response返回。在本些views中，可能需要执行一段耗时的程序，那么用户就会等待很长时间，造成不好的用户体验，比如发送邮件、手机验证码等。</p>
+<p>使用celery后，情况就不一样了。解决：将耗时的程序放到celery中执行。</p>
+<ul>
+<li>点击查看<a href="http://www.celeryproject.org/" target="_blank" rel="noopener">celery官方网站</a></li>
+<li>点击查看<a href="http://docs.jinkan.org/docs/celery/" target="_blank" rel="noopener">celery中文文档</a></li>
+</ul>
+<p>celery名词：</p>
+<ul>
+<li>任务task：就是一个Python函数。</li>
+<li>队列queue：将需要执行的任务加入到队列中。</li>
+<li>工人worker：在一个新进程中，负责执行队列中的任务。</li>
+<li>代理人broker：负责调度，在布置环境中使用redis。</li>
+</ul>
+<p>安装包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">celery==3.1.25</span><br><span class="line">django-celery==3.1.17</span><br></pre></td></tr></table></figure>
+
+<h1 id="布署"><a href="#布署" class="headerlink" title="布署"></a>布署</h1><p>当项目开发完成后，需要将项目代码放到服务器上，这个服务器拥有固定的IP，再通过域名绑定，就可以供其它人浏览，对于python web开发，可以使用wsgi、apache服务器，此处以wsgi为例进行布署。</p>
+<p>服务器首先是物理上的一台性能高、线路全、运行稳定的机器，分为私有服务器、公有服务器。</p>
+<ul>
+<li>私有服务器：公司自己购买、自己维护，只布署自己的应用，可供公司内部或外网访问，成本高，需要专业人员维护，适合大公司使用。</li>
+<li>公有服务器：集成好运营环境，销售空间或主机，供其布署自己的应用，适合初创公司使用，成本低。</li>
+</ul>
+<p>常用的公有服务器，如阿里云、青云等，可按流量收费或按时间收费。服务器还需要安装服务器软件，此处需要uWSGI、Nginx。</p>
+<p>服务器架构如下图：</p>
+<p><img src="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-29-13-47-34.png" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Django/" rel="tag"># Django</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/19/frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="next" title="frida环境配置">
+                <i class="fa fa-chevron-left"></i> frida环境配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/29/Flask%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/" rel="prev" title="Flask简单学习">
+                Flask简单学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/human.png"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#富文本编辑器"><span class="nav-number">1.</span> <span class="nav-text">富文本编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">1.1.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在Admin中使用"><span class="nav-number">1.1.1.</span> <span class="nav-text">在Admin中使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义使用"><span class="nav-number">1.1.2.</span> <span class="nav-text">自定义使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示"><span class="nav-number">1.1.3.</span> <span class="nav-text">显示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全文检索"><span class="nav-number">2.</span> <span class="nav-text">全文检索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建引擎及索引"><span class="nav-number">2.1.</span> <span class="nav-text">创建引擎及索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发送邮件"><span class="nav-number">3.</span> <span class="nav-text">发送邮件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#celery"><span class="nav-number">4.</span> <span class="nav-text">celery</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#布署"><span class="nav-number">5.</span> <span class="nav-text">布署</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/';
+          this.page.identifier = '2020/01/26/Django学习-第三方模块/';
+          this.page.title = 'Django学习-第三方模块';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
