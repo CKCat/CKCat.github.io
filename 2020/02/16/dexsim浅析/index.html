@@ -90,7 +90,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-13-59-53.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-15-17-58.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-15-17-13.png">
-<meta property="og:updated_time" content="2020-02-16T07:22:00.792Z">
+<meta property="og:updated_time" content="2020-02-17T04:11:45.778Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-13-59-53.png">
 
@@ -397,7 +397,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ptn = re.compile(r&apos;classes\d*.dex&apos;)</span><br><span class="line"></span><br><span class="line">zipFile = zipfile.ZipFile(apk_path)</span><br><span class="line">for item in zipFile.namelist():</span><br><span class="line">    if ptn.match(item):</span><br><span class="line">        output_path = zipFile.extract(item, tempdir)</span><br><span class="line">        baksmali(output_path, smali_dir)</span><br><span class="line">zipFile.close()</span><br><span class="line"></span><br><span class="line">dex_file = os.path.join(tempdir, &apos;new.dex&apos;)</span><br></pre></td></tr></table></figure>
 <p>然后在使用 <code>smali</code> 将合并的 <code>dex</code> 转为 <code>samli</code> 文件, 并进一步解析。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">smali(smali_dir, dex_file)</span><br><span class="line">dexsim_apk(args.f, smali_dir, includes, output_dex)</span><br></pre></td></tr></table></figure>
-<p>上面的方法可以进行一下优化，没有必要合并 <code>dex</code> ,并且只能针对 <code>apk</code> 文件进行解密，可以增加对 <code>dex</code> 文件的解密。</p>
+<p>上面的方法可以进行一下优化，没有必要将合并的 <code>dex</code> 进行反编译为 <code>smali</code> 文件,并且只能针对 <code>apk</code> 文件进行解密，可以增加对 <code>dex</code> 文件的解密。</p>
 <p>接着看 <code>dexsim_apk</code> 方法.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dexsim(apk_file, smali_dir, includes)</span><br><span class="line">if output_dex:</span><br><span class="line">    smali(smali_dir, output_dex)</span><br><span class="line">else:</span><br><span class="line">    smali(smali_dir,</span><br><span class="line">          os.path.splitext(os.path.basename(apk_file))[0] + &apos;.sim.dex&apos;)</span><br></pre></td></tr></table></figure>
 <p>发现该方法直接调用 <code>dexsim</code> 方法，然后解密完成，那么关键方法为 <code>dexsim</code>。</p>
@@ -468,6 +468,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/" rel="prev" title="ARMv8学习记录一">
+                ARMv8学习记录一 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -558,7 +562,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -569,7 +573,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -580,7 +584,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="汇编," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 从一个 HelloWorld 开始 1.1. 利用编译器创建一个 ARMv8 的源文件   2. 调试环境搭建 2.1. 安装 gef 2.2. 安装模块     1. 从一个 HelloWorld 开始1.1. 利用编译器创建一个 ARMv8 的源文件由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hel">
+<meta name="keywords" content="汇编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARMv8学习记录一">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="1. 从一个 HelloWorld 开始 1.1. 利用编译器创建一个 ARMv8 的源文件   2. 调试环境搭建 2.1. 安装 gef 2.2. 安装模块     1. 从一个 HelloWorld 开始1.1. 利用编译器创建一个 ARMv8 的源文件由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hel">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-37-24.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-39-35.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-41-48.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-33-08.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-41-36.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-42-00.png">
+<meta property="og:updated_time" content="2020-02-29T13:42:10.204Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-37-24.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/02/28/ARMv8学习记录一/"/>
+
+
+
+
+
+  <title>ARMv8学习记录一 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/human.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ARMv8学习记录一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T23:02:16+08:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index">
+                    <span itemprop="name">ARMv8汇编</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/28/ARMv8学习记录一/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- TOC -->
+
+<ul>
+<li><a href="#1-从一个-helloworld-开始">1. 从一个 HelloWorld 开始</a><ul>
+<li><a href="#11-利用编译器创建一个-armv8-的源文件">1.1. 利用编译器创建一个 ARMv8 的源文件</a></li>
+</ul>
+</li>
+<li><a href="#2-调试环境搭建">2. 调试环境搭建</a><ul>
+<li><a href="#21-安装-gef">2.1. 安装 gef</a></li>
+<li><a href="#22-安装模块">2.2. 安装模块</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<h1 id="1-从一个-HelloWorld-开始"><a href="#1-从一个-HelloWorld-开始" class="headerlink" title="1. 从一个 HelloWorld 开始"></a>1. 从一个 HelloWorld 开始</h1><h2 id="1-1-利用编译器创建一个-ARMv8-的源文件"><a href="#1-1-利用编译器创建一个-ARMv8-的源文件" class="headerlink" title="1.1. 利用编译器创建一个 ARMv8 的源文件"></a>1.1. 利用编译器创建一个 ARMv8 的源文件</h2><p>由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。</p>
+<p>C 代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// hello.c</span><br><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int main(int argc, char const *argv[])&#123;</span><br><span class="line">    printf(&quot;Hello World!\r\n&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>makefile 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">#文件名称</span><br><span class="line">MODALE_NAME=hello</span><br><span class="line"></span><br><span class="line">#ndk根目录</span><br><span class="line">NDK_ROOT = $(HOME)/DevTool/AndroidSdk/ndk-bundle</span><br><span class="line">#编译器根目录</span><br><span class="line">TOOLCHAINS_ROOT_ARM=$(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64</span><br><span class="line">TOOLCHAINS_ROOT_AARCH64=$(NDK_ROOT)/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64</span><br><span class="line">#编译器目录</span><br><span class="line">TOOLCHAINS_PREFIX=$(TOOLCHAINS_ROOT_ARM)/bin/arm-linux-androideabi</span><br><span class="line">TOOLCHAINS_PREFIX_AARCH64=$(TOOLCHAINS_ROOT_AARCH64)/bin/aarch64-linux-android</span><br><span class="line"></span><br><span class="line">#头文件搜索路径</span><br><span class="line">TOOLCHAINS_INCLUDE=$(TOOLCHAINS_ROOT_ARM)/lib/gcc/arm-linux-androideabi/4.9.x/include-fixed</span><br><span class="line">TOOLCHAINS_INCLUDE_AARCH64=$(TOOLCHAINS_ROOT_AARCH64)/lib/gcc/aarch64-linux-android/4.9.x/include-fixed</span><br><span class="line"></span><br><span class="line">#SDK根目录</span><br><span class="line">PLATFROM_ROOT=$(NDK_ROOT)/platforms/android-21/arch-arm</span><br><span class="line">PLATFROM_ROOT_AARCH64=$(NDK_ROOT)/platforms/android-21/arch-arm64</span><br><span class="line"></span><br><span class="line">#sdk头文件搜索路径</span><br><span class="line">PLATFROM_INCLUDE=$(PLATFROM_ROOT)/usr/include</span><br><span class="line">PLATFROM_INCLUDE_AARCH64=$(PLATFROM_ROOT_AARCH64)/usr/include</span><br><span class="line"></span><br><span class="line">#sdk库文件搜索路径</span><br><span class="line">PLATFROM_LIB=$(PLATFROM_ROOT)/usr/lib</span><br><span class="line">PLATFROM_LIB_AARCH64=$(PLATFROM_ROOT_AARCH64)/usr/lib</span><br><span class="line"></span><br><span class="line">#删除</span><br><span class="line">RM=del</span><br><span class="line"></span><br><span class="line">#编译选项</span><br><span class="line">FLAGS=-I$(TOOLCHAINS_INCLUDE) \</span><br><span class="line">      -I$(PLATFROM_INCLUDE)   \</span><br><span class="line">      -L$(PLATFROM_LIB) \</span><br><span class="line">      -nostdlib \</span><br><span class="line">      -lgcc \</span><br><span class="line">      -Bdynamic \</span><br><span class="line">      -lc \</span><br><span class="line">      -fPIE</span><br><span class="line"></span><br><span class="line">FLAGS_AARCH64=-I$(TOOLCHAINS_INCLUDE_AARCH64) \</span><br><span class="line">      -I$(PLATFROM_INCLUDE_AARCH64)   \</span><br><span class="line">      -L$(PLATFROM_LIB_AARCH64) \</span><br><span class="line">      -nostdlib \</span><br><span class="line">      -lgcc \</span><br><span class="line">      -Bdynamic \</span><br><span class="line">      -lc \</span><br><span class="line">      -fPIE</span><br><span class="line"></span><br><span class="line">#所有obj文件</span><br><span class="line">OBJS=$(MODALE_NAME).o \</span><br><span class="line">     $(PLATFROM_LIB)/crtbegin_dynamic.o \</span><br><span class="line">     $(PLATFROM_LIB)/crtend_android.o </span><br><span class="line"></span><br><span class="line">OBJS_AARCH64=$(MODALE_NAME)64.o \</span><br><span class="line">     $(PLATFROM_LIB_AARCH64)/crtbegin_dynamic.o \</span><br><span class="line">     $(PLATFROM_LIB_AARCH64)/crtend_android.o </span><br><span class="line"></span><br><span class="line">#编译器链接</span><br><span class="line">all:</span><br><span class="line">	$(TOOLCHAINS_PREFIX)-gcc $(FLAGS) -E $(MODALE_NAME).c -o $(MODALE_NAME).i</span><br><span class="line">	$(TOOLCHAINS_PREFIX)-gcc $(FLAGS)  -S $(MODALE_NAME).i -o $(MODALE_NAME).s</span><br><span class="line">	$(TOOLCHAINS_PREFIX)-gcc $(FLAGS) -c $(MODALE_NAME).s -o $(MODALE_NAME).o</span><br><span class="line">	$(TOOLCHAINS_PREFIX)-gcc $(FLAGS) $(OBJS) -fPIE -pie -o $(MODALE_NAME)</span><br><span class="line"></span><br><span class="line">all64:</span><br><span class="line">	$(TOOLCHAINS_PREFIX_AARCH64)-gcc $(FLAGS_AARCH64) -E $(MODALE_NAME).c -o $(MODALE_NAME)64.i</span><br><span class="line">	$(TOOLCHAINS_PREFIX_AARCH64)-gcc $(FLAGS_AARCH64)  -S $(MODALE_NAME)64.i -o $(MODALE_NAME)64.s</span><br><span class="line">	$(TOOLCHAINS_PREFIX_AARCH64)-gcc $(FLAGS_AARCH64) -c $(MODALE_NAME)64.s -o $(MODALE_NAME)64.o</span><br><span class="line">	$(TOOLCHAINS_PREFIX_AARCH64)-gcc $(FLAGS_AARCH64) $(OBJS_AARCH64) -fPIE -pie -o $(MODALE_NAME)64</span><br><span class="line">#删除所有.o文件</span><br><span class="line">clean:</span><br><span class="line">	$(RM) *.o</span><br><span class="line">#安装程序到手机</span><br><span class="line">install:</span><br><span class="line">	adb push $(MODALE_NAME) /data/local/tmp</span><br><span class="line">	adb shell chmod 755 /data/local/tmp/$(MODALE_NAME)</span><br><span class="line">	adb shell /data/local/tmp/$(MODALE_NAME) </span><br><span class="line">debug:</span><br><span class="line">	adb forward tcp:23946 tcp:23946</span><br><span class="line">	adb shell /data/local/tmp/android_server</span><br><span class="line"></span><br><span class="line">install64:</span><br><span class="line">	adb push $(MODALE_NAME)64 /data/local/tmp</span><br><span class="line">	adb shell chmod 755 /data/local/tmp/$(MODALE_NAME)64</span><br><span class="line">	adb shell /data/local/tmp/$(MODALE_NAME)64 </span><br><span class="line"></span><br><span class="line">debug64:</span><br><span class="line">	adb forward tcp:23946 tcp:23946</span><br><span class="line">	adb shell /data/local/tmp/android_server64</span><br><span class="line">#运行程序</span><br><span class="line">run:</span><br><span class="line">	adb shell /data/local/tmp/$(MODALE_NAME)  </span><br><span class="line"></span><br><span class="line">run64:</span><br><span class="line">	adb shell /data/local/tmp/$(MODALE_NAME)64</span><br></pre></td></tr></table></figure>
+<p>使用 <code>make all64</code> 命令编译后的结果：</p>
+<p><img src="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/2020-02-28-23-37-24.png" alt></p>
+<p>运行结果如下：</p>
+<p><img src="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/2020-02-28-23-39-35.png" alt></p>
+<p>生成的文件如下：</p>
+<p><img src="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/2020-02-28-23-41-48.png" alt></p>
+<p><code>hello64.s</code> 对应的内容，后面所有的指令学习将一次文件为基础进行修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">	.cpu generic+fp+simd</span><br><span class="line">	.file	&quot;hello.c&quot;</span><br><span class="line">	.section	.rodata</span><br><span class="line">	.align	3</span><br><span class="line">.LC0:</span><br><span class="line">	.string	&quot;Hello World!\r&quot;</span><br><span class="line">	.text</span><br><span class="line">	.align	2</span><br><span class="line">	.global	main</span><br><span class="line">	.type	main, %function</span><br><span class="line">main:</span><br><span class="line">	stp	x29, x30, [sp, -32]!</span><br><span class="line">	add	x29, sp, 0</span><br><span class="line">	str	w0, [x29,28]</span><br><span class="line">	str	x1, [x29,16]</span><br><span class="line">	adrp	x0, .LC0</span><br><span class="line">	add	x0, x0, :lo12:.LC0</span><br><span class="line">	bl	puts</span><br><span class="line">	mov	w0, 0</span><br><span class="line">	ldp	x29, x30, [sp], 32</span><br><span class="line">	ret</span><br><span class="line">	.size	main, .-main</span><br><span class="line">	.ident	&quot;GCC: (GNU) 4.9.x 20150123 (prerelease)&quot;</span><br><span class="line">	.section	.note.GNU-stack,&quot;&quot;,%progbits</span><br></pre></td></tr></table></figure>
+<p>至此，已经从一个 HelloWorld 开始了 ARMv8 的旅程。</p>
+<h1 id="2-调试环境搭建"><a href="#2-调试环境搭建" class="headerlink" title="2. 调试环境搭建"></a>2. 调试环境搭建</h1><p>IDA的调试环境就不说了，网上一大把，下面主要说明使用 gdb + gef 的调试环境搭建。</p>
+<h2 id="2-1-安装-gef"><a href="#2-1-安装-gef" class="headerlink" title="2.1. 安装 gef"></a>2.1. 安装 gef</h2><p>进入 android gdb 的目录 <code>/ndk-bundle/prebuilt/linux-x86_64/bin</code>,启动命令行，执行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -q -O .gdbinit-gef.py https://github.com/hugsy/gef/raw/master/gef.py</span><br><span class="line">echo source .gdbinit-gef.py &gt;&gt; .gdbinit</span><br></pre></td></tr></table></figure>
+<p>然后执行 <code>./gdb</code> 命令，出现如下信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GNU gdb (GDB) 7.11</span><br><span class="line">Copyright (C) 2016 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;</span><br><span class="line">and &quot;show warranty&quot; for details.</span><br><span class="line">This GDB was configured as &quot;x86_64-linux-gnu&quot;.</span><br><span class="line">Type &quot;show configuration&quot; for configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/documentation/&gt;.</span><br><span class="line">For help, type &quot;help&quot;.</span><br><span class="line">Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;.</span><br><span class="line">GEF for linux ready, type `gef&apos; to start, `gef config&apos; to configure</span><br><span class="line">78 commands loaded for GDB 7.11 using Python engine 2.7</span><br><span class="line">[*] 2 commands could not be loaded, run `gef missing` to know why.</span><br><span class="line">gef&gt; gef missing </span><br><span class="line">[*] Command `assemble` is missing, reason -&gt; Missing `keystone-engine` package for Python2, install with: `pip2 install keystone-engine`.</span><br><span class="line">[*] Command `set-permission` is missing, reason -&gt; Missing `keystone-engine` package for Python2, install with: `pip2 install keystone-engine`.</span><br></pre></td></tr></table></figure>
+<p>根据提示可以发现缺少了 <code>keystone-engine</code> 模块，当然还有可能缺少其他模块。</p>
+<h2 id="2-2-安装模块"><a href="#2-2-安装模块" class="headerlink" title="2.2. 安装模块"></a>2.2. 安装模块</h2><p>退出 <code>gdb</code> , 下载 <code>[ez_setup.py](https://bootstrap.pypa.io/ez_setup.py)</code> ，运行列命令，进 行 <code>easy_install</code> 工具的安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./python ez_setup.py</span><br></pre></td></tr></table></figure>
+<p>安装成功之后就可以使用 <code>easy_install</code> 进行安装 <code>package</code> 了，然后根据提示安装需要的模块，也可以利用 <code>easy_install</code> 先安装 <code>pip</code>, 然后在利用 <code>pip</code> 进行安装其他模块，这里我使用 <code>easy_install</code> 进行安装其他模块。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./easy_install keystone-engine</span><br></pre></td></tr></table></figure>
+<p>安装完 <code>keystone-engine</code> 后，发现还是会有同样的提示，此时就需要下载 <code>[keystone-engine](https://pypi.org/project/keystone-engine/)</code> 源码进行安装。将源码解压至当前 <code>gdb</code> 的目录 <code>keystone-engine</code>中，运行下列命令进行安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd keystone-engine</span><br><span class="line">../python setup.py install</span><br></pre></td></tr></table></figure>
+<p>然后再次运行 gdb, 结果如下图：</p>
+<p><img src="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/2020-02-29-21-33-08.png" alt></p>
+<p><img src="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/2020-02-29-21-41-36.png" alt></p>
+<p>至此，我们的环境就配好了，这里可以配合 <a href="https://bbs.pediy.com/thread-257344.htm" target="_blank" rel="noopener">Hyperpwn</a> 这个工具使用。</p>
+<p><img src="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/2020-02-29-21-42-00.png" alt></p>
+<p>参考： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://medium.com/bugbountywriteup/pwndbg-gef-peda-one-for-all-and-all-for-one-714d71bf36b8</span><br><span class="line">https://packmad.github.io/gdb-android/</span><br><span class="line">https://o0xmuhe.github.io/2016/06/29/install-gef/</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"># 汇编</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/" rel="next" title="dexsim浅析">
+                <i class="fa fa-chevron-left"></i> dexsim浅析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/human.png"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-从一个-HelloWorld-开始"><span class="nav-number">1.</span> <span class="nav-text">1. 从一个 HelloWorld 开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-利用编译器创建一个-ARMv8-的源文件"><span class="nav-number">1.1.</span> <span class="nav-text">1.1. 利用编译器创建一个 ARMv8 的源文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-调试环境搭建"><span class="nav-number">2.</span> <span class="nav-text">2. 调试环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装-gef"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 安装 gef</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装模块"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 安装模块</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80/';
+          this.page.identifier = '2020/02/28/ARMv8学习记录一/';
+          this.page.title = 'ARMv8学习记录一';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
