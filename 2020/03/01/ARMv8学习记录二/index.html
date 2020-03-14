@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="汇编," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述| 位宽   | 分类       |                |                 || —— | ———- | ————– | ————— || 32-bit | Wn（通用） | WZR（0寄存器） | WSP（堆栈指针） || 64-bit | Xn（通用） | X">
+<meta name="keywords" content="汇编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARMv8学习记录二">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述| 位宽   | 分类       |                |                 || —— | ———- | ————– | ————— || 32-bit | Wn（通用） | WZR（0寄存器） | WSP（堆栈指针） || 64-bit | Xn（通用） | X">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-15-57-08.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-16-00-41.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-19-15-20.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-46-28.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-48-58.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-49-14.png">
+<meta property="og:updated_time" content="2020-03-10T14:01:13.843Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-15-57-08.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/03/01/ARMv8学习记录二/"/>
+
+
+
+
+
+  <title>ARMv8学习记录二 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/human.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ARMv8学习记录二</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-01T20:37:23+08:00">
+                2020-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index">
+                    <span itemprop="name">ARMv8汇编</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/01/ARMv8学习记录二/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令</p>
+<h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="ARMv8寄存器"><a href="#ARMv8寄存器" class="headerlink" title="ARMv8寄存器"></a>ARMv8寄存器</h2><p>寄存器名称描述<br>| 位宽   | 分类       |                |                 |<br>| —— | ———- | ————– | ————— |<br>| 32-bit | Wn（通用） | WZR（0寄存器） | WSP（堆栈指针） |<br>| 64-bit | Xn（通用） | XZR（0寄存器） | SP（堆栈指针）  |</p>
+<h3 id="AArch64通用寄存器"><a href="#AArch64通用寄存器" class="headerlink" title="AArch64通用寄存器"></a>AArch64通用寄存器</h3><p>AArch64通用寄存器共31个 <code>X0-X30</code> , 其中各寄存器的作用如下表。<br>| 寄存器    | 描述                   |<br>| ——— | ———————- |<br>| <code>X0</code> – <code>X7</code>   | 参数和返回值           |<br>| <code>X8</code> – <code>X18</code>  | 临时寄存器(X8一般保存结构体首地址) |<br>| <code>X19</code> – <code>X28</code> | 被调用者保存的寄存器   |<br>| <code>X29</code>       | 帧指针(<code>FP</code>)                 |<br>| <code>X30</code>       | 返回地址(<code>LR</code>)               |<br>| <code>SP</code>        | 栈指针                 |</p>
+<h3 id="状态寄存器-SPSR"><a href="#状态寄存器-SPSR" class="headerlink" title="状态寄存器(SPSR)"></a>状态寄存器(SPSR)</h3><ol>
+<li>PSTATE at AArch64</li>
+</ol>
+<p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-15-57-08.png" alt></p>
+<ol start="2">
+<li>PSTATE at AArch32</li>
+</ol>
+<p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-16-00-41.png" alt></p>
+<h2 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h2><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Encoding</th>
+<th>Meaning (when set by CMP)</th>
+<th>Meaning (when set by FCMP)</th>
+<th>Condition flags</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>EQ</code></td>
+<td>0b0000</td>
+<td>Equal to.</td>
+<td>Equal to.</td>
+<td><code>Z = 1</code></td>
+</tr>
+<tr>
+<td><code>NE</code></td>
+<td>0b0001</td>
+<td>Not equal to.</td>
+<td>Unordered, or not equal to.</td>
+<td><code>Z = 0</code></td>
+</tr>
+<tr>
+<td><code>CS</code></td>
+<td>0b0010</td>
+<td>Carry set (identical to HS).</td>
+<td>Greater than, equal to, or unordered (identical to HS).</td>
+<td><code>C = 1</code></td>
+</tr>
+<tr>
+<td><code>HS</code></td>
+<td>0b0010</td>
+<td>Greater than, equal to (unsigned) (identical to CS).</td>
+<td>Greater than, equal to, or unordered (identical to CS).</td>
+<td><code>C = 1</code></td>
+</tr>
+<tr>
+<td><code>CC</code></td>
+<td>0b0011</td>
+<td>Carry clear (identical to LO).</td>
+<td>Less than (identical to LO).</td>
+<td><code>C = 0</code></td>
+</tr>
+<tr>
+<td><code>LO</code></td>
+<td>0b0011</td>
+<td>Unsigned less than (identical to CC).</td>
+<td>Less than (identical to CC).</td>
+<td><code>C = 0</code></td>
+</tr>
+<tr>
+<td><code>MI</code></td>
+<td>0b0100</td>
+<td>Minus, Negative.</td>
+<td>Less than.</td>
+<td><code>N = 1</code></td>
+</tr>
+<tr>
+<td><code>PL</code></td>
+<td>0b0101</td>
+<td>Positive or zero.</td>
+<td>Greater than, equal to, or unordered.</td>
+<td><code>N = 0</code></td>
+</tr>
+<tr>
+<td><code>VS</code></td>
+<td>0b0110</td>
+<td>Signed overflow.</td>
+<td>Unordered. (At least one argument was NaN).</td>
+<td><code>V = 1</code></td>
+</tr>
+<tr>
+<td><code>VC</code></td>
+<td>0b0111</td>
+<td>No signed overflow.</td>
+<td>Not unordered. (No argument was NaN).</td>
+<td><code>V = 0</code></td>
+</tr>
+<tr>
+<td><code>HI</code></td>
+<td>0b1000</td>
+<td>Greater than (unsigned).</td>
+<td>Greater than or unordered.</td>
+<td><code>(C = 1) &amp;&amp; (Z = 0)</code></td>
+</tr>
+<tr>
+<td><code>LS</code></td>
+<td>0b1001</td>
+<td>Less than or equal to (unsigned).</td>
+<td>Less than or equal to.</td>
+<td><code>(C = 0) || (Z = 1)</code></td>
+</tr>
+<tr>
+<td><code>GE</code></td>
+<td>0b1010</td>
+<td>Greater than or equal to (signed).</td>
+<td>Greater than or equal to.</td>
+<td><code>N==V</code></td>
+</tr>
+<tr>
+<td><code>LT</code></td>
+<td>0b1011</td>
+<td>Less than (signed).</td>
+<td>Less than or unordered.</td>
+<td><code>N!=V</code></td>
+</tr>
+<tr>
+<td><code>GT</code></td>
+<td>0b1100</td>
+<td>Greater than (signed).</td>
+<td>Greater than.</td>
+<td><code>(Z==0) &amp;&amp; (N==V)</code></td>
+</tr>
+<tr>
+<td><code>LE</code></td>
+<td>0b1101</td>
+<td>Less than or equal to (signed).</td>
+<td>Less than, equal to or unordered.</td>
+<td>`(Z==1)</td>
+</tr>
+<tr>
+<td><code>AL</code></td>
+<td>0b1110</td>
+<td>Always executed.</td>
+<td>Default. Always executed.</td>
+<td><code>Any</code></td>
+</tr>
+<tr>
+<td><code>NV</code></td>
+<td>0b1111</td>
+<td>Always executed.</td>
+<td>Always executed.</td>
+<td><code>Any</code></td>
+</tr>
+</tbody></table>
+<h1 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h1><h2 id="数据处理指令"><a href="#数据处理指令" class="headerlink" title="数据处理指令"></a>数据处理指令</h2><h3 id="算术和逻辑运算"><a href="#算术和逻辑运算" class="headerlink" title="算术和逻辑运算"></a>算术和逻辑运算</h3><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Instructions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>算术</td>
+<td><code>ADD</code>, <code>SUB</code>, <code>ADC</code>, <code>SBC</code>, <code>NEG</code>, <code>RSB</code></td>
+</tr>
+<tr>
+<td>逻辑</td>
+<td><code>AND</code>, <code>BIC</code>, <code>ORR</code>, <code>ORN</code>, <code>EOR</code>, <code>EON</code></td>
+</tr>
+<tr>
+<td>比较</td>
+<td><code>CMP</code>, <code>CMN</code>, <code>TST</code></td>
+</tr>
+<tr>
+<td>移动</td>
+<td><code>MOV</code>, <code>MVN</code></td>
+</tr>
+</tbody></table>
+<p><code>ADC</code> 和 <code>SBC</code> 运算执行加法和减法，并且将进位条件标志位用作输入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ADC&#123;S&#125;: Rd = Rn + Rm + C</span><br><span class="line">SBC&#123;S&#125;: Rd = Rn - Rm - 1 + C</span><br></pre></td></tr></table></figure>
+<h4 id><a href="#" class="headerlink" title></a></h4><p>例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ADD W0, W1, W2, LSL #3 // W0 = W1 + (W2 &lt;&lt; 3)</span><br><span class="line">SUBS X0, X4, X3, ASR #2 // X0 = X4 - (X3 &gt;&gt; 2), set flags</span><br><span class="line">MOV X0, X1 // Copy X1 to X0</span><br><span class="line">CMP W3, W4 // Set flags based on W3 - W4</span><br><span class="line">ADD W0, W5, #27 // W0 = W5 + 27</span><br></pre></td></tr></table></figure>
+
+<h3 id="乘法和除法指令"><a href="#乘法和除法指令" class="headerlink" title="乘法和除法指令"></a>乘法和除法指令</h3><table>
+<thead>
+<tr>
+<th>Opcode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Multiply instructions</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MADD</code></td>
+<td>Multiply add</td>
+</tr>
+<tr>
+<td><code>MNEG</code></td>
+<td>Multiply negate</td>
+</tr>
+<tr>
+<td><code>MSUB</code></td>
+<td>Multiply subtract</td>
+</tr>
+<tr>
+<td><code>MUL</code></td>
+<td>Multiply</td>
+</tr>
+<tr>
+<td><code>SMADDL</code></td>
+<td>Signed multiply-add long</td>
+</tr>
+<tr>
+<td><code>SMNEGL</code></td>
+<td>Signed multiply-negate long</td>
+</tr>
+<tr>
+<td><code>SMSUBL</code></td>
+<td>Signed multiply-subtract long</td>
+</tr>
+<tr>
+<td><code>SMULH</code></td>
+<td>Signed multiply returning high half</td>
+</tr>
+<tr>
+<td><code>SMULL</code></td>
+<td>Signed multiply long</td>
+</tr>
+<tr>
+<td><code>UMADDL</code></td>
+<td>Unsigned multiply-add long</td>
+</tr>
+<tr>
+<td><code>UMNEGL</code></td>
+<td>Unsigned multiply-negate long</td>
+</tr>
+<tr>
+<td><code>UMSUBL</code></td>
+<td>Unsigned multiply-subtract long</td>
+</tr>
+<tr>
+<td><code>UMULH</code></td>
+<td>Unsigned multiply returning high half</td>
+</tr>
+<tr>
+<td><code>UMULL</code></td>
+<td>Unsigned multiply long</td>
+</tr>
+<tr>
+<td><strong>Divide instructions</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SDIV</code></td>
+<td>Signed divide</td>
+</tr>
+<tr>
+<td><code>UDIV</code></td>
+<td>Unsigned divide</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MUL X0, X1, X2  // X0 = X1 * X2</span><br><span class="line">MNEG X0, X1, X2  // X0 = -(X1 * X2)</span><br><span class="line"></span><br><span class="line">UDIV W0, W1, W2  // W0 = W1 / W2 (unsigned, 32-bit divide)</span><br><span class="line">SDIV X0, X1, X2  // X0 = X1 / X2 (signed, 64-bit divide)</span><br></pre></td></tr></table></figure>
+
+<h3 id="移位操作"><a href="#移位操作" class="headerlink" title="移位操作"></a>移位操作</h3><table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Shift</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ASR</code></td>
+<td>Arithmetic shift right</td>
+</tr>
+<tr>
+<td><code>LSL</code></td>
+<td>Logical shift left</td>
+</tr>
+<tr>
+<td><code>LSR</code></td>
+<td>Logical shift right</td>
+</tr>
+<tr>
+<td><code>ROR</code></td>
+<td>Rotate right</td>
+</tr>
+<tr>
+<td><strong>Move</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MOV</code></td>
+<td>Move</td>
+</tr>
+<tr>
+<td><code>MVN</code></td>
+<td>Bitwise NOT</td>
+</tr>
+</tbody></table>
+<p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-19-15-20.png" alt></p>
+<h3 id="位和字节操作指令"><a href="#位和字节操作指令" class="headerlink" title="位和字节操作指令"></a>位和字节操作指令</h3><table>
+<thead>
+<tr>
+<th>Mnemonic</th>
+<th>Operands</th>
+<th>Instruction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>BFI</code></td>
+<td><code>Rd, Rn, #lsb, #width</code></td>
+<td>Bitfield Insert copies any number of low-order bits from a source register into the same number of adjacent bits at any position in the destination register, leaving other bits unchanged.</td>
+</tr>
+<tr>
+<td><code>BFM</code></td>
+<td><code>Rd, Rn, #immr, #imms</code></td>
+<td>Bitfield Move copies any number of low-order bits from a source register into the same number of adjacent bits at any position in the destination register, leaving other bits unchanged.</td>
+</tr>
+<tr>
+<td><code>BFXIL</code></td>
+<td><code>Rd, Rn, #lsb, #width</code></td>
+<td>Bitfield extract and insert at low end copies any number of low-order bits from a source register into the same number of adjacent bits at the low end in the destination register, leaving other bits unchanged.</td>
+</tr>
+<tr>
+<td><code>CLS</code></td>
+<td><code>Rd, Rn</code></td>
+<td>Count leading sign bits.</td>
+</tr>
+<tr>
+<td><code>CLZ</code></td>
+<td><code>Rd, Rn</code></td>
+<td>Count leading zero bits.</td>
+</tr>
+<tr>
+<td><code>EXTR</code></td>
+<td><code>Rd, Rn, Rm, #lsb</code></td>
+<td>Extract register extracts a register from a pair of registers.</td>
+</tr>
+<tr>
+<td><code>RBIT</code></td>
+<td><code>Rd, Rn</code></td>
+<td>Reverse Bits reverses the bit order in a register.</td>
+</tr>
+<tr>
+<td><code>REV16</code></td>
+<td><code>Rd, Rn</code></td>
+<td>Reverse bytes in 16-bit halfwords reverses the byte order in each 16-bit halfword of a register.</td>
+</tr>
+<tr>
+<td><code>REV32</code></td>
+<td><code>Rd, Rn</code></td>
+<td>Reverse bytes in 32-bit words reverses the byte order in each 32-bit word of a register.</td>
+</tr>
+<tr>
+<td><code>REV64</code></td>
+<td><code>Rd, Rn</code></td>
+<td>Reverse Bytes reverses the byte order in a 64-bit general-purpose register.</td>
+</tr>
+<tr>
+<td><code>SBFIZ</code></td>
+<td><code>Rd, Rn, #lsb, #width</code></td>
+<td>Signed Bitfield Insert in Zero zeroes the destination register and copies any number of contiguous bits from a source register into any position in the destination register, sign-extending the most significant bit of the transferred value. Alias of SBFM.</td>
+</tr>
+<tr>
+<td><code>SBFM</code></td>
+<td><code>Wd, Wn, #immr, #imms</code></td>
+<td>Signed Bitfield Move copies any number of low-order bits from a source register into the same number of adjacent bits at any position in the destination register, shifting in copies of the sign bit in the upper bits and zeros in the lower bits.</td>
+</tr>
+<tr>
+<td><code>SBFX</code></td>
+<td><code>Rd, Rn, #lsb, #width</code></td>
+<td>Signed Bitfield Extract extracts any number of adjacent bits at any position from a register, sign-extends them to the size of the register, and writes the result to the destination register.</td>
+</tr>
+<tr>
+<td><code>{S,U}XT{B,H,W}</code></td>
+<td><code>Rd, Rn</code></td>
+<td>(S)igned/(U)nsigned eXtend (B)yte/(H)alfword/(W)ord extracts an 8-bit,16-bit or 32-bit value from a register, zero-extends it to the size of the register, and writes the result to the destination register. Alias of UBFM.</td>
+</tr>
+</tbody></table>
+<p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-21-46-28.png" alt></p>
+<p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-21-48-58.png" alt></p>
+<p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-21-49-14.png" alt></p>
+<table>
+<thead>
+<tr>
+<th>Mnemonic</th>
+<th>Operands</th>
+<th>Instruction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>CCMN</code> (immediate)</td>
+<td><code>Rn, #imm, #nzcv, cond</code></td>
+<td>Conditional Compare Negative (immediate) sets the value of the condition flags to the result of the comparison of a register value and a negated immediate value if the condition is TRUE, and an immediate value otherwise.</td>
+</tr>
+<tr>
+<td><code>CCMN</code> (register)</td>
+<td><code>Rn, Rm, #nzcv, cond</code></td>
+<td>Conditional Compare Negative (register) sets the value of the condition flags to the result of the comparison of a register value and the inverse of another register value if the condition is TRUE, and an immediate value otherwise.</td>
+</tr>
+<tr>
+<td><code>CCMP</code> (immediate)</td>
+<td><code>Rn, #imm, #nzcv, cond</code></td>
+<td>Conditional Compare (immediate) sets the value of the condition flags to the result of the comparison of a register value and an immediate value if the condition is TRUE, and an immediate value otherwise.</td>
+</tr>
+<tr>
+<td><code>CCMP</code> (register)</td>
+<td><code>Rn, Rm, #nzcv, cond</code></td>
+<td>Conditional Compare (register) sets the value of the condition flags to the result of the comparison of two registers if the condition is TRUE, and an immediate value otherwise.</td>
+</tr>
+<tr>
+<td><code>CSEL</code></td>
+<td><code>Rd, Rn, Rm, cond</code></td>
+<td>Conditional Select returns, in the destination register, the value of the first source register if the condition is TRUE, and otherwise returns the value of the second source register.</td>
+</tr>
+<tr>
+<td><code>CSINC</code></td>
+<td><code>Rd, Rn, Rm, cond</code></td>
+<td>Conditional Select Increment returns, in the destination register, the value of the first source register if the condition is TRUE, and otherwise returns the value of the second source register incremented by 1. Used by CINC and CSET.</td>
+</tr>
+<tr>
+<td><code>CSINV</code></td>
+<td><code>Rd, Rn, Rm, cond</code></td>
+<td>Conditional Select Invert returns, in the destination register, the value of the first source register if the condition is TRUE, and otherwise returns the bitwise inversion value of the second source register. Used by CINV and CSETM.</td>
+</tr>
+<tr>
+<td><code>CSNEG</code></td>
+<td><code>Rd, Rn, Rm, cond</code></td>
+<td>Conditional Select Negation returns, in the destination register, the value of the first source register if the condition is TRUE, and otherwise returns the negated value of the second source register. Used by CNEG.</td>
+</tr>
+<tr>
+<td><code>CSET</code></td>
+<td><code>Rd, cond</code></td>
+<td>Conditional Set sets the destination register to 1 if the condition is TRUE, and otherwise sets it to 0.</td>
+</tr>
+<tr>
+<td><code>CSETM</code></td>
+<td><code>Rd, cond</code></td>
+<td>Conditional Set Mask sets all bits of the destination register to 1 if the condition is TRUE, and otherwise sets all bits to 0.</td>
+</tr>
+<tr>
+<td><code>CINC</code></td>
+<td><code>Rd, Rn, cond</code></td>
+<td>Conditional Increment returns, in the destination register, the value of the source register incremented by 1 if the condition is TRUE, and otherwise returns the value of the source register.</td>
+</tr>
+<tr>
+<td><code>CINV</code></td>
+<td><code>Rd, Rn, cond</code></td>
+<td>Conditional Invert returns, in the destination register, the bitwise inversion of the value of the source register if the condition is TRUE, and otherwise returns the value of the source register.</td>
+</tr>
+<tr>
+<td><code>CNEG</code></td>
+<td><code>Rd, Rn, cond</code></td>
+<td>Conditional Negate returns, in the destination register, the negated value of the source register if the condition is TRUE, and otherwise returns the value of the source register.</td>
+</tr>
+<tr>
+<td><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CSINC X0, X1, X0, NE  // Set the return register X0 to X1 if Zero flag clear, else increment X0</span><br><span class="line">CINC X0, X0, LS  // If less than or same (LS) then X0 = X0 + 1</span><br><span class="line">CSET W0, EQ  // If the previous comparison was equal (Z=1) then W0 = 1, </span><br><span class="line">// else W0 = 0</span><br><span class="line">CSETM X0, NE  // If not equal then X0 = -1, else X0 = 0 </span><br><span class="line"></span><br><span class="line">//if (i == 0) r = r + 2; else r = r - 1;</span><br><span class="line">CMP w0, #0  // if (i == 0)</span><br><span class="line">SUB w2, w1, #1  // r = r - 1</span><br><span class="line">ADD w1, w1, #2  // r = r + 2</span><br><span class="line">CSEL w1, w1, w2, EQ  // select between the two results</span><br></pre></td></tr></table></figure></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"># 汇编</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/01/define-EXPECT-EQ-INT-expect-actual-EXPECT-EQ-BASE-expect-actual-expect-actual-d/" rel="next" title="#define EXPECT_EQ_INT(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, %d)">
+                <i class="fa fa-chevron-left"></i> #define EXPECT_EQ_INT(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, %d)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/" rel="prev" title="github项目搜索技巧">
+                github项目搜索技巧 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/human.png"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本知识"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARMv8寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">ARMv8寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AArch64通用寄存器"><span class="nav-number">1.1.1.</span> <span class="nav-text">AArch64通用寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态寄存器-SPSR"><span class="nav-number">1.1.2.</span> <span class="nav-text">状态寄存器(SPSR)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件码"><span class="nav-number">1.2.</span> <span class="nav-text">条件码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#指令"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据处理指令"><span class="nav-number">2.1.</span> <span class="nav-text">数据处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算术和逻辑运算"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术和逻辑运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.1.1.1.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘法和除法指令"><span class="nav-number">2.1.2.</span> <span class="nav-text">乘法和除法指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移位操作"><span class="nav-number">2.1.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位和字节操作指令"><span class="nav-number">2.1.4.</span> <span class="nav-text">位和字节操作指令</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/';
+          this.page.identifier = '2020/03/01/ARMv8学习记录二/';
+          this.page.title = 'ARMv8学习记录二';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
