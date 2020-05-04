@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述| 位宽   | 分类       |                |                 || —— | ———- | ————– | ————— || 32-bit | Wn（通用） | WZR（0寄存器） | WSP（堆栈指针） || 64-bit | Xn（通用） | X">
+<meta name="description" content="基本知识 ARMv8寄存器 AArch64通用寄存器 状态寄存器(SPSR)   条件码   指令 数据处理指令 算术和逻辑运算 乘法和除法指令 移位操作 位和字节操作指令 条件执行   内存访问指令 加载和存储指令 寻址模式   流程控制指令 System   参考    前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述    位宽">
 <meta name="keywords" content="汇编">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARMv8学习记录二">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述| 位宽   | 分类       |                |                 || —— | ———- | ————– | ————— || 32-bit | Wn（通用） | WZR（0寄存器） | WSP（堆栈指针） || 64-bit | Xn（通用） | X">
+<meta property="og:description" content="基本知识 ARMv8寄存器 AArch64通用寄存器 状态寄存器(SPSR)   条件码   指令 数据处理指令 算术和逻辑运算 乘法和除法指令 移位操作 位和字节操作指令 条件执行   内存访问指令 加载和存储指令 寻址模式   流程控制指令 System   参考    前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述    位宽">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-15-57-08.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-16-00-41.png">
@@ -93,7 +93,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-46-28.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-48-58.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-49-14.png">
-<meta property="og:updated_time" content="2020-03-10T14:01:13.843Z">
+<meta property="og:updated_time" content="2020-03-15T12:34:33.273Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-15-57-08.png">
 
@@ -283,7 +283,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CKCat">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/human.png">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -383,9 +383,97 @@
       
 
       
-        <p>前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令</p>
-<h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="ARMv8寄存器"><a href="#ARMv8寄存器" class="headerlink" title="ARMv8寄存器"></a>ARMv8寄存器</h2><p>寄存器名称描述<br>| 位宽   | 分类       |                |                 |<br>| —— | ———- | ————– | ————— |<br>| 32-bit | Wn（通用） | WZR（0寄存器） | WSP（堆栈指针） |<br>| 64-bit | Xn（通用） | XZR（0寄存器） | SP（堆栈指针）  |</p>
-<h3 id="AArch64通用寄存器"><a href="#AArch64通用寄存器" class="headerlink" title="AArch64通用寄存器"></a>AArch64通用寄存器</h3><p>AArch64通用寄存器共31个 <code>X0-X30</code> , 其中各寄存器的作用如下表。<br>| 寄存器    | 描述                   |<br>| ——— | ———————- |<br>| <code>X0</code> – <code>X7</code>   | 参数和返回值           |<br>| <code>X8</code> – <code>X18</code>  | 临时寄存器(X8一般保存结构体首地址) |<br>| <code>X19</code> – <code>X28</code> | 被调用者保存的寄存器   |<br>| <code>X29</code>       | 帧指针(<code>FP</code>)                 |<br>| <code>X30</code>       | 返回地址(<code>LR</code>)               |<br>| <code>SP</code>        | 栈指针                 |</p>
+        <!-- TOC -->
+
+<ul>
+<li><a href="#基本知识">基本知识</a><ul>
+<li><a href="#armv8寄存器">ARMv8寄存器</a><ul>
+<li><a href="#aarch64通用寄存器">AArch64通用寄存器</a></li>
+<li><a href="#状态寄存器spsr">状态寄存器(SPSR)</a></li>
+</ul>
+</li>
+<li><a href="#条件码">条件码</a></li>
+</ul>
+</li>
+<li><a href="#指令">指令</a><ul>
+<li><a href="#数据处理指令">数据处理指令</a><ul>
+<li><a href="#算术和逻辑运算">算术和逻辑运算</a></li>
+<li><a href="#乘法和除法指令">乘法和除法指令</a></li>
+<li><a href="#移位操作">移位操作</a></li>
+<li><a href="#位和字节操作指令">位和字节操作指令</a></li>
+<li><a href="#条件执行">条件执行</a></li>
+</ul>
+</li>
+<li><a href="#内存访问指令">内存访问指令</a><ul>
+<li><a href="#加载和存储指令">加载和存储指令</a></li>
+<li><a href="#寻址模式">寻址模式</a></li>
+</ul>
+</li>
+<li><a href="#流程控制指令">流程控制指令</a></li>
+<li><a href="#system">System</a></li>
+</ul>
+</li>
+<li><a href="#参考">参考</a></li>
+</ul>
+<!-- /TOC -->
+
+<p>前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令</p>
+<h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="ARMv8寄存器"><a href="#ARMv8寄存器" class="headerlink" title="ARMv8寄存器"></a>ARMv8寄存器</h2><p>寄存器名称描述</p>
+<table>
+<thead>
+<tr>
+<th>位宽</th>
+<th>分类</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>32-bit</td>
+<td>Wn（通用）</td>
+<td>WZR（0寄存器）</td>
+<td>WSP（堆栈指针）</td>
+</tr>
+<tr>
+<td>64-bit</td>
+<td>Xn（通用）</td>
+<td>XZR（0寄存器）</td>
+<td>SP（堆栈指针）</td>
+</tr>
+</tbody></table>
+<h3 id="AArch64通用寄存器"><a href="#AArch64通用寄存器" class="headerlink" title="AArch64通用寄存器"></a>AArch64通用寄存器</h3><p>AArch64通用寄存器共31个 <code>X0-X30</code> , 其中各寄存器的作用如下表。</p>
+<table>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>X0</code> – <code>X7</code></td>
+<td>参数和返回值</td>
+</tr>
+<tr>
+<td><code>X8</code> – <code>X18</code></td>
+<td>临时寄存器(X8一般保存结构体首地址)</td>
+</tr>
+<tr>
+<td><code>X19</code> – <code>X28</code></td>
+<td>被调用者保存的寄存器</td>
+</tr>
+<tr>
+<td><code>X29</code></td>
+<td>帧指针(<code>FP</code>)</td>
+</tr>
+<tr>
+<td><code>X30</code></td>
+<td>返回地址(<code>LR</code>)</td>
+</tr>
+<tr>
+<td><code>SP</code></td>
+<td>栈指针</td>
+</tr>
+</tbody></table>
 <h3 id="状态寄存器-SPSR"><a href="#状态寄存器-SPSR" class="headerlink" title="状态寄存器(SPSR)"></a>状态寄存器(SPSR)</h3><ol>
 <li>PSTATE at AArch64</li>
 </ol>
@@ -486,7 +574,7 @@
 <td>0b1001</td>
 <td>Less than or equal to (unsigned).</td>
 <td>Less than or equal to.</td>
-<td><code>(C = 0) || (Z = 1)</code></td>
+<td>`(C = 0)</td>
 </tr>
 <tr>
 <td><code>GE</code></td>
@@ -557,8 +645,9 @@
 </tbody></table>
 <p><code>ADC</code> 和 <code>SBC</code> 运算执行加法和减法，并且将进位条件标志位用作输入。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ADC&#123;S&#125;: Rd = Rn + Rm + C</span><br><span class="line">SBC&#123;S&#125;: Rd = Rn - Rm - 1 + C</span><br></pre></td></tr></table></figure>
-<h4 id><a href="#" class="headerlink" title></a></h4><p>例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ADD W0, W1, W2, LSL #3 // W0 = W1 + (W2 &lt;&lt; 3)</span><br><span class="line">SUBS X0, X4, X3, ASR #2 // X0 = X4 - (X3 &gt;&gt; 2), set flags</span><br><span class="line">MOV X0, X1 // Copy X1 to X0</span><br><span class="line">CMP W3, W4 // Set flags based on W3 - W4</span><br><span class="line">ADD W0, W5, #27 // W0 = W5 + 27</span><br></pre></td></tr></table></figure>
+
+<p>例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CMN w0, #-3 // 等价CMP W0, #3 即 x0 == 3</span><br><span class="line">ADD W0, W1, W2, LSL #3 // W0 = W1 + (W2 &lt;&lt; 3)</span><br><span class="line">SUBS X0, X4, X3, ASR #2 // X0 = X4 - (X3 &gt;&gt; 2), set flags</span><br><span class="line">MOV X0, X1 // Copy X1 to X0</span><br><span class="line">CMP W3, W4 // Set flags based on W3 - W4</span><br><span class="line">ADD W0, W5, #27 // W0 = W5 + 27</span><br><span class="line">MNEG w0, w1, w2   //w0 = w0 - w1 * w2</span><br><span class="line">NEG w0, w1  //w0 = -w1</span><br><span class="line">// x1 = x0 % 16</span><br><span class="line">and     x1, x0, 15</span><br><span class="line"></span><br><span class="line">// x0 == 0?</span><br><span class="line">tst     x0, x0</span><br><span class="line">beq     zero</span><br><span class="line"></span><br><span class="line">// x0 = 0</span><br><span class="line">eor     x0, x0, x0</span><br></pre></td></tr></table></figure>
 
 <h3 id="乘法和除法指令"><a href="#乘法和除法指令" class="headerlink" title="乘法和除法指令"></a>乘法和除法指令</h3><table>
 <thead>
@@ -682,6 +771,8 @@
 <td>Bitwise NOT</td>
 </tr>
 </tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// x1 = x0 / 8</span><br><span class="line">lsr     x1, x0, 3</span><br><span class="line"></span><br><span class="line">// x1 = x0 * 4</span><br><span class="line">lsl     x1, x0, 2</span><br></pre></td></tr></table></figure>
+
 <p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-19-15-20.png" alt></p>
 <h3 id="位和字节操作指令"><a href="#位和字节操作指令" class="headerlink" title="位和字节操作指令"></a>位和字节操作指令</h3><table>
 <thead>
@@ -765,7 +856,7 @@
 <p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-21-46-28.png" alt></p>
 <p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-21-48-58.png" alt></p>
 <p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-21-49-14.png" alt></p>
-<table>
+<h3 id="条件执行"><a href="#条件执行" class="headerlink" title="条件执行"></a>条件执行</h3><table>
 <thead>
 <tr>
 <th>Mnemonic</th>
@@ -838,12 +929,177 @@
 <td><code>Rd, Rn, cond</code></td>
 <td>Conditional Negate returns, in the destination register, the negated value of the source register if the condition is TRUE, and otherwise returns the value of the source register.</td>
 </tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CSINC X0, X1, X0, NE  // Set the return register X0 to X1 if Zero flag clear, else increment X0</span><br><span class="line">CINC X0, X0, LS  // If less than or same (LS) then X0 = X0 + 1</span><br><span class="line">CSET W0, EQ  // If the previous comparison was equal (Z=1) then W0 = 1, </span><br><span class="line">// else W0 = 0</span><br><span class="line">CSETM X0, NE  // If not equal then X0 = -1, else X0 = 0 </span><br><span class="line"></span><br><span class="line">//if (i == 0) r = r + 2; else r = r - 1;</span><br><span class="line">CMP w0, #0  // if (i == 0)</span><br><span class="line">SUB w2, w1, #1  // r = r - 1</span><br><span class="line">ADD w1, w1, #2  // r = r + 2</span><br><span class="line">CSEL w1, w1, w2, EQ  // select between the two results</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存访问指令"><a href="#内存访问指令" class="headerlink" title="内存访问指令"></a>内存访问指令</h2><h3 id="加载和存储指令"><a href="#加载和存储指令" class="headerlink" title="加载和存储指令"></a>加载和存储指令</h3><table>
+<thead>
 <tr>
-<td><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CSINC X0, X1, X0, NE  // Set the return register X0 to X1 if Zero flag clear, else increment X0</span><br><span class="line">CINC X0, X0, LS  // If less than or same (LS) then X0 = X0 + 1</span><br><span class="line">CSET W0, EQ  // If the previous comparison was equal (Z=1) then W0 = 1, </span><br><span class="line">// else W0 = 0</span><br><span class="line">CSETM X0, NE  // If not equal then X0 = -1, else X0 = 0 </span><br><span class="line"></span><br><span class="line">//if (i == 0) r = r + 2; else r = r - 1;</span><br><span class="line">CMP w0, #0  // if (i == 0)</span><br><span class="line">SUB w2, w1, #1  // r = r - 1</span><br><span class="line">ADD w1, w1, #2  // r = r + 2</span><br><span class="line">CSEL w1, w1, w2, EQ  // select between the two results</span><br></pre></td></tr></table></figure></td>
+<th>Mnemonic</th>
+<th>Operands</th>
+<th>Instruction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>`LDR(B</td>
+<td>H</td>
+<td>SB</td>
+</tr>
+<tr>
+<td>`LD(B</td>
+<td>H</td>
+<td>SB</td>
+</tr>
+<tr>
+<td>`STR(B</td>
+<td>H</td>
+<td>SB</td>
+</tr>
+<tr>
+<td>`STR(B</td>
+<td>H</td>
+<td>SB</td>
+</tr>
+<tr>
+<td><code>LDP</code></td>
+<td>`Wt1, Wt2, [Xn</td>
+<td>SP], #imm`</td>
+</tr>
+<tr>
+<td><code>STP</code></td>
+<td>`Wt1, Wt2, [Xn</td>
+<td>SP], #imm`</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// load a byte from x1</span><br><span class="line">ldrb    w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a signed byte from x1</span><br><span class="line">ldrsb   w0, [x1]</span><br><span class="line"></span><br><span class="line">// store a 32-bit word to address in x1</span><br><span class="line">str     w0, [x1]</span><br><span class="line"></span><br><span class="line">// load two 32-bit words from stack, advance sp by 8</span><br><span class="line">ldp     w0, w1, [sp], 8</span><br><span class="line"></span><br><span class="line">// store two 64-bit words at [sp-96] and subtract 96 from sp </span><br><span class="line">stp     x0, x1, [sp, -96]!</span><br><span class="line"></span><br><span class="line">// load 32-bit immediate from literal pool</span><br><span class="line">ldr     w0, =0x12345678</span><br></pre></td></tr></table></figure>
+
+<h3 id="寻址模式"><a href="#寻址模式" class="headerlink" title="寻址模式"></a>寻址模式</h3><table>
+<thead>
+<tr>
+<th>Addressing Mode</th>
+<th>Immediate</th>
+<th>Register</th>
+<th>Extended Register</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Base register only (no offset)</td>
+<td><code>[base{, 0}]</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Base plus offset</td>
+<td><code>[base{, imm}]</code></td>
+<td><code>[base, Xm{, LSL imm}]</code></td>
+<td>`[base, Wm, (S</td>
+</tr>
+<tr>
+<td>Pre-indexed</td>
+<td><code>[base, imm]!</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Post-indexed</td>
+<td><code>[base], imm</code></td>
+<td><code>[base], Xm a</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Literal (PC-relative)</td>
+<td><code>label</code></td>
 <td></td>
 <td></td>
 </tr>
 </tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">// load a byte from x1</span><br><span class="line">ldrb   w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a half-word from x1</span><br><span class="line">ldrh   w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a word from x1</span><br><span class="line">ldr    w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1</span><br><span class="line">ldr    x0, [x1]</span><br><span class="line"></span><br><span class="line">// load a byte from x1 plus 1</span><br><span class="line">ldrb   w0, [x1, 1]</span><br><span class="line"></span><br><span class="line">// load a half-word from x1 plus 2</span><br><span class="line">ldrh   w0, [x1, 2]</span><br><span class="line"></span><br><span class="line">// load a word from x1 plus 4</span><br><span class="line">ldr    w0, [x1, 4]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 plus 8</span><br><span class="line">ldr    x0, [x1, 8]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 using x2 as index</span><br><span class="line">// w2 is multiplied by 8</span><br><span class="line">ldr    x0, [x1, x2, lsl 3]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 using w2 as index</span><br><span class="line">// w2 is zero-extended and multiplied by 8</span><br><span class="line">ldr    x0, [x1, w2, uxtw 3]</span><br><span class="line">// load a byte from x1 plus 1, then advance x1 by 1</span><br><span class="line">ldrb   w0, [x1, 1]!</span><br><span class="line"></span><br><span class="line">// load a half-word from x1 plus 2, then advance x1 by 2</span><br><span class="line">ldrh   w0, [x1, 2]!</span><br><span class="line"></span><br><span class="line">// load a word from x1 plus 4, then advance x1 by 4</span><br><span class="line">ldr    w0, [x1, 4]!</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 plus 8, then advance x1 by 8</span><br><span class="line">ldr    x0, [x1, 8]!</span><br><span class="line">// load a byte from x1, then advance x1 by 1</span><br><span class="line">ldrb   w0, [x1], 1</span><br><span class="line"></span><br><span class="line">// load a half-word from x1, then advance x1 by 2</span><br><span class="line">ldrh   w0, [x1], 2</span><br><span class="line"></span><br><span class="line">// load a word from x1, then advance x1 by 4</span><br><span class="line">ldr    w0, [x1], 4</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1, then advance x1 by 8</span><br><span class="line">ldr    x0, [x1], 8</span><br><span class="line"></span><br><span class="line">  // load address of label</span><br><span class="line">adr    x0, label</span><br><span class="line"></span><br><span class="line">// load address of label</span><br><span class="line">adrp   x0, label</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程控制指令"><a href="#流程控制指令" class="headerlink" title="流程控制指令"></a>流程控制指令</h2><table>
+<thead>
+<tr>
+<th>Mnemonic</th>
+<th>Operands</th>
+<th>Instruction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>B</code></td>
+<td><code>label</code></td>
+<td>Branch causes an unconditional branch to a label at a PC-relative offset, with a hint that this is not a subroutine call or return.</td>
+</tr>
+<tr>
+<td><code>B.cond</code></td>
+<td><code>label</code></td>
+<td>Branch conditionally to a label at a PC-relative offset, with a hint that this is not a subroutine call or return.</td>
+</tr>
+<tr>
+<td><code>BL</code></td>
+<td><code>label</code></td>
+<td>Branch with Link branches to a PC-relative offset, setting the register X30 to PC+4. It provides a hint that this is a subroutine call.</td>
+</tr>
+<tr>
+<td><code>BLR</code></td>
+<td><code>Xn</code></td>
+<td>Branch with Link to Register calls a subroutine at an address in a register, setting register X30 to PC+4.</td>
+</tr>
+<tr>
+<td><code>BR</code></td>
+<td><code>Xn</code></td>
+<td>Branch to Register branches unconditionally to an address in a register, with a hint that this is not a subroutine return.</td>
+</tr>
+<tr>
+<td><code>CBNZ</code></td>
+<td><code>Rn, label</code></td>
+<td>Compare and Branch on Nonzero compares the value in a register with zero, and conditionally branches to a label at a PC-relative offset if the comparison is not equal. It provides a hint that this is not a subroutine call or return. This instruction does not affect the condition flags.</td>
+</tr>
+<tr>
+<td><code>CBZ</code></td>
+<td><code>Rn, label</code></td>
+<td>Compare and Branch on Zero compares the value in a register with zero, and conditionally branches to a label at a PC-relative offset if the comparison is equal. It provides a hint that this is not a subroutine call or return. This instruction does not affect condition flags.</td>
+</tr>
+<tr>
+<td><code>RET</code></td>
+<td><code>Xn</code></td>
+<td>Return from subroutine branches unconditionally to an address in a register, with a hint that this is a subroutine return.</td>
+</tr>
+<tr>
+<td><code>TBNZ</code></td>
+<td><code>Rn, #imm, label</code></td>
+<td>Test bit and Branch if Nonzero compares the value of a bit in a general-purpose register with zero, and conditionally branches to a label at a PC-relative offset if the comparison is not equal. It provides a hint that this is not a subroutine call or return. This instruction does not affect condition flags.</td>
+</tr>
+<tr>
+<td><code>TBZ</code></td>
+<td><code>Rn, #imm, label</code></td>
+<td>Test bit and Branch if Zero compares the value of a test bit with zero, and conditionally branches to a label at a PC-relative offset if the comparison is equal. It provides a hint that this is not a subroutine call or return. This instruction does not affect condition flags.</td>
+</tr>
+</tbody></table>
+<h2 id="System"><a href="#System" class="headerlink" title="System"></a>System</h2><table>
+<thead>
+<tr>
+<th>Mnemonic</th>
+<th>Instruction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MSR</code></td>
+<td>Move general-purpose register to System Register allows the PE to write an AArch64 System register from a general-purpose register.</td>
+</tr>
+<tr>
+<td><code>MRS</code></td>
+<td>Move System Register allows the PE to read an AArch64 System register into a general-purpose register.</td>
+</tr>
+<tr>
+<td><code>SVC</code></td>
+<td>Supervisor Call causes an exception to be taken to EL1.</td>
+</tr>
+<tr>
+<td><code>NOP</code></td>
+<td>No Operation does nothing, other than advance the value of the program counter by 4. This instruction can be used for instruction alignment purposes.</td>
+</tr>
+</tbody></table>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://modexp.wordpress.com/2018/10/30/arm64-assembly/" target="_blank" rel="noopener">A Guide to ARM64 / AArch64 Assembly on Linux with Shellcodes and Cryptography</a></p>
+<p><a href="https://static.docs.arm.com/den0024/a/DEN0024A_v8_architecture_PG.pdf" target="_blank" rel="noopener">DEN0024A_v8_architecture_PG.pdf</a></p>
 
       
     </div>
@@ -963,7 +1219,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/human.png"
+                src="/images/avatar.gif"
                 alt="CKCat" />
             
               <p class="site-author-name" itemprop="name">CKCat</p>
@@ -977,7 +1233,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -999,7 +1255,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1048,7 +1304,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本知识"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARMv8寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">ARMv8寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AArch64通用寄存器"><span class="nav-number">1.1.1.</span> <span class="nav-text">AArch64通用寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态寄存器-SPSR"><span class="nav-number">1.1.2.</span> <span class="nav-text">状态寄存器(SPSR)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件码"><span class="nav-number">1.2.</span> <span class="nav-text">条件码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#指令"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据处理指令"><span class="nav-number">2.1.</span> <span class="nav-text">数据处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算术和逻辑运算"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术和逻辑运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-number">2.1.1.1.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘法和除法指令"><span class="nav-number">2.1.2.</span> <span class="nav-text">乘法和除法指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移位操作"><span class="nav-number">2.1.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位和字节操作指令"><span class="nav-number">2.1.4.</span> <span class="nav-text">位和字节操作指令</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本知识"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARMv8寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">ARMv8寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AArch64通用寄存器"><span class="nav-number">1.1.1.</span> <span class="nav-text">AArch64通用寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态寄存器-SPSR"><span class="nav-number">1.1.2.</span> <span class="nav-text">状态寄存器(SPSR)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件码"><span class="nav-number">1.2.</span> <span class="nav-text">条件码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#指令"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据处理指令"><span class="nav-number">2.1.</span> <span class="nav-text">数据处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算术和逻辑运算"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术和逻辑运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘法和除法指令"><span class="nav-number">2.1.2.</span> <span class="nav-text">乘法和除法指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移位操作"><span class="nav-number">2.1.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位和字节操作指令"><span class="nav-number">2.1.4.</span> <span class="nav-text">位和字节操作指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件执行"><span class="nav-number">2.1.5.</span> <span class="nav-text">条件执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存访问指令"><span class="nav-number">2.2.</span> <span class="nav-text">内存访问指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载和存储指令"><span class="nav-number">2.2.1.</span> <span class="nav-text">加载和存储指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#寻址模式"><span class="nav-number">2.2.2.</span> <span class="nav-text">寻址模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程控制指令"><span class="nav-number">2.3.</span> <span class="nav-text">流程控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System"><span class="nav-number">2.4.</span> <span class="nav-text">System</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

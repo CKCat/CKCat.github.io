@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="开发环境：ubuntu18.04  源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida官网：https:&#x2F;&#x2F;frida.re&#x2F;  安装 Frida1. 在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰1mkvirtualenv -p python3 frida_12.8.7  2. 进入虚拟环境，直接运行下来命令即可安装完成12pip i">
+<meta name="description" content="开发环境：ubuntu18.04  源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida官网：https:&#x2F;&#x2F;frida.re&#x2F;     安装 Frida 1. 在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰 2. 进入虚拟环境，直接运行下来命令即可安装完成 3. 根据f rida 的版本去下载对应的 frida-server-12.8.">
 <meta name="keywords" content="radare2 frida">
 <meta property="og:type" content="article">
 <meta property="og:title" content="frida环境配置">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;19&#x2F;frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="开发环境：ubuntu18.04  源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida官网：https:&#x2F;&#x2F;frida.re&#x2F;  安装 Frida1. 在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰1mkvirtualenv -p python3 frida_12.8.7  2. 进入虚拟环境，直接运行下来命令即可安装完成12pip i">
+<meta property="og:description" content="开发环境：ubuntu18.04  源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida官网：https:&#x2F;&#x2F;frida.re&#x2F;     安装 Frida 1. 在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰 2. 进入虚拟环境，直接运行下来命令即可安装完成 3. 根据f rida 的版本去下载对应的 frida-server-12.8.">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;19&#x2F;frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE&#x2F;2020-01-19-16-20-36.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;19&#x2F;frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE&#x2F;2020-01-19-16-31-30.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;19&#x2F;frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE&#x2F;2020-01-19-16-50-57.png">
-<meta property="og:updated_time" content="2020-01-19T09:52:25.687Z">
+<meta property="og:updated_time" content="2020-03-14T09:09:28.704Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;01&#x2F;19&#x2F;frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE&#x2F;2020-01-19-16-20-36.png">
 
@@ -280,7 +280,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CKCat">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/human.png">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -384,6 +384,25 @@
 <blockquote>
 <p>源码地址：<a href="https://github.com/frida/frida" target="_blank" rel="noopener">https://github.com/frida/frida</a><br>官网：<a href="https://frida.re/" target="_blank" rel="noopener">https://frida.re/</a></p>
 </blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#安装-frida">安装 Frida</a><ul>
+<li><a href="#1-在安装frida之前最好创建一个-python-虚拟环境这样可以避免与其他环境产生干扰">1. 在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰</a></li>
+<li><a href="#2-进入虚拟环境直接运行下来命令即可安装完成">2. 进入虚拟环境，直接运行下来命令即可安装完成</a></li>
+<li><a href="#3-根据f-rida-的版本去下载对应的-frida-server-1287-android-arm64xz">3. 根据f rida 的版本去下载对应的 <code>frida-server-12.8.7-android-arm64.xz</code></a></li>
+<li><a href="#4-将-frida-server-push-进-datalocaltmp-目录并给予其运行权限使用-root-用户启动">4. 将 <code>frida-server</code> push 进 <code>data/local/tmp</code> 目录，并给予其运行权限，使用 root 用户启动。</a></li>
+</ul>
+</li>
+<li><a href="#配置开发环境">配置开发环境</a><ul>
+<li><a href="#从官方下载api类型定义">从官方下载API类型定义</a></li>
+<li><a href="#另一种方式">另一种方式：</a></li>
+<li><a href="#简单使用">简单使用</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
 <h1 id="安装-Frida"><a href="#安装-Frida" class="headerlink" title="安装 Frida"></a>安装 Frida</h1><h2 id="1-在安装frida之前最好创建一个-python-虚拟环境，这样可以避免与其他环境产生干扰"><a href="#1-在安装frida之前最好创建一个-python-虚拟环境，这样可以避免与其他环境产生干扰" class="headerlink" title="1. 在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰"></a>1. 在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkvirtualenv -p python3 frida_12.8.7</span><br></pre></td></tr></table></figure>
 
 <h2 id="2-进入虚拟环境，直接运行下来命令即可安装完成"><a href="#2-进入虚拟环境，直接运行下来命令即可安装完成" class="headerlink" title="2. 进入虚拟环境，直接运行下来命令即可安装完成"></a>2. 进入虚拟环境，直接运行下来命令即可安装完成</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install frida-tools # CLI tools</span><br><span class="line">pip install frida       # Python bindings</span><br></pre></td></tr></table></figure>
@@ -527,7 +546,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/human.png"
+                src="/images/avatar.gif"
                 alt="CKCat" />
             
               <p class="site-author-name" itemprop="name">CKCat</p>
@@ -541,7 +560,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -563,7 +582,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
