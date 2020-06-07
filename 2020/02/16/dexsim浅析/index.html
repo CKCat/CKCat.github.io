@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="dexsim简介dexsim 是利用动态调用实现字符串解密的工具，需要配合 DSS 使用。作者为 mikusjelly 。 dexsim 源码浅析dexsim 源码结构如下图所示，  其中关键解密方法在 dexsim&#x2F;Plugins 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。 首先来看 main 方法 1234567891011121314151617if __name__">
+<meta name="description" content="dexsim简介 dexsim 源码浅析      dexsim简介dexsim 是利用动态调用实现字符串解密的工具，需要配合 DSS 使用。作者为 mikusjelly 。 dexsim 源码浅析dexsim 源码结构如下图所示，  其中关键解密方法在 dexsim&#x2F;Plugins 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。 首先来看 main 方法 12345678">
 <meta name="keywords" content="dex字符串解密">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dexsim浅析">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="dexsim简介dexsim 是利用动态调用实现字符串解密的工具，需要配合 DSS 使用。作者为 mikusjelly 。 dexsim 源码浅析dexsim 源码结构如下图所示，  其中关键解密方法在 dexsim&#x2F;Plugins 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。 首先来看 main 方法 1234567891011121314151617if __name__">
+<meta property="og:description" content="dexsim简介 dexsim 源码浅析      dexsim简介dexsim 是利用动态调用实现字符串解密的工具，需要配合 DSS 使用。作者为 mikusjelly 。 dexsim 源码浅析dexsim 源码结构如下图所示，  其中关键解密方法在 dexsim&#x2F;Plugins 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。 首先来看 main 方法 12345678">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-13-59-53.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-15-17-58.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-15-17-13.png">
-<meta property="og:updated_time" content="2020-02-17T04:11:45.778Z">
+<meta property="og:updated_time" content="2020-06-07T03:32:36.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;16&#x2F;dexsim%E6%B5%85%E6%9E%90&#x2F;2020-02-16-13-59-53.png">
 
@@ -380,7 +380,17 @@
       
 
       
-        <h1 id="dexsim简介"><a href="#dexsim简介" class="headerlink" title="dexsim简介"></a>dexsim简介</h1><p><a href="https://github.com/mikusjelly/dexsim" target="_blank" rel="noopener">dexsim</a> 是利用动态调用实现字符串解密的工具，需要配合 <a href="https://github.com/mikusjelly/DSS" target="_blank" rel="noopener">DSS</a> 使用。作者为 <code>mikusjelly</code> 。</p>
+        <!-- TOC -->
+
+<ul>
+<li><a href="#dexsim简介">dexsim简介</a><ul>
+<li><a href="#dexsim-源码浅析">dexsim 源码浅析</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="dexsim简介"><a href="#dexsim简介" class="headerlink" title="dexsim简介"></a>dexsim简介</h1><p><a href="https://github.com/mikusjelly/dexsim" target="_blank" rel="noopener">dexsim</a> 是利用动态调用实现字符串解密的工具，需要配合 <a href="https://github.com/mikusjelly/DSS" target="_blank" rel="noopener">DSS</a> 使用。作者为 <code>mikusjelly</code> 。</p>
 <h2 id="dexsim-源码浅析"><a href="#dexsim-源码浅析" class="headerlink" title="dexsim 源码浅析"></a>dexsim 源码浅析</h2><p><code>dexsim</code> 源码结构如下图所示，</p>
 <p><img src="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/2020-02-16-13-59-53.png" alt></p>
 <p>其中关键解密方法在 <code>dexsim/Plugins</code> 中，当我们需要添加一个解密方法时直接在该目录中添加对应插件既可。</p>
@@ -562,7 +572,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -584,7 +594,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

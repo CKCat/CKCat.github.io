@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="转载 : https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;6643  关键词：  不需要编译llvm 仅依赖NDK，不需要额外的其他环境 不会遇到配置引起的符号NotFound问题 不污染NDK  一、背景介绍现在代码保护技术很多是在llvm上实现的，例如 ollvm 和 hikari，作者给出的实现是将源码混杂在llvm中，这样做非常不优雅。近来越来越多安全工作者都开始接触和研究基于llvm的">
+<meta name="description" content="转载 : https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;6643  关键词：  不需要编译llvm 仅依赖NDK，不需要额外的其他环境 不会遇到配置引起的符号NotFound问题 不污染NDK    一、背景介绍 二、使用NDK的环境编译一个pass 三、使用NDK的环境加载一个pass 四、当我们来到macOS上 五、当我们来到Windows 六、其他     一、背景介绍现在代码保护技术很">
 <meta name="keywords" content="OLLVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="史上最优雅的NDK加载pass方案">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;07&#x2F;%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="转载 : https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;6643  关键词：  不需要编译llvm 仅依赖NDK，不需要额外的其他环境 不会遇到配置引起的符号NotFound问题 不污染NDK  一、背景介绍现在代码保护技术很多是在llvm上实现的，例如 ollvm 和 hikari，作者给出的实现是将源码混杂在llvm中，这样做非常不优雅。近来越来越多安全工作者都开始接触和研究基于llvm的">
+<meta property="og:description" content="转载 : https:&#x2F;&#x2F;xz.aliyun.com&#x2F;t&#x2F;6643  关键词：  不需要编译llvm 仅依赖NDK，不需要额外的其他环境 不会遇到配置引起的符号NotFound问题 不污染NDK    一、背景介绍 二、使用NDK的环境编译一个pass 三、使用NDK的环境加载一个pass 四、当我们来到macOS上 五、当我们来到Windows 六、其他     一、背景介绍现在代码保护技术很">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;07&#x2F;%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88&#x2F;2020-03-07-00-33-38.png">
-<meta property="og:updated_time" content="2020-03-06T16:34:24.014Z">
+<meta property="og:updated_time" content="2020-06-07T03:31:47.803Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;07&#x2F;%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88&#x2F;2020-03-07-00-33-38.png">
 
@@ -386,8 +386,20 @@
 <li>不需要编译llvm</li>
 <li>仅依赖NDK，不需要额外的其他环境</li>
 <li>不会遇到配置引起的符号NotFound问题</li>
-<li>不污染NDK</li>
+<li>不污染NDK<!-- TOC -->
+</li>
 </ul>
+<ul>
+<li><a href="#一背景介绍">一、背景介绍</a></li>
+<li><a href="#二使用ndk的环境编译一个pass">二、使用NDK的环境编译一个pass</a></li>
+<li><a href="#三使用ndk的环境加载一个pass">三、使用NDK的环境加载一个pass</a></li>
+<li><a href="#四当我们来到macos上">四、当我们来到macOS上</a></li>
+<li><a href="#五当我们来到windows">五、当我们来到Windows</a></li>
+<li><a href="#六其他">六、其他</a></li>
+</ul>
+<!-- /TOC -->
+
+
 <h1 id="一、背景介绍"><a href="#一、背景介绍" class="headerlink" title="一、背景介绍"></a>一、背景介绍</h1><p>现在代码保护技术很多是在llvm上实现的，例如 ollvm 和 hikari，作者给出的实现是将源码混杂在llvm中，这样做非常不优雅。近来越来越多安全工作者都开始接触和研究基于llvm的代码保护，工欲善其事必先利其器，在编译、运行均是本机的环境下，不会出问题，因此本文介绍的是，如何优雅地在NDK中加载pass。</p>
 <p>安卓开发者使用混淆技术来保护native代码时，一般有两种选择：</p>
 <p>第一个选择是获得git上 ollvm 或 hikari 的代码，编译后，替换掉NDK中原先的toolchain。<br>这是最不优雅的方式，因为维护起来很麻烦，因为需要编译整个llvm工程，并且对NDK有侵入性，无法保证修改前和修改后NDK的功能不发生变化。</p>
@@ -640,7 +652,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -662,7 +674,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

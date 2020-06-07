@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android源码阅读," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="类的加载dalvik 的类加载的主要过程如下：  app_process 作为 zygote server 通过 local socket 处理进程创建请求，zygote server 是在 ZygoteInit.main 函数里调用 ZygoteInit.runSelectLoop 监听。  接收到 zygote client 的 fork 请求之后，调用 ZygoteConnection.ru">
+<meta name="keywords" content="Android源码阅读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ART的函数运行机制">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;03&#x2F;ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="类的加载dalvik 的类加载的主要过程如下：  app_process 作为 zygote server 通过 local socket 处理进程创建请求，zygote server 是在 ZygoteInit.main 函数里调用 ZygoteInit.runSelectLoop 监听。  接收到 zygote client 的 fork 请求之后，调用 ZygoteConnection.ru">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-04T04:22:18.971Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/06/03/ART的函数运行机制/"/>
+
+
+
+
+
+  <title>ART的函数运行机制 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ART的函数运行机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-03T19:25:03+08:00">
+                2020-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/03/ART的函数运行机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="类的加载"><a href="#类的加载" class="headerlink" title="类的加载"></a>类的加载</h1><p><code>dalvik</code> 的类加载的主要过程如下：</p>
+<ol>
+<li><p><code>app_process</code> 作为 <code>zygote server</code> 通过 <code>local socket</code> 处理进程创建请求，<code>zygote server</code> 是在 <code>ZygoteInit.main</code> 函数里调用 <code>ZygoteInit.runSelectLoop</code> 监听。</p>
+</li>
+<li><p>接收到 <code>zygote client</code> 的 <code>fork</code> 请求之后，调用 <code>ZygoteConnection.runOnce</code> ，调用 <code>Zygote.forkAndSpecialize</code> 创建新进程</p>
+</li>
+<li><p>进程创建之后，由 <code>ZygoteConnection.handleParentProc</code> 来初始化进程，最终会调用 <code>ActivityThread.main</code> 函数</p>
+</li>
+<li><p><code>ActivityThread.main -&gt; ActivityThread.attach -&gt;  ActivityThread.bindApplication -&gt; Activity.handleBindApplication，handleBindApplication</code> 会初始化 <code>BaseDexClassLoader</code> 。</p>
+</li>
+<li><p>类的加载经过了 <code>ClassLoader.loadClass-&gt;BaseDexClassLoader.findClass-&gt;DexPathList.findClass-&gt;DexFile.loadClassBinaryName-&gt;DexFile.defineClassNative-&gt;DexFile_defineClassNative</code> (runtime/native/dalvik_system_DexFile.cc) 。</p>
+</li>
+</ol>
+<p>这个初始化过程， <code>art</code> 和 <code>dalvik</code> 都是一样的。 <code>art</code> 的 <code>DexFile_defineClassNative</code> 由 <code>ClassLinker</code> 的 <code>DefineClass</code> 来加载类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">static jclass DexFile_defineClassNative(JNIEnv* env,</span><br><span class="line">                                        jclass,</span><br><span class="line">                                        jstring javaName,</span><br><span class="line">                                        jobject javaLoader,</span><br><span class="line">                                        jobject cookie,</span><br><span class="line">                                        jobject dexFile) &#123;</span><br><span class="line">  std::vector&lt;const DexFile*&gt; dex_files;</span><br><span class="line">  const OatFile* oat_file;</span><br><span class="line">  if (!ConvertJavaArrayToDexFiles(env, cookie, /*out*/ dex_files, /*out*/ oat_file)) &#123;</span><br><span class="line">    VLOG(class_linker) &lt;&lt; &quot;Failed to find dex_file&quot;;</span><br><span class="line">    DCHECK(env-&gt;ExceptionCheck());</span><br><span class="line">    return nullptr;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ScopedUtfChars class_name(env, javaName);</span><br><span class="line">  if (class_name.c_str() == nullptr) &#123;</span><br><span class="line">    VLOG(class_linker) &lt;&lt; &quot;Failed to find class_name&quot;;</span><br><span class="line">    return nullptr;</span><br><span class="line">  &#125;</span><br><span class="line">  const std::string descriptor(DotToDescriptor(class_name.c_str()));</span><br><span class="line">  const size_t hash(ComputeModifiedUtf8Hash(descriptor.c_str()));</span><br><span class="line">  for (auto&amp; dex_file : dex_files) &#123;</span><br><span class="line">    const DexFile::ClassDef* dex_class_def =</span><br><span class="line">        OatDexFile::FindClassDef(*dex_file, descriptor.c_str(), hash);</span><br><span class="line">    if (dex_class_def != nullptr) &#123;</span><br><span class="line">      ScopedObjectAccess soa(env);</span><br><span class="line">      ClassLinker* class_linker = Runtime::Current()-&gt;GetClassLinker();</span><br><span class="line">      StackHandleScope&lt;1&gt; hs(soa.Self());</span><br><span class="line">      Handle&lt;mirror::ClassLoader&gt; class_loader(</span><br><span class="line">          hs.NewHandle(soa.Decode&lt;mirror::ClassLoader&gt;(javaLoader)));</span><br><span class="line">      ObjPtr&lt;mirror::DexCache&gt; dex_cache =</span><br><span class="line">          class_linker-&gt;RegisterDexFile(*dex_file, class_loader.Get());</span><br><span class="line">      if (dex_cache == nullptr) &#123;</span><br><span class="line">        // OOME or InternalError (dexFile already registered with a different class loader).</span><br><span class="line">        soa.Self()-&gt;AssertPendingException();</span><br><span class="line">        return nullptr;</span><br><span class="line">      &#125;</span><br><span class="line">      // 获取类</span><br><span class="line">      ObjPtr&lt;mirror::Class&gt; result = class_linker-&gt;DefineClass(soa.Self(),</span><br><span class="line">                                                               descriptor.c_str(),</span><br><span class="line">                                                               hash,</span><br><span class="line">                                                               class_loader,</span><br><span class="line">                                                               *dex_file,</span><br><span class="line">                                                               *dex_class_def);</span><br><span class="line">      // Add the used dex file. This only required for the DexFile.loadClass API since normal</span><br><span class="line">      // class loaders already keep their dex files live.</span><br><span class="line">      class_linker-&gt;InsertDexFileInToClassLoader(soa.Decode&lt;mirror::Object&gt;(dexFile),</span><br><span class="line">                                                 class_loader.Get());</span><br><span class="line">      if (result != nullptr) &#123;</span><br><span class="line">        VLOG(class_linker) &lt;&lt; &quot;DexFile_defineClassNative returning &quot; &lt;&lt; result</span><br><span class="line">                           &lt;&lt; &quot; for &quot; &lt;&lt; class_name.c_str();</span><br><span class="line">        return soa.AddLocalReference&lt;jclass&gt;(result);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  VLOG(class_linker) &lt;&lt; &quot;Failed to find dex_class_def &quot; &lt;&lt; class_name.c_str();</span><br><span class="line">  return nullptr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/" rel="tag"># Android源码阅读</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/05/GDB%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8Fbug%E6%97%A0%E5%A4%84%E8%BA%B2%E8%97%8F/" rel="next" title="GDB命令基础，让你的程序bug无处躲藏">
+                <i class="fa fa-chevron-left"></i> GDB命令基础，让你的程序bug无处躲藏
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/05/Build-lineage-16-0-for-sailfish/" rel="prev" title="Build lineage-16.0 for sailfish">
+                Build lineage-16.0 for sailfish <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类的加载"><span class="nav-number">1.</span> <span class="nav-text">类的加载</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/';
+          this.page.identifier = '2020/06/03/ART的函数运行机制/';
+          this.page.title = 'ART的函数运行机制';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

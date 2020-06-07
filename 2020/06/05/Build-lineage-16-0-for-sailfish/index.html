@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android系统编译," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： lineage-16.0     1. 配置安装平台工具 1.1. 安装 adb 和 fastboot ， 可以从谷歌下载它们。提取运行：   2. 配置必须的环境 2.1. 安装必须的库 2.2. JDK   3. 下载源码 3.1. 创建目录 3.2. 安装 repo 命令 3.3. 配置git 3.4. 初始化Linea">
+<meta name="keywords" content="Android系统编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build lineage-16.0 for sailfish">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;Build-lineage-16-0-for-sailfish&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="系统环境：Ubuntu 18.04.3 编译Android系统版本： lineage-16.0     1. 配置安装平台工具 1.1. 安装 adb 和 fastboot ， 可以从谷歌下载它们。提取运行：   2. 配置必须的环境 2.1. 安装必须的库 2.2. JDK   3. 下载源码 3.1. 创建目录 3.2. 安装 repo 命令 3.3. 配置git 3.4. 初始化Linea">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;Build-lineage-16-0-for-sailfish&#x2F;2020-06-07-11-17-46.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;Build-lineage-16-0-for-sailfish&#x2F;2020-06-07-11-23-55.png">
+<meta property="og:updated_time" content="2020-06-07T03:31:14.161Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;Build-lineage-16-0-for-sailfish&#x2F;2020-06-07-11-17-46.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/06/05/Build-lineage-16-0-for-sailfish/"/>
+
+
+
+
+
+  <title>Build lineage-16.0 for sailfish | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/05/Build-lineage-16-0-for-sailfish/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Build lineage-16.0 for sailfish</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-05T09:16:58+08:00">
+                2020-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/05/Build-lineage-16-0-for-sailfish/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/05/Build-lineage-16-0-for-sailfish/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>系统环境：Ubuntu 18.04.3</p>
+<p>编译Android系统版本： lineage-16.0</p>
+</blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#1-配置安装平台工具">1. 配置安装平台工具</a><ul>
+<li><a href="#11-安装-adb-和-fastboot--可以从谷歌下载它们提取运行">1.1. 安装 <code>adb</code> 和 <code>fastboot</code> ， 可以从谷歌下载它们。提取运行：</a></li>
+</ul>
+</li>
+<li><a href="#2-配置必须的环境">2. 配置必须的环境</a><ul>
+<li><a href="#21-安装必须的库">2.1. 安装必须的库</a></li>
+<li><a href="#22-jdk">2.2. JDK</a></li>
+</ul>
+</li>
+<li><a href="#3-下载源码">3. 下载源码</a><ul>
+<li><a href="#31-创建目录">3.1. 创建目录</a></li>
+<li><a href="#32-安装-repo-命令">3.2. 安装 repo 命令</a></li>
+<li><a href="#33-配置git">3.3. 配置git</a></li>
+<li><a href="#34-初始化lineageos源并下载源代码">3.4. 初始化LineageOS源并下载源代码</a></li>
+<li><a href="#35-提取专有blob">3.5. 提取专有Blob</a><ul>
+<li><a href="#351-通过-extract_filessh-脚本提取">3.5.1. 通过 <code>extract_files.sh</code> 脚本提取</a></li>
+<li><a href="#352-通过修改-repolocal_manifestsxml-文件进行提取">3.5.2. 通过修改 <code>.repo/local_manifests/*.xml</code> 文件进行提取</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#4-开始编译">4. 开始编译</a><ul>
+<li><a href="#41-准备设备特定的代码">4.1. 准备设备特定的代码</a></li>
+<li><a href="#42-开始构建">4.2. 开始构建</a></li>
+<li><a href="#43-安装版本">4.3. 安装版本</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="1-配置安装平台工具"><a href="#1-配置安装平台工具" class="headerlink" title="1. 配置安装平台工具"></a>1. 配置安装平台工具</h1><h2 id="1-1-安装-adb-和-fastboot-，-可以从谷歌下载它们。提取运行："><a href="#1-1-安装-adb-和-fastboot-，-可以从谷歌下载它们。提取运行：" class="headerlink" title="1.1. 安装 adb 和 fastboot ， 可以从谷歌下载它们。提取运行："></a>1.1. 安装 <code>adb</code> 和 <code>fastboot</code> ， 可以从<a href="https://dl.google.com/android/repository/platform-tools-latest-linux.zip" target="_blank" rel="noopener">谷歌下载</a>它们。提取运行：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip platform-tools-latest-linux.zip -d ~</span><br></pre></td></tr></table></figure>
+
+<p>添加 <code>adb</code> 和 <code>fastboot</code> 到 <code>PATH</code> 。打开 <code>~/.profile</code> 并添加以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># add Android SDK platform tools to path</span><br><span class="line">if [ -d &quot;$HOME/platform-tools&quot; ] ; then</span><br><span class="line">    PATH=&quot;$HOME/platform-tools:$PATH&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>然后，运行 <code>source ~/.profile</code> 以更新环境。</p>
+<h1 id="2-配置必须的环境"><a href="#2-配置必须的环境" class="headerlink" title="2. 配置必须的环境"></a>2. 配置必须的环境</h1><h2 id="2-1-安装必须的库"><a href="#2-1-安装必须的库" class="headerlink" title="2.1. 安装必须的库"></a>2.1. 安装必须的库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev</span><br></pre></td></tr></table></figure>
+
+<p>对于 20.04 之前的Ubuntu版本，需要安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libwxgtk3.0-dev</span><br></pre></td></tr></table></figure>
+
+<p>对于早于 16.04 的Ubuntu版本，请安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libwxgtk2.8-dev</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2-JDK"><a href="#2-2-JDK" class="headerlink" title="2.2. JDK"></a>2.2. JDK</h2><ul>
+<li>LineageOS 16.0：OpenJDK 1.9（默认包含）</li>
+<li>LineageOS 14.1-15.1：OpenJDK 1.8（安装openjdk-8-jdk）</li>
+<li>LineageOS 11.0-13.0：OpenJDK 1.7（安装openjdk-7-jdk）*</li>
+</ul>
+<h1 id="3-下载源码"><a href="#3-下载源码" class="headerlink" title="3. 下载源码"></a>3. 下载源码</h1><h2 id="3-1-创建目录"><a href="#3-1-创建目录" class="headerlink" title="3.1. 创建目录"></a>3.1. 创建目录</h2><p>创建构建环境中设置一些目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p ~/bin</span><br><span class="line">mkdir -p ~/android/lineage</span><br></pre></td></tr></table></figure>
+<h2 id="3-2-安装-repo-命令"><a href="#3-2-安装-repo-命令" class="headerlink" title="3.2. 安装 repo 命令"></a>3.2. 安装 repo 命令</h2><p>输入以下内容以下载 repo 二进制文件并使其可执行（可运行）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</span><br><span class="line">chmod a+x ~/bin/repo</span><br></pre></td></tr></table></figure>
+
+<p>将<del>/bin目录放在执行路径中，打开 `</del>/.profile` 文件，添加下列代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># set PATH so it includes user&apos;s private bin if it exists</span><br><span class="line">if [ -d &quot;$HOME/bin&quot; ] ; then</span><br><span class="line">    PATH=&quot;$HOME/bin:$PATH&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>然后，运行 <code>source ~/.profile</code> 以更新环境。</p>
+<h2 id="3-3-配置git"><a href="#3-3-配置git" class="headerlink" title="3.3. 配置git"></a>3.3. 配置git</h2><p>运行以下命令来配置git身份：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email &quot;you@example.com&quot;</span><br><span class="line">git config --global user.name &quot;Your Name&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-4-初始化LineageOS源并下载源代码"><a href="#3-4-初始化LineageOS源并下载源代码" class="headerlink" title="3.4. 初始化LineageOS源并下载源代码"></a>3.4. 初始化LineageOS源并下载源代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd ~/android/lineage</span><br><span class="line">repo init -u https://github.com/LineageOS/android.git -b lineage-16.0</span><br><span class="line"></span><br><span class="line">repo sync</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-5-提取专有Blob"><a href="#3-5-提取专有Blob" class="headerlink" title="3.5. 提取专有Blob"></a>3.5. 提取专有Blob</h2><h3 id="3-5-1-通过-extract-files-sh-脚本提取"><a href="#3-5-1-通过-extract-files-sh-脚本提取" class="headerlink" title="3.5.1. 通过 extract_files.sh 脚本提取"></a>3.5.1. 通过 <code>extract_files.sh</code> 脚本提取</h3><p>确保您的 Pixel 已通过 USB 电缆连接到计算机，并且已启用 ADB 和 root 身份，并且位于 <code>~/android/lineage/device/google/sailfish</code> 文件夹中。然后运行 <code>extract-files.sh</code>脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./extract-files.sh</span><br></pre></td></tr></table></figure>
+<p>Blob 应被拉入 <code>~/android/lineage/vendor/google</code> 文件夹。</p>
+<h3 id="3-5-2-通过修改-repo-local-manifests-xml-文件进行提取"><a href="#3-5-2-通过修改-repo-local-manifests-xml-文件进行提取" class="headerlink" title="3.5.2. 通过修改 .repo/local_manifests/*.xml 文件进行提取"></a>3.5.2. 通过修改 <code>.repo/local_manifests/*.xml</code> 文件进行提取</h3><p>在 <code>.repo/local_manifests/roomservice.xml</code> 文件中添加下列代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;project clone-depth=&quot;1&quot; name=&quot;TheMuppets/proprietary_vendor_google&quot; path=&quot;vendor/google&quot; remote=&quot;github&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<p>最终代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;manifest&gt;</span><br><span class="line">  &lt;project name=&quot;LineageOS/android_device_google_sailfish&quot; path=&quot;device/google/sailfish&quot; remote=&quot;github&quot; /&gt;</span><br><span class="line">  &lt;project name=&quot;LineageOS/android_device_google_marlin&quot; path=&quot;device/google/marlin&quot; remote=&quot;github&quot; /&gt;</span><br><span class="line">  &lt;project name=&quot;LineageOS/android_kernel_google_marlin&quot; path=&quot;kernel/google/marlin&quot; remote=&quot;github&quot; /&gt;</span><br><span class="line">  &lt;project clone-depth=&quot;1&quot; name=&quot;TheMuppets/proprietary_vendor_google&quot; path=&quot;vendor/google&quot; remote=&quot;github&quot; /&gt;</span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
+<p>然后执行 <code>repo sync</code> ， 最终将会 <code>~/android/lineage/vendor/google</code> 文件夹如下所示：</p>
+<p><img src="/2020/06/05/Build-lineage-16-0-for-sailfish/2020-06-07-11-17-46.png" alt></p>
+<h1 id="4-开始编译"><a href="#4-开始编译" class="headerlink" title="4. 开始编译"></a>4. 开始编译</h1><h2 id="4-1-准备设备特定的代码"><a href="#4-1-准备设备特定的代码" class="headerlink" title="4.1. 准备设备特定的代码"></a>4.1. 准备设备特定的代码</h2><p>进入 <code>~/android/lineage</code> 目录中，运行下列命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">$ source build/envsetup.sh  </span><br><span class="line">including device/generic/car/vendorsetup.sh</span><br><span class="line">including device/generic/mini-emulator-arm64/vendorsetup.sh</span><br><span class="line">including device/generic/mini-emulator-armv7-a-neon/vendorsetup.sh</span><br><span class="line">including device/generic/mini-emulator-x86/vendorsetup.sh</span><br><span class="line">including device/generic/mini-emulator-x86_64/vendorsetup.sh</span><br><span class="line">including device/generic/uml/vendorsetup.sh</span><br><span class="line">including device/google/marlin/vendorsetup.sh</span><br><span class="line">including vendor/lineage/vendorsetup.sh</span><br><span class="line">including sdk/bash_completion/adb.bash</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ breakfast sailfish</span><br><span class="line">including vendor/lineage/vendorsetup.sh</span><br><span class="line">Looking for dependencies in device/google/sailfish</span><br><span class="line">Looking for dependencies in device/google/marlin</span><br><span class="line">Looking for dependencies in kernel/google/marlin</span><br><span class="line">kernel/google/marlin has no additional dependencies.</span><br><span class="line"></span><br><span class="line">============================================</span><br><span class="line">PLATFORM_VERSION_CODENAME=REL</span><br><span class="line">PLATFORM_VERSION=9</span><br><span class="line">LINEAGE_VERSION=16.0-20200607-UNOFFICIAL-sailfish</span><br><span class="line">TARGET_PRODUCT=lineage_sailfish</span><br><span class="line">TARGET_BUILD_VARIANT=userdebug</span><br><span class="line">TARGET_BUILD_TYPE=release</span><br><span class="line">TARGET_ARCH=arm64</span><br><span class="line">TARGET_ARCH_VARIANT=armv8-a</span><br><span class="line">TARGET_CPU_VARIANT=kryo</span><br><span class="line">TARGET_2ND_ARCH=arm</span><br><span class="line">TARGET_2ND_ARCH_VARIANT=armv8-a</span><br><span class="line">TARGET_2ND_CPU_VARIANT=kryo</span><br><span class="line">HOST_ARCH=x86_64</span><br><span class="line">HOST_2ND_ARCH=x86</span><br><span class="line">HOST_OS=linux</span><br><span class="line">HOST_OS_EXTRA=Linux-5.3.0-53-generic-x86_64-Ubuntu-18.04.4-LTS</span><br><span class="line">HOST_CROSS_OS=windows</span><br><span class="line">HOST_CROSS_ARCH=x86</span><br><span class="line">HOST_CROSS_2ND_ARCH=x86_64</span><br><span class="line">HOST_BUILD_TYPE=release</span><br><span class="line">BUILD_ID=PQ3A.190801.002</span><br><span class="line">OUT_DIR=/media/ckcat/5670d030-468f-f443-9854-3a9e65ef901c/lineage/out</span><br><span class="line">============================================</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-2-开始构建"><a href="#4-2-开始构建" class="headerlink" title="4.2. 开始构建"></a>4.2. 开始构建</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">croot</span><br><span class="line">brunch sailfish</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-3-安装版本"><a href="#4-3-安装版本" class="headerlink" title="4.3. 安装版本"></a>4.3. 安装版本</h2><p>假设构建已完成且没有错误（完成后将很明显），请在构建运行的终端窗口中键入以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd $OUT</span><br></pre></td></tr></table></figure>
+<p>在这里，您会找到所有已创建的文件。更具兴趣的两个文件是：</p>
+<ul>
+<li><p>boot.img，这是LineageOS引导映像，并包含recovery-ramdisk。</p>
+</li>
+<li><p>lineage-17.1-20200605-UNOFFICIAL-sailfish.zip，这是LineageOS安装程序包。</p>
+</li>
+</ul>
+<p><img src="/2020/06/05/Build-lineage-16-0-for-sailfish/2020-06-07-11-23-55.png" alt></p>
+<p>成功!</p>
+<p>参考：</p>
+<blockquote>
+<p><a href="https://wiki.lineageos.org/devices/sailfish/build" target="_blank" rel="noopener">https://wiki.lineageos.org/devices/sailfish/build</a></p>
+<p><a href="https://www.reddit.com/r/LineageOS/comments/bjo6v3/error_building_lineageos/" target="_blank" rel="noopener">https://www.reddit.com/r/LineageOS/comments/bjo6v3/error_building_lineageos/</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91/" rel="tag"># Android系统编译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/" rel="next" title="ART的函数运行机制">
+                <i class="fa fa-chevron-left"></i> ART的函数运行机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/05/%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro/" rel="prev" title="使用Idea调试jebPro">
+                使用Idea调试jebPro <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-配置安装平台工具"><span class="nav-number">1.</span> <span class="nav-text">1. 配置安装平台工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-安装-adb-和-fastboot-，-可以从谷歌下载它们。提取运行："><span class="nav-number">1.1.</span> <span class="nav-text">1.1. 安装 adb 和 fastboot ， 可以从谷歌下载它们。提取运行：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置必须的环境"><span class="nav-number">2.</span> <span class="nav-text">2. 配置必须的环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装必须的库"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 安装必须的库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-JDK"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. JDK</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-下载源码"><span class="nav-number">3.</span> <span class="nav-text">3. 下载源码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-创建目录"><span class="nav-number">3.1.</span> <span class="nav-text">3.1. 创建目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-安装-repo-命令"><span class="nav-number">3.2.</span> <span class="nav-text">3.2. 安装 repo 命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-配置git"><span class="nav-number">3.3.</span> <span class="nav-text">3.3. 配置git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-初始化LineageOS源并下载源代码"><span class="nav-number">3.4.</span> <span class="nav-text">3.4. 初始化LineageOS源并下载源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-提取专有Blob"><span class="nav-number">3.5.</span> <span class="nav-text">3.5. 提取专有Blob</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-1-通过-extract-files-sh-脚本提取"><span class="nav-number">3.5.1.</span> <span class="nav-text">3.5.1. 通过 extract_files.sh 脚本提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-2-通过修改-repo-local-manifests-xml-文件进行提取"><span class="nav-number">3.5.2.</span> <span class="nav-text">3.5.2. 通过修改 .repo/local_manifests/*.xml 文件进行提取</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-开始编译"><span class="nav-number">4.</span> <span class="nav-text">4. 开始编译</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-准备设备特定的代码"><span class="nav-number">4.1.</span> <span class="nav-text">4.1. 准备设备特定的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-开始构建"><span class="nav-number">4.2.</span> <span class="nav-text">4.2. 开始构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-安装版本"><span class="nav-number">4.3.</span> <span class="nav-text">4.3. 安装版本</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/06/05/Build-lineage-16-0-for-sailfish/';
+          this.page.identifier = '2020/06/05/Build-lineage-16-0-for-sailfish/';
+          this.page.title = 'Build lineage-16.0 for sailfish';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
