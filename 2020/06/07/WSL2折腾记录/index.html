@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="最新看到很大佬对于wsl2的推崇，于是就想体验一番，将系统升级到2004，下面记录以下折腾过程。    1. 系统升级 1.1. 问题：我们无法更新系统保留的分区 1.2. 解决办法 1.2.1. 备份EFI分区 1.2.2. 删除EFI&#x2F;ESP 分区 1.2.3. 扩大 EFI 分区 1.2.4. 新建ESP&#x2F;MSR分区 1.2.5. 还原 EFI 分区镜像     2. 安装 WSL2 2.1">
+<meta name="description" content="最近看到很多大佬对于wsl2的推崇，于是就想体验一番，将系统升级到2004，下面记录以下折腾过程。    1. 系统升级 1.1. 问题：我们无法更新系统保留的分区 1.2. 解决办法 1.2.1. 备份EFI分区 1.2.2. 删除EFI&#x2F;ESP 分区 1.2.3. 扩大 EFI 分区 1.2.4. 新建ESP&#x2F;MSR分区 1.2.5. 还原 EFI 分区镜像     2. 安装 WSL2 2.">
 <meta name="keywords" content="windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="WSL2折腾记录">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="最新看到很大佬对于wsl2的推崇，于是就想体验一番，将系统升级到2004，下面记录以下折腾过程。    1. 系统升级 1.1. 问题：我们无法更新系统保留的分区 1.2. 解决办法 1.2.1. 备份EFI分区 1.2.2. 删除EFI&#x2F;ESP 分区 1.2.3. 扩大 EFI 分区 1.2.4. 新建ESP&#x2F;MSR分区 1.2.5. 还原 EFI 分区镜像     2. 安装 WSL2 2.1">
+<meta property="og:description" content="最近看到很多大佬对于wsl2的推崇，于是就想体验一番，将系统升级到2004，下面记录以下折腾过程。    1. 系统升级 1.1. 问题：我们无法更新系统保留的分区 1.2. 解决办法 1.2.1. 备份EFI分区 1.2.2. 删除EFI&#x2F;ESP 分区 1.2.3. 扩大 EFI 分区 1.2.4. 新建ESP&#x2F;MSR分区 1.2.5. 还原 EFI 分区镜像     2. 安装 WSL2 2.">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95&#x2F;2020-06-07-10-00-23.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95&#x2F;2020-06-07-10-06-59.png">
@@ -96,7 +96,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95&#x2F;2020-06-07-10-21-00.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95&#x2F;2020-06-07-10-16-27.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95&#x2F;2020-06-07-10-44-20.png">
-<meta property="og:updated_time" content="2020-06-07T03:31:04.784Z">
+<meta property="og:updated_time" content="2020-06-20T09:20:13.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95&#x2F;2020-06-07-10-00-23.png">
 
@@ -386,7 +386,7 @@
       
 
       
-        <p>最新看到很大佬对于wsl2的推崇，于是就想体验一番，将系统升级到2004，下面记录以下折腾过程。</p>
+        <p>最近看到很多大佬对于wsl2的推崇，于是就想体验一番，将系统升级到2004，下面记录以下折腾过程。</p>
 <!-- TOC -->
 
 <ul>
@@ -494,6 +494,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="prev" title="CMake的使用记录">
+                CMake的使用记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -583,7 +587,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -594,7 +598,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

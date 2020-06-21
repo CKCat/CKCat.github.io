@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="CKCat的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="基本结构 依赖CMakeLists.txt文件，项目主目标一个，主目录中可指定包含的子目录；  在项目CMakeLists.txt中使用project指定项目名称，add_subdirectory添加子目录  子目录CMakeLists.txt将从父目录CMakeLists.txt继承设置（TBD，待检验）   语法注释使用 # 表示注释 变量使用 set 命令显式定义及赋值, 在非 if 语句中">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMake的使用记录">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;11&#x2F;CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="基本结构 依赖CMakeLists.txt文件，项目主目标一个，主目录中可指定包含的子目录；  在项目CMakeLists.txt中使用project指定项目名称，add_subdirectory添加子目录  子目录CMakeLists.txt将从父目录CMakeLists.txt继承设置（TBD，待检验）   语法注释使用 # 表示注释 变量使用 set 命令显式定义及赋值, 在非 if 语句中">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-11T05:34:50.414Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/06/11/CMake的使用记录/"/>
+
+
+
+
+
+  <title>CMake的使用记录 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CMake的使用记录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-11T13:04:32+08:00">
+                2020-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/11/CMake的使用记录/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h1><ul>
+<li><p>依赖CMakeLists.txt文件，项目主目标一个，主目录中可指定包含的子目录；</p>
+</li>
+<li><p>在项目CMakeLists.txt中使用project指定项目名称，add_subdirectory添加子目录</p>
+</li>
+<li><p>子目录CMakeLists.txt将从父目录CMakeLists.txt继承设置（TBD，待检验）</p>
+</li>
+</ul>
+<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>使用 <code>#</code> 表示注释</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>使用 <code>set</code> 命令显式定义及赋值, 在非 <code>if</code> 语句中, 使用 <code>${}</code> 引用, <code>if</code> 中直接使用变量名引用; 后续的 <code>set</code> 命令会清理变量原来的值, 例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set(var a;b;c) &lt;=&gt; set(var a b c)  #定义变量var并赋值为a;b;c这样一个string list</span><br><span class="line">set(var a) # 赋值var变量的值为a</span><br><span class="line">add_executable($&#123;var&#125;) &lt;=&gt; Add_executable(a b c)   #变量使用$&#123;xxx&#125;引用</span><br></pre></td></tr></table></figure>
+
+<h2 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if(var) # var 非empty 0 N No OFF FALSE... #非运算使用NOT</span><br><span class="line">...</span><br><span class="line">else()/elseif()</span><br><span class="line">...</span><br><span class="line">endif(var)</span><br></pre></td></tr></table></figure>
+
+<h2 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Set(VAR a b c)</span><br><span class="line">Foreach(f $&#123;VAR&#125;)</span><br><span class="line">...</span><br><span class="line">Endforeach(f)</span><br><span class="line"></span><br><span class="line">--------</span><br><span class="line"></span><br><span class="line">WHILE()</span><br><span class="line">...</span><br><span class="line">ENDWHILE()</span><br></pre></td></tr></table></figure>
+
+<h2 id="内部变量"><a href="#内部变量" class="headerlink" title="内部变量"></a>内部变量</h2><p><code>CMAKE_C_COMPILER</code> : 指定C编译器。</p>
+<p><code>CMAKE_CXX_COMPILER</code> : 指定C++编译器</p>
+<p><code>CMAKE_C_FLAGS</code> : 编译C文件时的选项，如 <code>-g</code> , 也可以通过 <code>add_definitions</code> 添加编译选项。</p>
+<p><code>EXECUTABLE_OUTPUT_PATH</code> : 可执行文件的存放路径。</p>
+<p><code>LIBRARY_OUTPUT_PATH</code> : 库文件路径。</p>
+<p><code>CMAKE_BUILD_TYPE</code>: : <code>build</code> 类型(Debug, Release, …)，<code>CMAKE_BUILD_TYPE=Debug</code></p>
+<p><code>BUILD_SHARED_LIBS</code> : Switch between shared and static libraries.</p>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><p><code>project (HELLO)</code>   #指定项目名称，生成的VC项目的名称；</p>
+<blockquote>
+<p>使用${HELLO_SOURCE_DIR}表示项目根目录</p>
+</blockquote>
+<p><code>include_directories</code> : 指定头文件的搜索路径，相当于指定gcc的-I参数</p>
+<blockquote>
+<p>include_directories (${HELLO_SOURCE_DIR}/Hello)  #增加Hello为include目录</p>
+</blockquote>
+<p><code>link_directories</code> : 动态链接库或静态链接库的搜索路径，相当于gcc的-L参数</p>
+<blockquote>
+<p>link_directories (${HELLO_BINARY_DIR}/Hello)     #增加Hello为link目录</p>
+</blockquote>
+<p><code>add_subdirectory</code> : 包含子目录</p>
+<blockquote>
+<p>add_subdirectory (Hello)</p>
+</blockquote>
+<p><code>add_executable</code> : 编译可执行程序，指定编译，好像也可以添加.o文件</p>
+<blockquote>
+<p>add_executable (helloDemo demo.cxx demo_b.cxx)   #将cxx编译成可执行文件</p>
+</blockquote>
+<p><code>add_definitions</code> : 添加编译参数</p>
+<blockquote>
+<p>add_definitions(-DDEBUG)将在gcc命令行添加DEBUG宏定义；</p>
+</blockquote>
+<blockquote>
+<p>add_definitions( “-Wall -ansi –pedantic –g”)</p>
+</blockquote>
+<p><code>target_link_libraries</code> : 添加链接库,相同于指定-l参数</p>
+<blockquote>
+<p>target_link_libraries(demo Hello) #将可执行文件与Hello连接成最终文件demo</p>
+</blockquote>
+<p><code>add_library</code>:</p>
+<blockquote>
+<p>add_library(Hello hello.cxx)  #将hello.cxx编译成静态库如libHello.a</p>
+</blockquote>
+<p><code>add_custom_target</code> :</p>
+<p><code>message( status|fatal_error, “message”)</code> :</p>
+<p><code>set_target_properties( ... )</code> : lots of properties… OUTPUT_NAME, VERSION, ….</p>
+<p><code>link_libraries( lib1 lib2 ...)</code> : All targets link with the same set of libs</p>
+<h1 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h1><ol>
+<li>怎样获得一个目录下的所有源文件<blockquote>
+<p>aux_source_directory(<dir> <variable>)</variable></dir></p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>将dir中所有源文件（不包括头文件）保存到变量variable中，然后可以add_executable (ss7gw ${variable})这样使用。</p>
+</blockquote>
+<ol start="2">
+<li><p>怎样指定项目编译目标</p>
+<blockquote>
+<p> project命令指定</p>
+</blockquote>
+</li>
+<li><p>怎样添加动态库和静态库</p>
+<blockquote>
+<p>target_link_libraries命令添加即可</p>
+</blockquote>
+</li>
+<li><p>怎样在执行CMAKE时打印消息</p>
+<blockquote>
+<p>message([SEND_ERROR | STATUS | FATAL_ERROR] “message to display” …)</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>注意大小写</p>
+</blockquote>
+<ol start="5">
+<li>怎样指定头文件与库文件路径<blockquote>
+<p>include_directories与link_directories</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>可以多次调用以设置多个路径</p>
+</blockquote>
+<blockquote>
+<p>link_directories仅对其后面的targets起作用</p>
+</blockquote>
+<ol start="6">
+<li>怎样区分debug、release版本<blockquote>
+<p>建立debug/release两目录，分别在其中执行cmake -DCMAKE_BUILD_TYPE=Debug（或Release），需要编译不同版本时进入不同目录执行make即可；</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>Debug版会使用参数-g；Release版使用-O3 –DNDEBUG</p>
+</blockquote>
+<blockquote>
+<p>另一种设置方法——例如DEBUG版设置编译参数DDEBUG</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">IF(DEBUG_mode)</span><br><span class="line"></span><br><span class="line">    add_definitions(-DDEBUG)</span><br><span class="line"></span><br><span class="line">ENDIF()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在执行cmake时增加参数即可，例如cmake -D DEBUG_mode=ON</p>
+</blockquote>
+<ol start="7">
+<li>怎样设置条件编译<br>例如debug版设置编译选项DEBUG，并且更改不应改变CMakelist.txt</li>
+</ol>
+<blockquote>
+<p>使用option command，eg：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">option(DEBUG_mode &quot;ON for debug or OFF for release&quot; ON)</span><br><span class="line"></span><br><span class="line">IF(DEBUG_mode)</span><br><span class="line"></span><br><span class="line">    add_definitions(-DDEBUG)</span><br><span class="line"></span><br><span class="line">ENDIF()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使其生效的方法：首先cmake生成makefile，然后make edit_cache编辑编译选项；Linux下会打开一个文本框，可以更改，该完后再make生成目标文件——emacs不支持make edit_cache；</p>
+</blockquote>
+<blockquote>
+<p>局限：这种方法不能直接设置生成的makefile，而是必须使用命令在make前设置参数；对于debug、release版本，相当于需要两个目录，分别先cmake一次，然后分别make edit_cache一次；</p>
+</blockquote>
+<blockquote>
+<p>期望的效果：在执行cmake时直接通过参数指定一个开关项，生成相应的makefile——可以这样做，例如cmake –DDEBUGVERSION=ON</p>
+</blockquote>
+<ol start="8">
+<li><p>怎样添加编译宏定义</p>
+<blockquote>
+<p>使用add_definitions命令，见命令部分说明</p>
+</blockquote>
+</li>
+<li><p>怎样添加编译依赖项用于确保编译目标项目前依赖项必须先构建好</p>
+</li>
+</ol>
+<blockquote>
+<p>add_dependencies</p>
+</blockquote>
+<ol start="10">
+<li>怎样指定目标文件目录<blockquote>
+<p>建立一个新的目录，在该目录中执行cmake生成Makefile文件，这样编译结果会保存在该目录——类似</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>SET_TARGET_PROPERTIES(ss7gw PROPERTIES RUNTIME_OUTPUT_DIRECTORY “${BIN_DIR}”)</p>
+</blockquote>
+<ol start="10">
+<li><p>很多文件夹，难道需要把每个文件夹编译成一个库文件？</p>
+<blockquote>
+<p>可以不在子目录中使用CMakeList.txt，直接在上层目录中指定子目录</p>
+</blockquote>
+</li>
+<li><p>怎样设定依赖的cmake版本</p>
+<blockquote>
+<p>cmake_minimum_required(VERSION 2.6)</p>
+</blockquote>
+</li>
+<li><p>相对路径怎么指定</p>
+<blockquote>
+<p>${projectname_SOURCE_DIR}表示根源文件目录，${ projectname _BINARY_DIR}表示根二进制文件目录？</p>
+</blockquote>
+</li>
+<li><p>怎样设置编译中间文件的目录</p>
+<blockquote>
+<p>TBD</p>
+</blockquote>
+</li>
+<li><p>怎样在IF语句中使用字串或数字比较</p>
+<blockquote>
+<p>数字比较LESS、GREATER、EQUAL，字串比STRLESS、STRGREATER、STREQUAL，</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>Eg：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)</span><br><span class="line"></span><br><span class="line">set(AAA abc)</span><br><span class="line"></span><br><span class="line">IF(AAA STREQUAL abc)</span><br><span class="line"></span><br><span class="line">    message(STATUS &quot;true&quot;)   #应该打印true</span><br><span class="line"></span><br><span class="line">ENDIF()</span><br></pre></td></tr></table></figure>
+<ol start="15">
+<li><p>更改h文件时是否只编译必须的cpp文件</p>
+<blockquote>
+<p>是</p>
+</blockquote>
+</li>
+<li><p>机器上安装了VC7和VC8，CMAKE会自动搜索编译器，但是怎样指定某个版本？</p>
+<blockquote>
+<p>TBD</p>
+</blockquote>
+</li>
+<li><p>怎样根据OS指定编译选项</p>
+<blockquote>
+<p>IF( APPLE ); IF( UNIX ); IF( WIN32 )</p>
+</blockquote>
+</li>
+<li><p>能否自动执行某些编译前、后命令？</p>
+<blockquote>
+<p>可以，TBD</p>
+</blockquote>
+</li>
+<li><p>怎样打印make的输出<br>make VERBOSE=1</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/07/WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/" rel="next" title="WSL2折腾记录">
+                <i class="fa fa-chevron-left"></i> WSL2折腾记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/20/%E4%BB%8EActivityThread-main%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90android%E5%BA%94%E7%94%A8%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/" rel="prev" title="从ActivityThread.main开始分析android应用的启动过程">
+                从ActivityThread.main开始分析android应用的启动过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本结构"><span class="nav-number">1.</span> <span class="nav-text">基本结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语法"><span class="nav-number">2.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注释"><span class="nav-number">2.1.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">2.2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件语句"><span class="nav-number">2.3.</span> <span class="nav-text">条件语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环语句"><span class="nav-number">2.4.</span> <span class="nav-text">循环语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部变量"><span class="nav-number">2.5.</span> <span class="nav-text">内部变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令"><span class="nav-number">2.6.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FAQ"><span class="nav-number">3.</span> <span class="nav-text">FAQ</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/';
+          this.page.identifier = '2020/06/11/CMake的使用记录/';
+          this.page.title = 'CMake的使用记录';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
