@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android系统编译," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="CKCat的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="最近有点时间就尝试着移植 FART 到 Android 9.0 ，本文记录一下的整个过程。    获取 cloassloader 执行主动调用 添加 dumpMethodCode 方法 添加 myfartInvoke 方法 执行时 dumpDexFile    获取 cloassloader 执行主动调用首先修改 frameworks&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;app&#x2F;Acti">
+<meta name="keywords" content="Android系统编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移植FART到Adnroid 9.0">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;07&#x2F;17&#x2F;%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="最近有点时间就尝试着移植 FART 到 Android 9.0 ，本文记录一下的整个过程。    获取 cloassloader 执行主动调用 添加 dumpMethodCode 方法 添加 myfartInvoke 方法 执行时 dumpDexFile    获取 cloassloader 执行主动调用首先修改 frameworks&#x2F;base&#x2F;core&#x2F;java&#x2F;android&#x2F;app&#x2F;Acti">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;07&#x2F;17&#x2F;%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0&#x2F;2020-07-17-09-42-21.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;07&#x2F;17&#x2F;%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0&#x2F;2020-07-17-09-58-41.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;07&#x2F;17&#x2F;%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0&#x2F;2020-07-17-09-59-56.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;07&#x2F;17&#x2F;%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0&#x2F;2020-07-17-10-01-51.png">
+<meta property="og:updated_time" content="2020-07-17T02:32:11.457Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;07&#x2F;17&#x2F;%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0&#x2F;2020-07-17-09-42-21.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/07/17/移植FART到Adnroid-9-0/"/>
+
+
+
+
+
+  <title>移植FART到Adnroid 9.0 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">移植FART到Adnroid 9.0</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-17T09:16:34+08:00">
+                2020-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index">
+                    <span itemprop="name">Android源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/17/移植FART到Adnroid-9-0/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近有点时间就尝试着移植 FART 到 Android 9.0 ，本文记录一下的整个过程。</p>
+<!-- TOC -->
+
+<ul>
+<li><a href="#获取-cloassloader-执行主动调用">获取 cloassloader 执行主动调用</a></li>
+<li><a href="#添加-dumpmethodcode-方法">添加 dumpMethodCode 方法</a></li>
+<li><a href="#添加-myfartinvoke-方法">添加 myfartInvoke 方法</a></li>
+<li><a href="#执行时-dumpdexfile">执行时 dumpDexFile</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="获取-cloassloader-执行主动调用"><a href="#获取-cloassloader-执行主动调用" class="headerlink" title="获取 cloassloader 执行主动调用"></a>获取 cloassloader 执行主动调用</h1><p>首先修改 <code>frameworks/base/core/java/android/app/ActivityThread.java</code> 文件，添加以下内容。其中主要思想就是获取 apk 的 classloader 然后通过反射获取 dumpMethodCode 方法，执行主动调用，下面添加 dumpMethodCode 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br></pre></td><td class="code"><pre><span class="line">// add start</span><br><span class="line">import android.os.Build;</span><br><span class="line">import android.util.ArrayMap;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import java.io.BufferedReader;</span><br><span class="line">import java.io.File;</span><br><span class="line">import java.io.FileInputStream;</span><br><span class="line">import java.io.FileWriter;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.InputStreamReader;</span><br><span class="line">import java.lang.ref.WeakReference;</span><br><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import java.lang.reflect.InvocationTargetException;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line">import java.lang.reflect.Modifier;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.lang.reflect.Constructor;</span><br><span class="line">import dalvik.system.BaseDexClassLoader;</span><br><span class="line">import dalvik.system.DexClassLoader;</span><br><span class="line">// add end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// add start</span><br><span class="line">    public static String CKCatTAG = &quot;CKCatUnPack&quot;;</span><br><span class="line">    public static Field getClassField(ClassLoader classloader, String className,</span><br><span class="line">        String fieldName)&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Class clazz = classloader.loadClass(className);</span><br><span class="line">            Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">            field.setAccessible(true);</span><br><span class="line">            return field;</span><br><span class="line"></span><br><span class="line">        &#125;catch(SecurityException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (NoSuchFieldException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (IllegalArgumentException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Object getClassFieldObject(ClassLoader classloader, String className, </span><br><span class="line">        Object obj, String fieldName)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Class clazz = classloader.loadClass(className);</span><br><span class="line">            Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">            field.setAccessible(true);</span><br><span class="line">            Object result = null;</span><br><span class="line">            result = field.get(obj);</span><br><span class="line">            return result;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Object invokeStaticMethod(String className, String methodName,</span><br><span class="line">        Class[] pareType, Object[] pareValues)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Class clazz = Class.forName(className);</span><br><span class="line">            Method method = clazz.getMethod(methodName, pareType);</span><br><span class="line">            return method.invoke(null, pareValues);</span><br><span class="line">        &#125; catch(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; </span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Object getFieldObject(String className, Object obj,</span><br><span class="line">        String fieldName)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Class clazz = Class.forName(className);</span><br><span class="line">            Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">            field.setAccessible(true);</span><br><span class="line">            return field.get(obj);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static ClassLoader getClassLoader()&#123;</span><br><span class="line">        ClassLoader classloader = null;</span><br><span class="line">        Object currentActivityThread = invokeStaticMethod(&quot;android.app.ActivityThread&quot;,</span><br><span class="line">            &quot;currentActivityThread&quot;, new Class[]&#123;&#125;, new Object[]&#123;&#125;);</span><br><span class="line">        Object mBoundApplication = getFieldObject(&quot;android.app.ActivityThread&quot;, </span><br><span class="line">            currentActivityThread, &quot;mBoundApplication&quot;);</span><br><span class="line">        Object loadedApkInfo = getFieldObject(&quot;android.app.ActivityThread$AppBindData&quot;,</span><br><span class="line">            mBoundApplication, &quot;info&quot;);</span><br><span class="line">        Application mApplication = (Application)getFieldObject(&quot;android.app.loadedApk&quot;,</span><br><span class="line">            loadedApkInfo, &quot;mApplication&quot;);</span><br><span class="line">        classloader = mApplication.getClassLoader();</span><br><span class="line">        return classloader;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void loadClassAndInvoke(ClassLoader appClassloader, String eachClassName, </span><br><span class="line">        Method dumpMethodCode_method)&#123;</span><br><span class="line">        Log.i(CKCatTAG, &quot;go into loadClassAndInvoke-&gt;&quot; + &quot;classname:&quot; + eachClassName);</span><br><span class="line"></span><br><span class="line">        Class retClass = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            retClass = appClassloader.loadClass(eachClassName);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            return;</span><br><span class="line">        &#125; catch (Error e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            return;</span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        if (retClass != null) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Constructor&lt;?&gt; cons[] = retClass.getDeclaredConstructors();</span><br><span class="line">                for (Constructor&lt;?&gt; constructor : cons)&#123;</span><br><span class="line">                    if (dumpMethodCode_method != null) &#123;</span><br><span class="line">                        try &#123;</span><br><span class="line">                            dumpMethodCode_method.invoke(null, constructor);</span><br><span class="line">                        &#125; catch (Exception e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                            continue;</span><br><span class="line">                        &#125; catch (Error e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                            continue;</span><br><span class="line">                        &#125; </span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        Log.e(CKCatTAG, &quot;dumpMethodCode_method is null &quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;  catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; catch (Error e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; </span><br><span class="line"></span><br><span class="line">            try &#123;</span><br><span class="line">                Method[] methods = retClass.getDeclaredMethods();</span><br><span class="line">                if (methods != null) &#123;</span><br><span class="line">                    for (Method m : methods) &#123;</span><br><span class="line">                        if (dumpMethodCode_method != null) &#123;</span><br><span class="line">                            try &#123;</span><br><span class="line">                               dumpMethodCode_method.invoke(null, m);</span><br><span class="line">                             &#125; catch (Exception e) &#123;</span><br><span class="line">                                e.printStackTrace();</span><br><span class="line">                                continue;</span><br><span class="line">                            &#125; catch (Error e) &#123;</span><br><span class="line">                                e.printStackTrace();</span><br><span class="line">                                continue;</span><br><span class="line">                            &#125; </span><br><span class="line">                        &#125; else &#123;</span><br><span class="line">                            Log.e(CKCatTAG, &quot;dumpMethodCode_method is null &quot;);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; catch (Error e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void fart()&#123;</span><br><span class="line">        //获取当前 classloader</span><br><span class="line">        ClassLoader appClassloader = getClassLoader();</span><br><span class="line">        List&lt;Object&gt; dexFieldsArray = new ArrayList&lt;Object&gt;();</span><br><span class="line"></span><br><span class="line">        // 获取 pathList 字段</span><br><span class="line">        Field pathList_Field = (Field)getClassField(appClassloader, </span><br><span class="line">            &quot;dalvik.system.BaseDexClassLoader&quot;, &quot;pathList&quot;);</span><br><span class="line">        Object pathList_object = getFieldObject(&quot;dalvik.system.BaseDexClassLoader&quot;, </span><br><span class="line">            appClassloader, &quot;pathList&quot;);</span><br><span class="line"></span><br><span class="line">        // 获取 dexElements</span><br><span class="line">        Object[] dexElements = (Object[]) getFieldObject(&quot;dalvik.system.DexPathList&quot;, </span><br><span class="line">            pathList_object, &quot;dexElements&quot;);</span><br><span class="line"></span><br><span class="line">        Field dexFile_Field = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            dexFile_Field = (Field)getClassField(appClassloader, </span><br><span class="line">                &quot;dalvik.system.DexPathList$Element&quot;, &quot;dexFile&quot;);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Class dexFileClazz = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            dexFileClazz = appClassloader.loadClass(&quot;dalvik.system.DexFile&quot;);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Method getClassNameList_Method = null;</span><br><span class="line">        Method defineClass_Method = null;</span><br><span class="line">        Method dumpMethodCode_Method = null;</span><br><span class="line">        // 通过反射获取获取 dumpMethodCode </span><br><span class="line">        for (Method method : dexFileClazz.getDeclaredMethods())&#123;</span><br><span class="line">            if (method.getName().equals(&quot;getClassNameList&quot;)) &#123;</span><br><span class="line">                getClassNameList_Method = method;</span><br><span class="line">                getClassNameList_Method.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line">            if (method.getName().equals(&quot;defineClassNative&quot;)) &#123;</span><br><span class="line">                defineClass_Method = method;</span><br><span class="line">                defineClass_Method.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line">            if (method.getName().equals(&quot;dumpMethodCode&quot;)) &#123;</span><br><span class="line">                dumpMethodCode_Method = method;</span><br><span class="line">                dumpMethodCode_Method.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 获取 mCookie</span><br><span class="line">        Field mCookieField = getClassField(appClassloader, &quot;dalvik.system.DexFile&quot;, &quot;mCookie&quot;);</span><br><span class="line">        for (int i = 0; i &lt; dexElements.length; i++) &#123;</span><br><span class="line">            Object element = dexElements[i];</span><br><span class="line">            Object dexfile = null;</span><br><span class="line">            try &#123;</span><br><span class="line">                dexfile = (Object)dexFile_Field.get(element);</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (dexfile == null) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if(dexfile != null)&#123;</span><br><span class="line">                dexFieldsArray.add(dexfile);</span><br><span class="line">                Object mCookie = getClassFieldObject(appClassloader, </span><br><span class="line">                    &quot;dalvik.system.DexFile&quot;, dexfile, &quot;mCookie&quot;);</span><br><span class="line">                if (mCookie == null) &#123;</span><br><span class="line">                    continue;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                String[] classNames = null;</span><br><span class="line">                try &#123;</span><br><span class="line">                    classNames = (String[])getClassNameList_Method.invoke(dexfile, mCookie);</span><br><span class="line">                &#125; catch (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                    continue;</span><br><span class="line">                &#125; catch (Error e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                    continue;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                if (classNames != null) &#123;</span><br><span class="line">                    for(String eachClassName: classNames)&#123;</span><br><span class="line">                        // 执行主动调用</span><br><span class="line">                        loadClassAndInvoke(appClassloader, eachClassName, dumpMethodCode_Method);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void fartthread()&#123;</span><br><span class="line">        new Thread(new Runnable()&#123;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void run()&#123;</span><br><span class="line">                try&#123;</span><br><span class="line">                    Log.e(CKCatTAG, &quot;start sleep,wait for fartthread start......&quot;);</span><br><span class="line">                    Thread.sleep(1*60*1000);</span><br><span class="line">                &#125;catch(InterruptedException e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                Log.e(CKCatTAG, &quot;sleep over and start fartthread&quot;);</span><br><span class="line">                fart();</span><br><span class="line">                Log.e(CKCatTAG, &quot;fart run over&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    // add end</span><br><span class="line"></span><br><span class="line">    /**  Core implementation of activity launch. */</span><br><span class="line">    private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) &#123;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">        // add start</span><br><span class="line">        fartthread();</span><br><span class="line">        // add end</span><br><span class="line">        return activity;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="添加-dumpMethodCode-方法"><a href="#添加-dumpMethodCode-方法" class="headerlink" title="添加 dumpMethodCode 方法"></a>添加 dumpMethodCode 方法</h1><p>在 <code>libcore/dalvik/src/main/java/dalvik/system/DexFile.java</code> 中声明 dumpMethodCode 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//声明 dumpMethodCode 方法</span><br><span class="line">private static native void dumpMethodCode(Object m);</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>art/runtime/native/dalvik_system_DexFile.cc</code> 中实现 dumpMethodCode 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// add start</span><br><span class="line">#include &quot;art_method-inl.h&quot;</span><br><span class="line">#include &quot;class_linker.h&quot;</span><br><span class="line">#include &quot;jni_internal.h&quot;</span><br><span class="line">#include &quot;mirror/class-inl.h&quot;</span><br><span class="line">#include &quot;mirror/object-inl.h&quot;</span><br><span class="line">#include &quot;mirror/object_array-inl.h&quot;</span><br><span class="line">#include &quot;reflection.h&quot;</span><br><span class="line">#include &quot;scoped_fast_native_object_access-inl.h&quot;</span><br><span class="line">#include &quot;well_known_classes.h&quot;</span><br><span class="line"></span><br><span class="line">extern &quot;C&quot; void myfartInvoke(ArtMethod* artmethod);</span><br><span class="line"></span><br><span class="line">static void DexFile_dumpMethodCode(JNIEnv* env, jclass, jobject method)&#123;</span><br><span class="line"></span><br><span class="line">  ScopedFastNativeObjectAccess soa(env);</span><br><span class="line">  if (method != nullptr)&#123;</span><br><span class="line">    ArtMethod* artmethod = ArtMethod::FromReflectedMethod(soa, method);</span><br><span class="line">    myfartInvoke(artmethod);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// add end</span><br></pre></td></tr></table></figure>
+
+<p>动态注册 dumpMethodCode 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static JNINativeMethod gMethods[] = &#123;</span><br><span class="line">    ...</span><br><span class="line">  NATIVE_METHOD(DexFile, setTrusted, &quot;(Ljava/lang/Object;)V&quot;),</span><br><span class="line">  NATIVE_METHOD(DexFile, dumpMethodCode, &quot;(Ljava/lang/Object;)V&quot;),</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在这里移植的时候遇到了一个问题，即 ScopedFastNativeObjectAccess 类的头文件名称改变了，后续通过如下方法找到。</p>
+<p>在 vscode 搜索类 ScopedFastNativeObjectAccess ，如下图：</p>
+<p><img src="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/2020-07-17-09-42-21.png" alt></p>
+<p>随便选择一个使用了该类的文件，查看头文件，最终发现 <code>native/scoped_fast_native_object_access-inl.h</code> 文件中定义了 ScopedFastNativeObjectAccess ，所以我们在自己的文件中添加该头文件即可。</p>
+<h1 id="添加-myfartInvoke-方法"><a href="#添加-myfartInvoke-方法" class="headerlink" title="添加 myfartInvoke 方法"></a>添加 myfartInvoke 方法</h1><p>在 <code>art/runtime/art_method.cc</code> 文件中添加 myfartInvoke 相关代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br></pre></td><td class="code"><pre><span class="line">// add start</span><br><span class="line">#include &lt;pthread.h&gt;</span><br><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">#include &quot;runtime.h&quot;</span><br><span class="line">#include &lt;android/log.h&gt;</span><br><span class="line">#include &lt;assert.h&gt;</span><br><span class="line">#include &lt;errno.h&gt;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">#include &lt;pthread.h&gt;</span><br><span class="line">#include &lt;stdarg.h&gt;</span><br><span class="line">#include &lt;stddef.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;sys/mman.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/uio.h&gt;</span><br><span class="line">#include &lt;sys/un.h&gt;</span><br><span class="line">#include &lt;time.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;sys/syscall.h&gt;</span><br><span class="line">#include &quot;dex/code_item_accessors-inl.h&quot;</span><br><span class="line">#define gettidv1() syscall(__NR_gettid)</span><br><span class="line">#define LOG_TAG &quot;CKCatUnPack&quot;</span><br><span class="line">#define ALOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">uint8_t* codeitem_end(const uint8_t** pData)&#123;</span><br><span class="line">  uint32_t num_of_list = DecodeUnsignedLeb128(pData);</span><br><span class="line"></span><br><span class="line">  for (; num_of_list &gt; 0; num_of_list--)&#123;</span><br><span class="line">    int32_t num_of_handlers = DecodeUnsignedLeb128(pData);</span><br><span class="line">    int num = num_of_handlers;</span><br><span class="line">    if (num_of_handlers &lt;= 0)&#123;</span><br><span class="line">      num = -num_of_handlers;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for (; num &gt; 0; num--)&#123;</span><br><span class="line">      DecodeUnsignedLeb128(pData);</span><br><span class="line">      DecodeUnsignedLeb128(pData);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (num_of_handlers &lt;= 0)&#123;</span><br><span class="line">      DecodeUnsignedLeb128(pData);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return (uint8_t*)(*pData);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extern &quot;C&quot; char* Base64EnCode(char* str, long strLen, long* outLen)&#123;</span><br><span class="line">  long len;</span><br><span class="line">  char* res;</span><br><span class="line">  int i, j;</span><br><span class="line">      const char *base64_table =</span><br><span class="line">        &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;;</span><br><span class="line">    if (strLen % 3 == 0)</span><br><span class="line">      len = strLen / 3 * 4;</span><br><span class="line">    else</span><br><span class="line">      len = (strLen / 3 + 1) * 4;</span><br><span class="line"></span><br><span class="line">    res = (char *) malloc(sizeof(char) * (len + 1));</span><br><span class="line">    res[len] = &apos;\0&apos;;</span><br><span class="line">    *outLen = len;</span><br><span class="line">    for (i = 0, j = 0; i &lt; len - 2; j += 3, i += 4) &#123;</span><br><span class="line">      res[i] = base64_table[str[j] &gt;&gt; 2];</span><br><span class="line">      res[i + 1] =</span><br><span class="line">          base64_table[(str[j] &amp; 0x3) &lt;&lt; 4 |</span><br><span class="line">           (str[j + 1] &gt;&gt; 4)];</span><br><span class="line">      res[i + 2] =</span><br><span class="line">          base64_table[(str[j + 1] &amp; 0xf) &lt;&lt; 2 |</span><br><span class="line">           (str[j + 2] &gt;&gt; 6)];</span><br><span class="line">      res[i + 3] = base64_table[str[j + 2] &amp; 0x3f];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    switch (strLen % 3) &#123;</span><br><span class="line">    case 1:</span><br><span class="line">      res[i - 2] = &apos;=&apos;;</span><br><span class="line">      res[i - 1] = &apos;=&apos;;</span><br><span class="line">      break;</span><br><span class="line">    case 2:</span><br><span class="line">      res[i - 1] = &apos;=&apos;;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extern &quot;C&quot; void dumpDexFileByExecute(ArtMethod* artmethod)</span><br><span class="line">SHARED_LOCKS_REQUIRED(Locks::mutator_lock_)&#123;</span><br><span class="line">  char* dexfilepath = (char*)malloc(sizeof(char) * 2000);</span><br><span class="line">  if (dexfilepath == nullptr)&#123;</span><br><span class="line">      LOG(INFO) &lt;&lt; &quot;ArtMethod::dumpDexFileByExecute,methodname:&quot;</span><br><span class="line">        &lt;&lt; artmethod-&gt;PrettyMethod(false).c_str() &lt;&lt; &quot;malloc 2000 byte failed&quot;;</span><br><span class="line">        return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  int fcmdline = -1;</span><br><span class="line">  char szCmdLine[64] = &#123; 0 &#125;;</span><br><span class="line">  char szProcName[256] = &#123; 0 &#125;;</span><br><span class="line">  int pid = getpid();</span><br><span class="line">  sprintf(szCmdLine, &quot;/proc/%d/cmdline&quot;, pid);</span><br><span class="line">  fcmdline = open(szCmdLine, O_RDONLY);</span><br><span class="line">  if(fcmdline &gt; 0)&#123;</span><br><span class="line">    int n = read(fcmdline, szProcName, 256);</span><br><span class="line">    if(n &gt; 0)</span><br><span class="line">      close(fcmdline);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (szProcName[0])&#123;</span><br><span class="line">      const DexFile* dexfile = artmethod-&gt;GetDexFile();</span><br><span class="line">      const uint8_t* begin = dexfile-&gt;Begin();</span><br><span class="line">      size_t size = dexfile-&gt;Size();</span><br><span class="line"></span><br><span class="line">      memset(dexfilepath, 0, 2000);</span><br><span class="line">      sprintf(dexfilepath, &quot;%s&quot;, &quot;/sdcard/fart&quot;);</span><br><span class="line">      mkdir(dexfilepath, 0777);</span><br><span class="line"></span><br><span class="line">      memset(dexfilepath, 0, 2000);</span><br><span class="line">      sprintf(dexfilepath, &quot;/sdcard/fart/%s&quot;, szProcName);</span><br><span class="line">      mkdir(dexfilepath, 0777);</span><br><span class="line"></span><br><span class="line">      memset(dexfilepath, 0, 2000);</span><br><span class="line">      sprintf(dexfilepath, &quot;/sdcard/fart/%s/%zu_dexfile_execute.dex&quot;, szProcName, size);</span><br><span class="line">      </span><br><span class="line">      int dexfilefp = open(dexfilepath, O_RDONLY);</span><br><span class="line">      if (dexfilefp &gt; 0)&#123;</span><br><span class="line">        close(dexfilefp);</span><br><span class="line">        dexfilefp = 0;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        dexfilefp = open(dexfilepath, O_CREAT | O_RDWR, 0644);</span><br><span class="line">        if (dexfilefp &gt; 0)&#123;</span><br><span class="line">          int n = write(dexfilefp, (void*)begin, size);</span><br><span class="line">          if(n &gt; 0)</span><br><span class="line">            fsync(dexfilefp);</span><br><span class="line">          close(dexfilefp);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (dexfilepath != nullptr)</span><br><span class="line">  &#123;</span><br><span class="line">    free(dexfilepath);</span><br><span class="line">    dexfilepath = nullptr;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extern &quot;C&quot; void dumpArtMethod(ArtMethod* artmethod)</span><br><span class="line">SHARED_LOCKS_REQUIRED(Locks::mutator_lock_) &#123;</span><br><span class="line"></span><br><span class="line">  char* dexfilepath = (char*)malloc(sizeof(char) * 2000);</span><br><span class="line">  if (dexfilepath == nullptr)&#123;</span><br><span class="line">    LOG(INFO) &lt;&lt;&quot;ArtMethod::dumpArtMethodinvoked,methodname:&quot;</span><br><span class="line">    &lt;&lt; artmethod-&gt;PrettyMethod(false).c_str() &lt;&lt; &quot;malloc 2000 byte failed&quot;;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  int fcmdline = -1;</span><br><span class="line">  char szCmdline[64] = &#123; 0 &#125;;</span><br><span class="line">  char szProcName[256] = &#123; 0 &#125;;</span><br><span class="line">  int pid = getpid();</span><br><span class="line">  sprintf(szCmdline, &quot;/proc/%d/cmdline&quot;, pid);</span><br><span class="line">  fcmdline = open(szCmdline, O_RDONLY);</span><br><span class="line">  if (fcmdline &gt; 0)&#123;</span><br><span class="line">    int n = read(fcmdline, szProcName, 256);</span><br><span class="line">    if(n &gt; 0)</span><br><span class="line">    close(fcmdline);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (szProcName[0])&#123;</span><br><span class="line">    const DexFile* dexfile = artmethod-&gt;GetDexFile();</span><br><span class="line">    const char* methodname = artmethod-&gt;PrettyMethod(false).c_str();</span><br><span class="line">    const uint8_t* begin = dexfile-&gt;Begin();</span><br><span class="line">    size_t size = dexfile-&gt;Size();</span><br><span class="line"></span><br><span class="line">    memset(dexfilepath, 0, 2000);</span><br><span class="line">    sprintf(dexfilepath, &quot;%s&quot;, &quot;/sdcard/fart&quot;);</span><br><span class="line">    mkdir(dexfilepath, 0777);</span><br><span class="line"></span><br><span class="line">    memset(dexfilepath, 0, 2000);</span><br><span class="line">    sprintf(dexfilepath, &quot;/sdcard/fart/%s&quot;, szProcName);</span><br><span class="line">    mkdir(dexfilepath, 0777);</span><br><span class="line"></span><br><span class="line">    memset(dexfilepath, 0, 2000);</span><br><span class="line">    sprintf(dexfilepath, &quot;/sdcard/fart/%s/%zu_dexfile_execute.dex&quot;, szProcName, size);</span><br><span class="line">    </span><br><span class="line">    int dexfilefp = open(dexfilepath, O_RDONLY);</span><br><span class="line">    if (dexfilefp &gt; 0) &#123;</span><br><span class="line">      close(dexfilefp);</span><br><span class="line">      dexfilefp = 0;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      dexfilefp = open(dexfilepath, O_CREAT | O_RDWR, 0644);</span><br><span class="line">      if (dexfilefp &gt; 0) &#123;</span><br><span class="line">        int n = write(dexfilefp, (void*)begin, size);</span><br><span class="line">        if(n &gt; 0)</span><br><span class="line">          fsync(dexfilefp);</span><br><span class="line">        close(dexfilefp);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    const StandardDexFile::CodeItem* code_item = (StandardDexFile::CodeItem*)artmethod-&gt;GetCodeItem();</span><br><span class="line">    if (LIKELY(code_item != nullptr)) &#123;</span><br><span class="line">      int code_item_len = 0;</span><br><span class="line">      uint8_t* item = (uint8_t*)code_item;</span><br><span class="line">      if (code_item-&gt;tries_size_ &gt; 0)&#123;</span><br><span class="line">        CodeItemInstructionAccessor accessor(*dexfile, code_item);</span><br><span class="line">        const uint8_t* handler_data = (const uint8_t*)DexFile::GetTryItems(accessor.end(), code_item-&gt;tries_size_);</span><br><span class="line">        uint8_t *tail = codeitem_end(&amp;handler_data);</span><br><span class="line">        code_item_len = (int)(tail - item);</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        code_item_len = 16 + code_item-&gt;insns_size_in_code_units_ * 2;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      memset(dexfilepath, 0, 2000);</span><br><span class="line">      // data 的长度</span><br><span class="line">      int size_int = (int)dexfile-&gt;Size();</span><br><span class="line">      uint32_t method_idx = artmethod-&gt;GetDexMethodIndexUnchecked();</span><br><span class="line">      sprintf(dexfilepath, &quot;/sdcard/fart/%s/%d_%ld.bin&quot;, szProcName, size_int, gettidv1());</span><br><span class="line"></span><br><span class="line">      int fp2 = open(dexfilepath, O_CREAT | O_APPEND | O_RDWR, 0644);</span><br><span class="line">      if (fp2 &gt; 0)&#123;</span><br><span class="line">        lseek(fp2, 0, SEEK_END);</span><br><span class="line">        memset(dexfilepath, 0, 2000);</span><br><span class="line">        int offset = (int)(item - begin);</span><br><span class="line">        sprintf(dexfilepath, &quot;&#123;name:%s,method_idx:%d,offset:%d,code_item_len:%d,ins:&quot;,</span><br><span class="line">          methodname, method_idx, offset, code_item_len);</span><br><span class="line"></span><br><span class="line">        int contentlength = 0;</span><br><span class="line">        while(dexfilepath[contentlength] != 0)</span><br><span class="line">          contentlength++;</span><br><span class="line"></span><br><span class="line">        int n = write(fp2, (void*)dexfilepath, contentlength);</span><br><span class="line">        if(n &gt; 0)</span><br><span class="line">          printf(&quot;&quot;);</span><br><span class="line">        long outlen = 0;</span><br><span class="line">        char* base64result = Base64EnCode((char*)item, (long)code_item_len, &amp;outlen);</span><br><span class="line">        n = write(fp2, base64result, outlen);</span><br><span class="line">        if(n &gt; 0)</span><br><span class="line">        n = write(fp2, &quot;&#125;;&quot;, 2);</span><br><span class="line">        if(n &gt; 0)</span><br><span class="line">        fsync(fp2);</span><br><span class="line">        close(fp2);</span><br><span class="line">        if (base64result != nullptr)&#123;</span><br><span class="line">          free(base64result);</span><br><span class="line">          base64result = nullptr;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (dexfilepath != nullptr)&#123;</span><br><span class="line">    free(dexfilepath);</span><br><span class="line">    dexfilepath = nullptr;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extern &quot;C&quot; void myfartInvoke(ArtMethod* artmethod)</span><br><span class="line"> SHARED_LOCKS_REQUIRED(Locks::mutator_lock_) &#123;</span><br><span class="line">  JValue* result = nullptr;</span><br><span class="line">  Thread* self = nullptr;</span><br><span class="line">  uint32_t tmp = 6;</span><br><span class="line">  uint32_t* args = &amp;tmp;</span><br><span class="line">  uint32_t args_size = 6;</span><br><span class="line">  artmethod-&gt;Invoke(self, args, args_size, result, &quot;Fart&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// add end</span><br><span class="line">void ArtMethod::Invoke(Thread* self, uint32_t* args, uint32_t args_size, JValue* result,</span><br><span class="line">                       const char* shorty) &#123;</span><br><span class="line">  // add start</span><br><span class="line">  if (self == nullptr)&#123;</span><br><span class="line">    dumpArtMethod(this);</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  // add end</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里需要注意的是 PrettyMethod 方法和 GetTryItems 方法的参数有所改变，需要进行以下修改，可以参考上面关于 ScopedFastNativeObjectAccess 类查找头文件的方式进行修改，这里则关注那两个方法的使用和传参，然后再构造出相应的参数即可。由于这里主要关注的时移植，所以一些细节先这么处理了，后续可以在与阅读相关源码进行进一步处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">const StandardDexFile::CodeItem* code_item = (StandardDexFile::CodeItem*)artmethod-&gt;GetCodeItem();</span><br><span class="line">   if (LIKELY(code_item != nullptr)) &#123;</span><br><span class="line">     int code_item_len = 0;</span><br><span class="line">     uint8_t* item = (uint8_t*)code_item;</span><br><span class="line">     if (code_item-&gt;tries_size_ &gt; 0)&#123;</span><br><span class="line">       CodeItemInstructionAccessor accessor(*dexfile, code_item);</span><br><span class="line">       const uint8_t* handler_data = (const uint8_t*)DexFile::GetTryItems(accessor.end(), code_item-&gt;tries_size_);</span><br><span class="line">       uint8_t *tail = codeitem_end(&amp;handler_data);</span><br><span class="line">       code_item_len = (int)(tail - item);</span><br><span class="line">     &#125; else &#123;</span><br><span class="line">       code_item_len = 16 + code_item-&gt;insns_size_in_code_units_ * 2;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/2020-07-17-09-58-41.png" alt></p>
+<p><img src="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/2020-07-17-09-59-56.png" alt></p>
+<p><img src="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/2020-07-17-10-01-51.png" alt></p>
+<h1 id="执行时-dumpDexFile"><a href="#执行时-dumpDexFile" class="headerlink" title="执行时 dumpDexFile"></a>执行时 dumpDexFile</h1><p>在 <code>/art/runtime/interpreter/interpreter.cc</code> 文件中的 Execute 方法中添加下列代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">extern &quot;C&quot; void dumpDexFileByExecute(ArtMethod* artmethod);</span><br><span class="line"></span><br><span class="line">static inline JValue Execute(</span><br><span class="line">    Thread* self,</span><br><span class="line">    const CodeItemDataAccessor&amp; accessor,</span><br><span class="line">    ShadowFrame&amp; shadow_frame,</span><br><span class="line">    JValue result_register,</span><br><span class="line">    bool stay_in_interpreter = false) REQUIRES_SHARED(Locks::mutator_lock_) &#123;</span><br><span class="line"></span><br><span class="line">  // add start</span><br><span class="line">  if (strstr(shadow_frame.GetMethod()-&gt;PrettyMethod(false).c_str(),&quot;&lt;clinit&gt;&quot;) != nullptr)</span><br><span class="line">  &#123;</span><br><span class="line">    dumpDexFileByExecute(shadow_frame.GetMethod());</span><br><span class="line">  &#125;</span><br><span class="line">  // add end</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此，整个 FART 的代码移植完成了，后续有时间再研究一下 libdexfile 相关代码。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91/" rel="tag"># Android系统编译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/20/%E4%BB%8EActivityThread-main%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90android%E5%BA%94%E7%94%A8%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/" rel="next" title="从ActivityThread.main开始分析android应用的启动过程">
+                <i class="fa fa-chevron-left"></i> 从ActivityThread.main开始分析android应用的启动过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#获取-cloassloader-执行主动调用"><span class="nav-number">1.</span> <span class="nav-text">获取 cloassloader 执行主动调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加-dumpMethodCode-方法"><span class="nav-number">2.</span> <span class="nav-text">添加 dumpMethodCode 方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加-myfartInvoke-方法"><span class="nav-number">3.</span> <span class="nav-text">添加 myfartInvoke 方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行时-dumpDexFile"><span class="nav-number">4.</span> <span class="nav-text">执行时 dumpDexFile</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/';
+          this.page.identifier = '2020/07/17/移植FART到Adnroid-9-0/';
+          this.page.title = '移植FART到Adnroid 9.0';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
