@@ -81,20 +81,20 @@
 
 
 
-<meta name="description" content="最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。  样本来源：https:&#x2F;&#x2F;blog.trendmicro.com&#x2F;trendlabs-security-intelligence&#x2F;dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks&#x2F;  分析字符串解密特点首先查看样">
+<meta name="description" content="最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。  样本来源：https:&#x2F;&#x2F;blog.trendmicro.com&#x2F;trendlabs-security-intelligence&#x2F;dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks&#x2F;  样本下载 分析字符串解密特点">
 <meta name="keywords" content="dex字符串解密">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dexsim插件-Geost">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;dexsim%E6%8F%92%E4%BB%B6-Geost&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。  样本来源：https:&#x2F;&#x2F;blog.trendmicro.com&#x2F;trendlabs-security-intelligence&#x2F;dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks&#x2F;  分析字符串解密特点首先查看样">
+<meta property="og:description" content="最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。  样本来源：https:&#x2F;&#x2F;blog.trendmicro.com&#x2F;trendlabs-security-intelligence&#x2F;dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks&#x2F;  样本下载 分析字符串解密特点">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;dexsim%E6%8F%92%E4%BB%B6-Geost&#x2F;2020-03-13-14-51-04.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;dexsim%E6%8F%92%E4%BB%B6-Geost&#x2F;2020-03-13-15-01-28.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;dexsim%E6%8F%92%E4%BB%B6-Geost&#x2F;2020-03-13-15-03-56.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;dexsim%E6%8F%92%E4%BB%B6-Geost&#x2F;2020-03-13-15-05-33.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;dexsim%E6%8F%92%E4%BB%B6-Geost&#x2F;2020-03-13-15-12-09.png">
-<meta property="og:updated_time" content="2020-03-13T07:13:12.278Z">
+<meta property="og:updated_time" content="2020-12-02T11:23:13.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;13&#x2F;dexsim%E6%8F%92%E4%BB%B6-Geost&#x2F;2020-03-13-14-51-04.png">
 
@@ -388,6 +388,7 @@
 <blockquote>
 <p>样本来源：<a href="https://blog.trendmicro.com/trendlabs-security-intelligence/dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks/" target="_blank" rel="noopener">https://blog.trendmicro.com/trendlabs-security-intelligence/dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks/</a></p>
 </blockquote>
+<p><a href="dexsim插件-Geost/92394e82d9cf5de5cb9c7ac072e774496bd1c7e2944683837d30b188804c1810">样本下载</a></p>
 <h1 id="分析字符串解密特点"><a href="#分析字符串解密特点" class="headerlink" title="分析字符串解密特点"></a>分析字符串解密特点</h1><p>首先查看样本中解密字符串方法的特点</p>
 <p><img src="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-14-51-04.png" alt></p>
 <p>可以发现解密字符串函数为 <code>Lcom/rgamtgid/hnsolues/QLwdDnU;-&gt;UGanmSarY([B)[B</code> , 此代码的特征为：</p>
@@ -551,7 +552,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -562,7 +563,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -573,7 +574,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

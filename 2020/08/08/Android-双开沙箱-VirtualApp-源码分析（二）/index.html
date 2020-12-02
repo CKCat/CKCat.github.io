@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="VirtualApp," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="CKCat的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76150725     VA 初始化 VirtualCore.startup InvocationStubManager.injectInternal   Client App 的安装 VirtualCore.installPackage PackageParserEx.par">
+<meta name="keywords" content="VirtualApp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 双开沙箱 VirtualApp 源码分析（二）">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;08&#x2F;08&#x2F;Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76150725     VA 初始化 VirtualCore.startup InvocationStubManager.injectInternal   Client App 的安装 VirtualCore.installPackage PackageParserEx.par">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-13T06:32:50.907Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/08/08/Android-双开沙箱-VirtualApp-源码分析（二）/"/>
+
+
+
+
+
+  <title>Android 双开沙箱 VirtualApp 源码分析（二） | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 双开沙箱 VirtualApp 源码分析（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-08T15:18:04+08:00">
+                2020-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/08/08/Android-双开沙箱-VirtualApp-源码分析（二）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>转载 : <a href="https://blog.csdn.net/ganyao939543405/article/details/76150725" target="_blank" rel="noopener">https://blog.csdn.net/ganyao939543405/article/details/76150725</a></p>
+</blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#va-初始化">VA 初始化</a><ul>
+<li><a href="#virtualcorestartup">VirtualCore.startup</a></li>
+<li><a href="#invocationstubmanagerinjectinternal">InvocationStubManager.injectInternal</a></li>
+</ul>
+</li>
+<li><a href="#client-app-的安装">Client App 的安装</a><ul>
+<li><a href="#virtualcoreinstallpackage">VirtualCore.installPackage</a></li>
+<li><a href="#packageparserexparsepackage">PackageParserEx.parsePackage</a></li>
+<li><a href="#vpackage">VPackage</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+
+<h1 id="VA-初始化"><a href="#VA-初始化" class="headerlink" title="VA 初始化"></a>VA 初始化</h1><h2 id="VirtualCore-startup"><a href="#VirtualCore-startup" class="headerlink" title="VirtualCore.startup"></a>VirtualCore.startup</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public void startup(Context context) throws Throwable &#123;</span><br><span class="line">    if (!isStartUp) &#123;</span><br><span class="line">        // 确保 MainThread</span><br><span class="line">        if (Looper.myLooper() != Looper.getMainLooper()) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;VirtualCore.startup() must called in main thread.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        VASettings.STUB_CP_AUTHORITY = context.getPackageName() + &quot;.&quot; + VASettings.STUB_DEF_AUTHORITY;</span><br><span class="line">        ServiceManagerNative.SERVICE_CP_AUTH = context.getPackageName() + &quot;.&quot; + ServiceManagerNative.SERVICE_DEF_AUTH;</span><br><span class="line">        this.context = context;</span><br><span class="line">        // 获取 ActivityThread 实例</span><br><span class="line">        mainThread = ActivityThread.currentActivityThread.call();</span><br><span class="line">        unHookPackageManager = context.getPackageManager();</span><br><span class="line">        hostPkgInfo = unHookPackageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_PROVIDERS);</span><br><span class="line">        detectProcessType();</span><br><span class="line">        // hook 系统类</span><br><span class="line">        InvocationStubManager invocationStubManager = InvocationStubManager.getInstance();</span><br><span class="line">        invocationStubManager.init();</span><br><span class="line">        invocationStubManager.injectAll();</span><br><span class="line">        // 修复权限管理</span><br><span class="line">        ContextFixer.fixContext(context);</span><br><span class="line">        isStartUp = true;</span><br><span class="line">        if (initLock != null) &#123;</span><br><span class="line">            initLock.open();</span><br><span class="line">            initLock = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>整个 <code>VA</code> 会运行在四种进程, 分别是前面提到的 <code>VAService</code> 进程、<code>Client App</code> 进程、 <code>VA</code> 自身的 App 主进程、子进程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * Process type</span><br><span class="line">    */</span><br><span class="line">private enum ProcessType &#123;</span><br><span class="line">    /**</span><br><span class="line">        * Server process</span><br><span class="line">        */</span><br><span class="line">    Server,</span><br><span class="line">    /**</span><br><span class="line">        * Virtual app process</span><br><span class="line">        */</span><br><span class="line">    VAppClient,</span><br><span class="line">    /**</span><br><span class="line">        * Main process</span><br><span class="line">        */</span><br><span class="line">    Main,</span><br><span class="line">    /**</span><br><span class="line">        * Child process</span><br><span class="line">        */</span><br><span class="line">    CHILD</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的话， <code>Application</code> 就会被初始化多次，所以要在初始化的时候根据进程类型有选择的做对应的初始化工作。</p>
+<h2 id="InvocationStubManager-injectInternal"><a href="#InvocationStubManager-injectInternal" class="headerlink" title="InvocationStubManager.injectInternal"></a>InvocationStubManager.injectInternal</h2><p>主要完成对 <code>Java</code> 层 <code>framework</code> 的 <code>Hook</code> ，将其定位到 <code>VA</code> 伪造 <code>VA framework</code> 上去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">private void injectInternal() throws Throwable &#123;</span><br><span class="line">    // VA 自身的 App 进程不需要 Hook</span><br><span class="line">    if (VirtualCore.get().isMainProcess()) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // VAService 需要 Hook AMS 和 PMS</span><br><span class="line">    if (VirtualCore.get().isServerProcess()) &#123;</span><br><span class="line">        addInjector(new ActivityManagerStub());</span><br><span class="line">        addInjector(new PackageManagerStub());</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // Client APP 需要 Hook 整个 framework，来使其调用到 VA framework</span><br><span class="line">    if (VirtualCore.get().isVAppProcess()) &#123;</span><br><span class="line">        addInjector(new LibCoreStub());</span><br><span class="line">        addInjector(new ActivityManagerStub());</span><br><span class="line">        addInjector(new PackageManagerStub());</span><br><span class="line">        addInjector(HCallbackStub.getDefault());</span><br><span class="line">        addInjector(new ISmsStub());</span><br><span class="line">        addInjector(new ISubStub());</span><br><span class="line">        addInjector(new DropBoxManagerStub());</span><br><span class="line">        addInjector(new NotificationManagerStub());</span><br><span class="line">        addInjector(new LocationManagerStub());</span><br><span class="line">        addInjector(new WindowManagerStub());</span><br><span class="line">        addInjector(new ClipBoardStub());</span><br><span class="line">        addInjector(new MountServiceStub());</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p><code>VA</code> 初始化主要就是这些。</p>
+<h1 id="Client-App-的安装"><a href="#Client-App-的安装" class="headerlink" title="Client App 的安装"></a>Client App 的安装</h1><h2 id="VirtualCore-installPackage"><a href="#VirtualCore-installPackage" class="headerlink" title="VirtualCore.installPackage"></a>VirtualCore.installPackage</h2><p>首先调用远程 <code>VAService</code> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public InstallResult installPackage(String apkPath, int flags) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        // 调用远程 VAService</span><br><span class="line">        return getService().installPackage(apkPath, flags);</span><br><span class="line">    &#125; catch (RemoteException e) &#123;</span><br><span class="line">        return VirtualRuntime.crash(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终调用 <code>VAServcie</code> 中的 <code>VAppManagerService.installPackage()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line">// 安装 apk 先于 installPackageAsUser，主要目的是生成 VPackage 结构</span><br><span class="line">public synchronized InstallResult installPackage(String path, int flags, boolean notify) &#123;</span><br><span class="line">    long installTime = System.currentTimeMillis();</span><br><span class="line">    if (path == null) &#123;</span><br><span class="line">        return InstallResult.makeFailure(&quot;path = NULL&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    // 是否 OPT 优化(dex -&gt; binary)</span><br><span class="line">    boolean skipDexOpt = (flags &amp; InstallStrategy.SKIP_DEX_OPT) != 0;</span><br><span class="line">    // apk path</span><br><span class="line">    File packageFile = new File(path);</span><br><span class="line">    if (!packageFile.exists() || !packageFile.isFile()) &#123;</span><br><span class="line">        return InstallResult.makeFailure(&quot;Package File is not exist.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    VPackage pkg = null;</span><br><span class="line">    try &#123;</span><br><span class="line">        // 进入解析包结构，该结构是可序列化的，为了持久化在磁盘上</span><br><span class="line">        pkg = PackageParserEx.parsePackage(packageFile);</span><br><span class="line">    &#125; catch (Throwable e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    if (pkg == null || pkg.packageName == null) &#123;</span><br><span class="line">        return InstallResult.makeFailure(&quot;Unable to parse the package.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    InstallResult res = new InstallResult();</span><br><span class="line">    res.packageName = pkg.packageName;</span><br><span class="line">    // PackageCache holds all packages, try to check if we need to update.</span><br><span class="line">    VPackage existOne = PackageCacheManager.get(pkg.packageName);</span><br><span class="line">    PackageSetting existSetting = existOne != null ? (PackageSetting) existOne.mExtras : null;</span><br><span class="line">    if (existOne != null) &#123;</span><br><span class="line">        if ((flags &amp; InstallStrategy.IGNORE_NEW_VERSION) != 0) &#123;</span><br><span class="line">            res.isUpdate = true;</span><br><span class="line">            return res;</span><br><span class="line">        &#125;</span><br><span class="line">        if (!canUpdate(existOne, pkg, flags)) &#123;</span><br><span class="line">            return InstallResult.makeFailure(&quot;Not allowed to update the package.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        res.isUpdate = true;</span><br><span class="line">    &#125;</span><br><span class="line">    // 获得 app 安装文件夹</span><br><span class="line">    File appDir = VEnvironment.getDataAppPackageDirectory(pkg.packageName);</span><br><span class="line">    // so 文件夹</span><br><span class="line">    File libDir = new File(appDir, &quot;lib&quot;);</span><br><span class="line">    if (res.isUpdate) &#123;</span><br><span class="line">        FileUtils.deleteDir(libDir);</span><br><span class="line">        VEnvironment.getOdexFile(pkg.packageName).delete();</span><br><span class="line">        VActivityManagerService.get().killAppByPkg(pkg.packageName, VUserHandle.USER_ALL);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!libDir.exists() &amp;&amp; !libDir.mkdirs()) &#123;</span><br><span class="line">        return InstallResult.makeFailure(&quot;Unable to create lib dir.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 是否基于系统的 apk 加载，前提是安装过的 apk 并且 dependSystem 开关打开</span><br><span class="line">    boolean dependSystem = (flags &amp; InstallStrategy.DEPEND_SYSTEM_IF_EXIST) != 0</span><br><span class="line">            &amp;&amp; VirtualCore.get().isOutsideInstalled(pkg.packageName);</span><br><span class="line"></span><br><span class="line">    if (existSetting != null &amp;&amp; existSetting.dependSystem) &#123;</span><br><span class="line">        dependSystem = false;</span><br><span class="line">    &#125;</span><br><span class="line">    // 复制 so 到 sandbox lib</span><br><span class="line">    NativeLibraryHelperCompat.copyNativeBinaries(new File(path), libDir);</span><br><span class="line"></span><br><span class="line">    // 如果不基于系统，一些必要的拷贝工作</span><br><span class="line">    if (!dependSystem) &#123;</span><br><span class="line">        File privatePackageFile = new File(appDir, &quot;base.apk&quot;);</span><br><span class="line">        File parentFolder = privatePackageFile.getParentFile();</span><br><span class="line">        if (!parentFolder.exists() &amp;&amp; !parentFolder.mkdirs()) &#123;</span><br><span class="line">            VLog.w(TAG, &quot;Warning: unable to create folder : &quot; + privatePackageFile.getPath());</span><br><span class="line">        &#125; else if (privatePackageFile.exists() &amp;&amp; !privatePackageFile.delete()) &#123;</span><br><span class="line">            VLog.w(TAG, &quot;Warning: unable to delete file : &quot; + privatePackageFile.getPath());</span><br><span class="line">        &#125;</span><br><span class="line">        try &#123;</span><br><span class="line">            FileUtils.copyFile(packageFile, privatePackageFile);</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            privatePackageFile.delete();</span><br><span class="line">            return InstallResult.makeFailure(&quot;Unable to copy the package file.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        packageFile = privatePackageFile;</span><br><span class="line">    &#125;</span><br><span class="line">    if (existOne != null) &#123;</span><br><span class="line">        PackageCacheManager.remove(pkg.packageName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 给上可执行权限，5.0 之后在 SD 卡上执行 bin 需要可执行权限</span><br><span class="line">    chmodPackageDictionary(packageFile);</span><br><span class="line"></span><br><span class="line">    // PackageSetting 的一些配置，后面会序列化在磁盘上</span><br><span class="line">    PackageSetting ps;</span><br><span class="line">    if (existSetting != null) &#123;</span><br><span class="line">        ps = existSetting;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        ps = new PackageSetting();</span><br><span class="line">    &#125;</span><br><span class="line">    ps.skipDexOpt = skipDexOpt;</span><br><span class="line">    ps.dependSystem = dependSystem;</span><br><span class="line">    ps.apkPath = packageFile.getPath();</span><br><span class="line">    ps.libPath = libDir.getPath();</span><br><span class="line">    ps.packageName = pkg.packageName;</span><br><span class="line">    ps.appId = VUserHandle.getAppId(mUidSystem.getOrCreateUid(pkg));</span><br><span class="line">    if (res.isUpdate) &#123;</span><br><span class="line">        ps.lastUpdateTime = installTime;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        ps.firstInstallTime = installTime;</span><br><span class="line">        ps.lastUpdateTime = installTime;</span><br><span class="line">        for (int userId : VUserManagerService.get().getUserIds()) &#123;</span><br><span class="line">            boolean installed = userId == 0;</span><br><span class="line">            ps.setUserState(userId, false/*launched*/, false/*hidden*/, installed);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    //保存 VPackage Cache 到 Disk</span><br><span class="line">    PackageParserEx.savePackageCache(pkg);</span><br><span class="line">    //保存到 RamCache</span><br><span class="line">    PackageCacheManager.put(pkg, ps);</span><br><span class="line">    mPersistenceLayer.save();</span><br><span class="line">    BroadcastSystem.get().startApp(pkg);</span><br><span class="line">    //发送通知 安装完成</span><br><span class="line">    if (notify) &#123;</span><br><span class="line">        notifyAppInstalled(ps, -1);</span><br><span class="line">    &#125;</span><br><span class="line">    res.isSuccess = true;</span><br><span class="line">    return res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>APK 的安装主要完成以下几件事情:</p>
+<ol>
+<li>解析 <code>menifest</code> 拿到 <code>apk</code> 内部信息，包括组件信息，权限信息等。并将这些信息序列化到磁盘和内存中，以备打开时调用。</li>
+<li>准备 <code>App</code> 在 <code>VA</code> 沙箱环境中的私有空间，并且复制一些必要的 <code>apk</code> 和 <code>so libs</code>。</li>
+<li>最后通知前台安装完成。</li>
+</ol>
+<h2 id="PackageParserEx-parsePackage"><a href="#PackageParserEx-parsePackage" class="headerlink" title="PackageParserEx.parsePackage"></a>PackageParserEx.parsePackage</h2><p>解析 <code>apk menifest</code> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 解析包结构</span><br><span class="line">public static VPackage parsePackage(File packageFile) throws Throwable &#123;</span><br><span class="line">    PackageParser parser = PackageParserCompat.createParser(packageFile);</span><br><span class="line">    // 调用对应系统版本的 parsePackage 方法</span><br><span class="line">    PackageParser.Package p = PackageParserCompat.parsePackage(parser, packageFile, 0);</span><br><span class="line">    // 包含此信息代表其是 debug 签名或者其他签名</span><br><span class="line">    if (p.requestedPermissions.contains(&quot;android.permission.FAKE_PACKAGE_SIGNATURE&quot;)</span><br><span class="line">            &amp;&amp; p.mAppMetaData != null</span><br><span class="line">            &amp;&amp; p.mAppMetaData.containsKey(&quot;fake-signature&quot;)) &#123;</span><br><span class="line">        String sig = p.mAppMetaData.getString(&quot;fake-signature&quot;);</span><br><span class="line">        p.mSignatures = new Signature[]&#123;new Signature(sig)&#125;;</span><br><span class="line">        VLog.d(TAG, &quot;Using fake-signature feature on : &quot; + p.packageName);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 验证签名</span><br><span class="line">        PackageParserCompat.collectCertificates(parser, p, PackageParser.PARSE_IS_SYSTEM);</span><br><span class="line">    &#125;</span><br><span class="line">    // 转换成可以序列化在磁盘上的 Cache</span><br><span class="line">    return buildPackageCache(p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里解析 <code>Menifest</code> 的方法其实是调用了 <code>framework</code> 隐藏方法 <code>android.content.pm.PackageParser.parsePackage</code> 来实现的，这个方法返回 <code>android.content.pm.Package</code> 结构，这个类型也是隐藏的，怎么办？可以从 <code>sdk</code> 中复制这个类到自己的项目中欺骗编译器。这就是上一章一开始提到的。</p>
+<p>这里还有一个问题，就是 <code>Package</code> 类是不可序列化的，换句话说就是不能直接保存在磁盘上，我们需要将其转换成可以序列化的 <code>VPackage</code> 类型，这就是 <code>buildPackageCache()</code> 的作用。</p>
+<h2 id="VPackage"><a href="#VPackage" class="headerlink" title="VPackage"></a>VPackage</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public class VPackage implements Parcelable &#123;</span><br><span class="line"></span><br><span class="line">    public static final Creator&lt;VPackage&gt; CREATOR = new Creator&lt;VPackage&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public VPackage createFromParcel(Parcel source) &#123;</span><br><span class="line">            return new VPackage(source);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public VPackage[] newArray(int size) &#123;</span><br><span class="line">            return new VPackage[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    public ArrayList&lt;ActivityComponent&gt; activities;</span><br><span class="line">    public ArrayList&lt;ActivityComponent&gt; receivers;</span><br><span class="line">    public ArrayList&lt;ProviderComponent&gt; providers;</span><br><span class="line">    public ArrayList&lt;ServiceComponent&gt; services;</span><br><span class="line">    public ArrayList&lt;InstrumentationComponent&gt; instrumentation;</span><br><span class="line">    public ArrayList&lt;PermissionComponent&gt; permissions;</span><br><span class="line">    public ArrayList&lt;PermissionGroupComponent&gt; permissionGroups;</span><br><span class="line">    public ArrayList&lt;String&gt; requestedPermissions;</span><br><span class="line">    public ArrayList&lt;String&gt; protectedBroadcasts;</span><br><span class="line">    public ApplicationInfo applicationInfo;</span><br><span class="line">    public Signature[] mSignatures;</span><br><span class="line">    public Bundle mAppMetaData;</span><br><span class="line">    public String packageName;</span><br><span class="line">    public int mPreferredOrder;</span><br><span class="line">    public String mVersionName;</span><br><span class="line">    public String mSharedUserId;</span><br><span class="line">    public ArrayList&lt;String&gt; usesLibraries;</span><br><span class="line">    public int mVersionCode;</span><br><span class="line">    public int mSharedUserLabel;</span><br><span class="line">    // Applications hardware preferences</span><br><span class="line">    public ArrayList&lt;ConfigurationInfo&gt; configPreferences = null;</span><br><span class="line">    // Applications requested features</span><br><span class="line">    public ArrayList&lt;FeatureInfo&gt; reqFeatures = null;</span><br><span class="line">    public Object mExtras;</span><br><span class="line"></span><br><span class="line">    public VPackage() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>VPackage</code> 几乎保存了 <code>apk</code> 中所有的关键信息，尤其是组件的数据结构会在 <code>app</code> 在 <code>VA</code> 中运行的时候给 <code>VAMS</code> 、 <code>VPMS</code> 这些 <code>VAService</code> 提供 <code>apk</code> 的组件信息。</p>
+<p>关于是否 <code>dependSystem</code> 和 <code>isInstallOutside</code> ，这个有关 <code>apk</code> 的动态加载，如果 <code>dependSysytem</code> 并且 <code>apk</code> 已经在外部环境安装了，那么 <code>VA</code> 会调用系统提供的 <code>API</code> 就可以动态加载 <code>APK</code> 。反之 <code>VA</code> 需要做一些必要的复制工作然后再费劲的去加载 <code>APK</code> 。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/VirtualApp/" rel="tag"># VirtualApp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/06/awesome-adb/" rel="next" title="awesome-adb">
+                <i class="fa fa-chevron-left"></i> awesome-adb
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89App-%E5%90%AF%E5%8A%A8/" rel="prev" title="Android 双开沙箱 VirtualApp 源码分析（三）App 启动">
+                Android 双开沙箱 VirtualApp 源码分析（三）App 启动 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VA-初始化"><span class="nav-number">1.</span> <span class="nav-text">VA 初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#VirtualCore-startup"><span class="nav-number">1.1.</span> <span class="nav-text">VirtualCore.startup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InvocationStubManager-injectInternal"><span class="nav-number">1.2.</span> <span class="nav-text">InvocationStubManager.injectInternal</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Client-App-的安装"><span class="nav-number">2.</span> <span class="nav-text">Client App 的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#VirtualCore-installPackage"><span class="nav-number">2.1.</span> <span class="nav-text">VirtualCore.installPackage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PackageParserEx-parsePackage"><span class="nav-number">2.2.</span> <span class="nav-text">PackageParserEx.parsePackage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VPackage"><span class="nav-number">2.3.</span> <span class="nav-text">VPackage</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/';
+          this.page.identifier = '2020/08/08/Android-双开沙箱-VirtualApp-源码分析（二）/';
+          this.page.title = 'Android 双开沙箱 VirtualApp 源码分析（二）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
