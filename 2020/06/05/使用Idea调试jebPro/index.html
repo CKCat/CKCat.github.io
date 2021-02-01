@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="调试jar包," />
+  <meta name="keywords" content="JEB," />
 
 
 
@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="参考:  http:&#x2F;&#x2F;scz.617.cn:8&#x2F;misc&#x2F;202006051232.txt   https:&#x2F;&#x2F;www.ms509.com&#x2F;2020&#x2F;03&#x2F;19&#x2F;Java-Debug&#x2F;     1. 前期准备 2. 开始调试    1. 前期准备使用 Idea 新建一个空 java 工程。  把待调试的jar包加入到工程的依赖包中：右键点击工程名，选择 Open Module Setteings">
-<meta name="keywords" content="调试jar包">
+<meta name="description" content="参考:  http:&#x2F;&#x2F;scz.617.cn:8&#x2F;misc&#x2F;202006051232.txt   https:&#x2F;&#x2F;www.ms509.com&#x2F;2020&#x2F;03&#x2F;19&#x2F;Java-Debug&#x2F;     前期准备 开始调试    1. 前期准备使用 Idea 新建一个空 java 工程。  把待调试的jar包加入到工程的依赖包中：右键点击工程名，选择 Open Module Setteings 。  然后">
+<meta name="keywords" content="JEB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Idea调试jebPro">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="参考:  http:&#x2F;&#x2F;scz.617.cn:8&#x2F;misc&#x2F;202006051232.txt   https:&#x2F;&#x2F;www.ms509.com&#x2F;2020&#x2F;03&#x2F;19&#x2F;Java-Debug&#x2F;     1. 前期准备 2. 开始调试    1. 前期准备使用 Idea 新建一个空 java 工程。  把待调试的jar包加入到工程的依赖包中：右键点击工程名，选择 Open Module Setteings">
+<meta property="og:description" content="参考:  http:&#x2F;&#x2F;scz.617.cn:8&#x2F;misc&#x2F;202006051232.txt   https:&#x2F;&#x2F;www.ms509.com&#x2F;2020&#x2F;03&#x2F;19&#x2F;Java-Debug&#x2F;     前期准备 开始调试    1. 前期准备使用 Idea 新建一个空 java 工程。  把待调试的jar包加入到工程的依赖包中：右键点击工程名，选择 Open Module Setteings 。  然后">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro&#x2F;2020-06-05-17-56-40.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro&#x2F;2020-06-05-17-58-34.png">
@@ -95,7 +95,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro&#x2F;2020-06-05-18-04-33.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro&#x2F;2020-06-05-18-08-23.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro&#x2F;2020-06-05-18-10-17.png">
-<meta property="og:updated_time" content="2020-06-07T03:27:56.978Z">
+<meta property="og:updated_time" content="2021-01-28T10:14:37.501Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;06&#x2F;05&#x2F;%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro&#x2F;2020-06-05-17-56-40.png">
 
@@ -395,8 +395,8 @@
 <!-- TOC -->
 
 <ul>
-<li><a href="#1-前期准备">1. 前期准备</a></li>
-<li><a href="#2-开始调试">2. 开始调试</a></li>
+<li><a href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87">前期准备</a></li>
+<li><a href="#%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95">开始调试</a></li>
 </ul>
 <!-- /TOC -->
 
@@ -434,7 +434,7 @@ Module Setteings</code> 。</p>
       
         <div class="post-tags">
           
-            <a href="/tags/%E8%B0%83%E8%AF%95jar%E5%8C%85/" rel="tag"># 调试jar包</a>
+            <a href="/tags/JEB/" rel="tag"># JEB</a>
           
         </div>
       
@@ -550,7 +550,7 @@ Module Setteings</code> 。</p>
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -650,7 +650,7 @@ Module Setteings</code> 。</p>
       <div class="footer-inner">
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

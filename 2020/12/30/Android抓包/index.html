@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="逆向," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="CKCat的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="使用 Charles 抓包 PC端共享无线网络，使用 ipconfig 命令查看 ip 地址：    手机端设置代理    抓包工具设置代理    安装证书  手机端访问 chls.pro&#x2F;ssl 下载证书并安装。其中可以通过 Magisk 插件 move Certificates 将证书从用户证书移动到系统证书。后续即可进行抓包了。  brup 配置好代理后，下载证书地址 http:&#x2F;&#x2F;burp">
+<meta name="keywords" content="逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android抓包">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="使用 Charles 抓包 PC端共享无线网络，使用 ipconfig 命令查看 ip 地址：    手机端设置代理    抓包工具设置代理    安装证书  手机端访问 chls.pro&#x2F;ssl 下载证书并安装。其中可以通过 Magisk 插件 move Certificates 将证书从用户证书移动到系统证书。后续即可进行抓包了。  brup 配置好代理后，下载证书地址 http:&#x2F;&#x2F;burp">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-16-09-26.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-16-10-42.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-16-12-38.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-16-52-51.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-16-55-15.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-16-57-27.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-17-01-17.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-17-01-48.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-17-09-53.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-17-16-04.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-17-18-46.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-17-21-25.png">
+<meta property="og:updated_time" content="2020-12-30T09:35:22.042Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;12&#x2F;30&#x2F;Android%E6%8A%93%E5%8C%85&#x2F;2020-12-30-16-09-26.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2020/12/30/Android抓包/"/>
+
+
+
+
+
+  <title>Android抓包 | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android抓包</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-30T14:53:08+08:00">
+                2020-12-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/12/30/Android%E6%8A%93%E5%8C%85/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/12/30/Android抓包/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="使用-Charles-抓包"><a href="#使用-Charles-抓包" class="headerlink" title="使用 Charles 抓包"></a>使用 Charles 抓包</h1><ol>
+<li>PC端共享无线网络，使用 ipconfig 命令查看 ip 地址：</li>
+</ol>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-09-26.png" alt></p>
+<ol start="2">
+<li>手机端设置代理</li>
+</ol>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-10-42.png" alt></p>
+<ol start="3">
+<li>抓包工具设置代理</li>
+</ol>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-12-38.png" alt></p>
+<ol start="4">
+<li>安装证书</li>
+</ol>
+<p>手机端访问 chls.pro/ssl 下载证书并安装。其中可以通过 Magisk 插件 move Certificates 将证书从用户证书移动到系统证书。后续即可进行抓包了。</p>
+<blockquote>
+<p>brup 配置好代理后，下载证书地址 <a href="http://burp" target="_blank" rel="noopener">http://burp</a> 。</p>
+</blockquote>
+<h1 id="VPN-配合-Charles-抓包"><a href="#VPN-配合-Charles-抓包" class="headerlink" title="VPN 配合 Charles 抓包"></a>VPN 配合 Charles 抓包</h1><h2 id="Charles-设置"><a href="#Charles-设置" class="headerlink" title="Charles 设置"></a>Charles 设置</h2><p>首先要把 Charles 当做一个 SOCKS5 的代理服务器，所以要先设置 SOCKS5 代理服务器。打开 Proxy 设置选项，开启 SOCKS 服务器，我这里开启的端口为 8889 ，也可以随意填写。</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-52-51.png" alt></p>
+<p>下面介绍 3 款手机端的 VPN 应用。</p>
+<h2 id="Postern-设置"><a href="#Postern-设置" class="headerlink" title="Postern 设置"></a>Postern 设置</h2><p>在手机上打开 <a href="Android抓包/Postern-3.1.2.apk">Postern</a> 应用，设置 SOCKS5 代理服务器的地址。</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-55-15.png" alt></p>
+<p>然后设置 VPN 规则，我这里设置为所有地址都需要走 SOCKS5 代理服务器。</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-57-27.png" alt></p>
+<p>然后开启 VPN 即可使用 Charles 抓包。</p>
+<h2 id="SocksDroid-设置"><a href="#SocksDroid-设置" class="headerlink" title="SocksDroid 设置"></a>SocksDroid 设置</h2><p>这里还有另一款 VPN 工具 <a href="Android抓包/SocksDroid.apk">SocksDroid</a> 可以使用，这里也顺便说一下其配置方法，除了设置服务器 IP 和端口外，还需要设置一下 DNS 服务器，以适应国内网络环境。</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-01-17.png" alt><br><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-01-48.png" alt></p>
+<h2 id="drony-设置"><a href="#drony-设置" class="headerlink" title="drony 设置"></a>drony 设置</h2><p>最后再介绍一款 VPN 应用 <a href="(Android抓包/drony_1.3.155.apk)">drony</a> ，通过以下方法进行设置。<br>进入设置页面，选中无线网络，然后已连接的无线网络，设置设置服务器 IP 和端口，并将代理类型设置为 socket5 。</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-09-53.png" alt></p>
+<p>如果针对某一个应用进行抓包，可以通过规则设置，界面如下图</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-16-04.png" alt></p>
+<ol>
+<li>选择 Local proxy chain 。</li>
+<li>Application 选择需要强制代理的 APP 。</li>
+<li>Hostname 及 Port 不填 表示所有的都会被强制代理。</li>
+</ol>
+<p>设置好需要抓包的应用后直接保存即可。然后返回日志界面，开启代理即可。</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-18-46.png" alt></p>
+<h2 id="HTTP-HTTPS转发到Burp-Suite"><a href="#HTTP-HTTPS转发到Burp-Suite" class="headerlink" title="HTTP/HTTPS转发到Burp Suite"></a>HTTP/HTTPS转发到Burp Suite</h2><p>在 Charles 中，打开 External Proxy Settings 选项卡，选择把数据转到 Burp Suite 的代理服务器中。</p>
+<p><img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-21-25.png" alt></p>
+<p>参考连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://mp.weixin.qq.com/s/ahPbBSfkkBsv4oy265rI2Q</span><br><span class="line">https://www.cnblogs.com/lulianqi/p/11380794.html</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/29/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/" rel="next" title="学习资源">
+                <i class="fa fa-chevron-left"></i> 学习资源
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/28/JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="prev" title="JebAndroidSigPlugin使用记录">
+                JebAndroidSigPlugin使用记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-Charles-抓包"><span class="nav-number">1.</span> <span class="nav-text">使用 Charles 抓包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VPN-配合-Charles-抓包"><span class="nav-number">2.</span> <span class="nav-text">VPN 配合 Charles 抓包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Charles-设置"><span class="nav-number">2.1.</span> <span class="nav-text">Charles 设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Postern-设置"><span class="nav-number">2.2.</span> <span class="nav-text">Postern 设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SocksDroid-设置"><span class="nav-number">2.3.</span> <span class="nav-text">SocksDroid 设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drony-设置"><span class="nav-number">2.4.</span> <span class="nav-text">drony 设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-HTTPS转发到Burp-Suite"><span class="nav-number">2.5.</span> <span class="nav-text">HTTP/HTTPS转发到Burp Suite</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/';
+          this.page.identifier = '2020/12/30/Android抓包/';
+          this.page.title = 'Android抓包';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
