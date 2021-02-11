@@ -97,7 +97,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;03&#x2F;WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B&#x2F;2021-02-03-16-12-17.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;03&#x2F;WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B&#x2F;2021-02-03-16-19-37.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;03&#x2F;WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B&#x2F;%E6%95%88%E6%9E%9C%E5%9B%BE.gif">
-<meta property="og:updated_time" content="2021-02-03T09:12:41.517Z">
+<meta property="og:updated_time" content="2021-02-11T07:41:36.078Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;03&#x2F;WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B&#x2F;2021-02-03-15-29-46.png">
 
@@ -412,7 +412,7 @@
 <p>对应的 <a href="WhatsAppWrom分析过程/huawei.apk.jdb2">JEB 数据库</a></p>
 <p>不过最终根据 APK 还原的代码还是有点问题，最终发现好像时导库的有问题。最后通过<a href="https://gist.github.com/tajchert/53f728fadae7e3e9d77a#file-wearableextendersender" target="_blank" rel="noopener">链接</a>中的代码搞定了。</p>
 <p><img src="/2021/02/03/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/%E6%95%88%E6%9E%9C%E5%9B%BE.gif" alt></p>
-<p><a href="https://github.com/CKCat/Blog/WhatsAppWrom分析过程/WhatsAppWrom" target="_blank" rel="noopener">相关代码</a></p>
+<p><a href="https://github.com/CKCat/Blog/tree/master/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/WhatsAppWrom" target="_blank" rel="noopener">相关代码</a></p>
 <p>不过今天搜索 <code>&quot;android.car.EXTENSIONS&quot;</code> 关键字，突然发现了<a href="https://stackoverflow.com/questions/46788600/automatic-reply-for-whatsapp-messages-approach" target="_blank" rel="noopener">另一篇文章</a>，该文章的实现代码和 WhatsAppWrom 相似度非常高，WhatsAppWrom 开发者参考了相关代码。</p>
 <p>该文章回复帖子中提到了 Android 7 以上的版本利用通知栏直接回复的功能实现自动回复，也附上了相关<a href="https://stackoverflow.com/questions/40369508/how-to-utilize-android-nougats-direct-reply-feature-with-a-notificationlistener?rq=1" target="_blank" rel="noopener">文章</a>。其实最初分析这个样本的时候，也以为是利用了  Android 7 的直接回复功能，并在这里耗了一段时间，如果早点看到这一篇文章，或许分析起来就更轻松了吧。</p>
 <p>简单的来个总结吧：</p>
