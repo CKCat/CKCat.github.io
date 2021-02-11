@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="1. Android studio 出现 grant current user access to &#x2F;dev&#x2F;kvm 以及&#x2F;dev&#x2F;kvm devices: permission denies 2. Android studio 创建快捷方式 3. Ubuntu标题栏实时显示上下行网速、CPU及内存使用率 4. 设置深度截图快捷方式 5. 配置环境变量 5.1. 路径写法 5.2. 临时设置">
+<meta name="description" content="Android studio 出现 grant current user access to &#x2F;dev&#x2F;kvm 以及&#x2F;dev&#x2F;kvm devices: permission denies Android studio 创建快捷方式 Ubuntu标题栏实时显示上下行网速、CPU及内存使用率 设置深度截图快捷方式 配置环境变量 路径写法 临时设置 当前用户的全局设置 所有用户的全局设置   ad">
 <meta name="keywords" content="Ubuntu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux使用记录">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="1. Android studio 出现 grant current user access to &#x2F;dev&#x2F;kvm 以及&#x2F;dev&#x2F;kvm devices: permission denies 2. Android studio 创建快捷方式 3. Ubuntu标题栏实时显示上下行网速、CPU及内存使用率 4. 设置深度截图快捷方式 5. 配置环境变量 5.1. 路径写法 5.2. 临时设置">
+<meta property="og:description" content="Android studio 出现 grant current user access to &#x2F;dev&#x2F;kvm 以及&#x2F;dev&#x2F;kvm devices: permission denies Android studio 创建快捷方式 Ubuntu标题栏实时显示上下行网速、CPU及内存使用率 设置深度截图快捷方式 配置环境变量 路径写法 临时设置 当前用户的全局设置 所有用户的全局设置   ad">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;2019-11-03-14-57-30.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;2019-11-03-15-00-29.png">
@@ -95,7 +95,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;2019-11-03-15-48-05.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;2019-11-03-15-49-11.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;2019-12-15-20-41-37.png">
-<meta property="og:updated_time" content="2019-12-20T08:21:44.889Z">
+<meta property="og:updated_time" content="2021-02-11T00:54:47.230Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&#x2F;2019-11-03-14-57-30.png">
 
@@ -388,39 +388,39 @@
         <!-- TOC -->
 
 <ul>
-<li><a href="#1-android-studio-出现-grant-current-user-access-to-devkvm-以及devkvm-devices-permission-denies">1. Android studio 出现 grant current user access to /dev/kvm 以及/dev/kvm devices: permission denies</a></li>
-<li><a href="#2-android-studio-创建快捷方式">2. Android studio 创建快捷方式</a></li>
-<li><a href="#3-ubuntu标题栏实时显示上下行网速cpu及内存使用率">3. Ubuntu标题栏实时显示上下行网速、CPU及内存使用率</a></li>
-<li><a href="#4-设置深度截图快捷方式">4. 设置深度截图快捷方式</a></li>
-<li><a href="#5-配置环境变量">5. 配置环境变量</a><ul>
-<li><a href="#51-路径写法">5.1. 路径写法</a></li>
-<li><a href="#52-临时设置">5.2. 临时设置</a></li>
-<li><a href="#53-当前用户的全局设置">5.3. 当前用户的全局设置</a></li>
-<li><a href="#54-所有用户的全局设置">5.4. 所有用户的全局设置</a></li>
+<li><a href="#android-studio-%E5%87%BA%E7%8E%B0-grant-current-user-access-to-devkvm-%E4%BB%A5%E5%8F%8Adevkvm-devices-permission-denies">Android studio 出现 grant current user access to /dev/kvm 以及/dev/kvm devices: permission denies</a></li>
+<li><a href="#android-studio-%E5%88%9B%E5%BB%BA%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F">Android studio 创建快捷方式</a></li>
+<li><a href="#ubuntu%E6%A0%87%E9%A2%98%E6%A0%8F%E5%AE%9E%E6%97%B6%E6%98%BE%E7%A4%BA%E4%B8%8A%E4%B8%8B%E8%A1%8C%E7%BD%91%E9%80%9Fcpu%E5%8F%8A%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E7%8E%87">Ubuntu标题栏实时显示上下行网速、CPU及内存使用率</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E6%B7%B1%E5%BA%A6%E6%88%AA%E5%9B%BE%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F">设置深度截图快捷方式</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">配置环境变量</a><ul>
+<li><a href="#%E8%B7%AF%E5%BE%84%E5%86%99%E6%B3%95">路径写法</a></li>
+<li><a href="#%E4%B8%B4%E6%97%B6%E8%AE%BE%E7%BD%AE">临时设置</a></li>
+<li><a href="#%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E7%9A%84%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE">当前用户的全局设置</a></li>
+<li><a href="#%E6%89%80%E6%9C%89%E7%94%A8%E6%88%B7%E7%9A%84%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE">所有用户的全局设置</a></li>
 </ul>
 </li>
-<li><a href="#6-adb-devices-报错-no-permissions-user-in-plugdev-group-are-your-udev-rules-wrong-see-httpdeveloperandroidcomtoolsdevicehtml">6. adb devices 报错 no permissions (user in plugdev group; are your udev rules wrong?); see [http://developer.android.com/tools/device.html]</a><ul>
-<li><a href="#61-lsusb-找到你手机的usb地址">6.1. lsusb 找到你手机的usb地址</a></li>
-<li><a href="#62-修改etcudevrulesd51-androidrules文件">6.2. 修改/etc/udev/rules.d/51-android.rules文件</a></li>
-<li><a href="#63-执行下列命令">6.3. 执行下列命令</a></li>
+<li><a href="#adb-devices-%E6%8A%A5%E9%94%99-no-permissions-user-in-plugdev-group-are-your-udev-rules-wrong-see-httpdeveloperandroidcomtoolsdevicehtml">adb devices 报错 no permissions user in plugdev group; are your udev rules wrong?; see [http://developer.android.com/tools/device.html]</a><ul>
+<li><a href="#lsusb-%E6%89%BE%E5%88%B0%E4%BD%A0%E6%89%8B%E6%9C%BA%E7%9A%84usb%E5%9C%B0%E5%9D%80">lsusb 找到你手机的usb地址</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9etcudevrulesd51-androidrules%E6%96%87%E4%BB%B6">修改/etc/udev/rules.d/51-android.rules文件</a></li>
+<li><a href="#%E6%89%A7%E8%A1%8C%E4%B8%8B%E5%88%97%E5%91%BD%E4%BB%A4">执行下列命令</a></li>
 </ul>
 </li>
-<li><a href="#7-vim普通用户保存文件时用sudo获取root权限">7. VIM普通用户保存文件时用sudo获取root权限</a></li>
-<li><a href="#8-安装nodejs">8. 安装nodejs</a></li>
-<li><a href="#9-ubuntu安装metasploit-framework">9. ubuntu安装Metasploit Framework</a><ul>
-<li><a href="#91-安装">9.1. 安装</a></li>
+<li><a href="#vim%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E4%BF%9D%E5%AD%98%E6%96%87%E4%BB%B6%E6%97%B6%E7%94%A8sudo%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90">VIM普通用户保存文件时用sudo获取root权限</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85nodejs">安装nodejs</a></li>
+<li><a href="#ubuntu%E5%AE%89%E8%A3%85metasploit-framework">ubuntu安装Metasploit Framework</a><ul>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
 </ul>
 </li>
-<li><a href="#10-解决-ubuntu-下-keepass2-中文显示为方块的问题">10. 解决 Ubuntu 下 KeePass2 中文显示为方块的问题</a><ul>
-<li><a href="#101-安装keepass2">10.1. 安装keepass2</a></li>
-<li><a href="#102-下载-keepass2-语言包">10.2. 下载 KeePass2 语言包</a></li>
-<li><a href="#103-修改启动脚本">10.3. 修改启动脚本</a></li>
-<li><a href="#104-修改系统字体设置">10.4. 修改系统字体设置</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B-keepass2-%E4%B8%AD%E6%96%87%E6%98%BE%E7%A4%BA%E4%B8%BA%E6%96%B9%E5%9D%97%E7%9A%84%E9%97%AE%E9%A2%98">解决 Ubuntu 下 KeePass2 中文显示为方块的问题</a><ul>
+<li><a href="#%E5%AE%89%E8%A3%85keepass2">安装keepass2</a></li>
+<li><a href="#%E4%B8%8B%E8%BD%BD-keepass2-%E8%AF%AD%E8%A8%80%E5%8C%85">下载 KeePass2 语言包</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC">修改启动脚本</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E7%B3%BB%E7%BB%9F%E5%AD%97%E4%BD%93%E8%AE%BE%E7%BD%AE">修改系统字体设置</a></li>
 </ul>
 </li>
-<li><a href="#11-ubuntu安装wireshark">11. Ubuntu安装wireshark</a></li>
-<li><a href="#12-安装-albert">12. 安装 Albert</a></li>
-<li><a href="#13-ubuntu中添加和删除源">13. ubuntu中添加和删除源</a></li>
+<li><a href="#ubuntu%E5%AE%89%E8%A3%85wireshark">Ubuntu安装wireshark</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-albert">安装 Albert</a></li>
+<li><a href="#ubuntu%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%92%8C%E5%88%A0%E9%99%A4%E6%BA%90">ubuntu中添加和删除源</a></li>
 </ul>
 <!-- /TOC -->
 
@@ -438,7 +438,7 @@
 </li>
 </ul>
 <h1 id="2-Android-studio-创建快捷方式"><a href="#2-Android-studio-创建快捷方式" class="headerlink" title="2. Android studio 创建快捷方式"></a>2. Android studio 创建快捷方式</h1><p>打开<code>/usr/share/applications</code>目录，使用<code>sudo vim AndroidStudio.desktop</code>创建AndroidStudio的快捷方式，加入以下内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">AndroidStudio[Desktop Entry]</span><br><span class="line">Name=Android Studio     #名称</span><br><span class="line">Comment=Android Dev     #注释</span><br><span class="line">StartupNotify=true</span><br><span class="line">Terminal=false</span><br><span class="line">Type=Application</span><br><span class="line">Icon=/home/ckcat/DevelopTools/android-studio/bin/studio.png     #设置图标</span><br><span class="line">Exec=/home/ckcat/DevelopTools/android-studio/bin/studio.sh %F   #设置启动方式</span><br><span class="line">Exec=/home/ckcat/DevelopTools/android-studio/bin/studio.sh %F</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[Desktop Entry]</span><br><span class="line">Name=Android Studio     #名称</span><br><span class="line">Comment=Android Dev     #注释</span><br><span class="line">StartupNotify=true</span><br><span class="line">Terminal=false</span><br><span class="line">Type=Application</span><br><span class="line">Icon=/home/ckcat/DevelopTools/android-studio/bin/studio.png     #设置图标</span><br><span class="line">Exec=/home/ckcat/DevelopTools/android-studio/bin/studio.sh %F   #设置启动方式</span><br></pre></td></tr></table></figure>
 <p>保存退出后，其图标将会出现在Applications中，将其复制到桌面即可创建桌面快捷方式。</p>
 <h1 id="3-Ubuntu标题栏实时显示上下行网速、CPU及内存使用率"><a href="#3-Ubuntu标题栏实时显示上下行网速、CPU及内存使用率" class="headerlink" title="3. Ubuntu标题栏实时显示上下行网速、CPU及内存使用率"></a>3. Ubuntu标题栏实时显示上下行网速、CPU及内存使用率</h1><p>安装indicator-sysmonitor：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:fossfreedom/indicator-sysmonitor</span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install indicator-sysmonitor</span><br></pre></td></tr></table></figure>
@@ -685,7 +685,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -707,7 +707,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

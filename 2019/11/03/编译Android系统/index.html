@@ -101,7 +101,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-07-15-48-06.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-12-26-16-26-31.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;2019-11-10-14-07-09.png">
-<meta property="og:updated_time" content="2020-12-23T02:52:08.212Z">
+<meta property="og:updated_time" content="2021-02-10T13:07:30.530Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F&#x2F;Screenshot&amp;#32;from&amp;#32;2019-11-05&amp;#32;22-52-59.png">
 
@@ -449,13 +449,9 @@
 <p>安装 <code>openjdk-8-jdk</code> :</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-安装编译所需要的包"><a href="#2-安装编译所需要的包" class="headerlink" title="2. 安装编译所需要的包"></a>2. 安装编译所需要的包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev g++-multilib </span><br><span class="line">sudo apt-get install -y git flex bison gperf build-essential libncurses5-dev:i386 </span><br><span class="line">sudo apt-get install tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 </span><br><span class="line">sudo apt-get install dpkg-dev libsdl1.2-dev libesd0-dev</span><br><span class="line">sudo apt-get install git-core gnupg flex bison gperf build-essential  </span><br><span class="line">sudo apt-get install zip curl zlib1g-dev gcc-multilib g++-multilib </span><br><span class="line">sudo apt-get install libc6-dev-i386 </span><br><span class="line">sudo apt-get install lib32ncurses5-dev x11proto-core-dev libx11-dev </span><br><span class="line">sudo apt-get install libgl1-mesa-dev libxml2-utils xsltproc unzip m4</span><br><span class="line">sudo apt-get install lib32z-dev ccache</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>libesd0-dev包安装不上的解决方法：<br>使用 <code>sudo vim /etc/apt/sources.list</code> 打开 <code>sources.list</code> 文件,在末尾添加下列内容：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http://kr.archive.ubuntu.com/ubuntu/ xenial main universe</span><br><span class="line">deb-src http://kr.archive.ubuntu.com/ubuntu/ xenial main universe</span><br></pre></td></tr></table></figure>
-<p>然后 <code>sudo apt update</code> ，最后安装 <code>sudo apt-get install dpkg-dev libsdl1.2-dev libesd0-dev</code> 。</p>
-<h2 id="3-下载驱动"><a href="#3-下载驱动" class="headerlink" title="3. 下载驱动"></a>3. 下载驱动</h2><p>根据手机型号和Android版本下载对应的驱动</p>
+<h2 id="2-安装编译所需要的包"><a href="#2-安装编译所需要的包" class="headerlink" title="2. 安装编译所需要的包"></a>2. 安装编译所需要的包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get -y install git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig</span><br></pre></td></tr></table></figure>
+<p>以上的依赖包在编译 <code>android-9.0.0_r36</code> 时测试没有问题，其中 <code>openjdk-8-jdk</code> 非必须。</p>
+<h2 id="3-下载驱动"><a href="#3-下载驱动" class="headerlink" title="3. 下载驱动"></a>3. 下载驱动</h2><p>根据手机型号和 Android 版本下载对应的驱动</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://developers.google.com/android/drivers</span><br></pre></td></tr></table></figure>
 <p>下载完成后解压到<code>aosp</code>目录，并执行对应的脚本,最终会产生一个<code>vendor</code>目录。<br><img src="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/Screenshot&#32;from&#32;2019-11-05&#32;22-52-59.png" alt></p>
 <h2 id="4-编译"><a href="#4-编译" class="headerlink" title="4. 编译"></a>4. 编译</h2><p>首先运行<code>source build/envsetup.sh</code>:</p>
@@ -663,7 +659,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -685,7 +681,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
