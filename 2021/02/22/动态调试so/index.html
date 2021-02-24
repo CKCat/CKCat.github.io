@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="CKCat的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="动态调试送给最好的TA常规方式1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。 2. 选择Android调试器，设置hostname和端口。 3. 开始调试 启动 android_server 。 端口转发 adb forward tcp:23946 tcp:23946 。 以调试模式启动对应的 Activaty ，adb shell am start -D -n com.sgz">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态调试so">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="动态调试送给最好的TA常规方式1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。 2. 选择Android调试器，设置hostname和端口。 3. 开始调试 启动 android_server 。 端口转发 adb forward tcp:23946 tcp:23946 。 以调试模式启动对应的 Activaty ，adb shell am start -D -n com.sgz">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-20-57-11.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-20-58-08.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-02-38.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-07-35.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-08-20.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-09-05.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-13-27.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-18-20.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-19-40.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-36-04.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-36-55.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-21-41-55.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-24-19-19-27.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-24-19-23-12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-24-19-23-20.png">
+<meta property="og:updated_time" content="2021-02-24T11:37:06.415Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-20-57-11.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2021/02/22/动态调试so/"/>
+
+
+
+
+
+  <title>动态调试so | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">动态调试so</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-22T20:54:30+08:00">
+                2021-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index">
+                    <span itemprop="name">Android逆向</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/02/22/动态调试so/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="动态调试送给最好的TA"><a href="#动态调试送给最好的TA" class="headerlink" title="动态调试送给最好的TA"></a>动态调试送给最好的TA</h1><h2 id="常规方式"><a href="#常规方式" class="headerlink" title="常规方式"></a>常规方式</h2><h3 id="1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"><a href="#1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。" class="headerlink" title="1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"></a>1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。</h3><p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-57-11.png" alt></p>
+<h3 id="2-选择Android调试器，设置hostname和端口。"><a href="#2-选择Android调试器，设置hostname和端口。" class="headerlink" title="2. 选择Android调试器，设置hostname和端口。"></a>2. 选择Android调试器，设置hostname和端口。</h3><p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-58-08.png" alt></p>
+<h3 id="3-开始调试"><a href="#3-开始调试" class="headerlink" title="3. 开始调试"></a>3. 开始调试</h3><ul>
+<li>启动 <code>android_server</code> 。</li>
+<li>端口转发 <code>adb forward tcp:23946 tcp:23946</code> 。</li>
+<li>以调试模式启动对应的 Activaty ，<code>adb shell am start -D -n com.sgzh.dt/com.androlua.Welcome</code> 。</li>
+</ul>
+<p>执行完以上操作完，使用 IDA 附加对应的 APP 。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-02-38.png" alt></p>
+<h3 id="4-jdb-连接"><a href="#4-jdb-连接" class="headerlink" title="4. jdb 连接"></a>4. jdb 连接</h3><p>打开 monitor ，查看APP的调试端口，使用jdb 命令连接 <code>jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700</code> 。</p>
+<p>此时 APP 将会运行起来，IDA 将会弹出下列界面，点击 same 就可以了。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-07-35.png" alt></p>
+<p>最终将会断在我们之前下断点的地方。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-08-20.png" alt></p>
+<h3 id="5-分析并-dump-lua-字节码"><a href="#5-分析并-dump-lua-字节码" class="headerlink" title="5. 分析并 dump lua 字节码"></a>5. 分析并 dump lua 字节码</h3><p>通过参考其他文章可知 luaL_loadbufferx 是关键解密函数，但是也需要我们要分析解密的具体地方。看到有 malloc 就很可疑。我们就需要重点关注这个地方。通过调试发现其申请的空间就是存放解密后的 lua 字节码。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-09-05.png" alt></p>
+<p>编写 dump 脚本，下面提供了 IDC 和 Python 脚本。</p>
+<p><code>dump.idc</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> i,fp;</span><br><span class="line">    fp = fopen(<span class="string">"d:\\init.lua"</span>,<span class="string">"wb"</span>);</span><br><span class="line">    <span class="keyword">auto</span> start = <span class="number">0xF18B7140</span>;</span><br><span class="line">    <span class="keyword">auto</span> <span class="built_in">size</span> = <span class="number">0x1A6</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="built_in">size</span>; i++)</span><br><span class="line">        fputc(Byte(start + i),fp); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>dump.py</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> idaapi</span><br><span class="line">start_address = <span class="number">0xF18B7140</span></span><br><span class="line">data_length = <span class="number">0x1A6</span></span><br><span class="line">data = idaapi.dbg_read_memory(start_address , </span><br><span class="line">data_length)</span><br><span class="line">fp = open(<span class="string">'d:\\dump1'</span>, <span class="string">'wb'</span>)</span><br><span class="line">fp.write(data)</span><br><span class="line">fp.close()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Dump OK"</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="将字节码转换为-lua-代码"><a href="#将字节码转换为-lua-代码" class="headerlink" title="将字节码转换为 lua 代码"></a>将字节码转换为 lua 代码</h3><p>在网上找到 <code>unluac_2015_06_13.jar</code> ，将 lua 节码转换为 lua 代码。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-13-27.png" alt></p>
+<h2 id="修改-so-方式"><a href="#修改-so-方式" class="headerlink" title="修改 so 方式"></a>修改 so 方式</h2><p>这种方式主要是探索 IDA 断点的字节码，同样使用于探索其他调试器的断点字节码。</p>
+<h3 id="修改字节码"><a href="#修改字节码" class="headerlink" title="修改字节码"></a>修改字节码</h3><p>使用IDA打开需要调试的so文件，找到关键的方法，修改字节码，并将修改后的内容保存至文件。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-18-20.png" alt></p>
+<p>为什么将字节码修 03 AF 改为 10 DE 。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-19-40.png" alt></p>
+<p>使用的 IDA 插件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">下载Keypatch.py复制到插件目录：https://github.com/keystone-engine/keypatch</span><br><span class="line">下载安装keystone python模块：https://github.com/keystone-engine/keystone/releases/download/0.9.1/keystone-0.9.1-python-win64.msi</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong></p>
+<blockquote>
+<p>其实这里不一定要使用这种方式获取断点的字节码，也可以通过循环断下来，将指令改为一个死循环，最后暂停就可以断到相应的位置了，最后再将指令改回去就可以了。 </p>
+</blockquote>
+<p>最后重打包，按照之前的方式调试即可。</p>
+<h1 id="如何在-init-proc-和-init-arrary-调用下断点"><a href="#如何在-init-proc-和-init-arrary-调用下断点" class="headerlink" title="如何在 .init_proc 和 init_arrary 调用下断点"></a>如何在 <code>.init_proc</code> 和 <code>init_arrary</code> 调用下断点</h1><h2 id="init-proc-函数和-init-arrary-的产生方法。"><a href="#init-proc-函数和-init-arrary-的产生方法。" class="headerlink" title=".init_proc 函数和 init_arrary 的产生方法。"></a><code>.init_proc</code> 函数和 <code>init_arrary</code> 的产生方法。</h2><p><code>_init</code> 函数经过编译后就是 <code>.init_proc</code> 函数，是目前我所知道的在 so 最早被调用的函数 。<code>_init</code> 函数无参，无返回值，其次必须函数名必须是 <code>_init</code> ，并且不能名称粉碎。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-36-04.png" alt></p>
+<p>函数添加 <code>__attribute__((constructor))</code> 属性后，就会将对应的函数指针放在 <code>init_array</code> 节中，在 JNI_Onload 之前被调用。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-36-55.png" alt></p>
+<p>执行结果如下：</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-41-55.png" alt></p>
+<p>可以看到先执行的 <code>.init_proc</code> 函数，然后执行  <code>init_arrary</code> 节里的函数，最后执行 JNI_Onload 。</p>
+<h2 id="通过源码找到调用的关键位置"><a href="#通过源码找到调用的关键位置" class="headerlink" title="通过源码找到调用的关键位置"></a>通过源码找到调用的关键位置</h2><p>由于 <code>.init_proc</code> 和 <code>init_arrary</code> 是在 so 加载完成前调用的，那么就需要知道他们是在何时调用的，这里就需要跟一下dlopen的源码，最终会发现调用他们实现在 <code>linker.cpp</code>中，这一块大家有兴趣可以自己看看。我这里就直接给 android 7.1.2 源码中的关键点了。</p>
+<p><code>http://androidxref.com/7.1.2_r36/xref/bionic/linker/linker.cpp</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> soinfo::call_function(<span class="keyword">const</span> <span class="keyword">char</span>* function_name __unused, </span><br><span class="line">                           <span class="keyword">linker_function_t</span> function) &#123;</span><br><span class="line">  <span class="keyword">if</span> (function == <span class="literal">nullptr</span> </span><br><span class="line">      || <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">uintptr_t</span>&gt;(function) == <span class="keyword">static_cast</span>&lt;<span class="keyword">uintptr_t</span>&gt;(<span class="number">-1</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  TRACE(<span class="string">"[ Calling %s @ %p for \"%s\" ]"</span>, function_name, function, get_realpath());</span><br><span class="line">  function(); <span class="comment">//直接调用函数指针</span></span><br><span class="line">  TRACE(<span class="string">"[ Done calling %s @ %p for \"%s\" ]"</span>, function_name, function, get_realpath());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>大家看源码时也最好根据自己的手机版本看相对应的源码。其中 <code>funcion()</code> 就是调用 <code>.init_proc</code> 和 <code>init_arrary</code> 的地方，大家看看这个地方有什么特点？我们可以根据其上下两行输出字符串确定其位置。</p>
+<p>我们直接到手机的 <code>system/bin</code> 目录中导出 linker 文件，如果调试 ARMv8 则需要导出 linker64 文件。通过查找字符串<code>[ Calling %s @ %p for \&quot;%s\&quot; ]</code>  找到关键位置，其偏移为 0x6414 ，最后就可以通过基址+偏移得到最终的地址需要下断点的地址。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-24-19-19-27.png" alt></p>
+<h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2><p>当在 libc 中断下来直接，ctrl+s 找到 linker 的基址，然后加上偏移 0x6414 。可以发现其基址为 0xF44DC000+0x6414 = F44E2414‬ 最后跳到此处，下断点直接 F9 运行。然后 jdb 连接，最终会断在此处，F7 单步步入，即为 <code>.init_proc</code> 函数，继续执行就会又断在此处，F7 步入，则 test_construtor 函数。</p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-24-19-23-12.png" alt></p>
+<p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-24-19-23-20.png" alt></p>
+<p>其中也可以通过前文讲的修改 so 文件，修改字节码实现断点或无限循环达到相同的效果。</p>
+<p>调试应用和代码：</p>
+<p><a href="https://github.com/CKCat/Blog/blob/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84TA.apk" target="_blank" rel="noopener">送给最好的TA</a></p>
+<p><a href="https://github.com/CKCat/Blog/blob/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/unluac_2015_06_13.jar" target="_blank" rel="noopener">unluac_2015_06_13.jar</a></p>
+<p><a href="https://github.com/CKCat/Blog/tree/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/ndkcode" target="_blank" rel="noopener">init_proc相关代码</a></p>
+<p>参考：</p>
+<p><a href="https://bbs.pediy.com/thread-254770.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-254770.htm</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="next" title="git使用记录">
+                <i class="fa fa-chevron-left"></i> git使用记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#动态调试送给最好的TA"><span class="nav-number">1.</span> <span class="nav-text">动态调试送给最好的TA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常规方式"><span class="nav-number">1.1.</span> <span class="nav-text">常规方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-选择Android调试器，设置hostname和端口。"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 选择Android调试器，设置hostname和端口。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-开始调试"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 开始调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-jdb-连接"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. jdb 连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-分析并-dump-lua-字节码"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 分析并 dump lua 字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将字节码转换为-lua-代码"><span class="nav-number">1.1.6.</span> <span class="nav-text">将字节码转换为 lua 代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改-so-方式"><span class="nav-number">1.2.</span> <span class="nav-text">修改 so 方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改字节码"><span class="nav-number">1.2.1.</span> <span class="nav-text">修改字节码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在-init-proc-和-init-arrary-调用下断点"><span class="nav-number">2.</span> <span class="nav-text">如何在 .init_proc 和 init_arrary 调用下断点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#init-proc-函数和-init-arrary-的产生方法。"><span class="nav-number">2.1.</span> <span class="nav-text">.init_proc 函数和 init_arrary 的产生方法。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过源码找到调用的关键位置"><span class="nav-number">2.2.</span> <span class="nav-text">通过源码找到调用的关键位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始调试"><span class="nav-number">2.3.</span> <span class="nav-text">开始调试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/';
+          this.page.identifier = '2021/02/22/动态调试so/';
+          this.page.title = '动态调试so';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
