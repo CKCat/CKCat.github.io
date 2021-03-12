@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="基本知识 ARMv8寄存器 AArch64通用寄存器 状态寄存器(SPSR)   条件码   指令 数据处理指令 算术和逻辑运算 乘法和除法指令 移位操作 位和字节操作指令 条件执行   内存访问指令 加载和存储指令 寻址模式   流程控制指令 System   参考    前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述    位宽">
+<meta name="description" content="基本知识 ARMv8寄存器 AArch64通用寄存器 状态寄存器SPSR 条件码     指令 数据处理指令 算术和逻辑运算 乘法和除法指令 移位操作 位和字节操作指令 条件执行   内存访问指令 加载和存储指令 寻址模式   流程控制指令 System   指令记录 参考    前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述">
 <meta name="keywords" content="汇编">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARMv8学习记录二">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="基本知识 ARMv8寄存器 AArch64通用寄存器 状态寄存器(SPSR)   条件码   指令 数据处理指令 算术和逻辑运算 乘法和除法指令 移位操作 位和字节操作指令 条件执行   内存访问指令 加载和存储指令 寻址模式   流程控制指令 System   参考    前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述    位宽">
+<meta property="og:description" content="基本知识 ARMv8寄存器 AArch64通用寄存器 状态寄存器SPSR 条件码     指令 数据处理指令 算术和逻辑运算 乘法和除法指令 移位操作 位和字节操作指令 条件执行   内存访问指令 加载和存储指令 寻址模式   流程控制指令 System   指令记录 参考    前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-15-57-08.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-16-00-41.png">
@@ -95,7 +95,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-46-28.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-48-58.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-21-49-14.png">
-<meta property="og:updated_time" content="2020-03-15T12:34:33.273Z">
+<meta property="og:updated_time" content="2021-03-08T05:00:24.218Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;03&#x2F;01&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C&#x2F;2020-03-09-15-57-08.png">
 
@@ -388,34 +388,35 @@
         <!-- TOC -->
 
 <ul>
-<li><a href="#基本知识">基本知识</a><ul>
-<li><a href="#armv8寄存器">ARMv8寄存器</a><ul>
-<li><a href="#aarch64通用寄存器">AArch64通用寄存器</a></li>
-<li><a href="#状态寄存器spsr">状态寄存器(SPSR)</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86">基本知识</a><ul>
+<li><a href="#armv8%E5%AF%84%E5%AD%98%E5%99%A8">ARMv8寄存器</a><ul>
+<li><a href="#aarch64%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8">AArch64通用寄存器</a></li>
+<li><a href="#%E7%8A%B6%E6%80%81%E5%AF%84%E5%AD%98%E5%99%A8spsr">状态寄存器SPSR</a></li>
+<li><a href="#%E6%9D%A1%E4%BB%B6%E7%A0%81">条件码</a></li>
 </ul>
 </li>
-<li><a href="#条件码">条件码</a></li>
 </ul>
 </li>
-<li><a href="#指令">指令</a><ul>
-<li><a href="#数据处理指令">数据处理指令</a><ul>
-<li><a href="#算术和逻辑运算">算术和逻辑运算</a></li>
-<li><a href="#乘法和除法指令">乘法和除法指令</a></li>
-<li><a href="#移位操作">移位操作</a></li>
-<li><a href="#位和字节操作指令">位和字节操作指令</a></li>
-<li><a href="#条件执行">条件执行</a></li>
+<li><a href="#%E6%8C%87%E4%BB%A4">指令</a><ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4">数据处理指令</a><ul>
+<li><a href="#%E7%AE%97%E6%9C%AF%E5%92%8C%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97">算术和逻辑运算</a></li>
+<li><a href="#%E4%B9%98%E6%B3%95%E5%92%8C%E9%99%A4%E6%B3%95%E6%8C%87%E4%BB%A4">乘法和除法指令</a></li>
+<li><a href="#%E7%A7%BB%E4%BD%8D%E6%93%8D%E4%BD%9C">移位操作</a></li>
+<li><a href="#%E4%BD%8D%E5%92%8C%E5%AD%97%E8%8A%82%E6%93%8D%E4%BD%9C%E6%8C%87%E4%BB%A4">位和字节操作指令</a></li>
+<li><a href="#%E6%9D%A1%E4%BB%B6%E6%89%A7%E8%A1%8C">条件执行</a></li>
 </ul>
 </li>
-<li><a href="#内存访问指令">内存访问指令</a><ul>
-<li><a href="#加载和存储指令">加载和存储指令</a></li>
-<li><a href="#寻址模式">寻址模式</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4">内存访问指令</a><ul>
+<li><a href="#%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%AD%98%E5%82%A8%E6%8C%87%E4%BB%A4">加载和存储指令</a></li>
+<li><a href="#%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F">寻址模式</a></li>
 </ul>
 </li>
-<li><a href="#流程控制指令">流程控制指令</a></li>
+<li><a href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4">流程控制指令</a></li>
 <li><a href="#system">System</a></li>
 </ul>
 </li>
-<li><a href="#参考">参考</a></li>
+<li><a href="#%E6%8C%87%E4%BB%A4%E8%AE%B0%E5%BD%95">指令记录</a></li>
+<li><a href="#%E5%8F%82%E8%80%83">参考</a></li>
 </ul>
 <!-- /TOC -->
 
@@ -484,7 +485,8 @@
 <li>PSTATE at AArch32</li>
 </ol>
 <p><img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/2020-03-09-16-00-41.png" alt></p>
-<h2 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h2><table>
+<h3 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h3><p>此处的条件码对应的上面状态寄存器对应的标志位。</p>
+<table>
 <thead>
 <tr>
 <th>Code</th>
@@ -496,126 +498,126 @@
 </thead>
 <tbody><tr>
 <td><code>EQ</code></td>
-<td>0b0000</td>
+<td>0000</td>
 <td>Equal to.</td>
 <td>Equal to.</td>
 <td><code>Z = 1</code></td>
 </tr>
 <tr>
 <td><code>NE</code></td>
-<td>0b0001</td>
+<td>0001</td>
 <td>Not equal to.</td>
 <td>Unordered, or not equal to.</td>
 <td><code>Z = 0</code></td>
 </tr>
 <tr>
 <td><code>CS</code></td>
-<td>0b0010</td>
+<td>0010</td>
 <td>Carry set (identical to HS).</td>
 <td>Greater than, equal to, or unordered (identical to HS).</td>
 <td><code>C = 1</code></td>
 </tr>
 <tr>
 <td><code>HS</code></td>
-<td>0b0010</td>
+<td>0010</td>
 <td>Greater than, equal to (unsigned) (identical to CS).</td>
 <td>Greater than, equal to, or unordered (identical to CS).</td>
 <td><code>C = 1</code></td>
 </tr>
 <tr>
 <td><code>CC</code></td>
-<td>0b0011</td>
+<td>0011</td>
 <td>Carry clear (identical to LO).</td>
 <td>Less than (identical to LO).</td>
 <td><code>C = 0</code></td>
 </tr>
 <tr>
 <td><code>LO</code></td>
-<td>0b0011</td>
+<td>0011</td>
 <td>Unsigned less than (identical to CC).</td>
 <td>Less than (identical to CC).</td>
 <td><code>C = 0</code></td>
 </tr>
 <tr>
 <td><code>MI</code></td>
-<td>0b0100</td>
+<td>0100</td>
 <td>Minus, Negative.</td>
 <td>Less than.</td>
 <td><code>N = 1</code></td>
 </tr>
 <tr>
 <td><code>PL</code></td>
-<td>0b0101</td>
+<td>0101</td>
 <td>Positive or zero.</td>
 <td>Greater than, equal to, or unordered.</td>
 <td><code>N = 0</code></td>
 </tr>
 <tr>
 <td><code>VS</code></td>
-<td>0b0110</td>
+<td>0110</td>
 <td>Signed overflow.</td>
 <td>Unordered. (At least one argument was NaN).</td>
 <td><code>V = 1</code></td>
 </tr>
 <tr>
 <td><code>VC</code></td>
-<td>0b0111</td>
+<td>0111</td>
 <td>No signed overflow.</td>
 <td>Not unordered. (No argument was NaN).</td>
 <td><code>V = 0</code></td>
 </tr>
 <tr>
 <td><code>HI</code></td>
-<td>0b1000</td>
+<td>1000</td>
 <td>Greater than (unsigned).</td>
 <td>Greater than or unordered.</td>
 <td><code>(C = 1) &amp;&amp; (Z = 0)</code></td>
 </tr>
 <tr>
 <td><code>LS</code></td>
-<td>0b1001</td>
+<td>1001</td>
 <td>Less than or equal to (unsigned).</td>
 <td>Less than or equal to.</td>
 <td>`(C = 0)</td>
 </tr>
 <tr>
 <td><code>GE</code></td>
-<td>0b1010</td>
+<td>1010</td>
 <td>Greater than or equal to (signed).</td>
 <td>Greater than or equal to.</td>
 <td><code>N==V</code></td>
 </tr>
 <tr>
 <td><code>LT</code></td>
-<td>0b1011</td>
+<td>1011</td>
 <td>Less than (signed).</td>
 <td>Less than or unordered.</td>
 <td><code>N!=V</code></td>
 </tr>
 <tr>
 <td><code>GT</code></td>
-<td>0b1100</td>
+<td>1100</td>
 <td>Greater than (signed).</td>
 <td>Greater than.</td>
 <td><code>(Z==0) &amp;&amp; (N==V)</code></td>
 </tr>
 <tr>
 <td><code>LE</code></td>
-<td>0b1101</td>
+<td>1101</td>
 <td>Less than or equal to (signed).</td>
 <td>Less than, equal to or unordered.</td>
 <td>`(Z==1)</td>
 </tr>
 <tr>
 <td><code>AL</code></td>
-<td>0b1110</td>
+<td>1110</td>
 <td>Always executed.</td>
 <td>Default. Always executed.</td>
 <td><code>Any</code></td>
 </tr>
 <tr>
 <td><code>NV</code></td>
-<td>0b1111</td>
+<td>1111</td>
 <td>Always executed.</td>
 <td>Always executed.</td>
 <td><code>Any</code></td>
@@ -1100,6 +1102,7 @@
 <td>No Operation does nothing, other than advance the value of the program counter by 4. This instruction can be used for instruction alignment purposes.</td>
 </tr>
 </tbody></table>
+<h1 id="指令记录"><a href="#指令记录" class="headerlink" title="指令记录"></a>指令记录</h1><p>本节主要记录一些自已不知道其含义的指令，后续通过查询资料后才弄懂的指令，由于比较容易忘记，故记录下来。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://modexp.wordpress.com/2018/10/30/arm64-assembly/" target="_blank" rel="noopener">A Guide to ARM64 / AArch64 Assembly on Linux with Shellcodes and Cryptography</a></p>
 <p><a href="https://static.docs.arm.com/den0024/a/DEN0024A_v8_architecture_PG.pdf" target="_blank" rel="noopener">DEN0024A_v8_architecture_PG.pdf</a></p>
 
@@ -1313,7 +1316,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本知识"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARMv8寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">ARMv8寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AArch64通用寄存器"><span class="nav-number">1.1.1.</span> <span class="nav-text">AArch64通用寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态寄存器-SPSR"><span class="nav-number">1.1.2.</span> <span class="nav-text">状态寄存器(SPSR)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件码"><span class="nav-number">1.2.</span> <span class="nav-text">条件码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#指令"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据处理指令"><span class="nav-number">2.1.</span> <span class="nav-text">数据处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算术和逻辑运算"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术和逻辑运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘法和除法指令"><span class="nav-number">2.1.2.</span> <span class="nav-text">乘法和除法指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移位操作"><span class="nav-number">2.1.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位和字节操作指令"><span class="nav-number">2.1.4.</span> <span class="nav-text">位和字节操作指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件执行"><span class="nav-number">2.1.5.</span> <span class="nav-text">条件执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存访问指令"><span class="nav-number">2.2.</span> <span class="nav-text">内存访问指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载和存储指令"><span class="nav-number">2.2.1.</span> <span class="nav-text">加载和存储指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#寻址模式"><span class="nav-number">2.2.2.</span> <span class="nav-text">寻址模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程控制指令"><span class="nav-number">2.3.</span> <span class="nav-text">流程控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System"><span class="nav-number">2.4.</span> <span class="nav-text">System</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本知识"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARMv8寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">ARMv8寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AArch64通用寄存器"><span class="nav-number">1.1.1.</span> <span class="nav-text">AArch64通用寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态寄存器-SPSR"><span class="nav-number">1.1.2.</span> <span class="nav-text">状态寄存器(SPSR)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件码"><span class="nav-number">1.1.3.</span> <span class="nav-text">条件码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#指令"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据处理指令"><span class="nav-number">2.1.</span> <span class="nav-text">数据处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算术和逻辑运算"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术和逻辑运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘法和除法指令"><span class="nav-number">2.1.2.</span> <span class="nav-text">乘法和除法指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移位操作"><span class="nav-number">2.1.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位和字节操作指令"><span class="nav-number">2.1.4.</span> <span class="nav-text">位和字节操作指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件执行"><span class="nav-number">2.1.5.</span> <span class="nav-text">条件执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存访问指令"><span class="nav-number">2.2.</span> <span class="nav-text">内存访问指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载和存储指令"><span class="nav-number">2.2.1.</span> <span class="nav-text">加载和存储指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#寻址模式"><span class="nav-number">2.2.2.</span> <span class="nav-text">寻址模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程控制指令"><span class="nav-number">2.3.</span> <span class="nav-text">流程控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System"><span class="nav-number">2.4.</span> <span class="nav-text">System</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#指令记录"><span class="nav-number">3.</span> <span class="nav-text">指令记录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

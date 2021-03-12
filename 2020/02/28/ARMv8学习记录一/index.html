@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="1. 从一个 HelloWorld 开始 1.1. 利用编译器创建一个 ARMv8 的源文件   2. 调试环境搭建 2.1. 安装 gef 2.2. 安装模块     1. 从一个 HelloWorld 开始1.1. 利用编译器创建一个 ARMv8 的源文件由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hel">
+<meta name="description" content="从一个 HelloWorld 开始 使用 gcc 编译 使用 clang 编译   调试环境搭建 安装 gef 安装模块     1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hello.c#include&amp;lt;stdio.h&amp;gt;int">
 <meta name="keywords" content="汇编">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARMv8学习记录一">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="1. 从一个 HelloWorld 开始 1.1. 利用编译器创建一个 ARMv8 的源文件   2. 调试环境搭建 2.1. 安装 gef 2.2. 安装模块     1. 从一个 HelloWorld 开始1.1. 利用编译器创建一个 ARMv8 的源文件由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hel">
+<meta property="og:description" content="从一个 HelloWorld 开始 使用 gcc 编译 使用 clang 编译   调试环境搭建 安装 gef 安装模块     1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hello.c#include&amp;lt;stdio.h&amp;gt;int">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-37-24.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-39-35.png">
@@ -95,7 +95,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-33-08.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-41-36.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-42-00.png">
-<meta property="og:updated_time" content="2020-03-14T09:10:24.278Z">
+<meta property="og:updated_time" content="2021-03-08T04:50:02.019Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-37-24.png">
 
@@ -388,18 +388,19 @@
         <!-- TOC -->
 
 <ul>
-<li><a href="#1-从一个-helloworld-开始">1. 从一个 HelloWorld 开始</a><ul>
-<li><a href="#11-利用编译器创建一个-armv8-的源文件">1.1. 利用编译器创建一个 ARMv8 的源文件</a></li>
+<li><a href="#%E4%BB%8E%E4%B8%80%E4%B8%AA-helloworld-%E5%BC%80%E5%A7%8B">从一个 HelloWorld 开始</a><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8-gcc-%E7%BC%96%E8%AF%91">使用 gcc 编译</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-clang-%E7%BC%96%E8%AF%91">使用 clang 编译</a></li>
 </ul>
 </li>
-<li><a href="#2-调试环境搭建">2. 调试环境搭建</a><ul>
-<li><a href="#21-安装-gef">2.1. 安装 gef</a></li>
-<li><a href="#22-安装模块">2.2. 安装模块</a></li>
+<li><a href="#%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">调试环境搭建</a><ul>
+<li><a href="#%E5%AE%89%E8%A3%85-gef">安装 gef</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E6%A8%A1%E5%9D%97">安装模块</a></li>
 </ul>
 </li>
 </ul>
 <!-- /TOC -->
-<h1 id="1-从一个-HelloWorld-开始"><a href="#1-从一个-HelloWorld-开始" class="headerlink" title="1. 从一个 HelloWorld 开始"></a>1. 从一个 HelloWorld 开始</h1><h2 id="1-1-利用编译器创建一个-ARMv8-的源文件"><a href="#1-1-利用编译器创建一个-ARMv8-的源文件" class="headerlink" title="1.1. 利用编译器创建一个 ARMv8 的源文件"></a>1.1. 利用编译器创建一个 ARMv8 的源文件</h2><p>由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。</p>
+<h1 id="1-从一个-HelloWorld-开始"><a href="#1-从一个-HelloWorld-开始" class="headerlink" title="1. 从一个 HelloWorld 开始"></a>1. 从一个 HelloWorld 开始</h1><h2 id="1-1-使用-gcc-编译"><a href="#1-1-使用-gcc-编译" class="headerlink" title="1.1. 使用 gcc 编译"></a>1.1. 使用 gcc 编译</h2><p>由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。</p>
 <p>C 代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// hello.c</span><br><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">int main(int argc, char const *argv[])&#123;</span><br><span class="line">    printf(&quot;Hello World!\r\n&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>makefile 如下：</p>
@@ -413,12 +414,43 @@
 <p><code>hello64.s</code> 对应的内容，后面所有的指令学习将一次文件为基础进行修改。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">	.cpu generic+fp+simd</span><br><span class="line">	.file	&quot;hello.c&quot;</span><br><span class="line">	.section	.rodata</span><br><span class="line">	.align	3</span><br><span class="line">.LC0:</span><br><span class="line">	.string	&quot;Hello World!\r&quot;</span><br><span class="line">	.text</span><br><span class="line">	.align	2</span><br><span class="line">	.global	main</span><br><span class="line">	.type	main, %function</span><br><span class="line">main:</span><br><span class="line">	stp	x29, x30, [sp, -32]!</span><br><span class="line">	add	x29, sp, 0</span><br><span class="line">	str	w0, [x29,28]</span><br><span class="line">	str	x1, [x29,16]</span><br><span class="line">	adrp	x0, .LC0</span><br><span class="line">	add	x0, x0, :lo12:.LC0</span><br><span class="line">	bl	puts</span><br><span class="line">	mov	w0, 0</span><br><span class="line">	ldp	x29, x30, [sp], 32</span><br><span class="line">	ret</span><br><span class="line">	.size	main, .-main</span><br><span class="line">	.ident	&quot;GCC: (GNU) 4.9.x 20150123 (prerelease)&quot;</span><br><span class="line">	.section	.note.GNU-stack,&quot;&quot;,%progbits</span><br></pre></td></tr></table></figure>
 <p>至此，已经从一个 HelloWorld 开始了 ARMv8 的旅程。</p>
+<h2 id="使用-clang-编译"><a href="#使用-clang-编译" class="headerlink" title="使用 clang 编译"></a>使用 clang 编译</h2><p>首先使用 <code>which</code> 命令查看 clang 的位置，由于我没有将 clang 添加到环境变量，最终结果是找不到的，那么需要将 clang 添加到临时环境变量中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">"<span class="variable">$ANDROID_HOME</span>/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/bin/:<span class="variable">$PATH</span>"</span></span><br></pre></td></tr></table></figure>
+
+<p>然后参考NDK 官方指南 <a href="https://developer.android.com/ndk/guides/other_build_systems" target="_blank" rel="noopener">将 NDK 与其他构建系统配合使用</a> 部分，可以知道调用 Clang 时需要使用 <code>-target</code> 参数传递适当的目标，例如以下命令为编译 minSdkVersion 为 21 的 64 位 Android ARM 平台的应用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  clang -target aarch64-linux-android21 hello.c -o hello</span><br><span class="line">➜  file hello</span><br><span class="line">hello: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /system/bin/linker64, not stripped</span><br></pre></td></tr></table></figure>
+
+<p>以上命令为一步编译成功，实际过程可以分为三步，我们以 ARM 平台为例进行讲解。</p>
+<ol>
+<li>预处理</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  clang -target arm-linux-android21 -E hello.c -o arm_hello.i</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>编译成汇编文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  clang -target arm-linux-android21 -S arm_hello.i -o arm_hello.s</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>汇编成 obj 文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  clang -target arm-linux-android21 -c arm_hello.s -o arm_hello.o</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>链接成可执行程序</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  clang -target arm-linux-android21 arm_hello.o -o arm_hello</span><br></pre></td></tr></table></figure>
+
+<p>编写 makefile 执行 arm_hello</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all:</span></span><br><span class="line">    clang -target arm-linux-android21 arm_hello.s -o arm_hello</span><br><span class="line">	adb push arm_hello /data/local/tmp/arm_hello</span><br><span class="line">	adb shell chmod +x /data/local/tmp/arm_hello</span><br><span class="line">	adb shell /data/local/tmp/arm_hello</span><br></pre></td></tr></table></figure>
+
 <h1 id="2-调试环境搭建"><a href="#2-调试环境搭建" class="headerlink" title="2. 调试环境搭建"></a>2. 调试环境搭建</h1><p>IDA的调试环境就不说了，网上一大把，下面主要说明使用 gdb + gef 的调试环境搭建。</p>
 <h2 id="2-1-安装-gef"><a href="#2-1-安装-gef" class="headerlink" title="2.1. 安装 gef"></a>2.1. 安装 gef</h2><p>进入 android gdb 的目录 <code>/ndk-bundle/prebuilt/linux-x86_64/bin</code>,启动命令行，执行下列命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -q -O .gdbinit-gef.py https://github.com/hugsy/gef/raw/master/gef.py</span><br><span class="line">echo source .gdbinit-gef.py &gt;&gt; .gdbinit</span><br></pre></td></tr></table></figure>
 <p>然后执行 <code>./gdb</code> 命令，出现如下信息</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GNU gdb (GDB) 7.11</span><br><span class="line">Copyright (C) 2016 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;</span><br><span class="line">and &quot;show warranty&quot; for details.</span><br><span class="line">This GDB was configured as &quot;x86_64-linux-gnu&quot;.</span><br><span class="line">Type &quot;show configuration&quot; for configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/documentation/&gt;.</span><br><span class="line">For help, type &quot;help&quot;.</span><br><span class="line">Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;.</span><br><span class="line">GEF for linux ready, type `gef&apos; to start, `gef config&apos; to configure</span><br><span class="line">78 commands loaded for GDB 7.11 using Python engine 2.7</span><br><span class="line">[*] 2 commands could not be loaded, run `gef missing` to know why.</span><br><span class="line">gef&gt; gef missing </span><br><span class="line">[*] Command `assemble` is missing, reason -&gt; Missing `keystone-engine` package for Python2, install with: `pip2 install keystone-engine`.</span><br><span class="line">[*] Command `set-permission` is missing, reason -&gt; Missing `keystone-engine` package for Python2, install with: `pip2 install keystone-engine`.</span><br></pre></td></tr></table></figure>
 <p>根据提示可以发现缺少了 <code>keystone-engine</code> 模块，当然还有可能缺少其他模块。</p>
+<p><strong>后面的内容可以省略，安装过程中会出现比较多的问题，模块不安装也不影响使用。</strong></p>
 <h2 id="2-2-安装模块"><a href="#2-2-安装模块" class="headerlink" title="2.2. 安装模块"></a>2.2. 安装模块</h2><p>退出 <code>gdb</code> , 下载 <code>[ez_setup.py](https://bootstrap.pypa.io/ez_setup.py)</code> ，运行列命令，进 行 <code>easy_install</code> 工具的安装：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./python ez_setup.py</span><br></pre></td></tr></table></figure>
 <p>安装成功之后就可以使用 <code>easy_install</code> 进行安装 <code>package</code> 了，然后根据提示安装需要的模块，也可以利用 <code>easy_install</code> 先安装 <code>pip</code>, 然后在利用 <code>pip</code> 进行安装其他模块，这里我使用 <code>easy_install</code> 进行安装其他模块。</p>
@@ -643,7 +675,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-从一个-HelloWorld-开始"><span class="nav-number">1.</span> <span class="nav-text">1. 从一个 HelloWorld 开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-利用编译器创建一个-ARMv8-的源文件"><span class="nav-number">1.1.</span> <span class="nav-text">1.1. 利用编译器创建一个 ARMv8 的源文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-调试环境搭建"><span class="nav-number">2.</span> <span class="nav-text">2. 调试环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装-gef"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 安装 gef</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装模块"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 安装模块</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-从一个-HelloWorld-开始"><span class="nav-number">1.</span> <span class="nav-text">1. 从一个 HelloWorld 开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-使用-gcc-编译"><span class="nav-number">1.1.</span> <span class="nav-text">1.1. 使用 gcc 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-clang-编译"><span class="nav-number">1.2.</span> <span class="nav-text">使用 clang 编译</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-调试环境搭建"><span class="nav-number">2.</span> <span class="nav-text">2. 调试环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装-gef"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 安装 gef</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装模块"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 安装模块</span></a></li></ol></li></ol></div>
             
 
           </div>

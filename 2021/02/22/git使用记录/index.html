@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="CKCat的博客">
 <meta property="og:description" content="本文主要记录 git 使用过程中需要搜索的一些命令。 如何恢复初始的 git 提交。您可以删除 HEAD 并将存储库还原到新的状态，在该状态下可以创建一个新的初始提交： 1git update-ref -d HEAD  创建新提交之后，如果您已经将其推入远程，则需要强制将其发送到远程，以便覆盖先前的初始提交： 1git push --force origin  不要使用 rm -rf .git 或">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-22T12:50:51.615Z">
+<meta property="og:updated_time" content="2021-03-07T05:07:18.102Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -392,6 +392,20 @@
 
 <p>已经 push 了，可以使用 git revert 还原已经提交的修改 ，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git revert HEAD          <span class="comment"># 撤销前一次 commit 。</span></span><br><span class="line">git revert HEAD~n        <span class="comment"># 撤销前n次 commit 。</span></span><br><span class="line">git revert commit-id     <span class="comment"># 撤销指定的版本，撤销也会作为一次提交进行保存。</span></span><br><span class="line">git reset HEAD^ file     <span class="comment"># 回退 flie 这个文件的版本到上一个版本</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge"><a href="#解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge" class="headerlink" title="解决 Git 更新本地冲突：commit your changes or stash them before you can merge"></a>解决 Git 更新本地冲突：commit your changes or stash them before you can merge</h2><p>方法一：stash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git stash               让工作区内容保证与上一次提交内容相同，同时备份当前修改的内容</span><br><span class="line">git pull                 拉取仓库的最新内容</span><br><span class="line">git stash pop       在仓库最新内容的基础上添加当前修改的内容</span><br></pre></td></tr></table></figure>
+
+
+<p>方法二：直接完全覆盖本地修改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<h1 id="如何清洗-Github-提交历史"><a href="#如何清洗-Github-提交历史" class="headerlink" title="如何清洗 Github 提交历史"></a>如何清洗 Github 提交历史</h1><p>当 Github 的 Repo 变得日益臃肿、或者上传了敏感内容时，常见的方法时清理相关文件的所有历史提交记录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git filter-branch --force --index-filter <span class="string">'git rm --cached --ignore-unmatch $&#123;FILEPATH&#125;'</span> --prune-empty --tag-name-filter cat -- --all </span><br><span class="line">git push origin master --force </span><br><span class="line">rm -rf .git/refs/original/ </span><br><span class="line">git reflog expire --expire=now --all </span><br><span class="line">git gc --prune=now </span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+<p>但若这类文件非常多的时候，一个可选的方法时直接清空所有历史记录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rm -rf .git </span><br><span class="line">git init git </span><br><span class="line">add -A </span><br><span class="line">git commit -m <span class="string">"clear history"</span> </span><br><span class="line">git remote add origin <span class="variable">$&#123;GITHUB_REPO_URL&#125;</span> </span><br><span class="line">git push -f -u origin master</span><br></pre></td></tr></table></figure>
+<p>参考链接: <a href="https://exp-blog.com/scm/qing-xi-github-ti-jiao-li-shi/" target="_blank" rel="noopener">https://exp-blog.com/scm/qing-xi-github-ti-jiao-li-shi/</a></p>
+
       
     </div>
     
@@ -602,7 +616,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何恢复初始的-git-提交。"><span class="nav-number">1.</span> <span class="nav-text">如何恢复初始的 git 提交。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#撤销-git-add和-commit-操作"><span class="nav-number">2.</span> <span class="nav-text">撤销 git add和 commit 操作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何恢复初始的-git-提交。"><span class="nav-number">1.</span> <span class="nav-text">如何恢复初始的 git 提交。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#撤销-git-add和-commit-操作"><span class="nav-number">2.</span> <span class="nav-text">撤销 git add和 commit 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge"><span class="nav-number"></span> <span class="nav-text">解决 Git 更新本地冲突：commit your changes or stash them before you can merge</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何清洗-Github-提交历史"><span class="nav-number"></span> <span class="nav-text">如何清洗 Github 提交历史</span></a></div>
             
 
           </div>
