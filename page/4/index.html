@@ -270,6 +270,364 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/" itemprop="url">史上最优雅的NDK加载pass方案</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-07T00:18:47+08:00">
+                2020-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OLLVM/" itemprop="url" rel="index">
+                    <span itemprop="name">OLLVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/07/史上最优雅的NDK加载pass方案/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+转载 : https://xz.aliyun.com/t/6643
+
+关键词：
+
+不需要编译llvm
+仅依赖NDK，不需要额外的其他环境
+不会遇到配置引起的符号NotFound问题
+不污染NDK
+
+
+
+一、背景介绍
+二、使用NDK的环境编译一个pass
+三、使用NDK的环境加载一个pass
+四、当
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/" itemprop="url">github项目搜索技巧</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-05T21:44:32+08:00">
+                2020-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index">
+                    <span itemprop="name">其他</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/05/github项目搜索技巧/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          
+
+
+github 搜索技巧
+案例
+普通搜
+
+
+搭配技巧搜
+限定词
+查找某个用户或组织的项目
+
+
+辅助限定词
+还没搞懂的（关于 forks、mirror、issues）
+排序（放的是官网的链接）
+使用指南
+练习案例
+
+
+
+
+
+
+
+github 搜索技巧参考自 B站 up 主 CodeSheep 的视
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -374,42 +732,31 @@
       
         
           
-          
-
-
-基本知识
-ARMv8寄存器
-AArch64通用寄存器
-状态寄存器SPSR
-条件码
+          前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令
+基本知识ARMv8寄存器寄存器名称描述
 
 
 
-
-指令
-数据处理指令
-算术和逻辑运算
-乘法和除法指令
-移位操作
-位和字节操作指令
-条件执行
-
-
-内存访问指令
-加载和存储指令
-寻址模式
-
-
-流程控制指令
-System
-
-
-指令记录
-参考
+位宽
+分类
 
 
 
-前面的环境搭
+
+
+32-bit
+Wn（通用）
+WZR（0寄存器）
+WSP（堆栈指针）
+
+
+64-bit
+Xn（通用）
+XZR（0寄存器）
+SP（堆栈指针）
+
+
+AArch64通用寄存
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -574,6 +921,12 @@ System
 从一个 HelloWorld 开始
 使用 gcc 编译
 使用 clang 编译
+ndk-build 编译
+方法1：
+方法2：
+方法3：
+
+
 
 
 调试环境搭建
@@ -583,8 +936,7 @@ System
 
 
 
-1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。
-C
+1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1645,333 +1997,6 @@ Flask调用视图函数后，会将视图函数的返回值作为响
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/19/frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CKCat">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/19/frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" itemprop="url">frida环境配置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-19T16:10:09+08:00">
-                2020-01-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/frida/" itemprop="url" rel="index">
-                    <span itemprop="name">frida</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/19/frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/19/frida环境配置/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          开发环境：ubuntu18.04
-
-源码地址：https://github.com/frida/frida官网：https://frida.re/
-
-
-
-
-安装 Frida
-在安装frida之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰
-进入虚拟环境，直接运行下来命令即可安
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/01/19/frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/15/Django%E5%AD%A6%E4%B9%A0-%E5%85%B6%E4%BB%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CKCat">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/15/Django%E5%AD%A6%E4%B9%A0-%E5%85%B6%E4%BB%96/" itemprop="url">Django学习-其他</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T15:31:58+08:00">
-                2020-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/15/Django%E5%AD%A6%E4%B9%A0-%E5%85%B6%E4%BB%96/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/15/Django学习-其他/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          静态文件项目中的CSS、图片、js都是静态文件。一般会将静态文件放到一个单独的目录中，以方便管理。在html页面中调用时，也需要指定静态文件的路径，Django中提供了一种解析的方式配置静态文件路径。静态文件可以放在项目根目录下，也可以放在应用的目录下，由于有些静态文件在项目中是通用的，所以推荐放在
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/01/15/Django%E5%AD%A6%E4%B9%A0-%E5%85%B6%E4%BB%96/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2026,7 +2051,7 @@ Flask调用视图函数后，会将视图函数的返回值作为响
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="从一个 HelloWorld 开始 使用 gcc 编译 使用 clang 编译   调试环境搭建 安装 gef 安装模块     1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hello.c#include&amp;lt;stdio.h&amp;gt;int">
+<meta name="description" content="从一个 HelloWorld 开始 使用 gcc 编译 使用 clang 编译 ndk-build 编译 方法1： 方法2： 方法3：     调试环境搭建 安装 gef 安装模块     1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hell">
 <meta name="keywords" content="汇编">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARMv8学习记录一">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="从一个 HelloWorld 开始 使用 gcc 编译 使用 clang 编译   调试环境搭建 安装 gef 安装模块     1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hello.c#include&amp;lt;stdio.h&amp;gt;int">
+<meta property="og:description" content="从一个 HelloWorld 开始 使用 gcc 编译 使用 clang 编译 ndk-build 编译 方法1： 方法2： 方法3：     调试环境搭建 安装 gef 安装模块     1. 从一个 HelloWorld 开始1.1. 使用 gcc 编译由于我们主要学习ARMv8的指令，所以直接使用 C 源文件生成一个 ARMv8的汇编源文件。 C 代码如下： 123456&#x2F;&#x2F; hell">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-37-24.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-39-35.png">
@@ -95,7 +95,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-33-08.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-41-36.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-29-21-42-00.png">
-<meta property="og:updated_time" content="2021-03-08T04:50:02.019Z">
+<meta property="og:updated_time" content="2021-03-18T09:59:55.348Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2020&#x2F;02&#x2F;28&#x2F;ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%80&#x2F;2020-02-28-23-37-24.png">
 
@@ -391,6 +391,12 @@
 <li><a href="#%E4%BB%8E%E4%B8%80%E4%B8%AA-helloworld-%E5%BC%80%E5%A7%8B">从一个 HelloWorld 开始</a><ul>
 <li><a href="#%E4%BD%BF%E7%94%A8-gcc-%E7%BC%96%E8%AF%91">使用 gcc 编译</a></li>
 <li><a href="#%E4%BD%BF%E7%94%A8-clang-%E7%BC%96%E8%AF%91">使用 clang 编译</a></li>
+<li><a href="#ndk-build-%E7%BC%96%E8%AF%91">ndk-build 编译</a><ul>
+<li><a href="#%E6%96%B9%E6%B3%951">方法1：</a></li>
+<li><a href="#%E6%96%B9%E6%B3%952">方法2：</a></li>
+<li><a href="#%E6%96%B9%E6%B3%953">方法3：</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">调试环境搭建</a><ul>
@@ -444,6 +450,23 @@
 <p>编写 makefile 执行 arm_hello</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all:</span></span><br><span class="line">    clang -target arm-linux-android21 arm_hello.s -o arm_hello</span><br><span class="line">	adb push arm_hello /data/local/tmp/arm_hello</span><br><span class="line">	adb shell chmod +x /data/local/tmp/arm_hello</span><br><span class="line">	adb shell /data/local/tmp/arm_hello</span><br></pre></td></tr></table></figure>
 
+<h2 id="ndk-build-编译"><a href="#ndk-build-编译" class="headerlink" title="ndk-build 编译"></a>ndk-build 编译</h2><h3 id="方法1："><a href="#方法1：" class="headerlink" title="方法1："></a>方法1：</h3><ol>
+<li><p>创建一个空文件<code>AndroidManifest.xml</code>。</p>
+</li>
+<li><p>创建一个<code>Application.mk</code>，内容如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">APP_BUILD_SCRIPT := Android.mk</span><br><span class="line">APP_PLATFORM := android-21</span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个<code>Android.mk</code>文件，内容如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">LOCAL_PATH := $(call my-dir)</span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line">LOCAL_SRC_FILES := foo.c</span><br><span class="line">LOCAL_MODULE := foo</span><br><span class="line">include $(BUILD_EXECUTABLE)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用以下命令编译</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ndk-build NDK_APPLICATION_MK=$(pwd)/Application.mk</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="方法2："><a href="#方法2：" class="headerlink" title="方法2："></a>方法2：</h3><p>直接使用以下命令进行编译：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ndk-build NDK_PROJECT_PATH=$(pwd)</span><br><span class="line">或</span><br><span class="line">ndk-build NDK_PROJECT_PATH=$(pwd) APP_BUILD_SCRIPT=$(pwd)/Android.mk</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法3："><a href="#方法3：" class="headerlink" title="方法3："></a>方法3：</h3><p>将所有的文件放入  jni 目录，进入jni目录直接使用 ndk-build 命令编译即可。</p>
 <h1 id="2-调试环境搭建"><a href="#2-调试环境搭建" class="headerlink" title="2. 调试环境搭建"></a>2. 调试环境搭建</h1><p>IDA的调试环境就不说了，网上一大把，下面主要说明使用 gdb + gef 的调试环境搭建。</p>
 <h2 id="2-1-安装-gef"><a href="#2-1-安装-gef" class="headerlink" title="2.1. 安装 gef"></a>2.1. 安装 gef</h2><p>进入 android gdb 的目录 <code>/ndk-bundle/prebuilt/linux-x86_64/bin</code>,启动命令行，执行下列命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -q -O .gdbinit-gef.py https://github.com/hugsy/gef/raw/master/gef.py</span><br><span class="line">echo source .gdbinit-gef.py &gt;&gt; .gdbinit</span><br></pre></td></tr></table></figure>
@@ -597,7 +620,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -675,7 +698,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-从一个-HelloWorld-开始"><span class="nav-number">1.</span> <span class="nav-text">1. 从一个 HelloWorld 开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-使用-gcc-编译"><span class="nav-number">1.1.</span> <span class="nav-text">1.1. 使用 gcc 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-clang-编译"><span class="nav-number">1.2.</span> <span class="nav-text">使用 clang 编译</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-调试环境搭建"><span class="nav-number">2.</span> <span class="nav-text">2. 调试环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装-gef"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 安装 gef</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装模块"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 安装模块</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-从一个-HelloWorld-开始"><span class="nav-number">1.</span> <span class="nav-text">1. 从一个 HelloWorld 开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-使用-gcc-编译"><span class="nav-number">1.1.</span> <span class="nav-text">1.1. 使用 gcc 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-clang-编译"><span class="nav-number">1.2.</span> <span class="nav-text">使用 clang 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ndk-build-编译"><span class="nav-number">1.3.</span> <span class="nav-text">ndk-build 编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法1："><span class="nav-number">1.3.1.</span> <span class="nav-text">方法1：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法2："><span class="nav-number">1.3.2.</span> <span class="nav-text">方法2：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法3："><span class="nav-number">1.3.3.</span> <span class="nav-text">方法3：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-调试环境搭建"><span class="nav-number">2.</span> <span class="nav-text">2. 调试环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装-gef"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 安装 gef</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装模块"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 安装模块</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -81,13 +81,13 @@
 
 
 
-<meta name="description" content="动态调试送给最好的TA常规方式1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。 2. 选择Android调试器，设置hostname和端口。 3. 开始调试 启动 android_server 。 端口转发 adb forward tcp:23946 tcp:23946 。 以调试模式启动对应的 Activaty ，adb shell am start -D -n com.sgz">
+<meta name="description" content="如果手机系统是 android 10，那么需要设置一下  12export IDA_LIBC_PATH=&#x2F;apex&#x2F;com.android.runtime&#x2F;lib&#x2F;bionic&#x2F;libc.soor export IDA_LIBC_PATH=&#x2F;apex&#x2F;com.android.runtime&#x2F;lib64&#x2F;bionic&#x2F;libc.so 参考：https:&#x2F;&#x2F;bbs.pediy.com&#x2F;thread-">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动态调试so">
 <meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="动态调试送给最好的TA常规方式1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。 2. 选择Android调试器，设置hostname和端口。 3. 开始调试 启动 android_server 。 端口转发 adb forward tcp:23946 tcp:23946 。 以调试模式启动对应的 Activaty ，adb shell am start -D -n com.sgz">
+<meta property="og:description" content="如果手机系统是 android 10，那么需要设置一下  12export IDA_LIBC_PATH=&#x2F;apex&#x2F;com.android.runtime&#x2F;lib&#x2F;bionic&#x2F;libc.soor export IDA_LIBC_PATH=&#x2F;apex&#x2F;com.android.runtime&#x2F;lib64&#x2F;bionic&#x2F;libc.so 参考：https:&#x2F;&#x2F;bbs.pediy.com&#x2F;thread-">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-20-57-11.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-20-58-08.png">
@@ -104,7 +104,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-24-19-19-27.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-24-19-23-12.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-24-19-23-20.png">
-<meta property="og:updated_time" content="2021-02-24T11:37:06.415Z">
+<meta property="og:updated_time" content="2021-04-09T01:12:44.122Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;02&#x2F;22&#x2F;%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so&#x2F;2021-02-22-20-57-11.png">
 
@@ -394,7 +394,12 @@
       
 
       
-        <h1 id="动态调试送给最好的TA"><a href="#动态调试送给最好的TA" class="headerlink" title="动态调试送给最好的TA"></a>动态调试送给最好的TA</h1><h2 id="常规方式"><a href="#常规方式" class="headerlink" title="常规方式"></a>常规方式</h2><h3 id="1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"><a href="#1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。" class="headerlink" title="1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"></a>1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。</h3><p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-57-11.png" alt></p>
+        <blockquote>
+<p>如果手机系统是 android 10，那么需要设置一下</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so</span><br><span class="line">or <span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so</span><br></pre></td></tr></table></figure>
+<p>参考：<a href="https://bbs.pediy.com/thread-258103.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-258103.htm</a></p>
+<h1 id="动态调试送给最好的TA"><a href="#动态调试送给最好的TA" class="headerlink" title="动态调试送给最好的TA"></a>动态调试送给最好的TA</h1><h2 id="常规方式"><a href="#常规方式" class="headerlink" title="常规方式"></a>常规方式</h2><h3 id="1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"><a href="#1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。" class="headerlink" title="1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"></a>1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。</h3><p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-57-11.png" alt></p>
 <h3 id="2-选择Android调试器，设置hostname和端口。"><a href="#2-选择Android调试器，设置hostname和端口。" class="headerlink" title="2. 选择Android调试器，设置hostname和端口。"></a>2. 选择Android调试器，设置hostname和端口。</h3><p><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-58-08.png" alt></p>
 <h3 id="3-开始调试"><a href="#3-开始调试" class="headerlink" title="3. 开始调试"></a>3. 开始调试</h3><ul>
 <li>启动 <code>android_server</code> 。</li>
@@ -492,6 +497,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E5%9B%9B/" rel="prev" title="ARMv8学习记录四">
+                ARMv8学习记录四 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -581,7 +590,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
