@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="CKCat的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="转载：https:&#x2F;&#x2F;github.com&#x2F;NanXiao&#x2F;gnu-linux-proc-pid-intro  &#x2F;proc&#x2F;[pid]&#x2F;auxv&#x2F;proc&#x2F;[pid]&#x2F;cmdline&#x2F;proc&#x2F;[pid]&#x2F;comm&#x2F;proc&#x2F;[pid]&#x2F;cwd&#x2F;proc&#x2F;[pid]&#x2F;environ&#x2F;proc&#x2F;[pid]&#x2F;exe&#x2F;proc&#x2F;[pid]&#x2F;fd&#x2F;proc&#x2F;[pid]&#x2F;latency&#x2F;proc&#x2F;[pid">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gnu-linux-proc-pid-intro">
+<meta property="og:url" content="https:&#x2F;&#x2F;ckcat.github.io&#x2F;2021&#x2F;05&#x2F;13&#x2F;gnu-linux-proc-pid-intro&#x2F;index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="转载：https:&#x2F;&#x2F;github.com&#x2F;NanXiao&#x2F;gnu-linux-proc-pid-intro  &#x2F;proc&#x2F;[pid]&#x2F;auxv&#x2F;proc&#x2F;[pid]&#x2F;cmdline&#x2F;proc&#x2F;[pid]&#x2F;comm&#x2F;proc&#x2F;[pid]&#x2F;cwd&#x2F;proc&#x2F;[pid]&#x2F;environ&#x2F;proc&#x2F;[pid]&#x2F;exe&#x2F;proc&#x2F;[pid]&#x2F;fd&#x2F;proc&#x2F;[pid]&#x2F;latency&#x2F;proc&#x2F;[pid">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-05-13T01:42:46.944Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ckcat.github.io/2021/05/13/gnu-linux-proc-pid-intro/"/>
+
+
+
+
+
+  <title>gnu-linux-proc-pid-intro | CKCat的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CKCat的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/05/13/gnu-linux-proc-pid-intro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CKCat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">gnu-linux-proc-pid-intro</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-05-13T09:35:17+08:00">
+                2021-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/05/13/gnu-linux-proc-pid-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2021/05/13/gnu-linux-proc-pid-intro/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>转载：<a href="https://github.com/NanXiao/gnu-linux-proc-pid-intro" target="_blank" rel="noopener">https://github.com/NanXiao/gnu-linux-proc-pid-intro</a></p>
+</blockquote>
+<p><a href="#auxv">/proc/[pid]/auxv</a><br><a href="#cmdline">/proc/[pid]/cmdline</a><br><a href="#comm">/proc/[pid]/comm</a><br><a href="#cwd">/proc/[pid]/cwd</a><br><a href="#environ">/proc/[pid]/environ</a><br><a href="#exe">/proc/[pid]/exe</a><br><a href="#fd">/proc/[pid]/fd</a><br><a href="#latency">/proc/[pid]/latency</a><br><a href="#limits">/proc/[pid]/limits</a><br><a href="#maps">/proc/[pid]/maps</a><br><a href="#root">/proc/[pid]/root</a><br><a href="#stack">/proc/[pid]/stack</a><br><a href="#statm">/proc/[pid]/statm</a><br><a href="#status">/proc/[pid]/status</a><br><a href="#syscall">/proc/[pid]/syscall</a><br><a href="#wchan">/proc/[pid]/wchan</a>  </p>
+<h2 id="auxv"><a href="#auxv" class="headerlink" title="auxv"></a>auxv</h2><p><code>/proc/[pid]/auxv</code>包含传递给进程的<code>ELF</code>解释器信息，格式是每一项都是一个<code>unsigned long</code>长度的<code>ID</code>加上一个<code>unsigned long</code>长度的值。最后一项以连续的两个<code>0x00</code>开头。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexdump -x /proc/2948/auxv</span></span><br><span class="line">0000000    0021    0000    0000    0000    0000    1a82    7ffd    0000</span><br><span class="line">0000010    0010    0000    0000    0000    dbf5    1fc9    0000    0000</span><br><span class="line">0000020    0006    0000    0000    0000    1000    0000    0000    0000</span><br><span class="line">0000030    0011    0000    0000    0000    0064    0000    0000    0000</span><br><span class="line">0000040    0003    0000    0000    0000    2040    4326    7f4a    0000</span><br><span class="line">0000050    0004    0000    0000    0000    0038    0000    0000    0000</span><br><span class="line">0000060    0005    0000    0000    0000    0009    0000    0000    0000</span><br><span class="line">0000070    0007    0000    0000    0000    f000    4303    7f4a    0000</span><br><span class="line">0000080    0008    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">0000090    0009    0000    0000    0000    8e67    4327    7f4a    0000</span><br><span class="line">00000a0    000b    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000b0    000c    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000c0    000d    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000d0    000e    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000e0    0017    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000f0    0019    0000    0000    0000    3de9    1a80    7ffd    0000</span><br><span class="line">0000100    001f    0000    0000    0000    4fe5    1a80    7ffd    0000</span><br><span class="line">0000110    000f    0000    0000    0000    3df9    1a80    7ffd    0000</span><br><span class="line">0000120    0000    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">0000130</span><br></pre></td></tr></table></figure>
+<p>解析这个文件可以参考这段<a href="http://www.wienand.org/junkcode/linux/read-auxv.c" target="_blank" rel="noopener">代码</a>。</p>
+<h2 id="cmdline"><a href="#cmdline" class="headerlink" title="cmdline"></a>cmdline</h2><p><code>/proc/[pid]/cmdline</code>是一个只读文件，包含进程的完整命令行信息。如果这个进程是<code>zombie</code>进程，则这个文件没有任何内容。举例如下：    </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ps -ef | grep 2948</span></span><br><span class="line">root       2948      1  0 Nov05 ?        00:00:04 /usr/sbin/libvirtd --listen</span><br><span class="line"></span><br><span class="line"><span class="comment"># cat /proc/2948/cmdline</span></span><br><span class="line">/usr/sbin/libvirtd--listen</span><br></pre></td></tr></table></figure>
+
+<h2 id="comm"><a href="#comm" class="headerlink" title="comm"></a>comm</h2><p><code>/proc/[pid]/comm</code>包含进程的命令名。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/comm</span></span><br><span class="line">libvirtd</span><br></pre></td></tr></table></figure>
+
+<h2 id="cwd"><a href="#cwd" class="headerlink" title="cwd"></a>cwd</h2><p><code>/proc/[pid]/cwd</code>是进程当前工作目录的符号链接。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls -lt /proc/2948/cwd</span></span><br><span class="line">lrwxrwxrwx 1 root root 0 Nov  9 12:14 /proc/2948/cwd -&gt; /</span><br></pre></td></tr></table></figure>
+
+<h2 id="environ"><a href="#environ" class="headerlink" title="environ"></a>environ</h2><p><code>/proc/[pid]/environ</code>显示进程的环境变量。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># strings /proc/2948/environ</span></span><br><span class="line">LANG=POSIX</span><br><span class="line">LC_CTYPE=en_US.UTF-8</span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/sbin:/usr/<span class="built_in">local</span>/bin:/usr/sbin:/usr/bin:/sbin:/bin</span><br><span class="line">NOTIFY_SOCKET=@/org/freedesktop/systemd1/notify</span><br><span class="line">LIBVIRTD_CONFIG=/etc/libvirt/libvirtd.conf</span><br><span class="line">LIBVIRTD_ARGS=--listen</span><br><span class="line">LIBVIRTD_NOFILES_LIMIT=2048</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="exe"><a href="#exe" class="headerlink" title="exe"></a>exe</h2><p><code>/proc/[pid]/exe</code>为实际运行程序的符号链接。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls -lt /proc/2948/exe</span></span><br><span class="line">lrwxrwxrwx 1 root root 0 Nov  5 13:04 /proc/2948/exe -&gt; /usr/sbin/libvirtd</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="fd"><a href="#fd" class="headerlink" title="fd"></a>fd</h2><p><code>/proc/[pid]/fd</code>是一个目录，包含进程打开文件的情况。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls -lt /proc/3801/fd</span></span><br><span class="line">total 0</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 0 -&gt; socket:[37445]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 1 -&gt; socket:[37446]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 10 -&gt; socket:[31729]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 11 -&gt; socket:[34562]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 12 -&gt; socket:[39978]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 13 -&gt; socket:[34574]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 14 -&gt; socket:[39137]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 15 -&gt; socket:[39208]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 16 -&gt; socket:[39221]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 17 -&gt; socket:[41080]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 18 -&gt; socket:[40014]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 19 -&gt; socket:[34617]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 20 -&gt; socket:[34620]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 23 -&gt; socket:[42357]</span><br><span class="line">lr-x------. 1 root root 64 Apr 18 16:51 3 -&gt; /dev/urandom</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 4 -&gt; socket:[37468]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 5 -&gt; socket:[37471]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 6 -&gt; socket:[289532]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 7 -&gt; socket:[31728]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 8 -&gt; socket:[37450]</span><br><span class="line">lrwx------. 1 root root 64 Apr 18 16:51 9 -&gt; socket:[37451]</span><br><span class="line">l-wx------. 1 root root 64 Apr 13 16:35 2 -&gt; /root/.vnc/localhost.localdomain:1.log</span><br></pre></td></tr></table></figure>
+
+<p>目录中的每一项都是一个符号链接，指向打开的文件，数字则代表文件描述符。  </p>
+<h2 id="latency"><a href="#latency" class="headerlink" title="latency"></a>latency</h2><p><code>/proc/[pid]/latency</code>显示哪些代码造成的延时比较大（使用这个<code>feature</code>，需要执行“<code>echo 1 &gt; /proc/sys/kernel/latencytop</code>”）。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/latency</span></span><br><span class="line">Latency Top version : v0.1</span><br><span class="line">30667 10650491 4891 poll_schedule_timeout do_sys_poll SyS_poll system_call_fastpath 0x7f636573dc1d</span><br><span class="line">8 105 44 futex_wait_queue_me futex_wait do_futex SyS_futex system_call_fastpath 0x7f6365a167bc</span><br></pre></td></tr></table></figure>
+
+<p>每一行前三个数字分别是后面代码执行的次数，总共执行延迟时间（单位是微秒）和最长执行延迟时间（单位是微秒），后面则是代码完整的调用栈。</p>
+<h2 id="limits"><a href="#limits" class="headerlink" title="limits"></a>limits</h2><p><code>/proc/[pid]/limits</code>显示当前进程的资源限制。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/limits</span></span><br><span class="line">Limit                     Soft Limit           Hard Limit           Units</span><br><span class="line">Max cpu time              unlimited            unlimited            seconds</span><br><span class="line">Max file size             unlimited            unlimited            bytes</span><br><span class="line">Max data size             unlimited            unlimited            bytes</span><br><span class="line">Max stack size            8388608              unlimited            bytes</span><br><span class="line">Max core file size        0                    unlimited            bytes</span><br><span class="line">Max resident <span class="built_in">set</span>          unlimited            unlimited            bytes</span><br><span class="line">Max processes             6409                 6409                 processes</span><br><span class="line">Max open files            1024                 4096                 files</span><br><span class="line">Max locked memory         65536                65536                bytes</span><br><span class="line">Max address space         unlimited            unlimited            bytes</span><br><span class="line">Max file locks            unlimited            unlimited            locks</span><br><span class="line">Max pending signals       6409                 6409                 signals</span><br><span class="line">Max msgqueue size         819200               819200               bytes</span><br><span class="line">Max nice priority         0                    0</span><br><span class="line">Max realtime priority     0                    0</span><br><span class="line">Max realtime timeout      unlimited            unlimited            us</span><br></pre></td></tr></table></figure>
+
+<p><code>Soft Limit</code>表示<code>kernel</code>设置给资源的值，<code>Hard Limit</code>表示<code>Soft Limit</code>的上限，而<code>Units</code>则为计量单元。</p>
+<h2 id="maps"><a href="#maps" class="headerlink" title="maps"></a>maps</h2><p><code>/proc/[pid]/maps</code>显示进程的内存区域映射信息。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/maps</span></span><br><span class="line">......</span><br><span class="line">address                   perms offset  dev   inode                      pathname</span><br><span class="line">7f4a2e2ad000-7f4a2e2ae000 rw-p 00006000 08:14 6505977                    /usr/lib64/sasl2/libsasldb.so.3.0.0</span><br><span class="line">7f4a2e2ae000-7f4a2e2af000 ---p 00000000 00:00 0</span><br><span class="line">7f4a2e2af000-7f4a2eaaf000 rw-p 00000000 00:00 0                          [stack:94671]</span><br><span class="line">7f4a2eaaf000-7f4a2eab0000 ---p 00000000 00:00 0</span><br><span class="line">7f4a2eab0000-7f4a2f2b0000 rw-p 00000000 00:00 0                          [stack:94670]</span><br><span class="line">......</span><br><span class="line">7f4a434d0000-7f4a434d5000 rw-p 0006e000 08:14 4292988                    /usr/sbin/libvirtd</span><br><span class="line">7f4a4520a000-7f4a452f7000 rw-p 00000000 00:00 0                          [heap]</span><br><span class="line">7ffd1a7e4000-7ffd1a805000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffd1a820000-7ffd1a821000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure>
+
+<p>其中注意的一点是<code>[stack:&lt;tid&gt;]</code>是线程的堆栈信息，对应于<code>/proc/[pid]/task/[tid]/</code>路径。  </p>
+<h2 id="root"><a href="#root" class="headerlink" title="root"></a>root</h2><p><code>/proc/[pid]/root</code>是进程根目录的符号链接。举例如下： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls -lt /proc/2948/root</span></span><br><span class="line">lrwxrwxrwx 1 root root 0 Nov  9 12:14 /proc/2948/root -&gt; /</span><br></pre></td></tr></table></figure>
+
+<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><p><code>/proc/[pid]/stack</code>显示当前进程的内核调用栈信息，只有内核编译时打开了<code>CONFIG_STACKTRACE</code>编译选项，才会生成这个文件。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/stack</span></span><br><span class="line">[&lt;ffffffff80168375&gt;] poll_schedule_timeout+0x45/0x60</span><br><span class="line">[&lt;ffffffff8016994d&gt;] do_sys_poll+0x49d/0x550</span><br><span class="line">[&lt;ffffffff80169abd&gt;] SyS_poll+0x5d/0xf0</span><br><span class="line">[&lt;ffffffff804c16e7&gt;] system_call_fastpath+0x16/0x1b</span><br><span class="line">[&lt;00007f4a41ff2c1d&gt;] 0x7f4a41ff2c1d</span><br><span class="line">[&lt;ffffffffffffffff&gt;] 0xffffffffffffffff</span><br></pre></td></tr></table></figure>
+
+<h2 id="statm"><a href="#statm" class="headerlink" title="statm"></a>statm</h2><p><code>/proc/[pid]/statm</code>显示进程所占用内存大小的统计信息，包含七个值，度量单位是<code>page</code>（<code>page</code>大小可通过<code>getconf PAGESIZE</code>得到）。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/statm  </span></span><br><span class="line">72362 12945 4876 569 0 24665 0</span><br></pre></td></tr></table></figure>
+
+
+<p>各个值含义：<br>    a）进程占用的总的内存；<br>    b）进程当前时刻占用的物理内存；<br>    c）同其它进程共享的内存；<br>    d）进程的代码段；<br>    e）共享库（从<code>2.6</code>版本起，这个值为<code>0</code>）；<br>    f）进程的堆栈；<br>    g）<code>dirty pages</code>（从<code>2.6</code>版本起，这个值为<code>0</code>）。  </p>
+<h2 id="status"><a href="#status" class="headerlink" title="status"></a>status</h2><p><code>/proc/[pid]/status</code>包含进程的状态信息。其很多内容与<code>/proc/[pid]/stat</code>和<code>/proc/[pid]/statm</code>，但是却是以一种更清晰地方式展现出来。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/$$/status</span></span><br><span class="line">Name:   bash</span><br><span class="line">Umask:  0022</span><br><span class="line">State:  S (sleeping)</span><br><span class="line">Tgid:   15694</span><br><span class="line">Ngid:   0</span><br><span class="line">Pid:    15694</span><br><span class="line">PPid:   15692</span><br><span class="line">TracerPid:      0</span><br><span class="line">Uid:    0       0       0       0</span><br><span class="line">Gid:    0       0       0       0</span><br><span class="line">FDSize: 256</span><br><span class="line">Groups: 0 1 2 3 4 6 10 19</span><br><span class="line">NStgid: 15694</span><br><span class="line">NSpid:  15694</span><br><span class="line">NSpgid: 15694</span><br><span class="line">NSsid:  15694</span><br><span class="line">VmPeak:    26040 kB</span><br><span class="line">VmSize:    26040 kB</span><br><span class="line">VmLck:         0 kB</span><br><span class="line">VmPin:         0 kB</span><br><span class="line">VmHWM:      5412 kB</span><br><span class="line">VmRSS:      5412 kB</span><br><span class="line">RssAnon:            2272 kB</span><br><span class="line">RssFile:            3140 kB</span><br><span class="line">RssShmem:              0 kB</span><br><span class="line">VmData:     2244 kB</span><br><span class="line">VmStk:       132 kB</span><br><span class="line">VmExe:       792 kB</span><br><span class="line">VmLib:      2732 kB</span><br><span class="line">VmPTE:        68 kB</span><br><span class="line">VmPMD:        12 kB</span><br><span class="line">VmSwap:        0 kB</span><br><span class="line">HugetlbPages:          0 kB</span><br><span class="line">Threads:        1</span><br><span class="line">SigQ:   0/11753</span><br><span class="line">SigPnd: 0000000000000000</span><br><span class="line">ShdPnd: 0000000000000000</span><br><span class="line">SigBlk: 0000000000010000</span><br><span class="line">SigIgn: 0000000000380004</span><br><span class="line">SigCgt: 000000004b817efb</span><br><span class="line">CapInh: 0000000000000000</span><br><span class="line">CapPrm: 0000003fffffffff</span><br><span class="line">CapEff: 0000003fffffffff</span><br><span class="line">CapBnd: 0000003fffffffff</span><br><span class="line">CapAmb: 0000000000000000</span><br><span class="line">NoNewPrivs:     0</span><br><span class="line">Seccomp:        0</span><br><span class="line">Cpus_allowed:   f</span><br><span class="line">Cpus_allowed_list:      0-3</span><br><span class="line">Mems_allowed:   00000000,00000001</span><br><span class="line">Mems_allowed_list:      0</span><br><span class="line">voluntary_ctxt_switches:        1045</span><br><span class="line">nonvoluntary_ctxt_switches:     30</span><br></pre></td></tr></table></figure>
+<p>关于信号（<code>signal</code>）的信息：<code>SigQ</code>分为两部分（例如<code>0/11753</code>），前面表示当前处在队列中的信号（<code>0</code>），后面则表示队列一共可以存储多少信号（<code>11753</code>）；<code>SigPnd</code>表示当前线程<code>pending</code>的信号，而<code>ShdPnd</code>则表示整个进程<code>pending</code>的信号；<code>SigBlk</code>、<code>SigIgn</code>和<code>SigCgt</code>分别表示对信号的处理是阻塞，忽略，还是捕获。（关于<code>Unix</code>信号的相关知识，可以参考<a href="https://www.networkworld.com/article/3211296/linux/unix-dealing-with-signals.html" target="_blank" rel="noopener">Unix: Dealing with signals</a>）。</p>
+<h2 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h2><p><code>/proc/[pid]/syscall</code>显示当前进程正在执行的系统调用。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/syscall</span></span><br><span class="line">7 0x7f4a452cbe70 0xb 0x1388 0xffffffffffdff000 0x7f4a4274a750 0x0 0x7ffd1a8033f0 0x7f4a41ff2c1d</span><br></pre></td></tr></table></figure>
+
+<p>第一个值是系统调用号（<code>7</code>代表<code>poll</code>），后面跟着<code>6</code>个系统调用的参数值（位于寄存器中），最后两个值依次是堆栈指针和指令计数器的值。如果当前进程虽然阻塞，但阻塞函数并不是系统调用，则系统调用号的值为<code>-1</code>，后面只有堆栈指针和指令计数器的值。如果进程没有阻塞，则这个文件只有一个“<code>running</code>”的字符串。</p>
+<p>内核编译时打开了<code>CONFIG_HAVE_ARCH_TRACEHOOK</code>编译选项，才会生成这个文件。  </p>
+<h2 id="wchan"><a href="#wchan" class="headerlink" title="wchan"></a>wchan</h2><p><code>/proc/[pid]/wchan</code>显示当进程<code>sleep</code>时，<code>kernel</code>当前运行的函数。举例如下：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat /proc/2948/wchan</span></span><br><span class="line">kauditd_thread</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%94/" rel="next" title="ARMv8学习记录五">
+                <i class="fa fa-chevron-left"></i> ARMv8学习记录五
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/06/14/GCC%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96/" rel="prev" title="GCC内联汇编">
+                GCC内联汇编 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="CKCat" />
+            
+              <p class="site-author-name" itemprop="name">CKCat</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CKCat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:ckcatck@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#auxv"><span class="nav-number">1.</span> <span class="nav-text">auxv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cmdline"><span class="nav-number">2.</span> <span class="nav-text">cmdline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comm"><span class="nav-number">3.</span> <span class="nav-text">comm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cwd"><span class="nav-number">4.</span> <span class="nav-text">cwd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environ"><span class="nav-number">5.</span> <span class="nav-text">environ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exe"><span class="nav-number">6.</span> <span class="nav-text">exe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fd"><span class="nav-number">7.</span> <span class="nav-text">fd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latency"><span class="nav-number">8.</span> <span class="nav-text">latency</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#limits"><span class="nav-number">9.</span> <span class="nav-text">limits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#maps"><span class="nav-number">10.</span> <span class="nav-text">maps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#root"><span class="nav-number">11.</span> <span class="nav-text">root</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack"><span class="nav-number">12.</span> <span class="nav-text">stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#statm"><span class="nav-number">13.</span> <span class="nav-text">statm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#status"><span class="nav-number">14.</span> <span class="nav-text">status</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#syscall"><span class="nav-number">15.</span> <span class="nav-text">syscall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wchan"><span class="nav-number">16.</span> <span class="nav-text">wchan</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+  
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://CKCat.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ckcat.github.io/2021/05/13/gnu-linux-proc-pid-intro/';
+          this.page.identifier = '2021/05/13/gnu-linux-proc-pid-intro/';
+          this.page.title = 'gnu-linux-proc-pid-intro';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://CKCat.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
