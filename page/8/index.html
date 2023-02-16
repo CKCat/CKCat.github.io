@@ -84,7 +84,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -147,7 +147,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">85</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,121 +183,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">ssh基本使用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-12-14 10:50:02" itemprop="dateCreated datePublished" datetime="2019-12-14T10:50:02+00:00">2019-12-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>转载：<a target="_blank" rel="noopener" href="https://abcdabcd987.com/ssh/">https://abcdabcd987.com/ssh/</a></p>
-</blockquote>
-<!-- TOC -->
-
-<ul>
-<li><a href="#%E7%BA%A6%E5%AE%9A">约定</a></li>
-<li><a href="#%E5%9F%BA%E7%A1%80">基础</a></li>
-<li><a href="#%E5%AE%89%E8%A3%85-openssh-server">安装 OpenSSH Server</a></li>
-<li><a href="#%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%85%A5">免密码登入</a></li>
-<li><a href="#%E9%85%8D%E7%BD%AE%E5%88%AB%E5%90%8D">配置别名</a></li>
-<li><a href="#%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6">传输文件</a></li>
-<li><a href="#%E4%BF%9D%E6%8C%81%E7%A8%8B%E5%BA%8F%E5%9C%A8%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C">保持程序在后台运行</a></li>
-<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%901">反向端口转发：例子1</a></li>
-<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%902">反向端口转发：例子2</a></li>
-<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%903">反向端口转发：例子3</a></li>
-<li><a href="#%E6%AD%A3%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91">正向端口转发</a></li>
-<li><a href="#%E7%94%A8%E4%BD%9C-socks5-%E4%BB%A3%E7%90%86">用作 SOCKS5 代理</a></li>
-<li><a href="#%E4%BC%A0%E9%80%92%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2">传递图形界面</a></li>
-</ul>
-<!-- /TOC -->
-
-<h1 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h1><p>本文不讲解 Linux 使用方法，只讲解机器之间的通信方法。<br>下文中行首的 local$ 以及 remote$ 等为命令行的提示符，不是输入的内容，用于区分当前是在哪台机子上。</p>
-<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -343,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -436,7 +321,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -531,7 +416,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -667,7 +552,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -765,7 +650,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -872,7 +757,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -986,7 +871,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1090,7 +975,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1235,7 +1120,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1290,6 +1175,112 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/11/08/%E5%AE%89%E5%8D%934-4%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%B9%B6%E5%88%B7%E6%9C%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-08 10:40:16" itemprop="dateCreated datePublished" datetime="2019-11-08T10:40:16+00:00">2019-11-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>转载自：<a target="_blank" rel="noopener" href="https://www.mzihen.com/how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi/">https://www.mzihen.com/how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi/</a></p>
+</blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#%E4%B8%80%E5%88%B6%E4%BD%9C%E6%94%AF%E6%8C%81uefi%E5%90%AF%E5%8A%A8%E7%9A%84ubuntu-usb%E5%90%AF%E5%8A%A8%E7%9B%98">一、制作支持UEFI启动的Ubuntu USB启动盘</a></li>
+<li><a href="#%E4%BA%8Cwindows10%E4%B8%AD%E7%9A%84%E8%AE%BE%E7%BD%AE">二、Windows10中的设置</a></li>
+<li><a href="#%E4%B8%89%E5%88%86%E5%8C%BA">三、分区</a></li>
+<li><a href="#%E5%9B%9B%E5%AE%89%E8%A3%85ubuntu%E7%B3%BB%E7%BB%9F">四、安装Ubuntu系统</a></li>
+<li><a href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98">存在的问题。</a></li>
+</ul>
+<!-- /TOC -->
+<h1 id="一、制作支持UEFI启动的Ubuntu-USB启动盘"><a href="#一、制作支持UEFI启动的Ubuntu-USB启动盘" class="headerlink" title="一、制作支持UEFI启动的Ubuntu USB启动盘"></a>一、制作支持UEFI启动的Ubuntu USB启动盘</h1><p>我使用了开源软件Rufus（<a target="_blank" rel="noopener" href="https://rufus.akeo.ie/?locale=zh_CN">Rufus官网</a>）创建的USB启动盘，Ubuntu使用了最新版的Ubuntu 18.04.1 LTS（<a target="_blank" rel="noopener" href="https://www.ubuntu.com/download/desktop">ubuntu官网</a>）。</p>
+<p>现有台式机是SSD硬盘加机械硬盘，win10系统安装在SSD硬盘，SSD是MBR分区的，机械硬盘是GPT分区，主板使用的UEFI启动模式。因为要将Ubuntu安装在机械硬盘上，所以制作启动盘选择的 <strong>分区类型选择GPT，目标系统类型选择UEFI(非CSM)</strong> ，其它都按照我设置的即可，如下图。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

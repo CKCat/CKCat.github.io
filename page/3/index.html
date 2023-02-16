@@ -84,7 +84,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -147,7 +147,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">85</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,100 +183,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%94/" class="post-title-link" itemprop="url">ARMv8学习记录五</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-04-10 13:23:52" itemprop="dateCreated datePublished" datetime="2021-04-10T13:23:52+00:00">2021-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="条件执行"><a href="#条件执行" class="headerlink" title="条件执行"></a>条件执行</h1><h2 id="if…else-if…else"><a href="#if…else-if…else" class="headerlink" title="if…else if…else"></a>if…else if…else</h2><p>c语言代码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(argc &gt; <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc &gt; 1&quot;</span>);</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(argc == <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc == 1&quot;</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc &lt; 1&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对应的ARMv7代码：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%94/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -322,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -419,7 +325,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -516,7 +422,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -612,7 +518,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -710,7 +616,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -804,7 +710,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -904,7 +810,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1000,7 +906,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1100,7 +1006,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1128,6 +1034,100 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/10/27/IDA%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/09/14/%E7%BC%96%E8%AF%91GDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/09/14/%E7%BC%96%E8%AF%91GDB/" class="post-title-link" itemprop="url">编译GDB</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-14 13:11:38" itemprop="dateCreated datePublished" datetime="2020-09-14T13:11:38+00:00">2020-09-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:53:46" itemprop="dateModified" datetime="2023-02-16T01:53:46+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="编译-gdb-和-gdbserver"><a href="#编译-gdb-和-gdbserver" class="headerlink" title="编译 gdb 和 gdbserver"></a>编译 gdb 和 gdbserver</h1><h2 id="Download-gdb-source-code"><a href="#Download-gdb-source-code" class="headerlink" title="Download gdb source code:"></a>Download gdb source code:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget ftp://sourceware.org/pub/gdb/releases/gdb-9.1.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="Extract-file"><a href="#Extract-file" class="headerlink" title="Extract file:"></a>Extract file:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xzvf gdb-9.1.tar.gz</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/09/14/%E7%BC%96%E8%AF%91GDB/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

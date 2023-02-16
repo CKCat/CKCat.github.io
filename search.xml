@@ -5472,168 +5472,95 @@
   <entry>
     <title>Hexo｜快速搭建自己（Github）博客</title>
     <url>/2019/11/02/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<!-- TOC -->
-
-<ul>
-<li><a href="#%E4%B8%80%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">一、准备工作</a></li>
-<li><a href="#%E4%BA%8C%E7%94%B3%E8%AF%B7github%E5%8D%9A%E5%AE%A2">二、申请github博客</a><ul>
-<li><a href="#%E5%88%9B%E5%BB%BAgithub%E4%BB%93%E5%BA%93">创建github仓库</a></li>
-</ul>
-</li>
-<li><a href="#%E4%B8%89%E5%AE%89%E8%A3%85hexo">三、安装Hexo</a><ul>
-<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96">初始化</a></li>
-<li><a href="#%E6%96%B0%E5%BB%BA%E6%96%87%E7%AB%A0">新建文章</a></li>
-<li><a href="#%E5%BC%80%E5%90%AF%E6%9C%8D%E5%8A%A1">开启服务</a></li>
-</ul>
-</li>
-<li><a href="#%E5%9B%9B%E9%85%8D%E7%BD%AEhexo%E4%B8%8Egithub-pages%E8%BF%9B%E8%A1%8C%E5%85%B3%E8%81%94">四、配置Hexo与Github pages进行关联</a><ul>
-<li><a href="#%E9%85%8D%E7%BD%AE%E5%85%B3%E8%81%94">配置关联</a></li>
-<li><a href="#%E5%8F%91%E5%B8%83">发布</a></li>
-</ul>
-</li>
-<li><a href="#%E4%BA%94%E6%9B%B4%E6%8D%A2next%E4%B8%BB%E9%A2%98">五、更换NexT主题</a><ul>
-<li><a href="#%E4%B8%8B%E8%BD%BD%E4%B8%BB%E9%A2%98">下载主题</a></li>
-<li><a href="#%E8%AE%BE%E7%BD%AE%E4%B8%BB%E9%A2%98">设置主题</a></li>
-<li><a href="#%E9%85%8D%E7%BD%AE%E4%B8%BB%E9%A2%98">配置主题</a><ul>
-<li><a href="#%E6%A0%87%E7%AD%BE%E4%BA%91%E9%A1%B5%E9%9D%A2">标签云页面</a></li>
-<li><a href="#%E5%88%86%E7%B1%BB%E9%A1%B5%E9%9D%A2">分类页面</a></li>
-<li><a href="#about%E9%A1%B5%E9%9D%A2">About页面</a></li>
-<li><a href="#%E8%85%BE%E8%AE%AF%E5%85%AC%E7%9B%8A404%E9%A1%B5%E9%9D%A2">腾讯公益404页面</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE%E4%B8%BB%E9%A2%98">代码高亮主题</a></li>
-<li><a href="#%E7%AB%99%E7%82%B9%E5%BB%BA%E7%AB%8B%E6%97%B6%E9%97%B4">站点建立时间</a></li>
-<li><a href="#%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E6%98%BE%E7%A4%BA">数学公式显示</a></li>
-<li><a href="#%E4%BE%A7%E8%BE%B9%E6%A0%8F%E7%A4%BE%E4%BA%A4%E9%93%BE%E6%8E%A5">侧边栏社交链接</a></li>
-<li><a href="#%E9%A6%96%E9%A1%B5%E6%98%BE%E7%A4%BA%E6%96%87%E7%AB%A0%E6%91%98%E5%BD%95">首页显示文章摘录</a></li>
-<li><a href="#%E8%AE%BE%E7%BD%AE-favicon">设置 favicon</a></li>
-<li><a href="#%E9%85%8D%E7%BD%AE%E4%B8%8D%E8%92%9C%E5%AD%90%E8%AE%A1%E6%95%B0">配置不蒜子计数</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%E5%85%AD%E9%97%AE%E9%A2%98">六、问题</a><ul>
-<li><a href="#hexo%E5%BC%95%E7%94%A8%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA">hexo引用本地图片无法显示</a><ul>
-<li><a href="#%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE">插件安装与配置</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#hexo-%E5%8D%87%E7%BA%A7">hexo 升级</a><ul>
-<li><a href="#%E5%8D%87%E7%BA%A7">升级</a></li>
-<li><a href="#%E8%B0%83%E6%95%B4%E9%85%8D%E7%BD%AE">调整配置</a></li>
-<li><a href="#next-8x-%E8%B7%A8%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7">NexT-8.x 跨版本升级</a></li>
-<li><a href="#%E8%AE%BE%E7%BD%AE%E6%91%98%E8%A6%81">设置摘要</a></li>
-<li><a href="#%E7%BB%9F%E8%AE%A1%E4%BA%BA%E6%95%B0%E8%AE%BE%E7%BD%AE">统计人数设置</a></li>
-</ul>
-</li>
-</ul>
-<!-- /TOC -->
-
-<h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><ul>
+    <content><![CDATA[<h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><ul>
 <li>安装<a href="https://nodejs.org/en/">nodejs</a></li>
 <li>安装<a href="https://git-scm.com/">git</a></li>
 <li>注册<a href="https://github.com/">github</a>账号</li>
 </ul>
-<h1 id="二、申请github博客"><a href="#二、申请github博客" class="headerlink" title="二、申请github博客"></a>二、申请github博客</h1><h2 id="1-创建github仓库"><a href="#1-创建github仓库" class="headerlink" title="1.创建github仓库"></a>1.创建github仓库</h2><p>创建一个新的github仓库，仓库名为<code>username.github.io</code>,其他选项可以默认。</p>
+<h1 id="二、申请-github-博客"><a href="#二、申请-github-博客" class="headerlink" title="二、申请 github 博客"></a>二、申请 github 博客</h1><h2 id="1-创建-github-仓库"><a href="#1-创建-github-仓库" class="headerlink" title="1.创建 github 仓库"></a>1.创建 github 仓库</h2><p>创建一个新的 github 仓库，仓库名为<code>username.github.io</code>,其他选项可以默认。</p>
 <img src="/2019/11/02/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/new_repository.png" class="">
 
-<p>创建按仓库成功后，进入设置页面GitHub Pages 选项，出现如下界面则表示博客页面创建成功。</p>
+<p>创建按仓库成功后，进入设置页面 GitHub Pages 选项，出现如下界面则表示博客页面创建成功。</p>
 <img src="/2019/11/02/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/github_pages.png" class="">
 
-<h1 id="三、安装Hexo"><a href="#三、安装Hexo" class="headerlink" title="三、安装Hexo"></a>三、安装Hexo</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+<h1 id="三、安装-Hexo"><a href="#三、安装-Hexo" class="headerlink" title="三、安装 Hexo"></a>三、安装 Hexo</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
 
 <h2 id="1-初始化"><a href="#1-初始化" class="headerlink" title="1. 初始化"></a>1. 初始化</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo  init blog</span><br><span class="line">$ <span class="built_in">cd</span> blog</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
 
 <h2 id="2-新建文章"><a href="#2-新建文章" class="headerlink" title="2. 新建文章"></a>2. 新建文章</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;Hello-Hexo&quot;</span></span><br></pre></td></tr></table></figure>
-<p>会在根目录下source&#x2F;_posts&#x2F; 生成Hello-Hexo.md文件，使用markdown编辑器非常方便。</p>
+
+<p>会在根目录下 <code>source/_posts/</code> 生成 <code>Hello-Hexo.md</code> 文件，使用 markdown 编辑器非常方便。</p>
 <h2 id="3-开启服务"><a href="#3-开启服务" class="headerlink" title="3. 开启服务"></a>3. 开启服务</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
 <p>会看到提示<code>INFO  Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</code> 代表博客已经正常运行，在浏览器打开<code>http://0.0.0.0:4000/</code> 即可预览博客的初始状态。</p>
-<p>了解更多Hexo的信息和其他步骤请参考官网的<a href="https://hexo.io/zh-cn/docs/setup.html">这篇文档</a> 。</p>
-<h1 id="四、配置Hexo与Github-pages进行关联"><a href="#四、配置Hexo与Github-pages进行关联" class="headerlink" title="四、配置Hexo与Github pages进行关联"></a>四、配置Hexo与Github pages进行关联</h1><h2 id="1-配置关联"><a href="#1-配置关联" class="headerlink" title="1. 配置关联"></a>1. 配置关联</h2><p>进入<code>Blog</code>目录，然后以文本编辑器打开_config.yml文件，修改deploy配置如下，rego为CKCat.github.io.git仓库提交代码的git地址。</p>
+<p>了解更多 Hexo 的信息和其他步骤请参考官网的<a href="https://hexo.io/zh-cn/docs/setup.html">这篇文档</a> 。</p>
+<h1 id="四、配置-Hexo-与-Github-pages-进行关联"><a href="#四、配置-Hexo-与-Github-pages-进行关联" class="headerlink" title="四、配置 Hexo 与 Github pages 进行关联"></a>四、配置 Hexo 与 Github pages 进行关联</h1><h2 id="1-配置关联"><a href="#1-配置关联" class="headerlink" title="1. 配置关联"></a>1. 配置关联</h2><p>进入<code>Blog</code>目录，然后以文本编辑器打开 <code>_config.yml</code> 文件，修改 deploy 配置如下，rego 为 <code>CKCat.github.io.git</code> 仓库提交代码的 git 地址。</p>
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/CKCat/CKCat.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="2-发布"><a href="#2-发布" class="headerlink" title="2. 发布"></a>2. 发布</h2><p>使用下面的命令进行发布：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean  <span class="comment"># 清除缓存</span></span><br><span class="line">hexo g      <span class="comment"># 生成本地发布文件夹</span></span><br><span class="line">hexo d      <span class="comment"># 发布到github pages上</span></span><br></pre></td></tr></table></figure>
-<p>更多的hexo命令操作请参考<a href="https://hexo.io/zh-cn/docs/commands.html">Hexo官方文档</a>即可。</p>
-<h1 id="五、更换NexT主题"><a href="#五、更换NexT主题" class="headerlink" title="五、更换NexT主题"></a>五、更换NexT主题</h1><h2 id="1-下载主题"><a href="#1-下载主题" class="headerlink" title="1. 下载主题"></a>1. 下载主题</h2><p>在Blog目录运行下列命令：</p>
+
+<p>更多的 hexo 命令操作请参考<a href="https://hexo.io/zh-cn/docs/commands.html">Hexo 官方文档</a>即可。</p>
+<h1 id="五、更换-NexT-主题"><a href="#五、更换-NexT-主题" class="headerlink" title="五、更换 NexT 主题"></a>五、更换 NexT 主题</h1><h2 id="1-下载主题"><a href="#1-下载主题" class="headerlink" title="1. 下载主题"></a>1. 下载主题</h2><p>在 Blog 目录运行下列命令：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
 
-<h2 id="2-设置主题"><a href="#2-设置主题" class="headerlink" title="2. 设置主题"></a>2. 设置主题</h2><p>克隆完成以后打开站点配置 <code>_config.yml</code>，找到theme字段，值改为<code>next</code>。<br>运行<code>hexo server --debug</code>，访问<code>http://0.0.0.0:4000/</code> 查看主题是否生效。</p>
+<h2 id="2-设置主题"><a href="#2-设置主题" class="headerlink" title="2. 设置主题"></a>2. 设置主题</h2><p>克隆完成以后打开站点配置 <code>_config.yml</code>，找到 theme 字段，值改为<code>next</code>。<br>运行<code>hexo server --debug</code>，访问<code>http://0.0.0.0:4000/</code> 查看主题是否生效。</p>
 <h2 id="3-配置主题"><a href="#3-配置主题" class="headerlink" title="3. 配置主题"></a>3. 配置主题</h2><p>常用的配置可以直接按照主题的官方<a href="http://theme-next.iissnan.com/">参考手册</a>配置。<br>下面介绍一下常用配置：</p>
 <h3 id="1-标签云页面"><a href="#1-标签云页面" class="headerlink" title="1. 标签云页面"></a>1. 标签云页面</h3><ol>
-<li><p>新建一个页面，命名为tags。命令如下：</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new page <span class="string">&quot;tags&quot;</span></span><br></pre></td></tr></table></figure>
+<li><p>新建一个页面，命名为 tags。命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new page <span class="string">&quot;tags&quot;</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>编辑刚新建的页面，将页面的类型设置为tags，主题将自动为这个页面显示标签云。页面内容如下：</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line"></span><br><span class="line">title: 标签</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 11:46:23</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;tags&quot;</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p> 注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段 comments 并将值设置为 false，如：</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">title: 标签</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 11:46:23</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;tags&quot;</span></span><br><span class="line">comments: <span class="literal">false</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<li><p>编辑刚新建的页面，将页面的类型设置为 tags，主题将自动为这个页面显示标签云。页面内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line"></span><br><span class="line">title: 标签</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 11:46:23</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;tags&quot;</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段 comments 并将值设置为 false，如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">title: 标签</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 11:46:23</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;tags&quot;</span></span><br><span class="line">comments: <span class="literal">false</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>在菜单中添加链接。编辑 <strong>主题配置文件</strong> ，添加tags到 menu中，如下:</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">menu: </span><br><span class="line">home: / </span><br><span class="line">archives: /archives </span><br><span class="line">tags: /tags</span><br></pre></td></tr></table></figure></li>
+<li><p>在菜单中添加链接。编辑 <strong>主题配置文件</strong> ，添加 tags 到 menu 中，如下:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">home: /</span><br><span class="line">archives: /archives</span><br><span class="line">tags: /tags</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="2-分类页面"><a href="#2-分类页面" class="headerlink" title="2. 分类页面"></a>2. 分类页面</h3><ol>
-<li><p>新建一个页面，命名为categories。命令如下：</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new page categories</span><br></pre></td></tr></table></figure>
+<li><p>新建一个页面，命名为 categories。命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new page categories</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>编辑刚新建的页面，将页面的类型设置为categories，主题将自动为这个页面显示所有分类。</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 12:03:27</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;categories&quot;</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<li><p>编辑刚新建的页面，将页面的类型设置为 categories，主题将自动为这个页面显示所有分类。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 12:03:27</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;categories&quot;</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
 
-<p> 注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段comments并将值设置为false，如：</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 12:03:27</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;categories&quot;</span></span><br><span class="line">comments: <span class="literal">false</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>注意：如果有启用多说 或者 Disqus 评论，默认页面也会带有评论。需要关闭的话，请添加字段 comments 并将值设置为 false，如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 分类</span><br><span class="line"><span class="built_in">date</span>: 2019-11-01 12:03:27</span><br><span class="line"><span class="built_in">type</span>: <span class="string">&quot;categories&quot;</span></span><br><span class="line">comments: <span class="literal">false</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>在菜单中添加链接。编辑 <strong>主题配置文件</strong> ，将menu中的categories: &#x2F;categories注释去掉，如下:</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">menu: </span><br><span class="line">home: / </span><br><span class="line">categories: /categories </span><br><span class="line">archives: /archives </span><br><span class="line">tags: /tags</span><br></pre></td></tr></table></figure></li>
+<li><p>在菜单中添加链接。编辑 <strong>主题配置文件</strong> ，将 menu 中的 categories: &#x2F;categories 注释去掉，如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">home: /</span><br><span class="line">categories: /categories</span><br><span class="line">archives: /archives</span><br><span class="line">tags: /tags</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="3-About页面"><a href="#3-About页面" class="headerlink" title="3. About页面"></a>3. About页面</h3><ol>
-<li><p>新建一个 about页面：</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new page <span class="string">&quot;about&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>菜单显示about链接，在 <strong>主题配置文件</strong> 设置中将menu中about<br>前面的注释去掉即可。</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">menu: </span><br><span class="line">home: / </span><br><span class="line">archives: /archives </span><br><span class="line">tags: /tags </span><br><span class="line">about: /about</span><br></pre></td></tr></table></figure>
+<h3 id="3-About-页面"><a href="#3-About-页面" class="headerlink" title="3. About 页面"></a>3. About 页面</h3><ol>
+<li><p>新建一个 about 页面：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new page <span class="string">&quot;about&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>菜单显示 about 链接，在 <strong>主题配置文件</strong> 设置中将 menu 中 about<br>前面的注释去掉即可。<br><code>   menu:   home: /   archives: /archives   tags: /tags   about: /about</code></p>
 </li>
 <li><p>友情链接编辑 <strong>站点配置文件</strong> 添加：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># title, chinese available</span><br><span class="line">links_title: Links</span><br><span class="line"># links</span><br><span class="line">links: </span><br><span class="line">MacTalk: http://macshuo.com/</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># title, chinese available</span><br><span class="line">links_title: Links</span><br><span class="line"># links</span><br><span class="line">links:</span><br><span class="line">MacTalk: http://macshuo.com/</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="4-腾讯公益404页面"><a href="#4-腾讯公益404页面" class="headerlink" title="4. 腾讯公益404页面"></a>4. 腾讯公益404页面</h3><p>简体中文增加腾讯公益404页面，寻找丢失儿童，让大家一起关注此项公益事业！效果如下<a href="http://www.ixirong.com/404.html">http://www.ixirong.com/404.html</a></p>
-<p>使用方法，新建 404.html 页面，放到主题的source目录下，内容如下：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">HTML</span>&gt;</span><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;content-type&quot;</span> <span class="attr">content</span>=<span class="string">&quot;text/html;charset=utf-8;&quot;</span>/&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge,chrome=1&quot;</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;robots&quot;</span> <span class="attr">content</span>=<span class="string">&quot;all&quot;</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;robots&quot;</span> <span class="attr">content</span>=<span class="string">&quot;index,follow&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;http://www.qq.com/404/search_children.js&quot;</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> <span class="attr">homePageUrl</span>=<span class="string">&quot;your site url &quot;</span> <span class="attr">homePageName</span>=<span class="string">&quot;回到我的主页&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-腾讯公益-404-页面"><a href="#4-腾讯公益-404-页面" class="headerlink" title="4. 腾讯公益 404 页面"></a>4. 腾讯公益 404 页面</h3><p>简体中文增加腾讯公益 404 页面，寻找丢失儿童，让大家一起关注此项公益事业！效果如下 <a href="http://www.ixirong.com/404.html">http://www.ixirong.com/404.html</a></p>
+<p>使用方法，新建 404.md 页面，放到主题的 source 目录下，内容如下：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 
-<h3 id="5-代码高亮主题"><a href="#5-代码高亮主题" class="headerlink" title="5. 代码高亮主题"></a>5. 代码高亮主题</h3><p>NexT 使用 <a href="https://github.com/chriskempson/tomorrow-theme">Tomorrow Theme0</a> 作为代码高亮，共有5款主题供你选择。<br>默认使用的是白色的 normal。</p>
-<h3 id="6-站点建立时间"><a href="#6-站点建立时间" class="headerlink" title="6. 站点建立时间"></a>6. 站点建立时间</h3><p>这个时间将在站点的底部显示，例如<code>© 2013 - 2019</code>编辑 <strong>站点配置文件</strong>，新增字段since。</p>
+<h3 id="5-代码高亮主题"><a href="#5-代码高亮主题" class="headerlink" title="5. 代码高亮主题"></a>5. 代码高亮主题</h3><p>NexT 使用 <a href="https://github.com/chriskempson/tomorrow-theme">Tomorrow Theme0</a> 作为代码高亮，共有 5 款主题供你选择。<br>默认使用的是白色的 normal。</p>
+<h3 id="6-站点建立时间"><a href="#6-站点建立时间" class="headerlink" title="6. 站点建立时间"></a>6. 站点建立时间</h3><p>这个时间将在站点的底部显示，例如<code>© 2013 - 2019</code>编辑 <strong>站点配置文件</strong>，新增字段 since。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">since: 2013</span><br></pre></td></tr></table></figure>
 
-<h3 id="7-数学公式显示"><a href="#7-数学公式显示" class="headerlink" title="7. 数学公式显示"></a>7. 数学公式显示</h3><p>NexT 借助于 MathJax 来显示数学公式，此选项默认关闭。<br>编辑 <strong>主题配置文件</strong>，将mathjax设定为true即可。</p>
+<h3 id="7-数学公式显示"><a href="#7-数学公式显示" class="headerlink" title="7. 数学公式显示"></a>7. 数学公式显示</h3><p>NexT 借助于 MathJax 来显示数学公式，此选项默认关闭。<br>编辑 <strong>主题配置文件</strong>，将 mathjax 设定为 true 即可。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># MathJax Support</span><br><span class="line">mathjax: true</span><br></pre></td></tr></table></figure>
+
 <p>ProTip: <a href="https://github.com/iissnan/hexo-theme-next/pull/363">使用七牛 CDN 来加速 MathJax 脚本的加载</a></p>
-<h3 id="8-侧边栏社交链接"><a href="#8-侧边栏社交链接" class="headerlink" title="8. 侧边栏社交链接"></a>8. 侧边栏社交链接</h3><p>编辑 <strong>站点配置文件</strong> ，新增字段social，然后添加社交站点名称与地址即可。例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Social linkssocial: </span><br><span class="line">  github: https://github.com/your-user-name </span><br><span class="line">  twitter: https://twitter.com/your-user-name </span><br><span class="line">  weibo: http://weibo.com/your-user-name </span><br><span class="line">  douban: http://douban.com/people/your-user-name </span><br><span class="line">  zhihu: http://www.zhihu.com/people/your-user-name </span><br><span class="line">  # 等等</span><br></pre></td></tr></table></figure>
+<h3 id="8-侧边栏社交链接"><a href="#8-侧边栏社交链接" class="headerlink" title="8. 侧边栏社交链接"></a>8. 侧边栏社交链接</h3><p>编辑 <strong>站点配置文件</strong> ，新增字段 social，然后添加社交站点名称与地址即可。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#Social linkssocial:</span><br><span class="line">  github: https://github.com/your-user-name</span><br><span class="line">  twitter: https://twitter.com/your-user-name</span><br><span class="line">  weibo: http://weibo.com/your-user-name</span><br><span class="line">  douban: http://douban.com/people/your-user-name</span><br><span class="line">  zhihu: http://www.zhihu.com/people/your-user-name</span><br><span class="line">  # 等等</span><br></pre></td></tr></table></figure>
 
-<h3 id="9-首页显示文章摘录"><a href="#9-首页显示文章摘录" class="headerlink" title="9. 首页显示文章摘录"></a>9. 首页显示文章摘录</h3><p>NexT 支持三种方式来控制首页文章的显示方式。若需要在首页显示摘录，可以通过以下方法：</p>
-<p>在文章中使用<code>&lt;!-- more --&gt;</code>手动进行截断<br>在文章的 <a href="https://hexo.io/docs/front-matter.html">front-matter</a> 中添加description，并提供文章摘录<br>自动形成摘要，在 主题配置文件 中添加：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto_excerpt: </span><br><span class="line">enable: true </span><br><span class="line">length: 150</span><br></pre></td></tr></table></figure>
-<p>默认截取的长度为150字符，可以根据需要自行设定。</p>
-<h3 id="10-设置-favicon"><a href="#10-设置-favicon" class="headerlink" title="10. 设置 favicon"></a>10. 设置 favicon</h3><p>将<code>favicon</code>放置到站点的 <code>source</code>目录下即可。</p>
-<h3 id="11-配置不蒜子计数"><a href="#11-配置不蒜子计数" class="headerlink" title="11. 配置不蒜子计数"></a>11. 配置不蒜子计数</h3><ol>
-<li>安装脚本（必选）<br>要使用不蒜子必须在页面中引入busuanzi.js，代码如下：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>本人使用的是next主题，所以在themes&#x2F;next&#x2F;layout&#x2F;_partial&#x2F;footer.swig中添加上述脚本，也可以把脚本添加在header中，如果使用的是其他主题，大致也是一样的，不过可能后缀是ejs，没有影响。</p>
-<ol start="2">
-<li>配置方式使用不蒜子计数<br>第一种引入脚本的方法适用于任何类型的个人站点，如果你使用的主题是NexT，那么你可以很方便的进行不蒜子的访客统计设置，仅仅只需要一步：</li>
-</ol>
-<p>打开主题的配置文件<code>/theme/next/_config.yml</code>，配置如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Show PV/UV of the website/page with busuanzi.</span><br><span class="line"># Get more information on http://ibruce.info/2015/04/04/busuanzi/</span><br><span class="line">busuanzi_count:</span><br><span class="line">  # count values only if the other configs are false</span><br><span class="line">  enable: true</span><br><span class="line">  # custom uv span for the whole site</span><br><span class="line">  site_uv: true</span><br><span class="line">  site_uv_header: &lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 访客数</span><br><span class="line">  site_uv_footer: 人</span><br><span class="line">  # custom pv span for the whole site</span><br><span class="line">  site_pv: true</span><br><span class="line">  site_pv_header: &lt;i class=&quot;fa fa-eye&quot;&gt;&lt;/i&gt; 总访问量</span><br><span class="line">  site_pv_footer: 次</span><br><span class="line">  # custom pv span for one page only</span><br><span class="line">  page_pv: true</span><br><span class="line">  page_pv_header: &lt;i class=&quot;fa fa-file-o&quot;&gt;&lt;/i&gt;</span><br><span class="line">  page_pv_footer: 次</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>site_uv表示是否显示整个网站的UV数</p>
-<p>site_pv表示是否显示整个网站的PV数</p>
-<p>page_pv表示是否显示每个页面的PV数</p>
-</blockquote>
-<h1 id="六、问题"><a href="#六、问题" class="headerlink" title="六、问题"></a>六、问题</h1><h2 id="1-hexo引用本地图片无法显示"><a href="#1-hexo引用本地图片无法显示" class="headerlink" title="1.hexo引用本地图片无法显示"></a>1.hexo引用本地图片无法显示</h2><h3 id="插件安装与配置"><a href="#插件安装与配置" class="headerlink" title="插件安装与配置"></a>插件安装与配置</h3><p>首先我们需要安装一个图片路径转换的插件，这个插件名字是hexo-asset-image</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ npm install https://github.com/CodeFalling/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
-<p>但是这个插件的内容需要修改【不然可能会出Bug】</p>
-<p>打开<code>/node_modules/hexo-asset-image/index.js</code>，将内容更换为下面的代码</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="meta">&#x27;use strict&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> cheerio = <span class="built_in">require</span>(<span class="string">&#x27;cheerio&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// http://stackoverflow.com/questions/14480345/how-to-get-the-nth-occurrence-in-a-string</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getPosition</span>(<span class="params">str, m, i</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> str.<span class="title function_">split</span>(m, i).<span class="title function_">join</span>(m).<span class="property">length</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> version = <span class="title class_">String</span>(hexo.<span class="property">version</span>).<span class="title function_">split</span>(<span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">filter</span>.<span class="title function_">register</span>(<span class="string">&#x27;after_post_render&#x27;</span>, <span class="keyword">function</span>(<span class="params">data</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> config = hexo.<span class="property">config</span>;</span><br><span class="line">  <span class="keyword">if</span>(config.<span class="property">post_asset_folder</span>)&#123;</span><br><span class="line">    	<span class="keyword">var</span> link = data.<span class="property">permalink</span>;</span><br><span class="line">	<span class="keyword">if</span>(version.<span class="property">length</span> &gt; <span class="number">0</span> &amp;&amp; <span class="title class_">Number</span>(version[<span class="number">0</span>]) == <span class="number">3</span>)</span><br><span class="line">	   <span class="keyword">var</span> beginPos = <span class="title function_">getPosition</span>(link, <span class="string">&#x27;/&#x27;</span>, <span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	   <span class="keyword">var</span> beginPos = <span class="title function_">getPosition</span>(link, <span class="string">&#x27;/&#x27;</span>, <span class="number">3</span>) + <span class="number">1</span>;</span><br><span class="line">	<span class="comment">// In hexo 3.1.1, the permalink of &quot;about&quot; page is like &quot;.../about/index.html&quot;.</span></span><br><span class="line">	<span class="keyword">var</span> endPos = link.<span class="title function_">lastIndexOf</span>(<span class="string">&#x27;/&#x27;</span>) + <span class="number">1</span>;</span><br><span class="line">    link = link.<span class="title function_">substring</span>(beginPos, endPos);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> toprocess = [<span class="string">&#x27;excerpt&#x27;</span>, <span class="string">&#x27;more&#x27;</span>, <span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; toprocess.<span class="property">length</span>; i++)&#123;</span><br><span class="line">      <span class="keyword">var</span> key = toprocess[i];</span><br><span class="line"> </span><br><span class="line">      <span class="keyword">var</span> $ = cheerio.<span class="title function_">load</span>(data[key], &#123;</span><br><span class="line">        <span class="attr">ignoreWhitespace</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">xmlMode</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">lowerCaseTags</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">decodeEntities</span>: <span class="literal">false</span></span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      $(<span class="string">&#x27;img&#x27;</span>).<span class="title function_">each</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">		<span class="keyword">if</span> ($(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>))&#123;</span><br><span class="line">			<span class="comment">// For windows style path, we replace &#x27;\&#x27; to &#x27;/&#x27;.</span></span><br><span class="line">			<span class="keyword">var</span> src = $(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>).<span class="title function_">replace</span>(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">			<span class="keyword">if</span>(!<span class="regexp">/http[s]*.*|\/\/.*/</span>.<span class="title function_">test</span>(src) &amp;&amp;</span><br><span class="line">			   !<span class="regexp">/^\s*\//</span>.<span class="title function_">test</span>(src)) &#123;</span><br><span class="line">			  <span class="comment">// For &quot;about&quot; page, the first part of &quot;src&quot; can&#x27;t be removed.</span></span><br><span class="line">			  <span class="comment">// In addition, to support multi-level local directory.</span></span><br><span class="line">			  <span class="keyword">var</span> linkArray = link.<span class="title function_">split</span>(<span class="string">&#x27;/&#x27;</span>).<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">elem</span>)&#123;</span><br><span class="line">				<span class="keyword">return</span> elem != <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">			  &#125;);</span><br><span class="line">			  <span class="keyword">var</span> srcArray = src.<span class="title function_">split</span>(<span class="string">&#x27;/&#x27;</span>).<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">elem</span>)&#123;</span><br><span class="line">				<span class="keyword">return</span> elem != <span class="string">&#x27;&#x27;</span> &amp;&amp; elem != <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">			  &#125;);</span><br><span class="line">			  <span class="keyword">if</span>(srcArray.<span class="property">length</span> &gt; <span class="number">1</span>)</span><br><span class="line">				srcArray.<span class="title function_">shift</span>();</span><br><span class="line">			  src = srcArray.<span class="title function_">join</span>(<span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">			  $(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, config.<span class="property">root</span> + link + src);</span><br><span class="line">			  <span class="variable language_">console</span>.<span class="property">info</span>&amp;&amp;<span class="variable language_">console</span>.<span class="title function_">info</span>(<span class="string">&quot;update link as:--&gt;&quot;</span>+config.<span class="property">root</span> + link + src);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="property">info</span>&amp;&amp;<span class="variable language_">console</span>.<span class="title function_">info</span>(<span class="string">&quot;no src attr, skipped...&quot;</span>);</span><br><span class="line">			<span class="variable language_">console</span>.<span class="property">info</span>&amp;&amp;<span class="variable language_">console</span>.<span class="title function_">info</span>($(<span class="variable language_">this</span>));</span><br><span class="line">		&#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      data[key] = $.<span class="title function_">html</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h1 id="六、问题"><a href="#六、问题" class="headerlink" title="六、问题"></a>六、问题</h1><h2 id="1-hexo-引用本地图片无法显示"><a href="#1-hexo-引用本地图片无法显示" class="headerlink" title="1.hexo 引用本地图片无法显示"></a>1.hexo 引用本地图片无法显示</h2><h3 id="插件安装与配置"><a href="#插件安装与配置" class="headerlink" title="插件安装与配置"></a>插件安装与配置</h3><p><a href="https://github.com/cocowool/hexo-image-link">https://github.com/cocowool/hexo-image-link</a></p>
+<p>首先我们需要安装一个图片路径转换的插件，这个插件名字是 hexo-image-link</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-image-link --save</span><br></pre></td></tr></table></figure>
+<p>修改  <code>_config.next.yml</code> 配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo-asset-folder: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
-<p>打开_config.yml文件，修改下述内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span><br><span class="line">url: https://ckcat.github.io</span><br><span class="line">root: /</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br><span class="line">pretty_urls:</span><br><span class="line">  trailing_index: true # Set to false to remove trailing index.html from permalinks</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
-<p>参考<a href="https://850552586.github.io/2018/11/15/hexo%E5%BC%95%E7%94%A8%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA/">hexo引用本地图片无法显示</a></p>
 <h1 id="hexo-升级"><a href="#hexo-升级" class="headerlink" title="hexo 升级"></a>hexo 升级</h1><p>由于最近安装了 NodeJS 14 导致无法使用旧版的 hexo，所以进行了一次升级，记录一下。</p>
 <h2 id="升级"><a href="#升级" class="headerlink" title="升级"></a>升级</h2><p>Hexo 升级需要使用 <code>npm-check</code>、<code>npm-upgrade</code>、<code>npm-update</code> 按以下顺序逐步执行完成后，Hexo 版本及系统插件均会升级到最新。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">//以下指令均在Hexo目录下操作，先定位到Hexo目录</span><br><span class="line">//查看当前版本，判断是否需要升级</span><br><span class="line">&gt; hexo version</span><br><span class="line"></span><br><span class="line">//全局升级hexo-cli</span><br><span class="line">&gt; npm i hexo-cli -g</span><br><span class="line"></span><br><span class="line">//再次查看版本，看hexo-cli是否升级成功</span><br><span class="line">&gt; hexo version</span><br><span class="line"></span><br><span class="line">//安装npm-check，若已安装可以跳过</span><br><span class="line">&gt; npm install -g npm-check</span><br><span class="line"></span><br><span class="line">//检查系统插件是否需要升级</span><br><span class="line">&gt; npm-check</span><br><span class="line"></span><br><span class="line">//安装npm-upgrade，若已安装可以跳过</span><br><span class="line">&gt; npm install -g npm-upgrade</span><br><span class="line"></span><br><span class="line">//更新package.json</span><br><span class="line">&gt; npm-upgrade</span><br><span class="line"></span><br><span class="line">//更新全局插件</span><br><span class="line">&gt; npm update -g</span><br><span class="line"></span><br><span class="line">//更新系统插件</span><br><span class="line">&gt; npm update --save</span><br><span class="line"></span><br><span class="line">//再次查看版本，判断是否升级成功</span><br><span class="line">&gt; hexo version</span><br></pre></td></tr></table></figure>
@@ -5641,10 +5568,12 @@
 <h2 id="调整配置"><a href="#调整配置" class="headerlink" title="调整配置"></a>调整配置</h2><p>升级后别急着 <code>hexo g</code>，需要先调整站点配置文件 <code>hexo/_config.yml</code>，否则会报错。</p>
 <p>以下是废弃的字段，需要重新配置</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Deprecated</span></span><br><span class="line">external_link: <span class="literal">true</span>|<span class="literal">false</span></span><br><span class="line"><span class="comment"># New option</span></span><br><span class="line">external_link:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span> <span class="comment"># Open external links in new tab</span></span><br><span class="line">  field: site <span class="comment"># Apply to the whole site</span></span><br><span class="line">  exclude: <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Deprecated</span></span><br><span class="line">use_date_for_updated: <span class="literal">true</span></span><br><span class="line"><span class="comment"># New option</span></span><br><span class="line"><span class="comment">## pdated_option supports &#x27;mtime&#x27;, &#x27;date&#x27;, &#x27;empty&#x27;</span></span><br><span class="line">updated_option: <span class="string">&#x27;mtime&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <p>其他字段可以看官方文档，我这里不关心就不设置了。</p>
 <h2 id="NexT-8-x-跨版本升级"><a href="#NexT-8-x-跨版本升级" class="headerlink" title="NexT-8.x 跨版本升级"></a>NexT-8.x 跨版本升级</h2><p>升级完 hexo 为 5.4 以后， next 主题也需要进行升级。</p>
 <p>通过 npm 方式安装新版：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">//定位到hexo目录,npm安装主题</span><br><span class="line">&gt; npm install hexo-theme-next</span><br></pre></td></tr></table></figure>
+
 <p>将 Next 主题配置文件 <code>node_modules/hexo-theme-next/_config.yml</code> 改名为 <code>_config.next.yml</code>, 复制到根目录（与 Hexo 站点配置文件<code>_config.yml</code> 在同一目录），这个文件的作用等同于旧版 <code>next.yml</code>，但优先级最高。这样做的好处是以后可以通过 npm 顺滑升级 Next 版本，不用担心配置文件被覆盖。相关字段的解释可以通过<a href="https://theme-next.js.org/docs/getting-started/">官方文档</a>查看，我这里主要说一下摘要设置和统计人数设置。</p>
 <blockquote>
 <p>参考：<a href="https://www.imczw.com/post/tech/hexo5-next8-updated.html">https://www.imczw.com/post/tech/hexo5-next8-updated.html</a></p>
@@ -5656,14 +5585,35 @@
 </ol>
 <p>这两种方法都比较麻烦，我这里使用了第三方插件设置摘要。直接安装插件：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-excerpt --save</span><br></pre></td></tr></table></figure>
+
 <p>在 Hexo 站点配置文件<code>_config.yml</code> 添加下列字段</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">excerpt:</span><br><span class="line">  depth: 10 </span><br><span class="line">  excerpt_excludes: []</span><br><span class="line">  more_excludes: []</span><br><span class="line">  hideWholePostExcerpts: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">excerpt:</span><br><span class="line">  depth: 10</span><br><span class="line">  excerpt_excludes: []</span><br><span class="line">  more_excludes: []</span><br><span class="line">  hideWholePostExcerpts: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>参考：<a href="https://github.com/chekun/hexo-excerpt">https://github.com/chekun/hexo-excerpt</a></p>
 </blockquote>
 <h2 id="统计人数设置"><a href="#统计人数设置" class="headerlink" title="统计人数设置"></a>统计人数设置</h2><p>统计人数可以直接通过设置 <code>_config.next.yml</code> 配置文件，将 <code>enable</code> 对应的值改为 <code>true</code> 即可。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Show Views / Visitors of the website / page with busuanzi.</span></span><br><span class="line"><span class="comment"># For more information: http://ibruce.info/2015/04/04/busuanzi/</span></span><br><span class="line">busuanzi_count:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line">  total_visitors: <span class="literal">true</span></span><br><span class="line">  total_visitors_icon: fa fa-user</span><br><span class="line">  total_views: <span class="literal">true</span></span><br><span class="line">  total_views_icon: fa fa-eye</span><br><span class="line">  post_views: <span class="literal">true</span></span><br><span class="line">  post_views_icon: far fa-eye</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Show Views / Visitors of the website / page with busuanzi.</span></span><br><span class="line"><span class="comment"># For more information: http://ibruce.info/2015/04/04/busuanzi/</span></span><br><span class="line">busuanzi_count:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line">  total_visitors: <span class="literal">true</span></span><br><span class="line">  total_visitors_icon: fa fa-user</span><br><span class="line">  total_views: <span class="literal">true</span></span><br><span class="line">  total_views_icon: fa fa-eye</span><br><span class="line">  post_views: <span class="literal">true</span></span><br><span class="line">  post_views_icon: far fa-eye</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加搜索插件"><a href="#添加搜索插件" class="headerlink" title="添加搜索插件"></a>添加搜索插件</h2><p>安装 hexo-generator-searchdb</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-searchdb</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>_config.yml</code> 添加下面内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  content: <span class="literal">true</span></span><br><span class="line">  format: html</span><br></pre></td></tr></table></figure>
+
+<p><code>_config.next.yml</code> 添加下列内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Local search</span></span><br><span class="line"><span class="comment"># Dependencies: https://github.com/next-theme/hexo-generator-searchdb</span></span><br><span class="line">local_search:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line">  <span class="comment"># If auto, trigger search by changing input.</span></span><br><span class="line">  <span class="comment"># If manual, trigger search by pressing enter key or search button.</span></span><br><span class="line">  trigger: auto</span><br><span class="line">  <span class="comment"># Show top n results per article, show all results by setting to -1</span></span><br><span class="line">  top_n_per_article: 1</span><br><span class="line">  <span class="comment"># Unescape html strings to the readable one.</span></span><br><span class="line">  unescape: <span class="literal">false</span></span><br><span class="line">  <span class="comment"># Preload the search data when the page loads.</span></span><br><span class="line">  preload: <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>参考：<a href="https://theme-next.js.org/docs/third-party-services/search-services.html">https://theme-next.js.org/docs/third-party-services/search-services.html</a></p>
+<h2 id="利用-github-action-自动部署"><a href="#利用-github-action-自动部署" class="headerlink" title="利用 github action 自动部署"></a>利用 github action 自动部署</h2><p>参考：<a href="https://hexo.io/zh-cn/docs/github-pages">https://hexo.io/zh-cn/docs/github-pages</a> </p>
+<p>最关键的一点是需要修改一下 <code>.github/workflows/pages.yml</code> 中的 GITHUB_TOKEN，使用自己添加的 TOKEN ，否则有随机出错的可能。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">name: Pages</span><br><span class="line"></span><br><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    branches:</span><br><span class="line">      - main # default branch</span><br><span class="line"></span><br><span class="line">jobs:</span><br><span class="line">  pages:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    permissions:</span><br><span class="line">      contents: write</span><br><span class="line">    steps:</span><br><span class="line">      - uses: actions/checkout@v2</span><br><span class="line">      - name: Use Node.js 16.x</span><br><span class="line">        uses: actions/setup-node@v2</span><br><span class="line">        with:</span><br><span class="line">          node-version: &quot;16&quot;</span><br><span class="line">      - name: Cache NPM dependencies</span><br><span class="line">        uses: actions/cache@v2</span><br><span class="line">        with:</span><br><span class="line">          path: node_modules</span><br><span class="line">          key: $&#123;&#123; runner.OS &#125;&#125;-npm-cache</span><br><span class="line">          restore-keys: |</span><br><span class="line">            $&#123;&#123; runner.OS &#125;&#125;-npm-cache</span><br><span class="line">      - name: Install Dependencies</span><br><span class="line">        run: npm install</span><br><span class="line">      - name: Build</span><br><span class="line">        run: npm run build</span><br><span class="line">      - name: Deploy</span><br><span class="line">        uses: peaceiris/actions-gh-pages@v3</span><br><span class="line">        with:</span><br><span class="line">          github_token: $&#123;&#123; secrets.GITHUB_TOKEN &#125;&#125;</span><br><span class="line">          publish_dir: ./public</span><br></pre></td></tr></table></figure>
+
+<p>前往 <a href="https://github.com/settings/tokens/new">https://github.com/settings/tokens/new</a> 申请一个 token，然后添加到项目的 前往 <code>Settings &gt; secrets &gt; actions</code> 添加一个变量 ACCESS_TOKEN ，然后将上面的 secrets.GITHUB_TOKEN 替换为 secrets.ACCESS_TOKEN 即可。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://hexo-next.readthedocs.io/zh_CN/latest/">https://hexo-next.readthedocs.io/zh_CN/latest/</a></p>
+<p><a href="https://hexo.io/zh-cn/docs/">https://hexo.io/zh-cn/docs/</a></p>
+<p><a href="https://theme-next.js.org/">https://theme-next.js.org/</a></p>
+]]></content>
       <categories>
         <category>web</category>
       </categories>
@@ -10339,24 +10289,6 @@
       <tags>
         <tag>gradle</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2023/02/16/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>linux使用记录</title>
