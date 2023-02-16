@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="快速开始介绍:安装需要Git，触发git clone,默认将每一个指定特定格式插件的仓库复制到~&#x2F;.vim&#x2F;bundle&#x2F;. 搜索需要Curl支持。 Windows用户请直接访问Windows setup. 如果有任何问题, 请参考 FAQ. 查看 Tips 获取相关高级配置。 使用 non-POSIX shells, 比如比较流行对 Fish shell, 需要额外">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim插件安装使用整理记录">
+<meta property="og:url" content="https://ckcat.github.io/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="快速开始介绍:安装需要Git，触发git clone,默认将每一个指定特定格式插件的仓库复制到~&#x2F;.vim&#x2F;bundle&#x2F;. 搜索需要Curl支持。 Windows用户请直接访问Windows setup. 如果有任何问题, 请参考 FAQ. 查看 Tips 获取相关高级配置。 使用 non-POSIX shells, 比如比较流行对 Fish shell, 需要额外">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/2021-11-23-20-09-17.png">
+<meta property="article:published_time" content="2020-03-21T19:23:57.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.684Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="Ubuntu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/2021-11-23-20-09-17.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/","path":"2020/03/21/vim插件安装使用整理记录/","title":"vim插件安装使用整理记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vim插件安装使用整理记录 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">快速开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%AE%89%E8%A3%85-Vundle%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">初始安装 Vundle：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%92%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">配置插件 :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="nav-number">1.4.</span> <span class="nav-text">安装插件:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%B8%AE%E5%8A%A9"><span class="nav-number">2.1.</span> <span class="nav-text">查看帮助</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">常见命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6-1"><span class="nav-number">3.</span> <span class="nav-text">安装插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-ctrlp-%E6%A8%A1%E7%B3%8A%E6%90%9C%E7%B4%A2%E6%96%87%E4%BB%B6%E6%8F%92%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">安装 ctrlp 模糊搜索文件插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-vim-autoformat-%E8%87%AA%E5%8A%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%8F%92%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">安装 vim-autoformat 自动格式化插件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-LSP-%E6%8F%92%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">使用 LSP 插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-vim-plug"><span class="nav-number">4.1.</span> <span class="nav-text">安装 vim-plug</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-vim-lsp"><span class="nav-number">4.2.</span> <span class="nav-text">安装 vim-lsp</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vim插件安装使用整理记录 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vim插件安装使用整理记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-21 19:23:57" itemprop="dateCreated datePublished" datetime="2020-03-21T19:23:57+00:00">2020-03-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍:"></a>介绍:</h2><p>安装需要Git，触发git clone,默认将每一个指定特定格式插件的仓库复制到~&#x2F;.vim&#x2F;bundle&#x2F;. 搜索需要Curl支持。</p>
+<p>Windows用户请直接访问Windows setup. 如果有任何问题, 请参考 FAQ. 查看 Tips 获取相关高级配置。</p>
+<p>使用 non-POSIX shells, 比如比较流行对 Fish shell, 需要额外对步骤。 请查看 FAQ.</p>
+<h2 id="初始安装-Vundle："><a href="#初始安装-Vundle：" class="headerlink" title="初始安装 Vundle："></a>初始安装 Vundle：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置插件"><a href="#配置插件" class="headerlink" title="配置插件 :"></a>配置插件 :</h2><p>请将以下加在 .vimrc 方可使用Vundle. 删掉你不需要的插件, 这些只是用做示例.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">set nocompatible              &quot; 去除VI一致性,必须</span><br><span class="line">filetype off                  &quot; 必须</span><br><span class="line"></span><br><span class="line">&quot; 设置包括vundle和初始化相关的runtime path</span><br><span class="line">set rtp+=~/.vim/bundle/Vundle.vim</span><br><span class="line">call vundle#begin()</span><br><span class="line">&quot; 另一种选择, 指定一个vundle安装插件的路径</span><br><span class="line">&quot;call vundle#begin(&#x27;~/some/path/here&#x27;)</span><br><span class="line"></span><br><span class="line">&quot; 让vundle管理插件版本,必须</span><br><span class="line">Plugin &#x27;VundleVim/Vundle.vim&#x27;</span><br><span class="line"></span><br><span class="line">&quot; 以下范例用来支持不同格式的插件安装.</span><br><span class="line">&quot; 请将安装插件的命令放在vundle#begin和vundle#end之间.</span><br><span class="line">&quot; Github上的插件</span><br><span class="line">&quot; 格式为 Plugin &#x27;用户名/插件仓库名&#x27;</span><br><span class="line">Plugin &#x27;tpope/vim-fugitive&#x27;</span><br><span class="line">&quot; 来自 http://vim-scripts.org/vim/scripts.html 的插件</span><br><span class="line">&quot; Plugin &#x27;插件名称&#x27; 实际上是 Plugin &#x27;vim-scripts/插件仓库名&#x27; 只是此处的用户名可以省略</span><br><span class="line">Plugin &#x27;L9&#x27;</span><br><span class="line">&quot; 由Git支持但不再github上的插件仓库 Plugin &#x27;git clone 后面的地址&#x27;</span><br><span class="line">Plugin &#x27;git://git.wincent.com/command-t.git&#x27;</span><br><span class="line">&quot; 本地的Git仓库(例如自己的插件) Plugin &#x27;file:///+本地插件仓库绝对路径&#x27;</span><br><span class="line">Plugin &#x27;file:///home/gmarik/path/to/plugin&#x27;</span><br><span class="line">&quot; 插件在仓库的子目录中.</span><br><span class="line">&quot; 正确指定路径用以设置runtimepath. 以下范例插件在sparkup/vim目录下</span><br><span class="line">Plugin &#x27;rstacruz/sparkup&#x27;, &#123;&#x27;rtp&#x27;: &#x27;vim/&#x27;&#125;</span><br><span class="line">&quot; 安装L9，如果已经安装过这个插件，可利用以下格式避免命名冲突</span><br><span class="line">Plugin &#x27;ascenator/L9&#x27;, &#123;&#x27;name&#x27;: &#x27;newL9&#x27;&#125;</span><br><span class="line"></span><br><span class="line">&quot; 你的所有插件需要在下面这行之前</span><br><span class="line">call vundle#end()            &quot; 必须</span><br><span class="line">filetype plugin indent on    &quot; 必须 加载vim自带和插件相应的语法和文件类型相关脚本</span><br><span class="line">&quot; 忽视插件改变缩进,可以使用以下替代:</span><br><span class="line">&quot;filetype plugin on</span><br><span class="line">&quot;</span><br><span class="line">&quot; 简要帮助文档</span><br><span class="line">&quot; :PluginList       - 列出所有已配置的插件</span><br><span class="line">&quot; :PluginInstall    - 安装插件,追加 `!` 用以更新或使用 :PluginUpdate</span><br><span class="line">&quot; :PluginSearch foo - 搜索 foo ; 追加 `!` 清除本地缓存</span><br><span class="line">&quot; :PluginClean      - 清除未使用插件,需要确认; 追加 `!` 自动批准移除未使用插件</span><br><span class="line">&quot;</span><br><span class="line">&quot; 查阅 :h vundle 获取更多细节和wiki以及FAQ</span><br><span class="line">&quot; 将你自己对非插件片段放在这行之后</span><br></pre></td></tr></table></figure>
+<h2 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件:"></a>安装插件:</h2><p>运行 <code>vim</code> 再运行 <code>:PluginInstall</code></p>
+<p>通过命令行直接安装 <code>vim +PluginInstall +qall</code></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="查看帮助"><a href="#查看帮助" class="headerlink" title="查看帮助"></a>查看帮助</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:h vundle</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:PluginInstall</span><br><span class="line">:PluginUpdate</span><br><span class="line">:PluginSearch</span><br><span class="line">:PluginList</span><br><span class="line">:PluginClean</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装插件-1"><a href="#安装插件-1" class="headerlink" title="安装插件"></a>安装插件</h1><h2 id="安装-ctrlp-模糊搜索文件插件"><a href="#安装-ctrlp-模糊搜索文件插件" class="headerlink" title="安装 ctrlp 模糊搜索文件插件"></a>安装 ctrlp 模糊搜索文件插件</h2><p>打开 <code>.vimrc</code> 加入下面内容后，执行 <code>:PluginInstall</code> 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Plugin &#x27;ctrlpvim/ctrlp.vim&#x27;</span><br></pre></td></tr></table></figure>
+<p>ctrlp 插件使用</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ctrl + p</td>
+<td>开启文件搜索</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>刷新当前目录内容</td>
+</tr>
+<tr>
+<td>ctrl + f&#x2F;b</td>
+<td>切换显示模式</td>
+</tr>
+<tr>
+<td>ctrl + d</td>
+<td>只搜索文件名</td>
+</tr>
+<tr>
+<td>ctrl + r</td>
+<td>正则查找模式</td>
+</tr>
+<tr>
+<td>ctrl + j&#x2F;k</td>
+<td>搜索结果中移动光标</td>
+</tr>
+<tr>
+<td>ctrl + t</td>
+<td>新标签页打开</td>
+</tr>
+<tr>
+<td>ctrl + v&#x2F;x</td>
+<td>垂直分割打开 &#x2F; 水平分割打开</td>
+</tr>
+<tr>
+<td>ctrl + n&#x2F;p</td>
+<td>上下翻阅上次搜索历史</td>
+</tr>
+<tr>
+<td>ctrl + y</td>
+<td>在选中文件的父级目录创建新文件</td>
+</tr>
+<tr>
+<td>ctrl + z</td>
+<td>标记选择多个文件</td>
+</tr>
+<tr>
+<td>ctrl + o</td>
+<td>选择打开方式</td>
+</tr>
+</tbody></table>
+<h2 id="安装-vim-autoformat-自动格式化插件"><a href="#安装-vim-autoformat-自动格式化插件" class="headerlink" title="安装 vim-autoformat 自动格式化插件"></a>安装 vim-autoformat 自动格式化插件</h2><p><code>.vimrc</code> 中增加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Plugin &#x27;Chiel92/vim-autoformat&#x27;</span><br></pre></td></tr></table></figure>
+<p>增加快捷键配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">noremap &lt;F3&gt; :Autoformat&lt;CR&gt;</span><br></pre></td></tr></table></figure>
+<p>增加对python代码的支持,安装autopep8</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade autopep8</span><br></pre></td></tr></table></figure>
+<p>按F3开启自动格式化。</p>
+<h1 id="使用-LSP-插件"><a href="#使用-LSP-插件" class="headerlink" title="使用 LSP 插件"></a>使用 LSP 插件</h1><h2 id="安装-vim-plug"><a href="#安装-vim-plug" class="headerlink" title="安装 vim-plug"></a>安装 vim-plug</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -fLo ~/.vim/autoload/plug.vim --create-dirs \</span><br><span class="line">    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim</span><br></pre></td></tr></table></figure>
+<p>如果由于网络问题，无法访问 <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/">https://raw.githubusercontent.com</a> ，可以手动安装。</p>
+<ol>
+<li>下载 <code>plug.vim</code> 。</li>
+<li>将 <code>plug.vim</code> 移动到 <code>~/.vim/autoload/plug.vim</code> 。</li>
+</ol>
+<p>安装成功后修改 <code>~/.vimrc</code> 声明插件安装，然后进入 VIM 中运行 <code>:PlugInstall</code> 命令安装插件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot; Plugins will be downloaded under the specified directory.</span></span><br><span class="line"><span class="string">call plug#begin(&#x27;~/.vim/plugged&#x27;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;</span> 声明需要安装的插件</span><br><span class="line">Plug <span class="string">&#x27;prabirshrestha/vim-lsp&#x27;</span></span><br><span class="line">Plug <span class="string">&#x27;mattn/vim-lsp-settings&#x27;</span></span><br><span class="line">Plug <span class="string">&#x27;prabirshrestha/asyncomplete.vim&#x27;</span></span><br><span class="line">Plug <span class="string">&#x27;prabirshrestha/asyncomplete-lsp.vim&#x27;</span></span><br><span class="line">Plug <span class="string">&#x27;piec/vim-lsp-clangd&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot; List ends here. Plugins become visible to Vim after this call.</span></span><br><span class="line"><span class="string">call plug#end()</span></span><br></pre></td></tr></table></figure>
+<p>更多信息参考：<a target="_blank" rel="noopener" href="https://github.com/junegunn/vim-plug">https://github.com/junegunn/vim-plug</a></p>
+<h2 id="安装-vim-lsp"><a href="#安装-vim-lsp" class="headerlink" title="安装 vim-lsp"></a>安装 vim-lsp</h2><p>安装 vim-lsp 插件比较简单，上面安装 vim-plug 插件中已经安装好了。</p>
+<p>这里主要讲一下注册服务。</p>
+<p>例如：注册 python 服务。</p>
+<p>首先安装 <code>python-language-server</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install python-language-server</span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>~/.vimrc</code> 中，添加下列内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> executable(<span class="string">&#x27;pyls&#x27;</span>)</span><br><span class="line">    au User lsp_setup call lsp<span class="comment">#register_server(&#123;</span></span><br><span class="line">        \ <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;pyls&#x27;</span>,</span><br><span class="line">        \ <span class="string">&#x27;cmd&#x27;</span>: &#123;server_info-&gt;[<span class="string">&#x27;pyls&#x27;</span>]&#125;,</span><br><span class="line">        \ <span class="string">&#x27;whitelist&#x27;</span>: [<span class="string">&#x27;python&#x27;</span>],</span><br><span class="line">        \ &#125;)</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+<p>更详细的信息参考： <a target="_blank" rel="noopener" href="https://github.com/prabirshrestha/vim-lsp/wiki/Servers-Python">https://github.com/prabirshrestha/vim-lsp/wiki/Servers-Python</a> 。</p>
+<p>例如：安装 Clangd - C&#x2F;C++ 。</p>
+<p>首先安装 llvm。</p>
+<p>然后将下面内容添加到 中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> executable(<span class="string">&#x27;clangd&#x27;</span>)</span><br><span class="line">    au User lsp_setup call lsp<span class="comment">#register_server(&#123;</span></span><br><span class="line">        \ <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;clangd&#x27;</span>,</span><br><span class="line">        \ <span class="string">&#x27;cmd&#x27;</span>: &#123;server_info-&gt;[<span class="string">&#x27;clangd&#x27;</span>, <span class="string">&#x27;-background-index&#x27;</span>]&#125;,</span><br><span class="line">        \ <span class="string">&#x27;whitelist&#x27;</span>: [<span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;cpp&#x27;</span>, <span class="string">&#x27;objc&#x27;</span>, <span class="string">&#x27;objcpp&#x27;</span>],</span><br><span class="line">        \ &#125;)</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+<p>最后安装 <code>piec/vim-lsp-clangd</code> 插件。</p>
+<img src="/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/2021-11-23-20-09-17.png" class="" title="效果图">
+
+<p>更多信息请参考：<a target="_blank" rel="noopener" href="https://github.com/prabirshrestha/vim-lsp/wiki">https://github.com/prabirshrestha/vim-lsp/wiki</a> 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Ubuntu/" rel="tag"># Ubuntu</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/16/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%89/" rel="prev" title="ARMv8学习记录三">
+                  <i class="fa fa-chevron-left"></i> ARMv8学习记录三
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/21/%E5%A4%A9%E6%B6%AFkkndme%E7%A5%9E%E8%B4%B4%E8%81%8A%E6%88%BF%E4%BB%B7/" rel="next" title="天涯kkndme神贴聊房价">
+                  天涯kkndme神贴聊房价 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

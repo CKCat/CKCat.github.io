@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76146760     包结构 android.content com.lody.virtual client HOOK IPC Stub remote server   mirror   一些基础措施的封装 Mirror framework 层镜像 成员变量 Field 映射">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 双开沙箱 VirtualApp 源码分析（一）">
+<meta property="og:url" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76146760     包结构 android.content com.lody.virtual client HOOK IPC Stub remote server   mirror   一些基础措施的封装 Mirror framework 层镜像 成员变量 Field 映射">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-17-09-11.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-20-12-02.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-20-48-38.png">
+<meta property="article:published_time" content="2020-08-03T17:03:51.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.412Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="VirtualApp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-17-09-11.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/","path":"2020/08/03/Android-双开沙箱-VirtualApp-源码分析（一）/","title":"Android 双开沙箱 VirtualApp 源码分析（一）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Android 双开沙箱 VirtualApp 源码分析（一） | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%85%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">包结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#android-content"><span class="nav-number">1.1.</span> <span class="nav-text">android.content</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#com-lody-virtual"><span class="nav-number">1.2.</span> <span class="nav-text">com.lody.virtual</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#client"><span class="nav-number">1.2.1.</span> <span class="nav-text">client</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HOOK"><span class="nav-number">1.2.2.</span> <span class="nav-text">HOOK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPC"><span class="nav-number">1.2.3.</span> <span class="nav-text">IPC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stub"><span class="nav-number">1.2.4.</span> <span class="nav-text">Stub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remote"><span class="nav-number">1.2.5.</span> <span class="nav-text">remote</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#server"><span class="nav-number">1.2.6.</span> <span class="nav-text">server</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mirror"><span class="nav-number">1.3.</span> <span class="nav-text">mirror</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E6%8E%AA%E6%96%BD%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">一些基础措施的封装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mirror-framework-%E5%B1%82%E9%95%9C%E5%83%8F"><span class="nav-number">2.1.</span> <span class="nav-text">Mirror framework 层镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F-Field-%E6%98%A0%E5%B0%84"><span class="nav-number">2.1.1.</span> <span class="nav-text">成员变量 Field 映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Method-%E6%98%A0%E5%B0%84"><span class="nav-number">2.1.2.</span> <span class="nav-text">Method 映射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%B1%82-Hook"><span class="nav-number">2.2.</span> <span class="nav-text">Java 层 Hook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MethodProxy"><span class="nav-number">2.2.1.</span> <span class="nav-text">MethodProxy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MethodProxies"><span class="nav-number">2.2.2.</span> <span class="nav-text">MethodProxies</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">运行时结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%94%9F%E7%9A%84-framework-%E8%BF%90%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">系统原生的 framework 运作方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VA-%E7%8E%AF%E5%A2%83%E4%B8%8B-framework-%E8%BF%90%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">VA 环境下 framework 运作方式</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Android 双开沙箱 VirtualApp 源码分析（一） | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android 双开沙箱 VirtualApp 源码分析（一）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-08-03 17:03:51" itemprop="dateCreated datePublished" datetime="2020-08-03T17:03:51+00:00">2020-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>转载 : <a target="_blank" rel="noopener" href="https://blog.csdn.net/ganyao939543405/article/details/76146760">https://blog.csdn.net/ganyao939543405/article/details/76146760</a></p>
+</blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#%E5%8C%85%E7%BB%93%E6%9E%84">包结构</a><ul>
+<li><a href="#androidcontent">android.content</a></li>
+<li><a href="#comlodyvirtual">com.lody.virtual</a><ul>
+<li><a href="#client">client</a></li>
+<li><a href="#hook">HOOK</a></li>
+<li><a href="#ipc">IPC</a></li>
+<li><a href="#stub">Stub</a></li>
+<li><a href="#remote">remote</a></li>
+<li><a href="#server">server</a></li>
+</ul>
+</li>
+<li><a href="#mirror">mirror</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E6%8E%AA%E6%96%BD%E7%9A%84%E5%B0%81%E8%A3%85">一些基础措施的封装</a><ul>
+<li><a href="#mirror-framework-%E5%B1%82%E9%95%9C%E5%83%8F">Mirror framework 层镜像</a><ul>
+<li><a href="#%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F-field-%E6%98%A0%E5%B0%84">成员变量 Field 映射</a></li>
+<li><a href="#method-%E6%98%A0%E5%B0%84">Method 映射</a></li>
+</ul>
+</li>
+<li><a href="#java-%E5%B1%82-hook">Java 层 Hook</a><ul>
+<li><a href="#methodproxy">MethodProxy</a></li>
+<li><a href="#methodproxies">MethodProxies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E7%BB%93%E6%9E%84">运行时结构</a><ul>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%94%9F%E7%9A%84-framework-%E8%BF%90%E4%BD%9C%E6%96%B9%E5%BC%8F">系统原生的 framework 运作方式</a></li>
+<li><a href="#va-%E7%8E%AF%E5%A2%83%E4%B8%8B-framework-%E8%BF%90%E4%BD%9C%E6%96%B9%E5%BC%8F">VA 环境下 framework 运作方式</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<p>最近发现了一个非常好的开源项目，基本实现了一个 Android 上的沙箱环境，不过应用场景最多的还是应用双开。</p>
+<ul>
+<li>VA github: <a target="_blank" rel="noopener" href="https://github.com/asLody/VirtualApp">https://github.com/asLody/VirtualApp</a> </li>
+<li>VA 的源码注释: <a target="_blank" rel="noopener" href="https://github.com/ganyao114/VA_Doc">https://github.com/ganyao114/VA_Doc</a></li>
+</ul>
+<p>本文主要是分析一下项目的整体结构。</p>
+<h1 id="包结构"><a href="#包结构" class="headerlink" title="包结构"></a>包结构</h1><img src="/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-17-09-11.png" class="">
+
+<h2 id="android-content"><a href="#android-content" class="headerlink" title="android.content"></a>android.content</h2><p>主要是 <code>PackageParser</code>,该类型覆盖了系统的隐藏类 <code>android.content.pm.PackageParser</code></p>
+<h2 id="com-lody-virtual"><a href="#com-lody-virtual" class="headerlink" title="com.lody.virtual"></a>com.lody.virtual</h2><p>这里就是框架的主体代码了</p>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><p>运行在客户端的代码，指加载到 <code>VA</code> 中的子程序在被 <code>VA</code> 代理(hook)之后,所运行的代码</p>
+<h3 id="HOOK"><a href="#HOOK" class="headerlink" title="HOOK"></a>HOOK</h3><p>hook java 层函数的一些代码</p>
+<h3 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h3><p>伪造的一些 <code>framework</code> 层的 <code>IPC</code> 服务类，诸如 <code>ActivityManager</code>, <code>ServiceManager</code> 等等，使用 <code>VXXXXX</code> 命名。<code>hook</code> 之后，子程序就会运行到这里而不是原来真正的系统 <code>framework</code> 代码。</p>
+<h3 id="Stub"><a href="#Stub" class="headerlink" title="Stub"></a>Stub</h3><p>系统四大组件的插桩，如提前注册在 <code>Menifest</code> 里的几十个 <code>StubActivity</code> 。</p>
+<h3 id="remote"><a href="#remote" class="headerlink" title="remote"></a>remote</h3><p>一些可序列化 <code>Model</code> ，继承于 <code>Parcelable</code> 。  </p>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><p><code>server</code> 端代码， <code>VA</code> 伪造了一套 <code>framework</code> 层系统 <code>service</code> 的代码，他在一个独立的服务中记录管理组件的各种 <code>Recorder</code> ，其逻辑其实与系统原生的相近，通过 <code>Binder</code> 与 <code>client</code> 端的 <code>ipc</code> 包中的 <code>VXXXXManager</code> 通讯。诸如 <code>AMS(VAMS)</code> 、 <code>PMS(VPMS)</code>。</p>
+<h2 id="mirror"><a href="#mirror" class="headerlink" title="mirror"></a>mirror</h2><p>系统 <code>framework</code> 的镜像，实现了与 <code>framework</code> 层相对应的结构，封装了反射获取系统隐藏字段和方法的，便于直接调用获取或者赋值以及调用方法。</p>
+<h1 id="一些基础措施的封装"><a href="#一些基础措施的封装" class="headerlink" title="一些基础措施的封装"></a>一些基础措施的封装</h1><h2 id="Mirror-framework-层镜像"><a href="#Mirror-framework-层镜像" class="headerlink" title="Mirror framework 层镜像"></a>Mirror framework 层镜像</h2><h3 id="成员变量-Field-映射"><a href="#成员变量-Field-映射" class="headerlink" title="成员变量 Field 映射"></a>成员变量 Field 映射</h3><p>根据成员变量类型，映射类型分为几个基本数据类型和对象引用类型。下面就以对象引用类型为例，其他类型类似。</p>
+<p>类型 <code>RefObject</code> 代表映射 <code>framework</code> 层同名的泛型类型成员变量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">// Field 映射</span><br><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">public class RefObject&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    // framework 层对应的 Field</span><br><span class="line">    private Field field;</span><br><span class="line"></span><br><span class="line">    public RefObject(Class&lt;?&gt; cls, Field field) throws NoSuchFieldException &#123;</span><br><span class="line">        // 获取 framework 中同名字段的 field</span><br><span class="line">        this.field = cls.getDeclaredField(field.getName());</span><br><span class="line">        this.field.setAccessible(true);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 获取变量值</span><br><span class="line">    public T get(Object object) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            return (T) this.field.get(object);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // 赋值</span><br><span class="line">    public void set(Object obj, T value) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            this.field.set(obj, value);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            //Ignore</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以 <code>framework</code> 层中隐藏类 <code>LoadedApk</code> 来说：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class LoadedApk &#123;</span><br><span class="line">    public static Class Class = RefClass.load(LoadedApk.class, &quot;android.app.LoadedApk&quot;);</span><br><span class="line">    public static RefObject&lt;ApplicationInfo&gt; mApplicationInfo;</span><br><span class="line">    @MethodParams(&#123;boolean.class, Instrumentation.class&#125;)</span><br><span class="line">    public static RefMethod&lt;Application&gt; makeApplication;</span><br></pre></td></tr></table></figure>
+
+<p><code>mApplicationInfo</code> 就是 <code>LoadedApk</code> 中私有字段 <code>ApplicationInfo</code> 类型的同名映射。</p>
+<p>当你引用 <code>LoadedApk Mirror</code> 类时，类加载器加载该类并执行静态成员的初始化 <code>RefClass.load(LoadedApk.class, “android.app.LoadedApk”)</code> ， <code>LoadedApk Mirror</code> 类中的同名字段将被反射赋值。</p>
+<p>下面看一下 <code>RefClass.load()</code> 函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public static Class load(Class mappingClass, Class&lt;?&gt; realClass) &#123;</span><br><span class="line">    // 获取 Mirror 类的所有字段</span><br><span class="line">    Field[] fields = mappingClass.getDeclaredFields();</span><br><span class="line">    for (Field field : fields) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            // 必须是 static 变量</span><br><span class="line">            if (Modifier.isStatic(field.getModifiers())) &#123;</span><br><span class="line">                // 从预设的 Map 中找到 RefXXXX 的构造器</span><br><span class="line">                Constructor&lt;?&gt; constructor = REF_TYPES.get(field.getType());</span><br><span class="line">                if (constructor != null) &#123;</span><br><span class="line">                    // 这里首先利用构造函数获取framework层真正的字段，然后赋值 LoadedApk 的静态字段，一遍后续调用 get 和 set</span><br><span class="line">                    field.set(null, constructor.newInstance(realClass, field));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        catch (Exception e) &#123;</span><br><span class="line">            // Ignore</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return realClass;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>后续再进行调用的话，使用 <code>LoadedApk.mApplicationInfo.get(instance)</code> 、 <code>LoadedApk.mApplicationInfo.set(instance)</code> 就相当于直接调用 <code>framework</code> 层的 <code>LoadedApk.mApplicationInfo</code> 字段了。</p>
+<h3 id="Method-映射"><a href="#Method-映射" class="headerlink" title="Method 映射"></a>Method 映射</h3><p>其实与 <code>Field</code> 类似，只是 <code>Field</code> 主要是一个 <code>call</code> 即调用方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@MethodParams(&#123;File.class, int.class&#125;)</span><br><span class="line">public static RefMethod&lt;PackageParser.Package&gt; parsePackage;</span><br></pre></td></tr></table></figure>
+
+<p>表现在 <code>Mirror</code> 类型中也是一个字段，不过要在字段上边加上注解以标注参数类型。</p>
+<p>当然还有一种情况，参数类型也是隐藏的，则要使用全限定名表示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@MethodReflectParams(&#123;&quot;android.content.pm.PackageParser$Package&quot;, &quot;int&quot;&#125;)</span><br><span class="line">public static RefMethod&lt;Void&gt; collectCertificates;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Java-层-Hook"><a href="#Java-层-Hook" class="headerlink" title="Java 层 Hook"></a>Java 层 Hook</h2><p>位于 <code>com.lody.virtual.client.hook</code></p>
+<p><code>Java</code> 层使用了 <code>Java</code> 自带的动态代理</p>
+<h3 id="MethodProxy"><a href="#MethodProxy" class="headerlink" title="MethodProxy"></a>MethodProxy</h3><p><code>Hook</code> 点的代理接口，动态代理中的 <code>call</code> 。</p>
+<p>重要的是这三个方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public boolean beforeCall(Object who, Method method, Object... args) &#123;</span><br><span class="line">        return true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public Object call(Object who, Method method, Object... args) throws Throwable &#123;</span><br><span class="line">    return method.invoke(who, args);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public Object afterCall(Object who, Method method, Object[] args, Object result) throws Throwable &#123;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以 <code>hook getServices</code> 为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">static class GetServices extends MethodProxy &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public String getMethodName() &#123;</span><br><span class="line">        return &quot;getServices&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object call(Object who, Method method, Object... args) throws Throwable &#123;</span><br><span class="line">        int maxNum = (int) args[0];</span><br><span class="line">        int flags = (int) args[1];</span><br><span class="line">        return VActivityManager.get().getServices(maxNum, flags).getList();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean isEnable() &#123;</span><br><span class="line">        return isAppProcess();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>getMethodName</code> 是要 <code>Hook</code> 的方法名 </li>
+<li><code>Hook getServices</code> 之后发现，真正返回服务的方法变成了仿造的 <code>VActivityManager</code> 对象。而在后面我们会知道这些服务最后都会从 <code>VAMS</code> 中获取，而不是原来的 <code>AMS</code> 。</li>
+<li>实现了 <code>isEnable</code> 方法，这是 <code>Hook</code> 开关，如果返回 <code>false</code> 则不 <code>Hook</code> 该方法，而在这里的条件是，只有在子程序环境中 <code>Hook</code> ，而宿主即框架是不需要 <code>Hook</code> 的，框架仍然需要连接真正的 <code>AMS</code> 以获取在系统 <code>AMS</code> 中注册的“外部” <code>service</code> 。</li>
+</ul>
+<p>那么上面这个 <code>call</code> 在哪里被调用呢？ </p>
+<p><strong><code>MethodInvocationStub</code></strong> ，这个桩对应一个需要 <code>Hook</code> 的类，各种 <code>Method</code> 可以在内部添加。</p>
+<p>我们需要专注这个方法 <code>addMethodProxy</code> 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* Add a method proxy.</span><br><span class="line">*</span><br><span class="line">* @param methodProxy proxy</span><br><span class="line">*/</span><br><span class="line">public MethodProxy addMethodProxy(MethodProxy methodProxy) &#123;</span><br><span class="line">    if (methodProxy != null &amp;&amp; !TextUtils.isEmpty(methodProxy.getMethodName())) &#123;</span><br><span class="line">        if (mInternalMethodProxies.containsKey(methodProxy.getMethodName())) &#123;</span><br><span class="line">            VLog.w(TAG, &quot;The Hook(%s, %s) you added has been in existence.&quot;, methodProxy.getMethodName(),</span><br><span class="line">                    methodProxy.getClass().getName());</span><br><span class="line">            return methodProxy;</span><br><span class="line">        &#125;</span><br><span class="line">        mInternalMethodProxies.put(methodProxy.getMethodName(), methodProxy);</span><br><span class="line">    &#125;</span><br><span class="line">    return methodProxy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个也是关于动态代理的知识，这里的区别其实就是 <code>Lody</code> 对他做了一些接口的抽象，和一些诸如 <code>Log</code> 的封装。</p>
+<p>添加 <code>Hook Method</code> 的方式有两个：</p>
+<ul>
+<li>一是调用 <code>addMethodProxy</code> ，</li>
+<li>二是在 <code>Stub</code> 上添加 <code>@Inject</code> 注解。</li>
+</ul>
+<p>具体见下一段。</p>
+<h3 id="MethodProxies"><a href="#MethodProxies" class="headerlink" title="MethodProxies"></a>MethodProxies</h3><p>叫这个名字的类很多，每一个 <code>MethodProxies</code> 对应一个需要 <code>Hook</code> 的 <code>framework</code> 类型，需要 <code>Hook</code> 的方法以内部类(MethodProxy)的形式罗列在内部。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Inject(MethodProxies.class)</span><br><span class="line">public class LibCoreStub extends MethodInvocationProxy&lt;MethodInvocationStub&lt;Object&gt;&gt; &#123;</span><br></pre></td></tr></table></figure>
+<p>将要 <code>Hook</code> 的方法集合 <code>MethodProxies</code> 绑定到 <code>Stub</code> 上。然后就是 <code>Stub</code> 对自己头上注解的解析，最终还是会调用到内部的 <code>addMethodProxy</code> 方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">protected void onBindMethods() &#123;</span><br><span class="line"></span><br><span class="line">    if (mInvocationStub == null) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    Class&lt;? extends MethodInvocationProxy&gt; clazz = getClass();</span><br><span class="line">    Inject inject = clazz.getAnnotation(Inject.class);</span><br><span class="line">    if (inject != null) &#123;</span><br><span class="line">        Class&lt;?&gt; proxiesClass = inject.value();</span><br><span class="line">        Class&lt;?&gt;[] innerClasses = proxiesClass.getDeclaredClasses();</span><br><span class="line">        // 遍历内部类</span><br><span class="line">        for (Class&lt;?&gt; innerClass : innerClasses) &#123;</span><br><span class="line">            if (!Modifier.isAbstract(innerClass.getModifiers())</span><br><span class="line">                    &amp;&amp; MethodProxy.class.isAssignableFrom(innerClass)</span><br><span class="line">                    &amp;&amp; innerClass.getAnnotation(SkipInject.class) == null) &#123;</span><br><span class="line">                addMethodProxy(innerClass);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="运行时结构"><a href="#运行时结构" class="headerlink" title="运行时结构"></a>运行时结构</h1><p>这点很重要， <code>VA</code> 在运行时并不是一个简单的单进程的库，其需要在系统调用到其预先注册的 <code>Stub</code> 组件之后接手系统代理 <code>Client App</code> 的 四大组件，包括生命周期等一切事物。</p>
+<p><code>VA</code> 参照原生系统 <code>framework</code> 仿造了一套 <code>framework service</code>，还有配套在 <code>client</code> 端的 <code>framework</code> 库。</p>
+<h2 id="系统原生的-framework-运作方式"><a href="#系统原生的-framework-运作方式" class="headerlink" title="系统原生的 framework 运作方式"></a>系统原生的 framework 运作方式</h2><p>简单来说，我们平时所用到的 <code>app</code> 运行空间中的 <code>framework api</code> 最终会通过 <code>Binder</code> 远程调用到 <code>framework service</code> 空间的远程服务。</p>
+<p>而远程服务类似 <code>AMS</code> 中的 <code>Recoder</code> 中会持有 <code>app</code> 空间的 <code>Ibinder token</code> 句柄，通过 <code>token</code> 也可以让 <code>framework service</code> 远程调用到 <code>app</code> 空间。</p>
+<img src="/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-20-12-02.png" class="">
+
+
+<h2 id="VA-环境下-framework-运作方式"><a href="#VA-环境下-framework-运作方式" class="headerlink" title="VA 环境下 framework 运作方式"></a>VA 环境下 framework 运作方式</h2><p>而在 <code>VA</code> 环境下，情况其实也是类似，只不过在 <code>framework service</code> 和 <code>client app</code> 之间还有另外一个 <code>VA</code> 实现的 <code>VAService</code> ， <code>VAService</code> 仿造了 <code>framework service</code> 的一些功能。</p>
+<p>因为在 <code>VA</code> 中运行的 <code>Client App</code> 都是没有(也不能注册)在 <code>framework service </code>的，注册的只有 <code>VA</code> 预先注册在 <code>Menifest</code> 中的 <code>Stub</code> 而已。所以 <code>frameservice</code> 是无法像普通 <code>App</code> 一样管理 <code>VA Client App</code> 的会话的。</p>
+<p>这就要依靠 <code>VA</code> 仿造的另外一套 <code>VAService</code> 完成对 <code>VA</code> 中 <code>Client App</code> 的会话管理了。</p>
+<img src="/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-20-48-38.png" class="">
+
+<p>需要注意的是 <code>VA Client</code> 获取 <code>VA Service</code> 的 <code>IBinder</code> 句柄是统一通过 <code>IServiceFetcher</code> 这个句柄，这个看上去有些奇怪。而获得 <code>IServiceFetcher</code> 本身的方式是通过 <code>ContentProvider</code> ，选择 <code>ContentProvider</code> 原因是 <code>ContentProvider</code> 是同步的，如果使用 <code>Servicec</code> ，<code>Service</code> 的连接是异步的。</p>
+<blockquote>
+<p>使用contentprovider比service实现同步轻松得多。前不久我还在想怎么同步调用service中的方法，最终选择了aidl。但是aidl需要绑定服务才能使用，而使用contentprovider调用同app不同进程的方法一个字符串就可以了，也不要求进程必须在。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VirtualApp/" rel="tag"># VirtualApp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/" rel="prev" title="移植FART到Adnroid 9.0">
+                  <i class="fa fa-chevron-left"></i> 移植FART到Adnroid 9.0
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/08/06/awesome-adb/" rel="next" title="awesome-adb">
+                  awesome-adb <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

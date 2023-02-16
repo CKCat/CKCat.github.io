@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文章记录使用 pytho 过程中易忘的知识，方便自己查阅。 设置 pypi 镜像临时使用1pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple some-package  注意，simple 不能少, 是 https 而不是 http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python使用记录">
+<meta property="og:url" content="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="本文章记录使用 pytho 过程中易忘的知识，方便自己查阅。 设置 pypi 镜像临时使用1pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple some-package  注意，simple 不能少, 是 https 而不是 http">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-27-13-31-34.png">
+<meta property="article:published_time" content="2019-12-11T17:22:25.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.680Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="Python使用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-27-13-31-34.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/","path":"2019/12/11/python使用记录/","title":"python使用记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>python使用记录 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE-pypi-%E9%95%9C%E5%83%8F"><span class="nav-number">1.</span> <span class="nav-text">设置 pypi 镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%B4%E6%97%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">临时使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E4%B8%BA%E9%BB%98%E8%AE%A4"><span class="nav-number">1.2.</span> <span class="nav-text">设为默认</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-%E4%B8%AD-join-%E5%87%BD%E6%95%B0%E5%92%8C-os-path-join-%E7%94%A8%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">Python 中 join 函数和 os.path.join 用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-%E8%AE%BE%E7%BD%AE%E5%BF%BD%E7%95%A5%E5%A4%A7%E5%B0%8F%E5%86%99%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%8A%A8%E8%A1%A5%E9%BD%90"><span class="nav-number">3.</span> <span class="nav-text">pycharm 设置忽略大小写进行自动补齐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-%E8%AE%BE%E7%BD%AE-python-%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF"><span class="nav-number">4.</span> <span class="nav-text">pycharm 设置 python 代码模板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-%E6%89%93%E5%BC%80%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%97%B6%EF%BC%8C%E4%BB%A3%E7%A0%81%E6%97%A0%E6%B3%95%E8%A1%A5%E5%85%A8"><span class="nav-number">5.</span> <span class="nav-text">pycharm 打开虚拟环境时，代码无法补全</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PYTHONPATH-%E4%BD%9C%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">PYTHONPATH 作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Django-%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC"><span class="nav-number">7.</span> <span class="nav-text">Django 测试脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#locals-%E5%92%8C-globals-%E4%BB%A5%E5%8F%8A%E5%8F%8D%E5%B0%84"><span class="nav-number">8.</span> <span class="nav-text">locals 和 globals 以及反射</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="python使用记录 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python使用记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-11 17:22:25" itemprop="dateCreated datePublished" datetime="2019-12-11T17:22:25+00:00">2019-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文章记录使用 pytho 过程中易忘的知识，方便自己查阅。</p>
+<h1 id="设置-pypi-镜像"><a href="#设置-pypi-镜像" class="headerlink" title="设置 pypi 镜像"></a>设置 pypi 镜像</h1><h2 id="临时使用"><a href="#临时使用" class="headerlink" title="临时使用"></a>临时使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package</span><br></pre></td></tr></table></figure>
+
+<p>注意，simple 不能少, 是 https 而不是 http</p>
+<h2 id="设为默认"><a href="#设为默认" class="headerlink" title="设为默认"></a>设为默认</h2><p>升级 pip 到最新的版本 (&gt;&#x3D;10.0.0) 后进行配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pip install pip -U</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或：</span></span><br><span class="line"><span class="comment"># 阿里源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"><span class="comment"># 腾讯源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url http://mirrors.cloud.tencent.com/pypi/simple</span><br><span class="line"><span class="comment"># 豆瓣源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url http://pypi.douban.com/simple/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Python-中-join-函数和-os-path-join-用法"><a href="#Python-中-join-函数和-os-path-join-用法" class="headerlink" title="Python 中 join 函数和 os.path.join 用法"></a>Python 中 join 函数和 os.path.join 用法</h1><blockquote>
+<p>join ： 连接字符串数组。将字符串、元组、列表中的元素以指定的字符(分隔符)连接生成一个新的字符串</p>
+</blockquote>
+<blockquote>
+<p>os.path.join() ： 将多个路径组合后返回</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">语法：&#x27;sep&#x27;.join（seq）</span><br><span class="line"></span><br><span class="line">参数说明：</span><br><span class="line">    sep：分隔符。可以为空</span><br><span class="line">    seq：要连接的元素序列、字符串、元组、字典等</span><br><span class="line">上面的语法即：以sep作为分隔符，将seq所有的元素合并成一个新的字符串.</span><br><span class="line"></span><br><span class="line">返回值：返回一个以分隔符sep连接各个元素后生成的字符串</span><br></pre></td></tr></table></figure>
+
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line"></span><br><span class="line">seq = [&#x27;hello&#x27;, &#x27;world&#x27;, &#x27;世界&#x27;,&#x27;你好&#x27;]</span><br><span class="line">print(&#x27; &#x27;.join(seq))</span><br><span class="line">print(os.path.join(&#x27;home&#x27;, &quot;me&quot;, &quot;mypath&quot;))</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello world 世界 你好</span><br><span class="line">home/me/mypath</span><br></pre></td></tr></table></figure>
+
+<h1 id="pycharm-设置忽略大小写进行自动补齐"><a href="#pycharm-设置忽略大小写进行自动补齐" class="headerlink" title="pycharm 设置忽略大小写进行自动补齐"></a>pycharm 设置忽略大小写进行自动补齐</h1><p>进入下列设置</p>
+<blockquote>
+<p>settings -&gt; Editor -&gt; General -&gt; Code Completion</p>
+</blockquote>
+<p>将 <code>Match case</code> 不勾选就可以忽略大小写进行自动补齐了。</p>
+<h1 id="pycharm-设置-python-代码模板"><a href="#pycharm-设置-python-代码模板" class="headerlink" title="pycharm 设置 python 代码模板"></a>pycharm 设置 python 代码模板</h1><p>设置 File &gt; Settings &gt; File and Code Template &gt; Python Script</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python3</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># File Name : $&#123;NAME&#125;</span><br><span class="line"># Created by $&#123;USER&#125; on $DATE</span><br><span class="line"></span><br><span class="line">__author__ = &#x27;$&#123;USER&#125;&#x27;</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
+
+<p>一些模板变量含义</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$&#123;PROJECT_NAME&#125; - 当前Project名称;</span><br><span class="line"> $&#123;NAME&#125; - 在创建文件的对话框中指定的文件名;</span><br><span class="line"> $&#123;USER&#125; - 当前用户名;</span><br><span class="line"> $&#123;DATE&#125; - 当前系统日期;</span><br><span class="line"> $&#123;TIME&#125; - 当前系统时间;</span><br><span class="line"> $&#123;YEAR&#125; - 年;</span><br><span class="line"> $&#123;MONTH&#125; - 月;</span><br><span class="line"> $&#123;DAY&#125; - 日;</span><br><span class="line"> $&#123;HOUR&#125; - 小时;</span><br><span class="line"> $&#123;MINUTE&#125; - 分钟；</span><br><span class="line"> $&#123;PRODUCT_NAME&#125; - 创建文件的IDE名称;</span><br><span class="line"> $&#123;MONTH_NAME_SHORT&#125; - 英文月份缩写, 如: Jan, Feb, etc;</span><br><span class="line"> $&#123;MONTH_NAME_FULL&#125; - 英文月份全称, 如: January, February, etc；</span><br></pre></td></tr></table></figure>
+
+<h1 id="pycharm-打开虚拟环境时，代码无法补全"><a href="#pycharm-打开虚拟环境时，代码无法补全" class="headerlink" title="pycharm 打开虚拟环境时，代码无法补全"></a>pycharm 打开虚拟环境时，代码无法补全</h1><p>打开设置，按如下图所示添加对应的 python 虚拟环境</p>
+<img src="/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-27-13-31-34.png" class="">
+
+<h1 id="PYTHONPATH-作用"><a href="#PYTHONPATH-作用" class="headerlink" title="PYTHONPATH 作用"></a>PYTHONPATH 作用</h1><p>PYTHONPATH 是 Python 搜索路径，默认我们 import 的模块都会从 PYTHONPATH 里面寻找。</p>
+<p>默认情况下，PYTHONPATH 是个空值，可以通过命令设置临时环境变量 PYTHONPATH 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># windows</span></span><br><span class="line"><span class="built_in">set</span> PYTHONPATH=path1;path2</span><br><span class="line"></span><br><span class="line"><span class="comment"># linux</span></span><br><span class="line"><span class="built_in">export</span>  PYTHONPATH=path1:path2</span><br></pre></td></tr></table></figure>
+
+<p>pycharm 默认会设置 PYTHONPATH 为源码根目录，vscode 则不会设置。</p>
+<p>python 中获取 PYTHONPATH 值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line"></span><br><span class="line">os.environ[<span class="string">&#x27;PYTHONPATH&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h1 id="Django-测试脚本"><a href="#Django-测试脚本" class="headerlink" title="Django 测试脚本"></a>Django 测试脚本</h1><p>当你只是想测试 django 中的某一个 py 文件内容 那么你可以不用书写前后端交互的形式，而是直接写一个测试脚本即可</p>
+<p>测试环境的准备：</p>
+<p>去 manage.py 中拷贝前四行代码 然后自己写两行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">​</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    os.environ.setdefault(<span class="string">&quot;DJANGO_SETTINGS_MODULE&quot;</span>, <span class="string">&quot;day64.settings&quot;</span>)</span><br><span class="line">    <span class="keyword">import</span> django</span><br><span class="line">    django.setup()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在这个代码块的下面就可以测试 django 里面的单个 py 文件了。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.strongforu.top/archives/153">https://www.strongforu.top/archives/153</a></p>
+</blockquote>
+<h1 id="locals-和-globals-以及反射"><a href="#locals-和-globals-以及反射" class="headerlink" title="locals 和 globals 以及反射"></a>locals 和 globals 以及反射</h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python%E4%BD%BF%E7%94%A8/" rel="tag"># Python使用</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/" rel="prev" title="gradle学习">
+                  <i class="fa fa-chevron-left"></i> gradle学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/" rel="next" title="Django学习-入门">
+                  Django学习-入门 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

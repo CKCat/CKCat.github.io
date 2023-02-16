@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="内存管理内存页我们使用分页模式来管理内存，把物理内存空间分成 4KB 大小页，称为内存页。 由于使用 4KB 进行分页，因此每一个页的起始地址都应该是 0x1000 的倍数，即地址的低 12 位可以可以另作它用。 为了使内存管理高效，我们需要一个结构存放页的状态、页的地址、页的分配记数、页的类型、页的链表，如下所示。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统实战07-内存管理">
+<meta property="og:url" content="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="内存管理内存页我们使用分页模式来管理内存，把物理内存空间分成 4KB 大小页，称为内存页。 由于使用 4KB 进行分页，因此每一个页的起始地址都应该是 0x1000 的倍数，即地址的低 12 位可以可以另作它用。 为了使内存管理高效，我们需要一个结构存放页的状态、页的地址、页的分配记数、页的类型、页的链表，如下所示。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E9%A1%B5%E9%9D%A2%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E9%87%8A%E6%94%BE%E7%AE%97%E6%B3%95.png">
+<meta property="article:published_time" content="2021-11-15T09:41:17.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.940Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="操作系统实战">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E9%A1%B5%E9%9D%A2%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/","path":"2021/11/15/操作系统实战07-内存管理/","title":"操作系统实战07-内存管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>操作系统实战07-内存管理 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%A1%B5"><span class="nav-number">1.1.</span> <span class="nav-text">内存页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%8C%BA"><span class="nav-number">1.2.</span> <span class="nav-text">内存区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">实现内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%A1%B5%E7%BB%93%E6%9E%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text">内存页结构初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%8C%BA%E7%BB%93%E6%9E%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.2.</span> <span class="nav-text">内存区结构初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%A1%B5%E7%9A%84%E5%88%86%E9%85%8D"><span class="nav-number">2.3.</span> <span class="nav-text">内存页的分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%A1%B5%E7%9A%84%E9%87%8A%E6%94%BE"><span class="nav-number">2.4.</span> <span class="nav-text">内存页的释放</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="操作系统实战07-内存管理 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统实战07-内存管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-15 09:41:17" itemprop="dateCreated datePublished" datetime="2021-11-15T09:41:17+00:00">2021-11-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="内存页"><a href="#内存页" class="headerlink" title="内存页"></a>内存页</h2><p>我们使用分页模式来管理内存，把物理内存空间分成 4KB 大小页，称为内存页。</p>
+<p>由于使用 4KB 进行分页，因此每一个页的起始地址都应该是 0x1000 的倍数，即地址的低 12 位可以可以另作它用。</p>
+<p>为了使内存管理高效，我们需要一个结构存放页的状态、页的地址、页的分配记数、页的类型、页的链表，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 内存空间地址描述符标志</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSADFLGS</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">u32_t</span> mf_olkty:<span class="number">2</span>;    <span class="comment">// 挂入链表的类型</span></span><br><span class="line">    <span class="type">u32_t</span> mf_lstty:<span class="number">1</span>;    <span class="comment">// 是否挂入链表</span></span><br><span class="line">    <span class="type">u32_t</span> mf_mocty:<span class="number">2</span>;    <span class="comment">// 分配类型，被谁占用了，内核还是应用或者空闲</span></span><br><span class="line">    <span class="type">u32_t</span> mf_marty:<span class="number">3</span>;    <span class="comment">// 属于哪个区</span></span><br><span class="line">    <span class="type">u32_t</span> mf_uindx:<span class="number">24</span>;   <span class="comment">// 分配计数</span></span><br><span class="line">&#125;__attribute__((packed)) <span class="type">msadflgs_t</span>; </span><br><span class="line"><span class="comment">// 物理地址和标志  </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_PHYADRFLGS</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">u64_t</span> paf_alloc:<span class="number">1</span>;     <span class="comment">// 分配位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_shared:<span class="number">1</span>;    <span class="comment">// 共享位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_swap:<span class="number">1</span>;      <span class="comment">// 交换位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_cache:<span class="number">1</span>;     <span class="comment">// 缓存位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_kmap:<span class="number">1</span>;      <span class="comment">// 映射位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_lock:<span class="number">1</span>;      <span class="comment">// 锁定位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_dirty:<span class="number">1</span>;     <span class="comment">// 脏位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_busy:<span class="number">1</span>;      <span class="comment">// 忙位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_rv2:<span class="number">4</span>;       <span class="comment">// 保留位</span></span><br><span class="line">    <span class="type">u64_t</span> paf_padrs:<span class="number">52</span>;    <span class="comment">// 页物理地址位</span></span><br><span class="line">&#125;__attribute__((packed)) <span class="type">phyadrflgs_t</span>;</span><br><span class="line"><span class="comment">// 内存空间地址描述符</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSADSC</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> md_list;           <span class="comment">// 链表，可以方便它挂入到其他数据结构中。</span></span><br><span class="line">    <span class="type">spinlock_t</span> md_lock;         <span class="comment">// 保护自身的自旋锁</span></span><br><span class="line">    <span class="type">msadflgs_t</span> md_indxflgs;     <span class="comment">// 内存空间地址描述符标志</span></span><br><span class="line">    <span class="type">phyadrflgs_t</span> md_phyadrs;    <span class="comment">// 物理地址和标志</span></span><br><span class="line">    <span class="type">void</span>* md_odlink;            <span class="comment">// 相邻且相同大小 msadsc 的指针</span></span><br><span class="line">&#125;__attribute__((packed)) <span class="type">msadsc_t</span>;</span><br></pre></td></tr></table></figure>
+<p>msadsc_t 结构看似很大，实则很小，因为它表示一个页面，物理内存页有多少就需要有多少个 msadsc_t 结构。</p>
+<p>实际上一个 msadsc_t 结构占 40 字节，4KB * 100KB &#x3D; 1G，所以按需要 10M 的内存空间才可以存下表示 1G 内存空间的 msadsc_t 结构。</p>
+<p>正是因为页面地址总是按 4KB 对齐， 所以 phyadrflgs_t 结构的低 12 位才可以另作它用。</p>
+<p>除了分配计数，msadflgs_t 结构中的其他部分都是用来描述 msadsc_t 结构本身信息的。</p>
+<h2 id="内存区"><a href="#内存区" class="headerlink" title="内存区"></a>内存区</h2><p>我们把物理内存分成三个区，分别为硬件区，内核区，应用区。</p>
+<p>硬件区，它占用物理内存低端区域，地址区间为 <code>0~32MB</code>。因为很多外部硬件只能访问低于 24MB 的物理内存，所以需要硬件区。</p>
+<p>内核区，内核也要使用内存，但是内核同样也是运行在虚拟地址空间，就需要有一段物理内存空间和内核的虚拟地址空间是线性映射关系。</p>
+<p>应用区，这个区域主是给应用用户态程序使用。应用程序使用虚拟地址空间，一开始并不会为应用一次性分配完所需的所有物理内存，而是按需分配，即应用用到一页就分配一个页。<br>如果访问到一个没有与物理内存页建立映射关系的虚拟内存页，这时候 CPU 就会产生缺页异常。最终这个缺页异常由操作系统处理，操作系统会分配一个物理内存页，并建好映射关系。</p>
+<p>下面为内存区的数据结构。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MA_TYPE_HWAD 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_TYPE_KRNL 2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_TYPE_PROC 3</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_HWAD_LSTART 0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_HWAD_LSZ 0x2000000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_HWAD_LEND (MA_HWAD_LSTART+MA_HWAD_LSZ-1)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_KRNL_LSTART 0x2000000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_KRNL_LSZ (0x40000000-0x2000000)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_KRNL_LEND (MA_KRNL_LSTART+MA_KRNL_LSZ-1)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_PROC_LSTART 0x40000000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_PROC_LSZ (0xffffffff-0x40000000)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MA_PROC_LEND (MA_PROC_LSTART+MA_PROC_LSZ)</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MEMAREA</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> ma_list;             <span class="comment">//内存区自身的链表</span></span><br><span class="line">    <span class="type">spinlock_t</span> ma_lock;           <span class="comment">//保护内存区的自旋锁</span></span><br><span class="line">    <span class="type">uint_t</span> ma_stus;               <span class="comment">//内存区的状态</span></span><br><span class="line">    <span class="type">uint_t</span> ma_flgs;               <span class="comment">//内存区的标志 </span></span><br><span class="line">    <span class="type">uint_t</span> ma_type;               <span class="comment">//内存区的类型</span></span><br><span class="line">    <span class="type">sem_t</span> ma_sem;                 <span class="comment">//内存区的信号量</span></span><br><span class="line">    <span class="type">wait_l_head_t</span> ma_waitlst;     <span class="comment">//内存区的等待队列</span></span><br><span class="line">    <span class="type">uint_t</span> ma_maxpages;           <span class="comment">//内存区总的页面数</span></span><br><span class="line">    <span class="type">uint_t</span> ma_allocpages;         <span class="comment">//内存区分配的页面数</span></span><br><span class="line">    <span class="type">uint_t</span> ma_freepages;          <span class="comment">//内存区空闲的页面数</span></span><br><span class="line">    <span class="type">uint_t</span> ma_resvpages;          <span class="comment">//内存区保留的页面数</span></span><br><span class="line">    <span class="type">uint_t</span> ma_horizline;          <span class="comment">//内存区分配时的水位线</span></span><br><span class="line">    <span class="type">adr_t</span> ma_logicstart;          <span class="comment">//内存区开始地址</span></span><br><span class="line">    <span class="type">adr_t</span> ma_logicend;            <span class="comment">//内存区结束地址</span></span><br><span class="line">    <span class="type">uint_t</span> ma_logicsz;            <span class="comment">//内存区大小</span></span><br><span class="line">    <span class="comment">//还有一些结构我们这里不关心。后面才会用到</span></span><br><span class="line">&#125;<span class="type">memarea_t</span>；</span><br></pre></td></tr></table></figure>
+
+<p>挂载 msadsc_t 结构的数据结构，它其中需要锁、状态、msadsc_t 结构数量，挂载 msadsc_t 结构的链表、和一些统计数据。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_BAFHLST</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">spinlock_t</span> af_lock;    <span class="comment">//保护自身结构的自旋锁</span></span><br><span class="line">    <span class="type">u32_t</span> af_stus;         <span class="comment">//状态 </span></span><br><span class="line">    <span class="type">uint_t</span> af_oder;        <span class="comment">//页面数的位移量</span></span><br><span class="line">    <span class="type">uint_t</span> af_oderpnr;     <span class="comment">//oder对应的页面数比如 oder为2那就是1&lt;&lt;2=4</span></span><br><span class="line">    <span class="type">uint_t</span> af_fobjnr;      <span class="comment">//多少个空闲msadsc_t结构，即空闲页面</span></span><br><span class="line">    <span class="type">uint_t</span> af_mobjnr;      <span class="comment">//此结构的msadsc_t结构总数，即此结构总页面</span></span><br><span class="line">    <span class="type">uint_t</span> af_alcindx;     <span class="comment">//此结构的分配计数</span></span><br><span class="line">    <span class="type">uint_t</span> af_freindx;     <span class="comment">//此结构的释放计数</span></span><br><span class="line">    <span class="type">list_h_t</span> af_frelst;    <span class="comment">//挂载此结构的空闲msadsc_t结构</span></span><br><span class="line">    <span class="type">list_h_t</span> af_alclst;    <span class="comment">//挂载此结构已经分配的msadsc_t结构</span></span><br><span class="line">&#125;<span class="type">bafhlst_t</span>;</span><br></pre></td></tr></table></figure>
+<p>为了更高效，这里会将不同的大小的内存进行分割，相关结构如下</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MDIVMER_ARR_LMAX 52</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MEMDIVMER</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">spinlock_t</span> dm_lock;      <span class="comment">//保护自身结构的自旋锁</span></span><br><span class="line">    <span class="type">u32_t</span> dm_stus;           <span class="comment">//状态</span></span><br><span class="line">    <span class="type">uint_t</span> dm_divnr;         <span class="comment">//内存分配次数</span></span><br><span class="line">    <span class="type">uint_t</span> dm_mernr;         <span class="comment">//内存合并次数</span></span><br><span class="line">    <span class="type">bafhlst_t</span> dm_mdmlielst[MDIVMER_ARR_LMAX];<span class="comment">//bafhlst_t结构数组</span></span><br><span class="line">    <span class="type">bafhlst_t</span> dm_onemsalst;  <span class="comment">//单个的bafhlst_t结构</span></span><br><span class="line">&#125;<span class="type">memdivmer_t</span>;</span><br></pre></td></tr></table></figure>
+<p>下图为页面组织结构示意图。</p>
+<img src="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E9%A1%B5%E9%9D%A2%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.png" class="">
+
+<h1 id="实现内存管理"><a href="#实现内存管理" class="headerlink" title="实现内存管理"></a>实现内存管理</h1><p>内存管理的关键函数 init_memmgr 在 <code>cosmos/hal/x86/memmgrinit.c</code> 文件中, 该函数为物理内存管理器初始化的大总管,代码如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//cosmos/hal/x86/halmm.c中</span></span><br><span class="line"><span class="comment">//hal层的内存初始化函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_halmm</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">init_phymmarge</span>();</span><br><span class="line">    <span class="built_in">init_memmgr</span>();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Cosmos物理内存管理器初始化</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_memmgr</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//初始化内存页结构msadsc_t</span></span><br><span class="line">    <span class="comment">//初始化内存区结构memarea_t</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 init_memmgr 函数中应该要完成内存页结构 msadsc_t 和内存区结构 memarea_t 的初始化。</p>
+<p>下图为内存管理的时序图。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">halmm.c -&gt; memmgrinit.c : init_memmgr 内存管理器初始化。</span><br><span class="line">memmgrinit.c -&gt; msadsc.c : init_msadsc 初始化内存页结构 msadsc_t 。</span><br><span class="line">msadsc.c -&gt; msadsc.c : ret_msadsc_vadrandsz 计算 msadsc_t 结构数组的开始地址和数组元素个数。</span><br><span class="line">msadsc.c -&gt; msadsc.c : init_msadsc_core 初始化 msadsc_t 结构数组。</span><br><span class="line">memmgrinit.c -&gt; memarea.c : init_memarea 初始化内存区。</span><br><span class="line">memarea.c -&gt; memarea.c : init_memarea_core 设置硬件区、内核区、应用区。</span><br><span class="line">memmgrinit.c -&gt; msadsc.c : init_search_krloccupymm 初始化搜索内核占用的内存页面。</span><br><span class="line">msadsc.c -&gt; msadsc.c : search_krloccupymsadsc_core 搜索内核占用的内存页面。</span><br><span class="line">msadsc.c -&gt; msadsc.c : search_segment_occupymsadsc 搜索内核占用的内存页，并设置相应的 msadsc_t 结构。</span><br><span class="line">memmgrinit.c -&gt; memarea.c : init_merlove_mem 初始化页面合并。</span><br><span class="line">memarea.c -&gt; memarea.c : merlove_mem_core 合并内存页。</span><br><span class="line">memarea.c -&gt; memarea.c : merlove_setallmarflgs_onmemarea 给 msadsc_t 结构打上标签</span><br><span class="line">memarea.c -&gt; memarea.c : merlove_mem_onmemarea 根据内存区 memarea_t 结构对内存页 msadsc_t 结构进行合并。</span><br><span class="line">memarea.c -&gt; memarea.c : merlove_scan_continumsadsc 获取最多且地址连续的内存页 msadsc_t 结构体的开始、结束地址、个数。</span><br><span class="line">memarea.c -&gt; memarea.c : merlove_continumsadsc_mareabafh 把一组连续的内存页 msadsc_t 结构体挂载到合适的 m_mdmlielst 数组中的 bafhlst_t 结构中，实现内存合并。</span><br><span class="line">memarea.c -&gt; memarea.c : continumsadsc_mareabafh_core 内存合并的具体实现。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存页结构初始化"><a href="#内存页结构初始化" class="headerlink" title="内存页结构初始化"></a>内存页结构初始化</h2><p>内存页的初始化实现代码在 <code>cosmos/hal/x86/msadsc.c</code> 文件中，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">write_one_msadsc</span><span class="params">(<span class="type">msadsc_t</span> *msap, <span class="type">u64_t</span> phyadr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//对msadsc_t结构做基本的初始化，比如链表、锁、标志位</span></span><br><span class="line">    <span class="built_in">msadsc_t_init</span>(msap);</span><br><span class="line">    <span class="comment">//这是把一个64位的变量地址转换成phyadrflgs_t*类型方便取得其中的地址位段</span></span><br><span class="line">    <span class="type">phyadrflgs_t</span> *tmp = (<span class="type">phyadrflgs_t</span> *)(&amp;phyadr);</span><br><span class="line">    <span class="comment">//把页的物理地址写入到msadsc_t结构中</span></span><br><span class="line">    msap-&gt;md_phyadrs.paf_padrs = tmp-&gt;paf_padrs;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">u64_t</span> <span class="title">init_msadsc_core</span><span class="params">(<span class="type">machbstart_t</span> *mbsp, <span class="type">msadsc_t</span> *msavstart, <span class="type">u64_t</span> msanr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//获取phymmarge_t结构数组开始地址</span></span><br><span class="line">    <span class="type">phymmarge_t</span> *pmagep = (<span class="type">phymmarge_t</span> *)<span class="built_in">phyadr_to_viradr</span>((<span class="type">adr_t</span>)mbsp-&gt;mb_e820expadr);</span><br><span class="line">    <span class="type">u64_t</span> mdindx = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//扫描phymmarge_t结构数组</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">u64_t</span> i = <span class="number">0</span>; i &lt; mbsp-&gt;mb_e820exnr; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//判断phymmarge_t结构的类型是不是可用内存</span></span><br><span class="line">        <span class="keyword">if</span> (PMR_T_OSAPUSERRAM == pmagep[i].pmr_type)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//遍历phymmarge_t结构的地址区间</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">u64_t</span> start = pmagep[i].pmr_saddr; start &lt; pmagep[i].pmr_end; start += <span class="number">4096</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//每次加上4KB-1比较是否小于等于phymmarge_t结构的结束地址</span></span><br><span class="line">                <span class="keyword">if</span> ((start + <span class="number">4096</span> - <span class="number">1</span>) &lt;= pmagep[i].pmr_end)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//与当前地址为参数写入第mdindx个msadsc结构</span></span><br><span class="line">                    <span class="built_in">write_one_msadsc</span>(&amp;msavstart[mdindx], start);</span><br><span class="line">                    mdindx++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> mdindx;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_msadsc</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">u64_t</span> coremdnr = <span class="number">0</span>, msadscnr = <span class="number">0</span>;</span><br><span class="line">    <span class="type">msadsc_t</span> *msadscvp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">machbstart_t</span> *mbsp = &amp;kmachbsp;</span><br><span class="line">    <span class="comment">//计算msadsc_t结构数组的开始地址和数组元素个数</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">ret_msadsc_vadrandsz</span>(mbsp, &amp;msadscvp, &amp;msadscnr) == FALSE)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">system_error</span>(<span class="string">&quot;init_msadsc ret_msadsc_vadrandsz err\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//开始真正初始化msadsc_t结构数组</span></span><br><span class="line">    coremdnr = <span class="built_in">init_msadsc_core</span>(mbsp, msadscvp, msadscnr);</span><br><span class="line">    <span class="keyword">if</span> (coremdnr != msadscnr)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">system_error</span>(<span class="string">&quot;init_msadsc init_msadsc_core err\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//将msadsc_t结构数组的开始的物理地址写入kmachbsp结构中 </span></span><br><span class="line">    mbsp-&gt;mb_memmappadr = <span class="built_in">viradr_to_phyadr</span>((<span class="type">adr_t</span>)msadscvp);</span><br><span class="line">    <span class="comment">//将msadsc_t结构数组的元素个数写入kmachbsp结构中 </span></span><br><span class="line">    mbsp-&gt;mb_memmapnr = coremdnr;</span><br><span class="line">    <span class="comment">//将msadsc_t结构数组的大小写入kmachbsp结构中 </span></span><br><span class="line">    mbsp-&gt;mb_memmapsz = coremdnr * <span class="built_in">sizeof</span>(<span class="type">msadsc_t</span>);</span><br><span class="line">    <span class="comment">//计算下一个空闲内存的开始地址 </span></span><br><span class="line">    mbsp-&gt;mb_nextwtpadr = <span class="built_in">PAGE_ALIGN</span>(mbsp-&gt;mb_memmappadr + mbsp-&gt;mb_memmapsz);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="内存区结构初始化"><a href="#内存区结构初始化" class="headerlink" title="内存区结构初始化"></a>内存区结构初始化</h2><p>内存区结构初始化实现代码在 <code>cosmos/hal/x86/memarea.c</code> 文件，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">bafhlst_t_init</span><span class="params">(<span class="type">bafhlst_t</span> *initp, <span class="type">u32_t</span> stus, <span class="type">uint_t</span> oder, <span class="type">uint_t</span> oderpnr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//初始化bafhlst_t结构体的基本数据</span></span><br><span class="line">    <span class="built_in">knl_spinlock_init</span>(&amp;initp-&gt;af_lock);</span><br><span class="line">    initp-&gt;af_stus = stus;</span><br><span class="line">    initp-&gt;af_oder = oder;</span><br><span class="line">    initp-&gt;af_oderpnr = oderpnr;</span><br><span class="line">    initp-&gt;af_fobjnr = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;af_mobjnr = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;af_alcindx = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;af_freindx = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">list_init</span>(&amp;initp-&gt;af_frelst);</span><br><span class="line">    <span class="built_in">list_init</span>(&amp;initp-&gt;af_alclst);</span><br><span class="line">    <span class="built_in">list_init</span>(&amp;initp-&gt;af_ovelst);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">memdivmer_t_init</span><span class="params">(<span class="type">memdivmer_t</span> *initp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//初始化medivmer_t结构体的基本数据</span></span><br><span class="line">    <span class="built_in">knl_spinlock_init</span>(&amp;initp-&gt;dm_lock);</span><br><span class="line">    initp-&gt;dm_stus = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;dm_divnr = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;dm_mernr = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//循环初始化memdivmer_t结构体中dm_mdmlielst数组中的每个bafhlst_t结构的基本数据</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">uint_t</span> li = <span class="number">0</span>; li &lt; MDIVMER_ARR_LMAX; li++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">bafhlst_t_init</span>(&amp;initp-&gt;dm_mdmlielst[li], BAFH_STUS_DIVM, li, (<span class="number">1UL</span> &lt;&lt; li));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">bafhlst_t_init</span>(&amp;initp-&gt;dm_onemsalst, BAFH_STUS_ONEM, <span class="number">0</span>, <span class="number">1UL</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">memarea_t_init</span><span class="params">(<span class="type">memarea_t</span> *initp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//初始化memarea_t结构体的基本数据</span></span><br><span class="line">    <span class="built_in">list_init</span>(&amp;initp-&gt;ma_list);</span><br><span class="line">    <span class="built_in">knl_spinlock_init</span>(&amp;initp-&gt;ma_lock);</span><br><span class="line">    initp-&gt;ma_stus = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_flgs = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_type = MA_TYPE_INIT;</span><br><span class="line">    initp-&gt;ma_maxpages = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_allocpages = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_freepages = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_resvpages = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_horizline = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_logicstart = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_logicend = <span class="number">0</span>;</span><br><span class="line">    initp-&gt;ma_logicsz = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//初始化memarea_t结构体中的memdivmer_t结构体</span></span><br><span class="line">    <span class="built_in">memdivmer_t_init</span>(&amp;initp-&gt;ma_mdmdata);</span><br><span class="line">    initp-&gt;ma_privp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">bool_t</span> <span class="title">init_memarea_core</span><span class="params">(<span class="type">machbstart_t</span> *mbsp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//获取memarea_t结构开始地址</span></span><br><span class="line">    <span class="type">u64_t</span> phymarea = mbsp-&gt;mb_nextwtpadr;</span><br><span class="line">    <span class="comment">//检查内存空间够不够放下MEMAREA_MAX个memarea_t结构实例变量</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">initchkadr_is_ok</span>(mbsp, phymarea, (<span class="built_in">sizeof</span>(<span class="type">memarea_t</span>) * MEMAREA_MAX)) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">memarea_t</span> *virmarea = (<span class="type">memarea_t</span> *)<span class="built_in">phyadr_to_viradr</span>((<span class="type">adr_t</span>)phymarea);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">uint_t</span> mai = <span class="number">0</span>; mai &lt; MEMAREA_MAX; mai++)</span><br><span class="line">    &#123;   <span class="comment">//循环初始化每个memarea_t结构实例变量</span></span><br><span class="line">        <span class="built_in">memarea_t_init</span>(&amp;virmarea[mai]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//设置硬件区的类型和空间大小</span></span><br><span class="line">    virmarea[<span class="number">0</span>].ma_type = MA_TYPE_HWAD;</span><br><span class="line">    virmarea[<span class="number">0</span>].ma_logicstart = MA_HWAD_LSTART;</span><br><span class="line">    virmarea[<span class="number">0</span>].ma_logicend = MA_HWAD_LEND;</span><br><span class="line">    virmarea[<span class="number">0</span>].ma_logicsz = MA_HWAD_LSZ;</span><br><span class="line">    <span class="comment">//设置内核区的类型和空间大小</span></span><br><span class="line">    virmarea[<span class="number">1</span>].ma_type = MA_TYPE_KRNL;</span><br><span class="line">    virmarea[<span class="number">1</span>].ma_logicstart = MA_KRNL_LSTART;</span><br><span class="line">    virmarea[<span class="number">1</span>].ma_logicend = MA_KRNL_LEND;</span><br><span class="line">    virmarea[<span class="number">1</span>].ma_logicsz = MA_KRNL_LSZ;</span><br><span class="line">    <span class="comment">//设置应用区的类型和空间大小</span></span><br><span class="line">    virmarea[<span class="number">2</span>].ma_type = MA_TYPE_PROC;</span><br><span class="line">    virmarea[<span class="number">2</span>].ma_logicstart = MA_PROC_LSTART;</span><br><span class="line">    virmarea[<span class="number">2</span>].ma_logicend = MA_PROC_LEND;</span><br><span class="line">    virmarea[<span class="number">2</span>].ma_logicsz = MA_PROC_LSZ;</span><br><span class="line">    <span class="comment">//将memarea_t结构的开始的物理地址写入kmachbsp结构中 </span></span><br><span class="line">    mbsp-&gt;mb_memznpadr = phymarea;</span><br><span class="line">    <span class="comment">//将memarea_t结构的个数写入kmachbsp结构中 </span></span><br><span class="line">    mbsp-&gt;mb_memznnr = MEMAREA_MAX;</span><br><span class="line">    <span class="comment">//将所有memarea_t结构的大小写入kmachbsp结构中 </span></span><br><span class="line">    mbsp-&gt;mb_memznsz = <span class="built_in">sizeof</span>(<span class="type">memarea_t</span>) * MEMAREA_MAX;</span><br><span class="line">    <span class="comment">//计算下一个空闲内存的开始地址 </span></span><br><span class="line">    mbsp-&gt;mb_nextwtpadr = <span class="built_in">PAGE_ALIGN</span>(phymarea + <span class="built_in">sizeof</span>(<span class="type">memarea_t</span>) * MEMAREA_MAX);</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//初始化内存区</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_memarea</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//真正初始化内存区</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">init_memarea_core</span>(&amp;kmachbsp) == FALSE)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">system_error</span>(<span class="string">&quot;init_memarea_core fail&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存页的分配"><a href="#内存页的分配" class="headerlink" title="内存页的分配"></a>内存页的分配</h2><p>分配一个页面，这个算法将执行如下步骤：</p>
+<ol>
+<li>根据一个页面的请求，会返回 m_mdmlielst 数组中的第 0 个 bafhlst_t 结构。</li>
+<li>如果第 0 个 bafhlst_t 结构中有 msadsc_t 结构就直接返回，若没有 msadsc_t 结构，就会继续查找 m_mdmlielst 数组中的第 1 个 bafhlst_t 结构。</li>
+<li>如果第 1 个 bafhlst_t 结构中也没有 msadsc_t 结构，就会继续查找 m_mdmlielst 数组中的第 2 个 bafhlst_t 结构。</li>
+<li>如果第 2 个 bafhlst_t 结构中有 msadsc_t 结构，记住第 2 个 bafhlst_t 结构中对应是 4 个连续的 msadsc_t 结构。这时让这 4 个连续的 msadsc_t 结构从第 2 个 bafhlst_t 结构中脱离。</li>
+<li>把这 4 个连续的 msadsc_t 结构，对半分割成 2 个双 msadsc_t 结构，把其中一个双 msadsc_t 结构挂载到第 1 个 bafhlst_t 结构中。</li>
+<li>把剩下一个双 msadsc_t 结构，继续对半分割成两个单 msadsc_t 结构，把其中一个单 msadsc_t 结构挂载到第 0 个 bafhlst_t 结构中，剩下一个单 msadsc_t 结构返回给请求者，完成内存分配。</li>
+</ol>
+<p>内存分配算法示意图。</p>
+<img src="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%AE%97%E6%B3%95%E7%A4%BA%E6%84%8F%E5%9B%BE.png" class="">
+
+<p>时序图</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">mm_division_pages -&gt; mm_divpages_fmwk : 在内存分配接口中将调用内存分配框架。</span><br><span class="line">mm_divpages_fmwk -&gt; onmrtype_retn_marea : 获取对应的内存区结构指针。</span><br><span class="line">mm_divpages_fmwk -&gt; mm_divpages_core : 调用内存分配核心函数。</span><br><span class="line">mm_divpages_core -&gt; mm_reldivpages_onmarea :  内存分配。</span><br><span class="line">mm_reldivpages_onmarea -&gt; onmpgs_retn_bafhlst :  获取内存区请求分配页结构和实际分配页结构 bafhlst_t。</span><br><span class="line">mm_reldivpages_onmarea -&gt; mm_reldpgsdivmsa_bafhl :  处理分配过程。</span><br><span class="line">mm_reldpgsdivmsa_bafhl -&gt; mm_retnmsaob_onbafhlst :  获取内存页结构体的起始地址和结束地址。</span><br><span class="line">mm_reldpgsdivmsa_bafhl -&gt; mm_divpages_opmsadsc :  如果分配的大小正好等于请求分配的大小，则设置 msadsc_t 结构的相关信息表示已经被使用。</span><br><span class="line">mm_reldpgsdivmsa_bafhl -&gt; mrdmb_add_msa_bafh :  如果大小不等，则需要分割。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存页的释放"><a href="#内存页的释放" class="headerlink" title="内存页的释放"></a>内存页的释放</h2><p>释放一个页面，这个算法将执行如下步骤：</p>
+<ol>
+<li>释放一个页面，会返回 m_mdmlielst 数组中的第 0 个 bafhlst_t 结构。</li>
+<li>设置这个页面对应的 msadsc_t 结构的相关信息，表示已经执行了释放操作。</li>
+<li>开始查看第 0 个 bafhlst_t 结构中有没有空闲的 msadsc_t，并且它和要释放的 msadsc_t 对应的物理地址是连续的。没有则把这个释放的 msadsc_t 挂载第 0 个 bafhlst_t 结构中，算法结束，否则进入下一步。</li>
+<li>把第 0 个 bafhlst_t 结构中的 msadsc_t 结构拿出来与释放的 msadsc_t 结构，合并成 2 个连续且更大的 msadsc_t。</li>
+<li>继续查看第 1 个 bafhlst_t 结构中有没有空闲的 msadsc_t，而且这个空闲 msadsc_t 要和上一步合并的 2 个 msadsc_t 对应的物理地址是连续的。没有则把这个合并的 2 个 msadsc_t 挂载第 1 个 bafhlst_t 结构中，算法结束，否则进入下一步。</li>
+<li>把第 1 个 bafhlst_t 结构中的 2 个连续的 msadsc_t 结构，还有合并的 2 个地址连续的 msadsc_t 结构拿出来，合并成 4 个连续且更大的 msadsc_t 结构。</li>
+<li>继续查看第 2 个 bafhlst_t 结构，有没有空闲的 msadsc_t 结构，并且它要和上一步合并的 4 个 msadsc_t 结构对应的物理地址是连续的。没有则把这个合并的 4 个 msadsc_t 挂载第 2 个 bafhlst_t 结构中，算法结束。</li>
+</ol>
+<p>内存释放算法示意图。</p>
+<img src="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E9%87%8A%E6%94%BE%E7%AE%97%E6%B3%95.png" class="">
+
+<p>时序图</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">mm_merge_pages -&gt; mm_merpages_fmwk : 调用释放内存页面的框架函数。</span><br><span class="line">mm_merpages_fmwk -&gt; mm_merpages_core : 释放内存页面的核心函数。</span><br><span class="line">mm_merpages_core -&gt; mm_merpages_onmarea : 对一个内存区释放内存页。</span><br><span class="line">mm_merpages_onmarea -&gt; onfpgs_retn_bafhlst : 获取请求释放和最大释放的 bafhlst_t 结构指针。</span><br><span class="line">mm_merpages_onmarea -&gt; mm_merpages_opmsadsc : 设置 msadsc_t 结构的信息。</span><br><span class="line">mm_merpages_onmarea -&gt; mm_merpages_onbafhlst : 对 msadsc_t 结构进行合并。</span><br><span class="line">mm_merpages_onbafhlst -&gt; mm_merpages_onbafhlst : 将合并的 msadsc_t 结构加入对应的 bafhlst_t 结构中。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<p>整个流程基本结束，后面有时间再看细节。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" rel="tag"># 操作系统实战</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/" rel="prev" title="编译x64dbg">
+                  <i class="fa fa-chevron-left"></i> 编译x64dbg
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/" rel="next" title="操作系统实战08-内存对象管理">
+                  操作系统实战08-内存对象管理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

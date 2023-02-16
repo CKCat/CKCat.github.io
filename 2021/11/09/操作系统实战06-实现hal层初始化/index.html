@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="第一个 C 函数总体概述第一个 C 函数 hal_start 首先初始化 hal 层，其中执行了平台初始化，hal层的内存初始化、中断初始化，最后进入到内核初始化。下面展示了整个执行时序图，先有一个宏观的感官。 12345678910111213141516171819202122@startumlhal_start.c -&gt; hal_start.c : hal_start 处理 hal 层">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统实战06-实现hal层初始化">
+<meta property="og:url" content="https://ckcat.github.io/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="第一个 C 函数总体概述第一个 C 函数 hal_start 首先初始化 hal 层，其中执行了平台初始化，hal层的内存初始化、中断初始化，最后进入到内核初始化。下面展示了整个执行时序图，先有一个宏观的感官。 12345678910111213141516171819202122@startumlhal_start.c -&gt; hal_start.c : hal_start 处理 hal 层">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-09T14:48:33.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.940Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="操作系统实战">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/","path":"2021/11/09/操作系统实战06-实现hal层初始化/","title":"操作系统实战06-实现hal层初始化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>操作系统实战06-实现hal层初始化 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA-C-%E5%87%BD%E6%95%B0%E6%80%BB%E4%BD%93%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">第一个 C 函数总体概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hal-%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">hal 层初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B9%B3%E5%8F%B0"><span class="nav-number">2.1.</span> <span class="nav-text">初始化平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%86%85%E5%AD%98"><span class="nav-number">2.2.</span> <span class="nav-text">初始化内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%AD%E6%96%AD"><span class="nav-number">2.3.</span> <span class="nav-text">初始化中断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">2.4.</span> <span class="nav-text">初始化中断控制器</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="操作系统实战06-实现hal层初始化 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统实战06-实现hal层初始化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-09 14:48:33" itemprop="dateCreated datePublished" datetime="2021-11-09T14:48:33+00:00">2021-11-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="第一个-C-函数总体概述"><a href="#第一个-C-函数总体概述" class="headerlink" title="第一个 C 函数总体概述"></a>第一个 C 函数总体概述</h1><p>第一个 C 函数 hal_start 首先初始化 hal 层，其中执行了平台初始化，hal层的内存初始化、中断初始化，最后进入到内核初始化。下面展示了整个执行时序图，先有一个宏观的感官。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">hal_start.c -&gt; hal_start.c : hal_start 处理 hal 层开始函数。 </span><br><span class="line">hal_start.c -&gt; halinit.c : init_hal 初始化 hal 层。</span><br><span class="line">halinit.c -&gt; halplatform.c : init_halplaltform 初始化平台。</span><br><span class="line">halplatform.c -&gt; halplatform.c : init_machbstart 复制二级引导器收集的机器信息结构体。</span><br><span class="line">halplatform.c -&gt; bdvideo.c : init_bdvideo 初始化图形显示驱动。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : init_dftgraph 初始化图形数据结构，里面放有图形模式，分辨率，图形驱动函数指针。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : init_bga 初始 bga 图形显卡的函数指针。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : init_vbe 初始 vbe 图形显卡的函数指针。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : fill_graph 清空屏幕为黑色。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : set_charsdxwflush </span><br><span class="line">bdvideo.c -&gt; bdvideo.c : hal_background 显示背景图片。</span><br><span class="line">halinit.c -&gt; halinit.c : move_img2maxpadr 将 img 移动到高地址的内存空间，防止被覆盖。</span><br><span class="line">halinit.c -&gt; halmm.c : init_halmm 初始化内存。</span><br><span class="line">halmm.c -&gt; halmm.c : init_phymmarge 初始化内存并排序。</span><br><span class="line">halinit.c -&gt; halintupt.c : init_halintupt 初始化中断。</span><br><span class="line">halintupt.c -&gt; halintupt.c : init_descriptor 初始化 GDT 描述符 x64_gdt 。</span><br><span class="line">halintupt.c -&gt; halintupt.c : init_idt_descriptor 初始化 IDT 描述符 x64_idt ，绑定了中断编号及中断处理函数。</span><br><span class="line">halintupt.c -&gt; halintupt.c : init_intfltdsc 初始化中断异常表 machintflt ，拷贝了中断相关信息。</span><br><span class="line">halintupt.c -&gt; i8259.c : init_i8259 初始化 8259A 中断控制器。</span><br><span class="line">hal_start.c -&gt; hal_start.c : init_krl 初始化内核层。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>下面在从微观角度看一下每一个功能的实现。</p>
+<h1 id="hal-层初始化"><a href="#hal-层初始化" class="headerlink" title="hal 层初始化"></a>hal 层初始化</h1><p>hal 层初始化相关代码在 <code>Cosmos/hal/x86/halinit.c</code> 中实现，比较简单，调用初始化平台、初始化内存、初始化中断的功能，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_hal</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 平台初始化函数</span></span><br><span class="line">    <span class="built_in">init_halplaltform</span>();</span><br><span class="line">    <span class="comment">// 将 img 移动到高地址的内存空间，防止被覆盖</span></span><br><span class="line">    <span class="built_in">move_img2maxpadr</span>(&amp;kmachbsp);</span><br><span class="line">    <span class="comment">// 初始化内存</span></span><br><span class="line">    <span class="built_in">init_halmm</span>(); </span><br><span class="line">    <span class="comment">// 初始化中断</span></span><br><span class="line">    <span class="built_in">init_halintupt</span>();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来看一下初始化平台。</p>
+<h2 id="初始化平台"><a href="#初始化平台" class="headerlink" title="初始化平台"></a>初始化平台</h2><p>初始化平台主要完成两个任务，一个是把二级引导器建立的机器信息结构复制到 hal 层的一个全局变量中，方便内核中的其他代码使用里面的信息，之后二级引导器建立的数据所占用的内存都会被释放；二是初始化图形显示驱动，内核运行过程要在屏幕上输出信息。</p>
+<p>初始化平台相关代码在 <code>Cosmos/hal/x86/halplatform.c</code> 文件中，以下代码实现了机器信息结构的复制。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_machbstart</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">machbstart_t</span> *kmbsp = &amp;kmachbsp;</span><br><span class="line">    <span class="type">machbstart_t</span> *smbsp = MBSPADR; <span class="comment">// 物理地址 1MB 处存放着此前初始化的 machbstart_t 结构体。</span></span><br><span class="line">    <span class="built_in">machbstart_t_init</span>(kmbsp);</span><br><span class="line">    <span class="comment">// 要把地址转换成虚拟地址并复制</span></span><br><span class="line">    <span class="built_in">memcopy</span>((<span class="type">void</span> *)<span class="built_in">phyadr_to_viradr</span>((<span class="type">adr_t</span>)smbsp), (<span class="type">void</span> *)kmbsp, <span class="built_in">sizeof</span>(<span class="type">machbstart_t</span>));</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 平台初始化函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_halplaltform</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 复制机器信息结构</span></span><br><span class="line">    <span class="built_in">init_machbstart</span>();</span><br><span class="line">    <span class="comment">// 初始化图形显示驱动</span></span><br><span class="line">    <span class="built_in">init_bdvideo</span>();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中值得关注的一个变量为 <code>kmachbsp</code> ，该变量是一个 hal 层的全局变量，定义在 <code>Cosmos/hal/x86/halglobal.c</code> 文件中，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//全局变量定义变量放在data段</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HAL_DEFGLOB_VARIABLE(vartype,varname) \</span></span><br><span class="line"><span class="meta">EXTERN  __attribute__((section(<span class="string">&quot;.data&quot;</span>))) vartype varname</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">HAL_DEFGLOB_VARIABLE</span>(<span class="type">machbstart_t</span>,kmachbsp);</span><br></pre></td></tr></table></figure>
+
+<p>下面再看一下初始化图形显示驱动，相关代码在 <code>Cosmos/hal/x86/bdvideo.c</code> 文件中，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化图形显示驱动</span></span><br><span class="line"><span class="function">PUBLIC LKINIT <span class="type">void</span> <span class="title">init_bdvideo</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">dftgraph_t</span> *kghp = &amp;kdftgh;</span><br><span class="line">    <span class="comment">// 初始化图形数据结构，里面放有图形模式，分辨率，图形驱动函数指针</span></span><br><span class="line">    <span class="built_in">init_dftgraph</span>();</span><br><span class="line">    <span class="comment">// 初始bga图形显卡的函数指针</span></span><br><span class="line">    <span class="built_in">init_bga</span>();</span><br><span class="line">    <span class="comment">// 初始vbe图形显卡的函数指针</span></span><br><span class="line">    <span class="built_in">init_vbe</span>();</span><br><span class="line">    <span class="comment">// 清空屏幕 为黑色</span></span><br><span class="line">    <span class="built_in">fill_graph</span>(kghp, <span class="built_in">BGRA</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">    <span class="comment">// 显示背景图片 </span></span><br><span class="line">    <span class="built_in">set_charsdxwflush</span>(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">hal_background</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>init_defgraph()</code> 函数初始了 <code>dftgraph_t</code> 结构体类型的变量 <code>kdftgh</code>，<code>dftgraph_t</code> 相关结构体定义在 <code>Cosmos/hal/x86/halglobal.c</code> 文件中，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_DFTGRAPH</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">u64_t</span> gh_mode;         <span class="comment">//图形模式</span></span><br><span class="line">    <span class="type">u64_t</span> gh_x;            <span class="comment">//水平像素点</span></span><br><span class="line">    <span class="type">u64_t</span> gh_y;            <span class="comment">//垂直像素点</span></span><br><span class="line">    <span class="type">u64_t</span> gh_framphyadr;   <span class="comment">//显存物理地址 </span></span><br><span class="line">    <span class="type">u64_t</span> gh_fvrmphyadr;   <span class="comment">//显存虚拟地址</span></span><br><span class="line">    <span class="type">u64_t</span> gh_fvrmsz;       <span class="comment">//显存大小</span></span><br><span class="line">    <span class="type">u64_t</span> gh_onepixbits;   <span class="comment">//一个像素字占用的数据位数</span></span><br><span class="line">    <span class="type">u64_t</span> gh_onepixbyte;</span><br><span class="line">    <span class="type">u64_t</span> gh_vbemodenr;    <span class="comment">//vbe模式号</span></span><br><span class="line">    <span class="type">u64_t</span> gh_bank;         <span class="comment">//显存的bank数</span></span><br><span class="line">    <span class="type">u64_t</span> gh_curdipbnk;    <span class="comment">//当前bank</span></span><br><span class="line">    <span class="type">u64_t</span> gh_nextbnk;      <span class="comment">//下一个bank</span></span><br><span class="line">    <span class="type">u64_t</span> gh_banksz;       <span class="comment">//bank大小</span></span><br><span class="line">    <span class="type">u64_t</span> gh_fontadr;      <span class="comment">//字库地址</span></span><br><span class="line">    <span class="type">u64_t</span> gh_fontsz;       <span class="comment">//字库大小</span></span><br><span class="line">    <span class="type">u64_t</span> gh_fnthight;     <span class="comment">//字体高度</span></span><br><span class="line">    <span class="type">u64_t</span> gh_nxtcharsx;    <span class="comment">//下一字符显示的x坐标</span></span><br><span class="line">    <span class="type">u64_t</span> gh_nxtcharsy;    <span class="comment">//下一字符显示的y坐标</span></span><br><span class="line">    <span class="type">u64_t</span> gh_linesz;       <span class="comment">//字符行高</span></span><br><span class="line">    <span class="type">pixl_t</span> gh_deffontpx;   <span class="comment">//默认字体大小</span></span><br><span class="line">    <span class="type">u64_t</span> gh_chardxw;</span><br><span class="line">    <span class="type">u64_t</span> gh_flush;</span><br><span class="line">    <span class="type">u64_t</span> gh_framnr;</span><br><span class="line">    <span class="type">u64_t</span> gh_fshdata;      <span class="comment">//刷新相关的</span></span><br><span class="line">    <span class="type">dftghops_t</span> gh_opfun;   <span class="comment">//图形驱动操作函数指针结构体</span></span><br><span class="line">&#125;<span class="type">dftgraph_t</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_DFTGHOPS</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//读写显存数据</span></span><br><span class="line">    <span class="built_in">size_t</span> (*dgo_read)(<span class="type">void</span>* ghpdev,<span class="type">void</span>* outp,<span class="type">size_t</span> rdsz);</span><br><span class="line">    <span class="built_in">size_t</span> (*dgo_write)(<span class="type">void</span>* ghpdev,<span class="type">void</span>* inp,<span class="type">size_t</span> wesz);</span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_ioctrl)(<span class="type">void</span>* ghpdev,<span class="type">void</span>* outp,<span class="type">uint_t</span> iocode);</span><br><span class="line">    <span class="comment">//刷新</span></span><br><span class="line">    <span class="built_in">void</span>   (*dgo_flush)(<span class="type">void</span>* ghpdev);</span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_set_bank)(<span class="type">void</span>* ghpdev, <span class="type">sint_t</span> bnr);</span><br><span class="line">    <span class="comment">//读写像素</span></span><br><span class="line">    <span class="built_in">pixl_t</span> (*dgo_readpix)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span> x,<span class="type">uint_t</span> y);</span><br><span class="line">    <span class="built_in">void</span>   (*dgo_writepix)(<span class="type">void</span>* ghpdev,<span class="type">pixl_t</span> pix,<span class="type">uint_t</span> x,<span class="type">uint_t</span> y);</span><br><span class="line">    <span class="comment">//直接读写像素 </span></span><br><span class="line">    <span class="built_in">pixl_t</span> (*dgo_dxreadpix)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span> x,<span class="type">uint_t</span> y);</span><br><span class="line">    <span class="built_in">void</span>   (*dgo_dxwritepix)(<span class="type">void</span>* ghpdev,<span class="type">pixl_t</span> pix,<span class="type">uint_t</span> x,<span class="type">uint_t</span> y);</span><br><span class="line">    <span class="comment">//设置x，y坐标和偏移</span></span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_set_xy)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span> x,<span class="type">uint_t</span> y);</span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_set_vwh)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span> vwt,<span class="type">uint_t</span> vhi);</span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_set_xyoffset)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span> xoff,<span class="type">uint_t</span> yoff);</span><br><span class="line">    <span class="comment">//获取x，y坐标和偏移</span></span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_get_xy)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span>* rx,<span class="type">uint_t</span>* ry);</span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_get_vwh)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span>* rvwt,<span class="type">uint_t</span>* rvhi);</span><br><span class="line">    <span class="built_in">sint_t</span> (*dgo_get_xyoffset)(<span class="type">void</span>* ghpdev,<span class="type">uint_t</span>* rxoff,<span class="type">uint_t</span>* ryoff);</span><br><span class="line">&#125;<span class="type">dftghops_t</span>;</span><br><span class="line"><span class="comment">//刷新显存</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">flush_videoram</span><span class="params">(<span class="type">dftgraph_t</span> *kghp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    kghp-&gt;gh_opfun.<span class="built_in">dgo_flush</span>(kghp);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化图形显示驱动，这里实现了设置背景图片，显示 Cosmos 的版本、编译时间、CPU工作模式、内存大小等数据。</p>
+<h2 id="初始化内存"><a href="#初始化内存" class="headerlink" title="初始化内存"></a>初始化内存</h2><p>hal 层的内存初始化比较容易，只要向内存管理器提供内存空间布局信息就可以。</p>
+<p>在二级引导器中我们已经获取了内存布局信息，但是 Cosmos 的内存管理器需要保存更多的信息，这里就需要以 BIOS 提供的结构为基础，设计一套新的数据结构，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_T_OSAPUSERRAM 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_T_RESERVRAM 2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_T_HWUSERRAM 8</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_T_ARACONRAM 0xf</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_T_BUGRAM 0xff</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_F_X86_32 (1&lt;&lt;0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_F_X86_64 (1&lt;&lt;1)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_F_ARM_32 (1&lt;&lt;2)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_F_ARM_64 (1&lt;&lt;3)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PMR_F_HAL_MASK 0xff</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_PHYMMARGE</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">spinlock_t</span> pmr_lock;<span class="comment">//保护这个结构是自旋锁</span></span><br><span class="line">    <span class="type">u32_t</span> pmr_type;     <span class="comment">//内存地址空间类型</span></span><br><span class="line">    <span class="type">u32_t</span> pmr_stype;</span><br><span class="line">    <span class="type">u32_t</span> pmr_dtype;    <span class="comment">//内存地址空间的子类型，见上面的宏</span></span><br><span class="line">    <span class="type">u32_t</span> pmr_flgs;     <span class="comment">//结构的标志与状态</span></span><br><span class="line">    <span class="type">u32_t</span> pmr_stus;</span><br><span class="line">    <span class="type">u64_t</span> pmr_saddr;    <span class="comment">//内存空间的开始地址</span></span><br><span class="line">    <span class="type">u64_t</span> pmr_lsize;    <span class="comment">//内存空间的大小</span></span><br><span class="line">    <span class="type">u64_t</span> pmr_end;      <span class="comment">//内存空间的结束地址</span></span><br><span class="line">    <span class="type">u64_t</span> pmr_rrvmsaddr;<span class="comment">//内存保留空间的开始地址</span></span><br><span class="line">    <span class="type">u64_t</span> pmr_rrvmend;  <span class="comment">//内存保留空间的结束地址</span></span><br><span class="line">    <span class="type">void</span>* pmr_prip;     <span class="comment">//结构的私有数据指针，以后扩展所用</span></span><br><span class="line">    <span class="type">void</span>* pmr_extp;     <span class="comment">//结构的扩展数据指针，以后扩展所用</span></span><br><span class="line">&#125;<span class="type">phymmarge_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>下面开始将  e820map_t 内存结构中的数据复制到 phymmarge_t 结构中来，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">u64_t</span> <span class="title">initpmrge_core</span><span class="params">(<span class="type">e820map_t</span> *e8sp, <span class="type">u64_t</span> e8nr, <span class="type">phymmarge_t</span> *pmargesp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">u64_t</span> retnr = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">u64_t</span> i = <span class="number">0</span>; i &lt; e8nr; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//根据一个e820map_t结构建立一个phymmarge_t结构</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">init_one_pmrge</span>(&amp;e8sp[i], &amp;pmargesp[i]) == FALSE)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> retnr;</span><br><span class="line">        &#125;</span><br><span class="line">        retnr++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> retnr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_phymmarge</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">machbstart_t</span> *mbsp = &amp;kmachbsp;</span><br><span class="line">    <span class="type">phymmarge_t</span> *pmarge_adr = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">u64_t</span> pmrgesz = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//根据machbstart_t机器信息结构计算获得phymmarge_t结构的开始地址和大小</span></span><br><span class="line">    <span class="built_in">ret_phymmarge_adrandsz</span>(mbsp, &amp;pmarge_adr, &amp;pmrgesz);</span><br><span class="line">    <span class="type">u64_t</span> tmppmrphyadr = mbsp-&gt;mb_nextwtpadr;</span><br><span class="line">    <span class="type">e820map_t</span> *e8p = (<span class="type">e820map_t</span> *)((<span class="type">adr_t</span>)(mbsp-&gt;mb_e820padr));</span><br><span class="line">    <span class="comment">//建立phymmarge_t结构</span></span><br><span class="line">    <span class="type">u64_t</span> ipmgnr = <span class="built_in">initpmrge_core</span>(e8p, mbsp-&gt;mb_e820nr, pmarge_adr);</span><br><span class="line">    <span class="comment">//把phymmarge_t结构的地址大小个数保存machbstart_t机器信息结构中</span></span><br><span class="line">    mbsp-&gt;mb_e820expadr = tmppmrphyadr;</span><br><span class="line">    mbsp-&gt;mb_e820exnr = ipmgnr;</span><br><span class="line">    mbsp-&gt;mb_e820exsz = ipmgnr * <span class="built_in">sizeof</span>(<span class="type">phymmarge_t</span>);</span><br><span class="line">    mbsp-&gt;mb_nextwtpadr = <span class="built_in">PAGE_ALIGN</span>(mbsp-&gt;mb_e820expadr + mbsp-&gt;mb_e820exsz);</span><br><span class="line">    <span class="comment">//phymmarge_t结构中地址空间从低到高进行排序，我已经帮你写好了</span></span><br><span class="line">    <span class="built_in">phymmarge_sort</span>(pmarge_adr, ipmgnr);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="初始化中断"><a href="#初始化中断" class="headerlink" title="初始化中断"></a>初始化中断</h2><p>在 x86 CPU 上，最多支持 256 个中断，这意味着我们要准备 256 个中断门描述符和 256 个中断处理程序的入口。</p>
+<p>下面我们来定义中断门描述符，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 中断门描述符</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_GATE</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="type">u16_t</span>   offset_low;     <span class="comment">/* 偏移 */</span></span><br><span class="line">        <span class="type">u16_t</span>   selector;       <span class="comment">/* 段选择子 */</span></span><br><span class="line">        <span class="type">u8_t</span>    dcount;         <span class="comment">/* 该字段只在调用门描述符中有效。如果在利用调用门调用子程序时引起特权级的转换和堆栈的改变，需要将外层堆栈中的参数复制到内层堆栈。该双字计数字段就是用于说明这种情况发生时，要复制的双字参数的数量。*/</span></span><br><span class="line">        <span class="type">u8_t</span>    attr;           <span class="comment">/* P(1) DPL(2) DT(1) TYPE(4) */</span></span><br><span class="line">        <span class="type">u16_t</span>   offset_high;    <span class="comment">/* 偏移的高位段 */</span></span><br><span class="line">        <span class="type">u32_t</span>   offset_high_h;</span><br><span class="line">        <span class="type">u32_t</span>   offset_resv;</span><br><span class="line">&#125;__attribute__((packed)) <span class="type">gate_t</span>;</span><br><span class="line"><span class="comment">//定义中断表</span></span><br><span class="line"><span class="built_in">HAL_DEFGLOB_VARIABLE</span>(<span class="type">gate_t</span>,x64_idt)[IDTMAX];</span><br></pre></td></tr></table></figure>
+
+<p>定义好中断表后，需要进行设置中断门描述符数据，相关代码如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//vector 向量也是中断号</span></span><br><span class="line"><span class="comment">//desc_type 中断门类型，中断门，陷阱门</span></span><br><span class="line"><span class="comment">//handler 中断处理程序的入口地址</span></span><br><span class="line"><span class="comment">//privilege 中断门的权限级别</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">set_idt_desc</span><span class="params">(<span class="type">u8_t</span> vector, <span class="type">u8_t</span> desc_type, <span class="type">inthandler_t</span> handler, <span class="type">u8_t</span> privilege)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">gate_t</span> *p_gate = &amp;x64_idt[vector];</span><br><span class="line">    <span class="type">u64_t</span> base = (<span class="type">u64_t</span>)handler;</span><br><span class="line">    p_gate-&gt;offset_low = base &amp; <span class="number">0xFFFF</span>;</span><br><span class="line">    p_gate-&gt;selector = SELECTOR_KERNEL_CS;</span><br><span class="line">    p_gate-&gt;dcount = <span class="number">0</span>;</span><br><span class="line">    p_gate-&gt;attr = (<span class="type">u8_t</span>)(desc_type | (privilege &lt;&lt; <span class="number">5</span>));</span><br><span class="line">    p_gate-&gt;offset_high = (<span class="type">u16_t</span>)((base &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFFFF</span>);</span><br><span class="line">    p_gate-&gt;offset_high_h = (<span class="type">u32_t</span>)((base &gt;&gt; <span class="number">32</span>) &amp; <span class="number">0xffffffff</span>);</span><br><span class="line">    p_gate-&gt;offset_resv = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们需要设置中断处理程序，中断处理程序只负责这三件事。</p>
+<ol>
+<li>保护 CPU 寄存器，即中断发生时的程序运行的上下文。</li>
+<li>调用中断处理程序，这个程序可以是修复异常的，可以是设备驱动程序中对设备响应的程序。</li>
+<li>恢复 CPU 寄存器，即恢复中断时程序运行的上下文，使程序继续运行。</li>
+</ol>
+<p>下面为部分中断处理程序相关代码。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//除法错误异常 比如除0</span></span><br><span class="line">exc_divide_error:</span><br><span class="line">  SRFTFAULT <span class="number">0</span></span><br><span class="line"><span class="comment">//单步执行异常</span></span><br><span class="line">exc_single_step_exception:</span><br><span class="line">  SRFTFAULT <span class="number">1</span></span><br><span class="line">exc_nmi:</span><br><span class="line">  SRFTFAULT <span class="number">2</span></span><br><span class="line"><span class="comment">//调试断点异常</span></span><br><span class="line">exc_breakpoint_exception:</span><br><span class="line">  SRFTFAULT <span class="number">3</span></span><br><span class="line"><span class="comment">//溢出异常</span></span><br><span class="line">exc_overflow:</span><br><span class="line">  SRFTFAULT <span class="number">4</span></span><br><span class="line"><span class="comment">//段不存在异常</span></span><br><span class="line">exc_segment_not_present:</span><br><span class="line">  SRFTFAULT_ECODE <span class="number">11</span></span><br><span class="line"><span class="comment">//栈异常</span></span><br><span class="line">exc_stack_exception:</span><br><span class="line">  SRFTFAULT_ECODE <span class="number">12</span></span><br><span class="line"><span class="comment">//通用异常</span></span><br><span class="line">exc_general_protection:</span><br><span class="line">  SRFTFAULT_ECODE <span class="number">13</span></span><br><span class="line"><span class="comment">//缺页异常</span></span><br><span class="line">exc_page_fault:</span><br><span class="line">  SRFTFAULT_ECODE <span class="number">14</span></span><br><span class="line">hxi_exc_general_intpfault:</span><br><span class="line">  SRFTFAULT <span class="number">256</span></span><br><span class="line"><span class="comment">//硬件1～7号中断</span></span><br><span class="line">hxi_hwint00:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">0</span>)</span><br><span class="line">hxi_hwint01:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">1</span>)</span><br><span class="line">hxi_hwint02:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">2</span>)</span><br><span class="line">hxi_hwint03:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">3</span>)</span><br><span class="line">hxi_hwint04:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">4</span>)</span><br><span class="line">hxi_hwint05:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">5</span>)</span><br><span class="line">hxi_hwint06:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">6</span>)</span><br><span class="line">hxi_hwint07:</span><br><span class="line">  <span class="built_in">HARWINT</span>  (INT_VECTOR_IRQ0+<span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+
+<p>有了中断处理程序的入口地址，就可以设置中断描述符了，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_idt_descriptor</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 一开始把所有中断的处理程序设置为保留的通用处理程序</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">u16_t</span> intindx = <span class="number">0</span>; intindx &lt;= <span class="number">255</span>; intindx++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">set_idt_desc</span>((<span class="type">u8_t</span>)intindx, DA_386IGate, hxi_exc_general_intpfault, PRIVILEGE_KRNL);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 对已知的中断和异常进一步设置，这会覆盖之前的通用处理程序</span></span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_DIVIDE, DA_386IGate, exc_divide_error, PRIVILEGE_KRNL);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_DEBUG, DA_386IGate, exc_single_step_exception, PRIVILEGE_KRNL);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_NMI, DA_386IGate, exc_nmi, PRIVILEGE_KRNL);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_BREAKPOINT, DA_386IGate, exc_breakpoint_exception, PRIVILEGE_USER);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_OVERFLOW, DA_386IGate, exc_overflow, PRIVILEGE_USER);</span><br><span class="line">    ....</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_PAGE_FAULT, DA_386IGate, exc_page_fault, PRIVILEGE_KRNL);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_IRQ0 + <span class="number">0</span>, DA_386IGate, hxi_hwint00, PRIVILEGE_KRNL);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_IRQ0 + <span class="number">1</span>, DA_386IGate, hxi_hwint01, PRIVILEGE_KRNL);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_IRQ0 + <span class="number">2</span>, DA_386IGate, hxi_hwint02, PRIVILEGE_KRNL);</span><br><span class="line">    <span class="built_in">set_idt_desc</span>(INT_VECTOR_IRQ0 + <span class="number">3</span>, DA_386IGate, hxi_hwint03, PRIVILEGE_KRNL);</span><br><span class="line">    ....</span><br><span class="line">     <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后再实现中断处理函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//中断处理函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">hal_do_hwint</span><span class="params">(<span class="type">uint_t</span> intnumb, <span class="type">void</span> *krnlsframp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">intfltdsc_t</span> *ifdscp = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">cpuflg_t</span> cpuflg;</span><br><span class="line">    <span class="keyword">if</span> (intnumb &gt; IDTMAX || krnlsframp == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">hal_sysdie</span>(<span class="string">&quot;hal_do_hwint fail\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 根据中断号获取中断异常描述符地址    </span></span><br><span class="line">    ifdscp = <span class="built_in">hal_retn_intfltdsc</span>(intnumb);</span><br><span class="line">    <span class="keyword">if</span> (ifdscp == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">hal_sysdie</span>(<span class="string">&quot;hal_do_hwint ifdscp NULL\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 对断异常描述符加锁并中断</span></span><br><span class="line">    <span class="built_in">hal_spinlock_saveflg_cli</span>(&amp;ifdscp-&gt;i_lock, &amp;cpuflg);</span><br><span class="line">    ifdscp-&gt;i_indx++;</span><br><span class="line">    ifdscp-&gt;i_deep++;</span><br><span class="line">    <span class="comment">// 运行中断处理的回调函数</span></span><br><span class="line">    <span class="built_in">hal_run_intflthandle</span>(intnumb, krnlsframp);</span><br><span class="line">    ifdscp-&gt;i_deep--;</span><br><span class="line">    <span class="comment">// 解锁并恢复中断状态</span></span><br><span class="line">    <span class="built_in">hal_spinunlock_restflg_sti</span>(&amp;ifdscp-&gt;i_lock, &amp;cpuflg);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="初始化中断控制器"><a href="#初始化中断控制器" class="headerlink" title="初始化中断控制器"></a>初始化中断控制器</h2><p>前面实现了 CPU 端的中断，接下来需要初始化中断控制器，处理 CPU 与设备之间的中断，这里选择 8259A 中断控制器。</p>
+<p>相关代码在 <code>Cosmos/hal/x86/i8259.c</code> 中，具体实现如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">init_i8259</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 初始化主从8259a</span></span><br><span class="line">	<span class="built_in">out_u8_p</span>(ZIOPT, ICW1);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(SIOPT, ICW1);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(ZIOPT1, ZICW2);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(SIOPT1, SICW2);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(ZIOPT1, ZICW3);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(SIOPT1, SICW3);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(ZIOPT1, ICW4);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(SIOPT1, ICW4);</span><br><span class="line">	<span class="comment">// 屏蔽全部中断源</span></span><br><span class="line">	<span class="built_in">out_u8_p</span>(ZIOPT1, <span class="number">0xff</span>);</span><br><span class="line">	<span class="built_in">out_u8_p</span>(SIOPT1, <span class="number">0xff</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果你要了解 8259A 的细节，就是上述代码中为什么要写入这些数据，你可以自己在 Intel 官方网站上搜索 8259A 的数据手册，自行查看。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" rel="tag"># 操作系统实战</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/" rel="prev" title="操作系统实战04-程序中的地址如何转换">
+                  <i class="fa fa-chevron-left"></i> 操作系统实战04-程序中的地址如何转换
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/" rel="next" title="编译x64dbg">
+                  编译x64dbg <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

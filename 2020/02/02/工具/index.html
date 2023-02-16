@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Anroid 逆向工具静态分析JEB -  The Interactive Android Decompiler. GDA - GGJoy Dex Analysizer(GDA)，国内第一款也是唯一一款全交互式反编译器，同时也是世界上最早实现的dalvik字节码反编译器。 IDA - The IDA Disassembler and Debugger is an interactive, prog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工具">
+<meta property="og:url" content="https://ckcat.github.io/2020/02/02/%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="Anroid 逆向工具静态分析JEB -  The Interactive Android Decompiler. GDA - GGJoy Dex Analysizer(GDA)，国内第一款也是唯一一款全交互式反编译器，同时也是世界上最早实现的dalvik字节码反编译器。 IDA - The IDA Disassembler and Debugger is an interactive, prog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-02T04:49:50.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.740Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2020/02/02/%E5%B7%A5%E5%85%B7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/02/02/%E5%B7%A5%E5%85%B7/","path":"2020/02/02/工具/","title":"工具"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>工具 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Anroid-%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">Anroid 逆向工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">静态分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95HOOK"><span class="nav-number">1.2.</span> <span class="nav-text">动态调试HOOK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%B1%E5%A3%B3%E5%B7%A5%E5%85%B7"><span class="nav-number">1.3.</span> <span class="nav-text">脱壳工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PC-%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">PC 逆向工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text">开发工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7"><span class="nav-number">4.</span> <span class="nav-text">抓包工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%B7%A5%E5%85%B7"><span class="nav-number">5.</span> <span class="nav-text">编辑工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IDA-Pro-%E6%8F%92%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">IDA Pro 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ghidra-%E6%8F%92%E4%BB%B6"><span class="nav-number">7.</span> <span class="nav-text">Ghidra 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jeb-Pro-%E6%8F%92%E4%BB%B6"><span class="nav-number">8.</span> <span class="nav-text">Jeb Pro 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-%E5%B7%A5%E5%85%B7"><span class="nav-number">9.</span> <span class="nav-text">Frida 工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-%E9%80%86%E5%90%91"><span class="nav-number">10.</span> <span class="nav-text">Java 逆向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="nav-number">11.</span> <span class="nav-text">其他工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#python-%E5%BA%93"><span class="nav-number">12.</span> <span class="nav-text">python 库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JS-%E5%BA%93"><span class="nav-number">13.</span> <span class="nav-text">JS 库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-%E5%BA%93"><span class="nav-number">14.</span> <span class="nav-text">C++ 库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-%E5%BA%93"><span class="nav-number">15.</span> <span class="nav-text">Java 库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%96%E8%AF%81"><span class="nav-number">16.</span> <span class="nav-text">取证</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/02/%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="工具 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          工具
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-02-02 04:49:50" itemprop="dateCreated datePublished" datetime="2020-02-02T04:49:50+00:00">2020-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Anroid-逆向工具"><a href="#Anroid-逆向工具" class="headerlink" title="Anroid 逆向工具"></a>Anroid 逆向工具</h1><h2 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h2><p><a target="_blank" rel="noopener" href="https://www.pnfsoftware.com/">JEB</a> -  The Interactive Android Decompiler.</p>
+<p><a target="_blank" rel="noopener" href="http://www.gda.wiki:9090/">GDA</a> - GGJoy Dex Analysizer(GDA)，国内第一款也是唯一一款全交互式反编译器，同时也是世界上最早实现的dalvik字节码反编译器。</p>
+<p><a target="_blank" rel="noopener" href="https://www.hex-rays.com/products/ida/">IDA</a> - The IDA Disassembler and Debugger is an interactive, programmable, extensible, multi-processor disassembler hosted on Windows, Linux, or Mac OS X. IDA has become the de-facto standard for the analysis of hostile code, vulnerability research and commercial-off-the-shelf validation.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/NationalSecurityAgency/ghidra">Ghidra</a> - Ghidra is a software reverse engineering (SRE) framework.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/skylot/jadx">jadx</a> - Dex to Java decompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/java-decompiler/jd-gui">jd-gui</a> - A standalone Java Decompiler GUI.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/androguard/androguard">androguard</a> - Reverse engineering, Malware and goodware analysis of Android applications … and more (ninja !).</p>
+<p><a target="_blank" rel="noopener" href="https://code.google.com/p/android-apktool/">ApkTool</a> - A tool for reverse engineering Android Apk Files.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Konloch/bytecode-viewer">Bytecode-Viewer</a> - A Java 8 Jar &amp; Android APK Reverse Engineering Suite (Decompiler, Editor, Debugger &amp; More)</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/pxb1988/dex2jar">Dex2Jar</a> - Tools to work with android .dex and java .class files.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Storyyeller/enjarify">Enjarify</a> - Enjarify is a tool for translating Dalvik bytecode to equivalent Java bytecode. This allows Java analysis tools to analyze Android applications.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/JesusFreke/smali">smali&#x2F;baksmali</a> - An assembler&#x2F;disassembler for Android’s dex format.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/deathmarine/Luyten">Luyten</a> - An Open Source Java Decompiler Gui for Procyon.</p>
+<p><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-319641-1-1.html">AndroidKiller</a> - Android killer 是一款可视化的安卓应用逆向工具，集Apk反编译、Apk打包、Apk签名，编码互转，ADB通信（应用安装-卸载-运行-设备文件管理）等特色功能于一身，支持logcat日志输出，语法高亮，基于关键字（支持单行代码或多行代码段）项目内搜索，可自定义外部工具；吸收融汇多种工具功能与特点，打造一站式逆向工具操作体验，大大简化了安卓应用&#x2F;游戏修改过程中各类繁琐工作。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/EiNSTeiN-/decompiler">decompiler</a> - A decompiler with multiple backend support, written in Python. Works with IDA and Capstone.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zsdlove/ApkVulCheck">ApkVulCheck</a> - This is a tool to help androidcoder to check the flaws in their projects.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/m0bilesecurity/RMS-Runtime-Mobile-Security">RMS-Runtime-Mobile-Security</a> - Runtime Mobile Security (RMS) is a powerful web interface that helps you to manipulate Android Java Classes and Methods at Runtime.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">Mobile-Security-Framework-MobSF</a> - Mobile Security Framework (MobSF) is an automated, all-in-one mobile application (Android&#x2F;iOS&#x2F;Windows) pen-testing, malware analysis and security assessment framework capable of performing static and dynamic analysis. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/radareorg/cutter">cutter</a> - Free and Open Source Reverse Engineering Platform powered by radare2.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/google/android-classyshark">android-classyshark</a> - Analyze any Android&#x2F;Java based app or game.</p>
+<p><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-259688.htm">jda</a> - apk、dex、jar 反编译工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Surendrajat/APKLab">APKLab</a> - Android Reverse Engineering WorkBench for VS Code.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/chason0528/profiler">profiler</a> - 这是一个主要用于逆向工程师用来跟踪java方法调用流程的工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/panhongwei/TraceReader">TraceReader</a> - About<br>android小工具，通过读取trace文件，回溯整个整个程序执行调用树。</p>
+<p>[reko]{<a target="_blank" rel="noopener" href="https://github.com/uxmal/reko%7D">https://github.com/uxmal/reko}</a> - Reko is a binary decompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/quark-engine/quark-engine">quark-engine</a> - Malware Scoring System.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sonyxperiadev/ApkAnalyser">ApkAnalyser</a> - ApkAnalyser.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LLVM-but-worse/java-disassembler">java-disassembler</a> - The Java Disassembler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/pkilller/super-jadx">super-jadx</a> - Add new features for reverse engineering, such as: renaming of classes, fields, methods, variables, reference graphs and more.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vaibhavpandeyvpz/apkstudio">apkstudio</a> - Open-source, cross platform Qt based IDE for reverse-engineering Android application packages.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/secure-software-engineering/FlowDroid">FlowDroid</a> - FlowDroid Static Data Flow Tracker.</p>
+<h2 id="动态调试HOOK"><a href="#动态调试HOOK" class="headerlink" title="动态调试HOOK"></a>动态调试HOOK</h2><p><a target="_blank" rel="noopener" href="https://github.com/CalebFenton/simplify/sdbg">sdbg</a> - Sdbg is a Smali debugger powered by SmaliVM. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/frida/frida">frida</a> - Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alibaba/arthas">Arthas</a> - Alibaba Java Diagnostic Tool Arthas&#x2F;Alibaba Java诊断利器Arthas.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MerryMage/dynarmic">dynarmic</a> - An ARM dynamic recompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/FabricMC/Enigma">Enigma</a> - This is a fork of cuchaz’s engima, a deobfuscation&#x2F;remapping tool for Java software.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jmpews/Dobby">Dobby</a> - a lightweight, multi-platform, multi-architecture hook framework.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wfcpc/ARM64InlineHook">ARM64InlineHook</a> - ARM64InlineHook.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sensepost/objection">objection</a> - objection - runtime mobile exploration.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ele7enxxh/Android-Inline-Hook">Android-Inline-Hook</a> - thumb16 thumb32 arm32 inlineHook in Android.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iqiyi/xHook">xHook</a> - A PLT hook library for Android native ELF.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/turing-technician/FastHook">FastHook</a> - 一种高效稳定、简洁易用的Android Hook框架，实际项目验证，拥有远超其他同类框架的优异稳定性。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/asLody/whale">whale</a> - Hook Framework for Android&#x2F;IOS&#x2F;Linux&#x2F;MacOS.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/PAGalaxyLab/YAHFA">YAHFA</a> - Yet Another Hook Framework for ART.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ganyao114/SandHook">SandHook</a> - Android ART Hook&#x2F;Native Inline Hook&#x2F;Single Instruction Hook - support 4.4 - 11.0 32&#x2F;64 bit - Xposed API Compat.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GToad/Android_Inline_Hook">Android_Inline_Hook</a> - Build an so file to automatically do the android_native_hook work. Supports thumb-2&#x2F;arm32 and ARM64 ! With this, tools like Xposed can do android native hook.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GToad/Android_Inline_Hook_ARM64">Android_Inline_Hook_ARM64</a> - Build an .so file to automatically do the android_native_hook work. Supports ARM64 ! With this, tools like Xposed can do android native hook.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/mar-v-in/ArtHook">ArtHook</a> - Library for hooking on ART.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tiann/epic">epic</a> - Dynamic java method AOP hook for Android(continution of Dexposed on ART), Supporting 5.0~11.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zhuotong/Android_InlineHook">Android_InlineHook</a> - Android内联hook框架.</p>
+<p>[And64InlineHook]{<a target="_blank" rel="noopener" href="https://github.com/Rprop/And64InlineHook%7D">https://github.com/Rprop/And64InlineHook}</a> - Lightweight ARMv8-A(ARM64, AArch64, Little-Endian) Inline Hook Library for Android C&#x2F;C++.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/woxihuannisja/StormHook">StormHook</a> - StormHook is a Android Hook Framework for Dalvik and Art.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dodola/fbhookfork">fbhookfork</a> - 从 fb 的 profilo 项目里提取出来的hook 库，自己用.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/canyie/pine">pine</a> - Dynamic java method hook framework on ART.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ChickenHook/ChickenHook">ChickenHook</a> - A linux &#x2F; android &#x2F; MacOS hooking framework.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/BigFaceCat2017/frida-substrate">frida-substrate</a> - substrate framework for android based on frida.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/darvincisec/VirtualDynamicAnalysis">VirtualDynamicAnalysis</a> - A basic android pentest environment to instrument apps without root or repackaging an app.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LSPosed/LSPosed">LSPosed</a> - LSPosed Xposed Framework.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/FrenchYeti/dexcalibur">dexcalibur</a> - About<br>[Official] Android reverse engineering tool focused on dynamic instrumentation automation.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iGio90/Dwarf">Dwarf</a> - Full featured multi arch&#x2F;os debugger built on top of PyQt5 and frida.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rohanrhu/gdb-frontend">gdb-frontend</a> - GDBFrontend is an easy, flexible and extensionable gui debugger.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/bytedance/bhook">bhook</a> - ByteHook(aka bhook) is a PLT hook framework for Android app.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/smx-smx/ezinject">ezinject</a> - Modular binary injection framework.</p>
+<h2 id="脱壳工具"><a href="#脱壳工具" class="headerlink" title="脱壳工具"></a>脱壳工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/hanbinglengyue/FART">FART</a> - ART环境下自动化脱壳方案。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/F8LEFT/FUPK3">FUPK3</a> - FUPK v3, 早期的一个Android半自动脱壳机。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sepyeight/FartDexFix">FartDexFix</a> - hanbing大佬fart工具脱壳后dex后修复.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CodingGay/BlackDex">BlackDex</a> - BlackDex</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Youlor/unpacker">unpacker</a> - unpacker</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ShivamKumarJha/android_tools">android_tools</a> - Bash scripts for ROM development stuff.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iromise/fans">fans</a> - FANS: Fuzzing Android Native System Services.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/chason0528/profiler">profiler</a> - A tool to trace java method dynamically for android application.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alitekin2fx/magiskboot">magiskboot</a> - ‘magiskboot’ command line application on linux.</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><a target="_blank" rel="noopener" href="https://github.com/RealityNet/android_triage">android_triage</a> - Bash script to extract data from an Android device.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/droe/sslsplit">sslsplit</a> - 透明的 SSL&#x2F;TLS 拦截.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anestisb/vdexExtractor">vdexExtractor</a> - Tool to decompile &amp; extract Android Dex bytecode from Vdex files.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anestisb/android-simg2img">android-simg2img</a> - Tool to convert Android sparse images to raw images.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anestisb/android-unpackbootimg">android-unpackbootimg</a> - Tools to work with Android boot images.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rmnscnce/hsu">hsu</a> - Hide Magisk and root system-wide to prevent any kinds of detection.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ysbing/yadb">yadb</a> - yadb是一个根据原生yadb不支持的功能做的扩展。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rev1si0n/bxxt">bxxt</a> - 解包，打包 boot.img 工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf">MagiskHidePropsConf</a> - MagiskHidePropsConf.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vfsfitvnm/frida-il2cpp-bridge">frida-il2cpp-bridge</a> - A Frida module to dump, trace or hijack any Il2Cpp application at runtime, without needing the global-metadata.dat file.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hamibot/hamibot">hamibot</a> - Android 平台 JavaScript 自动化工具，无需 root。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TUSSON/android-event-recorder">android-event-recorder</a> - 一个记录&#x2F;重放Android平台输入事件的工具，自动化测试会更容易。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/svengong/xcubebase">xcubebase</a> - 基于xposed的frida持久化方案。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/svengong/xcubebase_riru">xcubebase_riru</a> - 基于magisk 和riru的frida持久化方案。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/doridori/Android-Security-Reference">Android-Security-Reference</a> - A W.I.P Android Security Ref.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/AirtestProject/Airtest">Airtest</a> - 游戏和应用程序的 UI 自动化框架.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/leng-yue/py-scrcpy-client">py-scrcpy-client</a> - 一个简单易用的python scrcpy客户端。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/aktsk/apk-medit">apk-medit</a> - 无需root和ndk的可调试apk上的内存搜索和补丁工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GJDuck/e9patch">e9patch</a> - 强大的静态二进制重写器.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cfig/Android_boot_image_editor">Android_boot_image_editor</a> - Parsing and re-packing Android boot.img&#x2F;vbmeta.img, supporting Android 12.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nightmare-space/adb_tool">adb_tool</a> - ADB TOOL，提供 adb 管理，android 端 adb 安装，开启远程调试。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/a13xp0p0v/kconfig-hardened-check">kconfig-hardened-check</a> - A tool for checking the security hardening options of the Linux kernel.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/shogo82148/androidbinary">androidbinary</a> - Android binary file parser written in golang.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vm03/payload_dumper">payload_dumper</a> - Android OTA payload .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Gyoonus/deoptfuscator">deoptfuscator</a> - Deobfuscator for Android Application.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ashwio/arm64-pgtable-tool">arm64-pgtable-tool</a> - Tool for automatically generating MMU and translation table setup code, whether to drag and drop into your own bare metal arm64 projects or to assist you in your own learning.</p>
+<h1 id="PC-逆向工具"><a href="#PC-逆向工具" class="headerlink" title="PC 逆向工具"></a>PC 逆向工具</h1><p><a target="_blank" rel="noopener" href="https://github.com/x64dbg/x64dbg">x64dbg</a> - An open-source x64&#x2F;x32 debugger for windows. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Air14/HyperHide">HyperHide</a> - Hypervisor based anti anti debug plugin for x64dbg.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/VenTaz/Themidie">Themidie</a> - x64dbg plugin to bypass Themida 3.x Anti-Debugger &#x2F; VM &#x2F; Monitoring programs checks (x64).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ThunderCls/xAnalyzer">xAnalyzer</a> - xAnalyzer plugin for x64dbg.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/stevemk14ebr/RETools">RETools</a> - RETools.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rizinorg/rizin">rizin</a> - UNIX-like reverse engineering framework and command-line toolset.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nico/demumble">demumble</a> - A better c++filt and a better undname.exe, in one binary.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/airbus-cert/Winshark">Winshark</a> - </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/udbg/udbg">udbg</a> - dynamic binary analysis tools.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/eteran/edb-debugger">edb-debugger</a> - edb is a cross-platform AArch32&#x2F;x86&#x2F;x86-64 debugger.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lucasg/Dependencies">Dependencies</a> - depends.exe 的开源的现代版本。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CERTCC/kaiju">kaiju</a> - CERT Kaiju is a binary analysis framework extension for the Ghidra software reverse engineering suite. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/4d61726b/VirtualKD-Redux">VirtualKD-Redux</a> - VirtualKD-Redux - A revival and modernization of VirtualKD.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/f0wl/MalwareLab_VM-Setup">MalwareLab_VM-Setup</a> - Setup scripts for my Malware Analysis VMs</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/repnz/windbg-cheat-sheet">windbg-cheat-sheet</a> - My personal cheat sheet for using WinDbg for kernel debugging.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0vercl0k/windbg-scripts">windbg-scripts</a> - A bunch of JavaScript extensions for WinDbg.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cmu-sei/pharos">pharos</a> - 二进制程序的自动化静态分析工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/void-stack/VMUnprotect">VMUnprotect</a> - VMUnprotect 可以动态记录和操作来自虚拟化方法的调用。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/uxmal/reko">reko</a> - Reko is a binary decompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ClownQq/YDArk">YDArk</a> - X64内核小工具.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ph4ntonn/Impost3r">Impost3r</a> - Impost3r是一个利用C语言编写,用来窃取linux下各类密码(ssh,su,sudo)的工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/HyperDbg/HyperDbg">HyperDbg</a> - HyperDbg Debugger is an open-source, community-driven, hypervisor-assisted, user-mode and kernel-mode Windows debugger with a focus on using modern hardware technologies. </p>
+<h1 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h1><h1 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h1><p><a target="_blank" rel="noopener" href="https://portswigger.net/burp">BurpSuite</a> - Burp Suite is a leading range of cybersecurity tools, brought to you by PortSwigger. We believe in giving our users a competitive advantage through superior research.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TrojanAZhen/BurpSuitePro-2.1">BurpSuitePro-2.1</a> - 免费的BurpSuitePro版本。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Mr-xn/BurpSuite-collections">BurpSuite-collections</a> - BurpSuite的插件(非商店),文章以及使用技巧的收集.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/leolovenet/qqwry2mmdb">qqwry2mmdb</a> - 为 Wireshark 能使用纯真网络 IP 数据库(QQwry)而提供的格式转换工具.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Hackl0us/GeoIP-CN">GeoIP-CN</a> - 🇨🇳 最小巧、最准确、最实用的 中国大陆 IP 段 + GeoIP2 数据库 🇨🇳.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/odedshimon/BruteShark">BruteShark</a> - Network Analysis Tool.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/brimsec/brim">brim</a> - Desktop application to efficiently search large packet captures and Zeek logs.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/mitmproxy/mitmproxy">mitmproxy</a> - An interactive TLS-capable intercepting HTTP proxy for penetration testers and software developers.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tomer8007/chromium-ipc-sniffer">chromium-ipc-sniffer</a> - A tool to capture communication between Chromium processes on Windows.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/airbus-cert/Winshark">Winshark</a> - A wireshark plugin to instrument ETW.</p>
+<p><a target="_blank" rel="noopener" href="https://httptoolkit.tech/">httptoolkit</a> - Intercept &amp; view all your HTTP(S).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/BigFaceCat2017/frida_ssl_logger">frida_ssl_logger</a> - ssl_logger based on frida.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/r0ysue/r0capture">r0capture</a> - 安卓应用层抓包通杀脚本.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lyxhh/lxhToolHTTPDecrypt">lxhToolHTTPDecrypt</a> - Simple Android&#x2F;iOS protocol analysis and utilization tool.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/emanuele-f/PCAPdroid">PCAPdroid</a> - No-root network monitor and traffic dump tool for Android devices.</p>
+<h1 id="编辑工具"><a href="#编辑工具" class="headerlink" title="编辑工具"></a>编辑工具</h1><p><a target="_blank" rel="noopener" href="https://github.com/WerWolv/ImHex">ImHex</a> - A Hex Editor for Reverse Engineers.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/williamboman/nvim-lsp-installer">nvim-lsp-installer</a> - Companion plugin for nvim-lspconfig that allows you to seamlessly install LSP servers locally with :LspInstall. </p>
+<h1 id="IDA-Pro-插件"><a href="#IDA-Pro-插件" class="headerlink" title="IDA Pro 插件"></a>IDA Pro 插件</h1><p><a target="_blank" rel="noopener" href="https://github.com/airbus-cert/comida">comida</a> - An IDA Plugin that help analyzing module that use COM.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cseagle/blc">blc</a> - Integrate Ghidra’s decompiler as an Ida plugin.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/danigargu/deREferencing">deREferencing</a> - IDA Pro plugin that implements more user-friendly register and stack views.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/push0ebp/ALLirt">ALLIRT</a> - Tool that converts All of libc to signatures for IDA Pro FLIRT Plugin. and utility make sig with FLAIR easily.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/a1ext/auto_re">auto_re</a> - IDA PRO auto-renaming plugin with tagging support.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/RevSpBird/HightLight">HightLight</a> - a plugin for ida of version 7.2 to help know F5 window codes better.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/RicBent/Classy">Classy</a> - IDA Pro plugin to manage classes.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/chrisps/Hexext">Hexext</a> - Hexext is a plugin to improve the output of the hexrays decompiler through microcode manipulation.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/polymorf/findcrypt-yara">findcrypt-yara</a> - IDA pro plugin to find crypto constants (and more).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Cisco-Talos/GhIDA">GhIDA</a> - GhIDA is an IDA Pro plugin that integrates the Ghidra decompiler in IDA.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tmr232/ida_ipython">ida_ipython</a> - An IDA Pro Plugin for embedding an IPython Kernel.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/abyss">abyss</a> - abyss - IDAPython Plugin for Postprocessing of Hexrays Decompiler Output.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/hexrays_scripts">hexrays_scripts</a> - Various scripts for the Hexrays decompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/dsync">dsync</a> - IDAPython plugin that synchronizes disassembler and decompiler views.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/HRDevHelper">HRDevHelper</a> - HexRays decompiler plugin that visualizes the ctree of decompiled functions.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/IDAPyHelper">IDAPyHelper</a> - IDAPyHelper is a script for the Interactive Disassembler that helps writing IDAPython scripts and plugins.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/IDACyber">IDACyber</a> - Data Visualization Plugin for IDA Pro.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ioncodes/idacode">IDACode</a> - An integration for IDA and VS Code which connects both to easily execute and debug IDAPython scripts.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gaasedelen/lighthouse">lighthouse</a> - A Code Coverage Explorer for IDA Pro &amp; Binary Ninja.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/topics/ida-plugin">ida-plugin</a> - ida-plugin topics.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/onethawt/idaplugins-list">idaplugins-list</a> - A list of IDA Plugins.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CheckPointSW/Karta">Karta</a> - Karta - source code assisted fast binary matching plugin for IDA.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/HexraysToolbox">HexraysToolbox</a> - Hexrays Toolbox - IDAPython script for finding code patterns using Hexrays.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/REhints/HexRaysCodeXplorer">HexRaysCodeXplorer</a> - Hex-Rays Decompiler plugin for better code navigation.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0xgalz/Virtuailor">Virtuailor</a> - IDAPython tool for creating automatic C++ virtual tables in IDA Pro.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/binarly-io/efiXplorer">efiXplorer</a> - IDA plugin for UEFI firmware analysis and reverse engineering automation.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/binaryai/sdk">binaryai</a> - BinaryAI Python SDK.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Chordp/PatternGen">PatternGen</a> - ida sig pattern generate pulgin.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/oct0xor/highlight2">highlight2</a> - IDA Pro plugin that changes color of call instructions and works with all architectures.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fireeye/flare-ida">flare-ida</a> - IDA Pro utilities from FLARE team.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/blackberry/pe_tree">pe_tree</a> - Python module for viewing Portable Executable (PE) files in a tree-view using pefile and PyQt5. Can also be used with IDA Pro to dump in-memory PE files and reconstruct imports.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/repnz/ida-plugins">ida-plugins</a> -A collection of my IDA plugins.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LeadroyaL/IDA_ARM_Unwind">IDA_ARM_Unwind</a> - IDA plugin, unwind stack trace when debugging arm.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/synacktiv/bip">bip</a> - Bip is a project which aimed to simplify the usage of python for interacting with IDA.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zyantific/IDASkins">IDASkins</a> - Advanced skinning plugin for IDA Pro .</p>
+<p><a target="_blank" rel="noopener" href="https://gitlab.com/bluedevil/ida-pro-solarized-theme">ida-pro-solarized-theme</a> - Solarized Theme for IDA Pro 7.3+.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fireeye/FIDL">FIDL</a> - FLARE IDA Decompiler Library.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tkmru/idapm">idapm</a> - idapm is IDA Plugin Manager via GitHub Repository.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hasherezade/ida_ifl">ida_ifl</a> - IFL - Interactive Functions List (plugin for IDA Pro).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ChiChou/IDA-ObjCExplorer">IDA-ObjCExplorer</a> - Objective C classdump for IDA Pro.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lucasg/idamagnum">idamagnum</a> - idamagnum is a plugin for integrating MagnumDB requests within IDA.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gaasedelen/lucid">lucid</a> - An Interactive Hex-Rays Microcode Explorer.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fboldewin/COM-Code-Helper">COM-Code-Helper</a> - Two IDAPython Scripts help you to reconstruct Microsoft COM<br>(Component Object Model) Code.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nccgroup/SusanRTTI">SusanRTTI</a> - Another RTTI Parsing IDA plugin.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/medigate-io/ida_medigate">ida_medigate</a> - Medigate plugin for c++ reverse engineering and other utils.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x1shyboy1/MiasmPlugin">MiasmPlugin</a> - This is a IDA plugin that integrates several modules of miasm.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nologic/idaref">idaref</a> - IDA Pro Instruction Reference Plugin.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hluwa/genmc-dom">genmc-dom</a> - Display Hex-Rays Microcode.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jendabenda/fingermatch">fingermatch</a> - FingerMatch is IDA plugin for collecting functions, data, types and comments from analysed binaries and fuzzy matching them in another binaries.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ajkhoury/SigMaker-x64">SigMaker-x64</a> - IDA Pro 7 compatible SigMaker plugin.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/L4ys/LazyIDA">LazyIDA</a> - Make your IDA Lazy!</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/L4ys/IDASignsrch">IDASignsrch</a> - IDA_Signsrch in Python.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/patois/FuncScanner">FuncScanner</a> - Collects extended function properties from IDA Pro databases.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lda-project">lda-project</a> - Topic modeling with latent Dirichlet allocation using Gibbs sampling.</p>
+<p><a target="_blank" rel="noopener" href="https://lumen.abda.nl/">Lumen</a> - Lumen compatible with IDA Pro’s Lumina.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/synacktiv/lumina_server">lumina_server</a> - Local server for IDA Lumina feature.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/repnz/ida-plugins">reg_xref</a> - Register Cross References.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tacnetsol/ida">ida</a> - Collection of IDA Python plugins&#x2F;scripts&#x2F;modules.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cellebrite-srl/PacXplorer">PacXplorer</a> - About<br>IDA plugin to find code cross references to virtual functions using PAC codes.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fireeye/capa">capa</a> - FLARE团队的开源工具可识别可执行文件中的功能。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/joxeankoret/idamagicstrings">idamagicstrings</a> - An IDA Python script to extract information from string constants.</p>
+<p>[d810]{<a target="_blank" rel="noopener" href="https://gitlab.com/eshard/d810%7D">https://gitlab.com/eshard/d810}</a> - D-810 is an IDA Pro plugin which can be used to deobfuscate code at decompilation time by modifying IDA Pro microcode.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/SentineLabs/Memloader">Memloader</a> - Memory loader is a DLL based on IDA SDK that allows you to load files into IDA and reverse them without writing the actual file to the disk. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gaasedelen/tenet">tenet</a> - A Trace Explorer for Reverse Engineers.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/arizvisa/ida-minsc">ida-minsc</a> - IDA-minsc is a plugin for IDA Pro that assists a user with scripting the IDAPython plugin that is bundled with the disassembler. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/danielplohmann/idascope">idascope</a> - An IDA Pro extension for easier (malware) reverse engineering.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TakahiroHaruyama/ida_haru">ida_haru</a> - scripts&#x2F;plugins for IDA Pro.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ax330d/hrdev">hrdev</a> - Hex-Rays Decompiler Enhanced View.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ax330d/functions-plus">functions-plus</a> - IDA Pro plugin to show functions in a tree view.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/giladreich/ida_migrator">ida_migrator</a> - IDA Migrator is an IDA Pro plugin which helps migrating current work from one idb instance to another. Giving the ability to conveniently migrate function names, structures and enums.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Maximus-/cfold">cfold</a> - Slightly better IDA code folding.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hugsy/ida-headless">ida-headless</a> - IDA (sort of) headless.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/airbus-cert/Yagi">Yagi</a> - Yet Another Ghidra Integration for IDA.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/aliyunav/Finger">Finger</a> - A tool for recognizing function symbol.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Martyx00/CollaRE">CollaRE</a> - Multi-tool reverse engineering collaboration solution.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/P4nda0s/LazyIDA">LazyIDA</a> - Make your IDA Lazy!</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/medigateio/ida_medigate">ida_medigate</a> - Medigate plugin for c++ reverse engineering and other utils.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/mandiant/flare-ida">flare-ida</a> - IDA Pro utilities from FLARE team.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/SentineLabs/AlphaGolang">AlphaGolang</a> - IDApython Scripts for Analyzing Golang Binaries.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/strazzere/golang_loader_assist">golang_loader_assist</a> - Making GO reversing easier in IDA Pro.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0xjiayu/go_parser">go_parser</a> - Yet Another Golang binary parser for IDAPro.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Jinmo/ifred">ifred</a> - IDA command palette &amp; more (Ctrl+Shift+P, Ctrl+P).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lucasg/findrpc">findrpc</a> - Idapython script to carve binary for internal RPC structures.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/matteyeux/ida-iboot-loader">ida-iboot-loader</a> - IDA loader for Apple’s iBoot, SecureROM and AVPBooter.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alexhude/FRIEND">FRIEND</a> - FRIEND 是一个 IDA 插件，旨在改进反汇编并将注册&#x2F;指令文档直接引入 IDA 视图。</p>
+<h1 id="Ghidra-插件"><a href="#Ghidra-插件" class="headerlink" title="Ghidra 插件"></a>Ghidra 插件</h1><p><a target="_blank" rel="noopener" href="https://github.com/0ffffffffh/dragondance">dragondance</a> - Binary code coverage visualizer plugin for Ghidra.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/RolfRolles/GhidraPAL">GhidraPAL</a> - Ghidra Program Analysis Library.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/RolfRolles/HexRaysDeob">HexRaysDeob</a> - Hex-Rays microcode API plugin for breaking an obfuscating compiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ghidraninja/ghidra_scripts">ghidra_scripts</a> - Scripts for the Ghidra software reverse engineering suite.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ghidraninja">ghidraninja</a> - Ghidra Ninja.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/andr3colonel/ghidra_wasm">ghidra_wasm</a> - Module to load WebAssembly files into ghidra.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/d3v1l401/FindCrypt-Ghidra">FindCrypt-Ghidra</a> - IDA Pro’s FindCrypt ported to Ghidra, with an updated and customizable signature database <a target="_blank" rel="noopener" href="https://d3vsite.org/">https://d3vsite.org/</a>.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/enovella/ida2ghidra-kb">ida2ghidra-kb</a> - IDA Pro to Ghidra Key Bindings to feel like if you were in IDA Pro when navigating.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Comsecuris/gdbghidra">gdbghidra</a> - gdbghidra - a visual bridge between a GDB session and GHIDRA.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/toor-de-force/Ghidra-to-LLVM">Ghidra-to-LLVM</a> - An binary-to-LLVM IR lifter that leverages Ghidra’s IR and analysis.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/astrelsky/Ghidra-Cpp-Class-Analyzer">Ghidra-Cpp-Class-Analyzer</a> - Ghidra C++ Class and Run Time Type Information Analyzer.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/AllsafeCyberSecurity/awesome-ghidra">awesome-ghidra</a> - A curated list of awesome Ghidra materials.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0xb0bb/pwndra">pwndra</a> - A collection of pwn&#x2F;CTF related utilities for Ghidra.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cetfor/GhidraSnippets">GhidraSnippets</a> - Python snippets for Ghidra’s Program and Decompiler APIs.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fuzzywalls/ghidra_scripts">ghidra_scripts</a> - Port of devttyS0’s IDA plugins to the Ghidra plugin framework, new plugins as well.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/astrelsky/vscode-ghidra-skeleton">vscode-ghidra-skeleton</a> - VSCode Ghidra Plugin&#x2F;Script Skeletons.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/googleinterns/ghidra-nsis-extension">ghidra-nsis-extension</a> - ghidra-nsis-extension.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/reb311ion/emerald">emerald</a> - Import DynamoRIO drcov code coverage data into Ghidra.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x6d696368/ghidra-data">ghidra-data</a> - 支持Ghidra的数据档案 <a target="_blank" rel="noopener" href="https://www.nsa.gov/ghidra">https://www.nsa.gov/ghidra</a>.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/felberj/gotools">gotools</a> - Plugin for Ghidra to assist reversing Golang binaries.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/meromwolff/Ghidra-EFI-Byte-Code-Processor">Ghidra-EFI-Byte-Code-Processor</a> - A Ghidra processor module for the EFI Byte Code (EBC).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Dump-GUY/ghidra_scripts">ghidra_scripts</a> - Scripts for the Ghidra software reverse engineering suite.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/PAGalaxyLab/ghidra_scripts">ghidra_scripts</a> - Scripts for the Ghidra.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x36/ghidra_kernelcache">ghidra_kernelcache</a> - a Ghidra framework for iOS kernelcache reverse engineering.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/justfoxing/ghidra_bridge">ghidra_bridge</a> - Python 3 bridge to Ghidra’s Python scripting.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Nalen98/AngryGhidra">AngryGhidra</a> - Angr plugin for Ghdira.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/daenerys-sre/source">Daenerys</a> - Daenerys: A framework for interoperability between IDA and Ghidra.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x6d696368/ghidra-data/tree/master/typeinfo">typeinfo</a> - Ghidra Data Type.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Ayrx/JNIAnalyzer">JNIAnalyzer</a> - Analysis scripts for Ghidra to work with Android NDK libraries.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/revolver-ocelot-saa/GhidraX64Dbg">GhidraX64Dbg</a> - Extract annoations from Ghidra into an X32&#x2F;X64 dbg database.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/garyttierney/intellij-ghidra">intellij-ghidra</a> - An IntelliJ IDEA plugin for working on Ghidra Extensions.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/garyttierney/ghidra-batteries-included">ghidra-batteries-included</a> - Builds of Ghidra 9.2 with additional components included.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/schlafwandler/ghidra_SavePatch">ghidra_SavePatch</a> - A Ghidra script to save small patches back to the executable file.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fmagin/ghidra_scripts">ghidra_scripts</a> - ghidra_scripts.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Cuyler36/CodeWarriorDemangler">CodeWarriorDemangler</a> - Code Warrior Demangler Extension for Ghidra.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x6d696368/ghidra_scripts">ghidra_scripts</a> - Ghidra scripts such as a RC4 decrypter, Yara search, stack string decoder, etc.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/reb311ion/replica">replica</a> - Ghidra Analysis Enhancer.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kohnakagawa/gdt_halper">gdt_halper</a> - Ghidra Data Type (GDT) Helper.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/HackOvert/GhidraSnippets">GhidraSnippets</a> - Ghidra 的程序和反编译器 API 的 Python 片段.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cmu-sei/kaiju">kaiju</a> - CERT Kaiju 是 Ghidra 软件逆向工程套件的二进制分析框架扩展。</p>
+<h1 id="Jeb-Pro-插件"><a href="#Jeb-Pro-插件" class="headerlink" title="Jeb Pro 插件"></a>Jeb Pro 插件</h1><p><a target="_blank" rel="noopener" href="https://github.com/LeadroyaL/JebScript">JebScript</a> - Some usefull Jeb Script.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/S3cuRiTy-Er1C/JebScripts">JebScripts</a> -  通过sourceInfo恢复类名，兼容jeb2和jeb3的API.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/acbocai/jeb_script">jeb_script</a> - 一些常用的基础的代码分析操作,可用于反混淆&#x2F;路径分析&#x2F;代码定位等.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/2Y2s1mple/JebScript">JebScript</a> - A bunch of JEB python scripts.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yoavst/JebOps">JebOps</a> - Handy utils for reversing android apps in JEB.</p>
+<h1 id="Frida-工具"><a href="#Frida-工具" class="headerlink" title="Frida 工具"></a>Frida 工具</h1><p><a target="_blank" rel="noopener" href="https://github.com/tacesrever/frida-tsplugin">frida-tsplugin</a> - typescript autocomplete plugin for frida’s java warpper.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/FuzzySecurity/Fermion">Fermion</a> - Fermion, an electron wrapper for Frida &amp; Monaco.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x742/noia">noia</a> - Simple Android application sandbox file browser tool. Powered by <a target="_blank" rel="noopener" href="https://www.frida.re/">frida.re</a>.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/chame1eon/jnitrace-engine">jnitrace-engine</a> - Engine used by jnitrace to intercept JNI API calls.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/chame1eon/jnitrace">jnitrace</a> - A Frida based tool that traces usage of the JNI API in Android apps.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ChiChou/vscode-frida">vscode-frida</a> - Unofficial frida extension for VSCode.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GoSecure/frida-xamarin-unpin">frida-xamarin-unpin</a> - A Frida script to bypass Xamarin certificate pinning implementations.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Ch0pin/medusa">medusa</a> - Medusa is an extensible framework for Android applications which automates processes and techniques practised during the dynamic analysis of a malware investigation.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iddoeldor/frida-snippets">frida-snippets</a> - Hand-crafted Frida examples.</p>
+<h1 id="Java-逆向"><a href="#Java-逆向" class="headerlink" title="Java 逆向"></a>Java 逆向</h1><p><a target="_blank" rel="noopener" href="https://github.com/Col-E/Recaf">Recaf</a> - The modern Java bytecode editor.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GraxCode/JByteMod-Beta">JByteMod</a> - Java bytecode editor.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Konloch/bytecode-viewer">bytecode-viewer</a> - A Java 8+ Jar &amp; Android APK Reverse Engineering Suite (Decompiler, Editor, Debugger &amp; More).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/skylot/jadx">jadx</a> - Dex to Java decompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/java-decompiler/jd-gui">jd-gui</a> - A standalone Java Decompiler GUI.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/deathmarine/Luyten">Luyten</a> - An Open Source Java Decompiler Gui for Procyon.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/leibnitz27/cfr">CFR</a> - This is the public repository for the CFR Java decompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LLVM-but-worse/java-disassembler">java-disassembler</a> - The Java Disassembler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GraxCode/cafecompare">cafecompare</a> - Java code comparison tool (jar &#x2F; class).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/castor-software/decompilercmp">decompilercmp</a> - Dataset and tool to analyse and compare java bytecode decompilers.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Col-E/Recaf">Recaf</a> - A modern Java bytecode editor.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GraxCode/cafecompare">cafecompare</a> - Java code comparison tool (jar &#x2F; class)</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GraxCode/Cafebabe">Cafebabe</a> - Easy-to-use java bytecode editor - successor of JByteMod!</p>
+<h1 id="其他工具"><a href="#其他工具" class="headerlink" title="其他工具"></a>其他工具</h1><p><a target="_blank" rel="noopener" href="https://github.com/VSCodium/vscodium">vscodium</a> -它就是 VS Code 的一个分支，但它删除 VS Code 原版收集用户数据的功能。如果你不信任微软，如果你是一个开源纯粹主义者，可以试试。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Eloston/ungoogled-chromium">Ungoogled Chromium</a>- 它是 Chromium 的分支，但是把 Google Web 服务依赖全都移除了！</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nico/demumble">demumble</a> - A better c++filt and a better undname.exe, in one binary.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TGSAN/CMWTAT_Digital_Edition">CMWTAT_Digital_Edition</a> - win10激活工具，火绒不报错，开源工具，永久数字证书.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/barry-ran/QtScrcpy">QtScrcpy</a> - Android real-time display control software.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CoatiSoftware/Sourcetrail">Sourcetrail</a> - Sourcetrail-免费和开源的交互式资源管理器.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/flameshot-org/flameshot">flameshot</a> - flameshot 是一个功能强大且易用的截图软件.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/easymodo/qimgv">qimgv</a> - Qt5 image viewer with optional video support.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/d2phap/ImageGlass">ImageGlass</a> - A lightweight, versatile image viewer.</p>
+<p><a target="_blank" rel="noopener" href="http://www.tenmax.com/Teleport_Pro_Installer.exe">Teleport Ultra Pro</a> - 整站下载工具。用户名：<code>zbezj</code> 激活码：<code>664504030</code>  <a target="_blank" rel="noopener" href="https://macyoyo.cn/html/732.html">来源</a>。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Leon406/ToolsFx">ToolsFx</a> - 基于kotlin+tornadoFx开发的跨平台密码学工具箱.包含编解码,编码转换,加解密, 哈希,MAC,签名,二维码功能,ctf等实用功能,支持插件。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tldr-pages/tldr">tldr</a> - 控制台命令的协作备忘单.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Awesome-Windows/Awesome">Awesome-Windows</a> - 适用于 Windows 的最佳应用程序和工具的精选列表。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iCHAIT/awesome-macOS">awesome-macOS</a> - 适用于 macOS 的精选应用程序、软件、工具和闪亮事物的精选列表。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ashishb/android-security-awesome">android-security-awesome</a> - A collection of android security related resources.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/luong-komorebi/Awesome-Linux-Software">Awesome-Linux-Softwar</a> - About<br>A list of awesome applications, software, tools and other materials for Linux distros.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Hack-with-Github/Awesome-Hacking">Awesome-Hacking</a> - A collection of various awesome lists for hackers, pentesters and security researchers.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Ciphey/Ciphey">Ciphey</a> - Automatically decrypt encryptions without knowing the key or cipher, decode encodings, and crack hashes.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/L-codes/pwcrack-framework">pwcrack-framework</a> - pwcrack-framework 是一个用Ruby编写的密码自动破解框架，目前提供了 25 个在线破解和 25 个离线破解接口，支持 48 种算法破解。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/YerongAI/Office-Tool">Office-Tool</a> - Office Tool Plus 本地化项目，用于 Office 部署的强大且有用的工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/VShawn/PRemoteM">PRemoteM</a> - PRemoteM 是一款现代的远程会话管理和启动器，它让你能够在任何时候快速开启一个远程会话。目前 PRemoteM 已支持 微软远程桌面(RDP)、VNC、SSH、Telnet、SFTP, FTP, RemoteApp等协议。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wmjordan/PDFPatcher">PDF补丁丁</a> - PDF补丁丁是一个用于修改PDF文件信息的工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hiyohiyo/CrystalDiskInfo">CrystalDiskInfo</a> - CrystalDiskInfo is a disk information tool.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/joyqi/sfz">sfz</a> - 专门用于给图片加水印打码的工具</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kimci86/bkcrack">bkcrack</a> - 使用 Biham 和 Kocher 已知的明文攻击破解传统的 zip 加密。</p>
+<blockquote>
+<p>以下工具来自 ：<a target="_blank" rel="noopener" href="https://github.com/yifeitao/learn/wiki/tools">https://github.com/yifeitao/learn/wiki/tools</a><br>windows</p>
+</blockquote>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://amazing-apps.gitbook.io/windows-apps-that-amaze-us/zh-cn">https://amazing-apps.gitbook.io/windows-apps-that-amaze-us/zh-cn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.wepe.com.cn/">http://www.wepe.com.cn/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://chocolatey.org/">https://chocolatey.org/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://msdn.itellyou.cn/">http://msdn.itellyou.cn/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://ninite.com/">https://ninite.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.nirsoft.net/">https://www.nirsoft.net/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://joplinapp.org/">https://joplinapp.org/</a> 笔记软件 印象笔记替代</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/hackjutsu/Lepton">https://github.com/hackjutsu/Lepton</a> gist管理软件</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.basiccat.org/zh/">https://www.basiccat.org/zh/</a> 翻译辅助软件</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://obsproject.com/">https://obsproject.com/</a> 屏幕录制</p>
+</li>
+<li><p>linux</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://guacamole.apache.org/">https://guacamole.apache.org/</a></p>
+</li>
+<li><p>app</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://tox.chat/">https://tox.chat/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/soimort/you-get">https://github.com/soimort/you-get</a><br>科学上网</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://prism-break.org/zh-CN/">https://prism-break.org/zh-CN/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.v2ray.com/">https://www.v2ray.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://mysterium.network/">https://mysterium.network/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/ginuerzh/gost">https://github.com/ginuerzh/gost</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/snooda/net-speeder">https://github.com/snooda/net-speeder</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/trailofbits/algo">https://github.com/trailofbits/algo</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/StreisandEffect/streisand">https://github.com/StreisandEffect/streisand</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/haoel/haoel.github.io#33-%E7%94%A8-gost-%E8%AE%BE%E7%BD%AE-https-%E6%9C%8D%E5%8A%A1">https://github.com/haoel/haoel.github.io#33-%E7%94%A8-gost-%E8%AE%BE%E7%BD%AE-https-%E6%9C%8D%E5%8A%A1</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/xuxiaodong/v2ray-for-ansible">https://github.com/xuxiaodong/v2ray-for-ansible</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/ginuerzh/gost">https://github.com/ginuerzh/gost</a></p>
+</li>
+<li><p>安全</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://flowerpassword.com/">https://flowerpassword.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://monitor.firefox.com/">https://monitor.firefox.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.pixelpin.io/">https://www.pixelpin.io/</a><br>文本编辑</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://casual-effects.com/markdeep/">https://casual-effects.com/markdeep/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/zadam/trilium">https://github.com/zadam/trilium</a><br>流程图</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/jgraph/drawio">https://github.com/jgraph/drawio</a><br>信息获取</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blogtrottr.com/">https://blogtrottr.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://fivefilters.org/">https://fivefilters.org/</a><br>文件中转</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://tmp.link/">http://tmp.link/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://send-anywhere.com/">https://send-anywhere.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.multcloud.com/">https://www.multcloud.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://send.firefox.com/">https://send.firefox.com/</a><br>数据分析</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://me.bdp.cn/home.html">https://me.bdp.cn/home.html</a><br>自动化脚本</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.sikulix.com/">http://www.sikulix.com/</a><br>开发文档</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docusaurus.io/">https://docusaurus.io/</a><br>网站构建</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.contentful.com/">https://www.contentful.com/</a><br>媒体创作</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://obsproject.com/">https://obsproject.com/</a><br>其它</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://uzer.me/">https://uzer.me/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.ipip.net/">https://www.ipip.net/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.wolframalpha.com/">https://www.wolframalpha.com/</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://www.globalrichlist.com/">http://www.globalrichlist.com/</a><br>旅行</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://traveladapter.xyz/">https://traveladapter.xyz/</a><br>数据</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/ricklamers/gridstudio">https://github.com/ricklamers/gridstudio</a><br>图片合成</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imagemagick.org/">https://imagemagick.org/</a><br>视频处理</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://ffmpeg.org/">https://ffmpeg.org/</a><br>代码运行</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://code.labstack.com/">https://code.labstack.com/</a></p>
+</li>
+</ul>
+<h1 id="python-库"><a href="#python-库" class="headerlink" title="python 库"></a>python 库</h1><p><a target="_blank" rel="noopener" href="https://github.com/Delgan/loguru">loguru</a> - Python logging made (stupidly) simple</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jmcnamara/XlsxWriter">XlsxWriter</a> - A Python module for creating Excel XLSX files.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/playwright-python">playwright-python</a> - 微软开源的Python自动化神器 Playwright.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/pyppeteer/pyppeteer">pyppeteer</a> - Headless chrome&#x2F;chromium automation library (unofficial port of puppeteer).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ssssssss-team/spider-flow">spider-flow</a> - 新一代爬虫平台，以图形化方式定义爬虫流程，不写代码即可完成爬虫。</p>
+<h1 id="JS-库"><a href="#JS-库" class="headerlink" title="JS 库"></a>JS 库</h1><p><a target="_blank" rel="noopener" href="https://github.com/lelinhtinh/de4js">de4js</a> - JavaScript Deobfuscator and Unpacker.</p>
+<h1 id="C-库"><a href="#C-库" class="headerlink" title="C++ 库"></a>C++ 库</h1><p><a target="_blank" rel="noopener" href="https://github.com/stbrumme/hash-library">hash-library</a> - Portable C++ hashing library.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ZLMediaKit/ZLToolKit">ZLToolKit</a> - 一个基于C++11简单易用的轻量级网络编程框架.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lewissbaker/cppcoro">cppcoro</a> - A library of C++ coroutine abstractions for the coroutines TS.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/d2school/da4qi4">da4qi4</a> - a cpp Web Server .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zrax/pycdc">pycdc</a> - C++ python bytecode disassembler and decompiler.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zrax/string_theory">string_theory</a> - 具有类型安全格式的灵活现代 C++ 字符串库.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MiroKaku/ucxxrt">ucxxrt</a> - The Universal C++ RunTime library, supporting kernel-mode C++ exception-handler and STL.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MiroKaku/libwsk">libwsk</a> - The Kernel-Mode Winsock library, supporting TCP, UDP and Unix sockets .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LianjiaTech/kbms">kbms</a> - 一个轻量级c++网络框架.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf">protobuf</a> - Protocol Buffers - Google 的数据交换格式.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Raais/ImStudio">ImStudio</a> - Real-time GUI layout creator for Dear ImGui.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/troldal/OpenXLSX">OpenXLSX</a> - A C++ library for reading, writing, creating and modifying Microsoft Excel® (.xlsx) files.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/seladb/PcapPlusPlus">PcapPlusPlus</a> - PcapPlusPlus is a multiplatform C++ library for capturing, parsing and crafting of network packets.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/electronicarts/EAThread">EAThread</a> - EAThread implements a unified cross-platform interface for multithreaded programming.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/DaveGamble/cJSON">cJSON</a> - ANSI C 中的超轻量级 JSON 解析器.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alexhude/MMUit">MMUit</a> - 用于探索和修改 ARM64 地址转换的轻量级工具包。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/greg7mdp/parallel-hashmap">parallel-hashmap</a> - 一系列仅标头、非常快速且内存友好的哈希图和 btree 容器。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> - 一个简单的 C++ 库，用于基于终端的用户界面。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/llxiaoyuan/oxorany">oxorany</a> - 带有混淆的编译时任意常量加密.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ultimatepp/ultimatepp">ultimatepp</a> - U++是一个C++跨平台快速应用开发框架，专注于程序员的生产力。它包括一组库（GUI、SQL、网络等）和集成开发环境（TheIDE）。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kokke/tiny-regex-c">tiny-regex-c</a> - Small portable regex in C.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lpcvoid/cpp-net-lib">cpp-net-lib</a> - Modern, header-only, compact and cross platform C++ network&#x2F;sockets library.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sheredom/utf8.h">utf8.h</a> - single header utf8 string functions for C and C++.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dougbinks/enkiTS">enkiTS</a> - A permissively licensed C and C++ Task Scheduler for creating parallel programs. Requires C++11 support.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/osen/stent">stent</a> - Completely avoid dangling pointers in C.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jonathandata1/tyr">tyr</a> - Android Recon &amp; Research Tools.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/libcpr/cpr">cpr</a> - C++ Requests: Curl for People, a spiritual port of Python Requests.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fnc12/sqlite_orm">sqlite_orm</a> - SQLite ORM light header only library for modern C++.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/skypjack/uvw">uvw</a> - Header-only, event based, tiny and easy to use libuv wrapper in modern C++ .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/HoShiMin/Sig">Sig</a> - The most powerful and customizable binary pattern scanner.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fmtlib/fmt">fmt</a> - <code>&#123;fmt&#125;</code> is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/abseil/abseil-cpp">abseil-cpp</a> - Abseil 是一个开源的 C++ 库代码集合，旨在增强 C++ 标准库。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ryanhaining/cppitertools">cppitertools</a> - 受 Python 内置函数和 itertools 库启发的基于范围的 for 循环附加组件。与 itertools 和 Python3 内置函数一样，该库尽可能使用惰性求值。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/partouf/Crosscables">Crosscables</a> - 用于线程、文件系统、网络、MySQL 和其他事物的跨平台 C++98 库。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/niekbouman/ctbignum">ctbignum</a> - Constexpr C++20 Big-Integer &#x2F; Finite-Field library</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Neargye/magic_enum">magic_enum</a> - 为枚举提供静态反射，无需任何宏或样板代码即可处理任何枚举类型。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CLIUtils/CLI11">CLI11</a> - CLI11 is a command line parser for C++11 and beyond that provides a rich feature set with a simple and intuitive interface.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rbock/sqlpp11">sqlpp11</a> - A type safe SQL template library for C++.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/likle/cwalk">cwalk</a> - Path library for C&#x2F;C++. Cross-Platform for Windows, MacOS and Linux. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Quintus/pathie-cpp">pathie-cpp</a> - Small C++ library for crossplatform Unicode path management</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iUIShop/LibUIDK">LibUIDK</a> - LibUIDK原来是商业界面库，2019年9月8号开源。是专业开发Windows平台下图形用户界面的开发包，也是国内第一款商业的高级界面开发工具。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/josuttis/belleviews">belleviews</a> - Belleviews are easier to use, more robust, and cause less unexpected compile-time and runtime errors than the views of the C++ standard library.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/google/benchmark">benchmark</a> - A library to benchmark code snippets, similar to unit tests.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gabime/spdlog">spdlog</a> - Very fast, header-only&#x2F;compiled, C++ logging library. ci</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/foonathan/type_safe">type_safe</a> - type_safe provides zero overhead abstractions that use the C++ type system to prevent bugs.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/marzer/tomlplusplus">tomlplusplus</a> - Header-only TOML config file parser and serializer for C++17. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ToruNiina/toml11">toml11</a> - toml11 is a C++11 (or later) header-only toml parser&#x2F;encoder depending only on C++ standard library.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TartanLlama/expected">expected</a> - Single header implementation of std::expected with functional-style extensions.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/oneapi-src/oneTBB">oneTBB</a> - oneTBB is a flexible C++ library that simplifies the work of adding parallelism to complex applications, even if you are not a threading expert.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/taocpp/json">taoJSON</a> - taoJSON is a C++ header-only JSON library that provides a generic Value Class, uses Type Traits to interoperate with C++ types, uses an Events Interface to convert from and to JSON, JAXN, CBOR, MsgPack and UBJSON, and much more…</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rollbear/strong_type">strong_type</a> - An additive strong typedef library for C++14&#x2F;17&#x2F;20 using the Boost Software License 1.0</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jfalcou/spy">spy</a> - Detection and versioning of operating systems, compilers, architecture and other element are traditionally done using preprocessor macros. Library like Boost.Predef provides a sanitized interface on top of those but still live in a world where the preprocessor is king.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ThePhD/sol2">sol2</a> - sol2 is a C++ library binding to Lua. It currently supports all Lua versions 5.1+ (LuaJIT 2.0+ and MoonJIT included). </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ericniebler/range-v3">range-v3</a> - Range library for C++14&#x2F;17&#x2F;20, basis for C++20’s std::ranges .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zeux/pugixml">pugixml</a> - Light-weight, simple and fast XML parser for C++ with XPath support.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ned14/outcome">outcome</a> - Outcome is a C++14 library for reporting and handling function failures. It can be used as a substitute for, or a complement to, the exception handling mechanism.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/libuv/libuv">libuv</a> - libuv is a multi-platform support library with a focus on asynchronous I&#x2F;O. It was primarily developed for use by Node.js, but it’s also used by Luvit, Julia, uvloop, and others.</p>
+<p><a target="_blank" rel="noopener" href="https://www.lua.org/">lua</a> - Lua is a powerful, efficient, lightweight, embeddable scripting language. It supports procedural programming, object-oriented programming, functional programming, data-driven programming, and data description. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/p12tic/libsimdpp">libsimdpp</a> - libsimdpp is a portable header-only zero-overhead C++ low level SIMD library. The library presents a single interface over SIMD instruction sets present in x86, ARM, PowerPC and MIPS architectures.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/danielaparker/jsoncons">jsoncons</a> - A C++, header-only library for constructing JSON and JSON-like data formats, with JSON Pointer, JSON Patch, JSON Schema, JSONPath, JMESPath, CSV, MessagePack, CBOR, BSON, UBJSON .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/google/highway">highway</a> - Performance-portable, length-agnostic SIMD with runtime dispatch .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nemequ/hedley">hedley</a> - Hedley is C&#x2F;C++ a header file designed to smooth over some platform-specific annoyances. </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/beached/daw_json_link">daw_json_link</a> - Fast, convenient JSON serialization and parsing in C++ .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Hosseinmoein/DataFrame">DataFrame</a> - This is a C++ analytical library designed for data analysis similar to libraries in Python and R. For example, you could compare this to Pandas or R data.frame.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/HowardHinnant/date">date</a> - A date and time library based on the C++11&#x2F;14&#x2F;17 <code>&lt;chrono&gt;</code> header.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hanickadot/compile-time-regular-expressions">compile-time-regular-expressions</a> - Compile Time Regular Expression in C++ .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hanickadot/cthash">cthash</a> - This library is constexpr implementation of SHA-2 and SHA-3 family of hashes.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/partouf/Crosscables">Crosscables</a> - A cross platform C++98 library for Threading, Filesystem, Network, MySQL and other things .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/soasis/text">ztd.text</a> - A spicy text library for C++ that has the explicit goal of enabling the entire ecosystem to share in proper forward progress towards a bright Unicode future. </p>
+<h1 id="Java-库"><a href="#Java-库" class="headerlink" title="Java 库"></a>Java 库</h1><p><a target="_blank" rel="noopener" href="https://github.com/dhatim/fastexcel">fastexcel</a> - Generate and read big Excel files quickly.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hzw1199/xml2axml">xml2axml</a> - encode xml to axml AND decode axml to xml–Hack Android Manifest easily.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fornwall/jelf">jelf</a> - ELF parsing library in java.</p>
+<h1 id="取证"><a href="#取证" class="headerlink" title="取证"></a>取证</h1><p><a target="_blank" rel="noopener" href="https://github.com/cugu/awesome-forensics">awesome-forensics</a> - A curated list of awesome forensic analysis tools and resources.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/den4uk/andriller">andriller</a> - Andriller - is software utility with a collection of forensic tools for smartphones.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"># 工具</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/29/Flask%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/" rel="prev" title="Flask简单学习">
+                  <i class="fa fa-chevron-left"></i> Flask简单学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="next" title="xposde源码分析">
+                  xposde源码分析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

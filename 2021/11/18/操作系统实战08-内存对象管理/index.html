@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="内存对象管理数据结构用 freobjh_t 结构表示一个对象了，如下所示。 123456typedef struct s_FREOBJH&amp;#123;    list_h_t oh_list;     &#x2F;&#x2F; 内存对象链表    uint_t oh_stus;       &#x2F;&#x2F; 内存对象状态    void* oh_stat;        &#x2F;&#x2F; 内存对象的开始地址&amp;#125;freobjh_t;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统实战08-内存对象管理">
+<meta property="og:url" content="https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="内存对象管理数据结构用 freobjh_t 结构表示一个对象了，如下所示。 123456typedef struct s_FREOBJH&amp;#123;    list_h_t oh_list;     &#x2F;&#x2F; 内存对象链表    uint_t oh_stus;       &#x2F;&#x2F; 内存对象状态    void* oh_stat;        &#x2F;&#x2F; 内存对象的开始地址&amp;#125;freobjh_t;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E5%AE%B9%E5%99%A8%E5%85%B3%E7%B3%BB.png">
+<meta property="article:published_time" content="2021-11-18T17:38:24.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.972Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="操作系统实战">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E5%AE%B9%E5%99%A8%E5%85%B3%E7%B3%BB.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/","path":"2021/11/18/操作系统实战08-内存对象管理/","title":"操作系统实战08-内存对象管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>操作系统实战08-内存对象管理 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">内存对象管理数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">分配内存对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8A%E6%94%BE%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.1.</span> <span class="nav-text">释放内存对象</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="操作系统实战08-内存对象管理 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统实战08-内存对象管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-18 17:38:24" itemprop="dateCreated datePublished" datetime="2021-11-18T17:38:24+00:00">2021-11-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="内存对象管理数据结构"><a href="#内存对象管理数据结构" class="headerlink" title="内存对象管理数据结构"></a>内存对象管理数据结构</h1><p>用 freobjh_t 结构表示一个对象了，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_FREOBJH</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> oh_list;     <span class="comment">// 内存对象链表</span></span><br><span class="line">    <span class="type">uint_t</span> oh_stus;       <span class="comment">// 内存对象状态</span></span><br><span class="line">    <span class="type">void</span>* oh_stat;        <span class="comment">// 内存对象的开始地址</span></span><br><span class="line">&#125;<span class="type">freobjh_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>kmsob_t 用于表示内存对象容器，kmbext_t 用于表示内存对象容器的扩展内存，msomdc_t 和 msclst_t 用于管理内存对象容器占用的物理内存页面。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//管理内存对象容器占用的内存页面所对应的msadsc_t结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSCLST</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint_t</span> ml_msanr;  <span class="comment">//多少个msadsc_t</span></span><br><span class="line">    <span class="type">uint_t</span> ml_ompnr;  <span class="comment">//一个msadsc_t对应的连续的物理内存页面数</span></span><br><span class="line">    <span class="type">list_h_t</span> ml_list; <span class="comment">//挂载msadsc_t的链表</span></span><br><span class="line">&#125;<span class="type">msclst_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//管理内存对象容器占用的内存</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSOMDC</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//msclst_t结构数组mc_lst[0]=1个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[1]=2个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[2]=4个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[3]=8个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[4]=16个连续页面的msadsc_t</span></span><br><span class="line">    <span class="type">msclst_t</span> mc_lst[MSCLST_MAX];</span><br><span class="line">    <span class="type">uint_t</span> mc_msanr;   <span class="comment">//总共多个msadsc_t结构</span></span><br><span class="line">    <span class="type">list_h_t</span> mc_list;</span><br><span class="line">    <span class="comment">//内存对象容器第一个占用msadsc_t</span></span><br><span class="line">    <span class="type">list_h_t</span> mc_kmobinlst;</span><br><span class="line">    <span class="comment">//内存对象容器第一个占用msadsc_t对应的连续的物理内存页面数</span></span><br><span class="line">    <span class="type">uint_t</span> mc_kmobinpnr;</span><br><span class="line">&#125;<span class="type">msomdc_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//管理内存对象容器扩展容量</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KMBEXT</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> mt_list;        <span class="comment">//链表</span></span><br><span class="line">    <span class="type">adr_t</span> mt_vstat;          <span class="comment">//内存对象容器扩展容量开始地址</span></span><br><span class="line">    <span class="type">adr_t</span> mt_vend;           <span class="comment">//内存对象容器扩展容量结束地址</span></span><br><span class="line">    <span class="type">kmsob_t</span>* mt_kmsb;        <span class="comment">//指向内存对象容器结构</span></span><br><span class="line">    <span class="type">uint_t</span> mt_mobjnr;        <span class="comment">//内存对象容器扩展容量的内存中有多少对象</span></span><br><span class="line">&#125;<span class="type">kmbext_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 内存对象容器</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KMSOB</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> so_list;        <span class="comment">//链表</span></span><br><span class="line">    <span class="type">spinlock_t</span> so_lock;      <span class="comment">//保护结构自身的自旋锁</span></span><br><span class="line">    <span class="type">uint_t</span> so_stus;          <span class="comment">//状态与标志</span></span><br><span class="line">    <span class="type">uint_t</span> so_flgs;</span><br><span class="line">    <span class="type">adr_t</span> so_vstat;          <span class="comment">//内存对象容器的开始地址</span></span><br><span class="line">    <span class="type">adr_t</span> so_vend;           <span class="comment">//内存对象容器的结束地址</span></span><br><span class="line">    <span class="type">size_t</span> so_objsz;         <span class="comment">//内存对象大小</span></span><br><span class="line">    <span class="type">size_t</span> so_objrelsz;      <span class="comment">//内存对象实际大小</span></span><br><span class="line">    <span class="type">uint_t</span> so_mobjnr;        <span class="comment">//内存对象容器中总共的对象个数</span></span><br><span class="line">    <span class="type">uint_t</span> so_fobjnr;        <span class="comment">//内存对象容器中空闲的对象个数</span></span><br><span class="line">    <span class="type">list_h_t</span> so_frelst;      <span class="comment">//内存对象容器中空闲的对象链表头</span></span><br><span class="line">    <span class="type">list_h_t</span> so_alclst;      <span class="comment">//内存对象容器中分配的对象链表头</span></span><br><span class="line">    <span class="type">list_h_t</span> so_mextlst;     <span class="comment">//内存对象容器扩展kmbext_t结构链表头</span></span><br><span class="line">    <span class="type">uint_t</span> so_mextnr;        <span class="comment">//内存对象容器扩展kmbext_t结构个数</span></span><br><span class="line">    <span class="type">msomdc_t</span> so_mc;          <span class="comment">//内存对象容器占用内存页面管理结构</span></span><br><span class="line">    <span class="type">void</span>* so_privp;          <span class="comment">//本结构私有数据指针</span></span><br><span class="line">    <span class="type">void</span>* so_extdp;          <span class="comment">//本结构扩展数据指针</span></span><br><span class="line">&#125;<span class="type">kmsob_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>内存对象容器关系</p>
+<img src="/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E5%AE%B9%E5%99%A8%E5%85%B3%E7%B3%BB.png" class="">
+
+<p>管理内存对象容器 kmsob_t 结构的数据结构如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KOBLST_MAX (64)</span></span><br><span class="line"><span class="comment">//挂载kmsob_t结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KOBLST</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> ol_emplst; <span class="comment">// 挂载 kmsob_t 结构的链表</span></span><br><span class="line">    <span class="type">kmsob_t</span>* ol_cahe;   <span class="comment">// 最近一次查找的 kmsob_t 结构</span></span><br><span class="line">    <span class="type">uint_t</span> ol_emnr;     <span class="comment">// 挂载 kmsob_t 结构的数量</span></span><br><span class="line">    <span class="type">size_t</span> ol_sz;       <span class="comment">// kmsob_t 结构中内存对象的大小</span></span><br><span class="line">&#125;<span class="type">koblst_t</span>;</span><br><span class="line"><span class="comment">//管理 kmsob_t 结构的数据结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KMSOBMGRHED</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">spinlock_t</span> ks_lock;  <span class="comment">// 保护自身的自旋锁</span></span><br><span class="line">    <span class="type">list_h_t</span> ks_tclst;   <span class="comment">// 链表</span></span><br><span class="line">    <span class="type">uint_t</span> ks_tcnr;</span><br><span class="line">    <span class="type">uint_t</span> ks_msobnr;    <span class="comment">// 总共多少个 kmsob_t 结构</span></span><br><span class="line">    <span class="type">kmsob_t</span>* ks_msobche; <span class="comment">// 最近分配内存对象的 kmsob_t 结构</span></span><br><span class="line">    <span class="type">koblst_t</span> ks_msoblst[KOBLST_MAX]; <span class="comment">//koblst_t结构数组</span></span><br><span class="line">&#125;<span class="type">kmsobmgrhed_t</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>时序图</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">init_kmsob -&gt; kmsobmgrhed_t_init : 初始化管理 kmsob_t 结构的数据结构 kmsobmgrhed_t 结构体。</span><br><span class="line">kmsobmgrhed_t_init -&gt; koblst_t_init : 初始化koblst_t结构体。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是 ks_msoblst 数组中 kmsob_t 结构中内存对象的大小 ol_sz 初始值为 32 字节，并且每次递增 32，即 kmsob_t 内存容器中存放的单个内存对象最大内存大小为 32*64 &#x3D; 2048 字节。</p>
+<h1 id="分配内存对象"><a href="#分配内存对象" class="headerlink" title="分配内存对象"></a>分配内存对象</h1><p>时序图</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">kmsob_new -&gt; kmsob_new_core : 调用核心函数。</span><br><span class="line">kmsob_new_core -&gt; onmsz_retn_koblst : 根据内存对象大小查找并返回 ks_msoblst 数组元素的指针。</span><br><span class="line">kmsob_new_core -&gt; onkoblst_retn_newkmsob : 查询 ks_msoblst 数组元素的指针对应的内存对象容器并返回。</span><br><span class="line">onkoblst_retn_newkmsob -&gt; scan_newkmsob_isok : 看看内存对象容器是不是合乎要求。</span><br><span class="line">kmsob_new_core -&gt; _create_kmsob : 第一次分配内存对象时，必然需要建立一个内存对象容器。</span><br><span class="line">_create_kmsob -&gt; mm_division_pages : 为内存对象容器分配物理内存空间。</span><br><span class="line">_create_kmsob -&gt; _create_init_kmsob : 初始化 kmsob_t 内存对象容器并建立内存对象。</span><br><span class="line">_create_init_kmsob -&gt; kmsob_t_init : 初始化 kmsob_t 内存对象容器。</span><br><span class="line">_create_init_kmsob -&gt; freobjh_t_init : 初始化 freobjh_t 内存对象。</span><br><span class="line">_create_kmsob -&gt; kmsob_add_koblst : 把 kmsob_t 内存容器结构，挂载到对应的 koblst_t 结构中去。</span><br><span class="line">kmsob_new_core -&gt; kmsob_new_onkmsob : 分配内存对象。</span><br><span class="line">kmsob_new_onkmsob -&gt; scan_kmsob_objnr : 判断内存对象容器中有没有空闲的内存对象。</span><br><span class="line">kmsob_new_onkmsob -&gt; kmsob_extn_pages : 如果没有空闲内存对象，则扩展内存对象容器的内存。</span><br><span class="line">kmsob_extn_pages -&gt; mm_division_pages : 为内存对象容器分配物理内存空间。</span><br><span class="line">kmsob_extn_pages -&gt; retn_mscidx : 获取物理内存页面数对应在 kmsob_t 的 so_mc.mc_lst 数组中下标。</span><br><span class="line">kmsob_extn_pages -&gt; kmbext_t_init : 初始化扩展内存 kmbext_t 数据结构。</span><br><span class="line">kmsob_extn_pages -&gt; freobjh_t_init : 在扩展的内存空间中建立内存对象。</span><br><span class="line">kmsob_new_onkmsob -&gt; kmsob_new_opkmsob : 实际分配内存对象。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<h2 id="释放内存对象"><a href="#释放内存对象" class="headerlink" title="释放内存对象"></a>释放内存对象</h2><p>时序图</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">kmsob_delete -&gt; kmsob_delete_core : 调用释放内存对象的核心函数。</span><br><span class="line">kmsob_delete_core -&gt; onmsz_retn_koblst : 根据内存对象大小查找并返回 ks_msoblst 数组元素的指针。</span><br><span class="line">kmsob_delete_core -&gt; onkoblst_retn_delkmsob : 查找释放内存对象所属的 kmsob_t 结构。</span><br><span class="line">onkoblst_retn_delkmsob -&gt; scan_delkmsob_isok : 检查释放的内存对象是不是属于这个 kmsob_t 结构。</span><br><span class="line">kmsob_delete_core -&gt; kmsob_delete_onkmsob : 释放内存对象。</span><br><span class="line">kmsob_delete_onkmsob -&gt; kmsob_del_opkmsob : 实际完成内存对象释放。</span><br><span class="line">kmsob_delete_core -&gt; _destroy_kmsob : 销毁内存对象容器。</span><br><span class="line">_destroy_kmsob -&gt; scan_freekmsob_isok : 看看能不能销毁。</span><br><span class="line">_destroy_kmsob -&gt; _destroy_kmsob_core : 调用销毁内存对象容器的核心函数。</span><br><span class="line">_destroy_kmsob_core -&gt; mm_merge_pages : 释放 msadsc_t 对应的物理内存页面。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" rel="tag"># 操作系统实战</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="prev" title="操作系统实战07-内存管理">
+                  <i class="fa fa-chevron-left"></i> 操作系统实战07-内存管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9809-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" rel="next" title="操作系统实战09-虚拟内存">
+                  操作系统实战09-虚拟内存 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

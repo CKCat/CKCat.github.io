@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转载：https:&#x2F;&#x2F;abcdabcd987.com&#x2F;ssh&#x2F;     约定 基础 安装 OpenSSH Server 免密码登入 配置别名 传输文件 保持程序在后台运行 反向端口转发：例子1 反向端口转发：例子2 反向端口转发：例子3 正向端口转发 用作 SOCKS5 代理 传递图形界面    约定本文不讲解 Linux 使用方法，只讲解机器之间的通信方法。下文中行首的 local$ 以及 r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh基本使用">
+<meta property="og:url" content="https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="转载：https:&#x2F;&#x2F;abcdabcd987.com&#x2F;ssh&#x2F;     约定 基础 安装 OpenSSH Server 免密码登入 配置别名 传输文件 保持程序在后台运行 反向端口转发：例子1 反向端口转发：例子2 反向端口转发：例子3 正向端口转发 用作 SOCKS5 代理 传递图形界面    约定本文不讲解 Linux 使用方法，只讲解机器之间的通信方法。下文中行首的 local$ 以及 r">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/2019-12-14-11-13-04.png">
+<meta property="article:published_time" content="2019-12-14T10:50:02.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.684Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="ssh">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/2019-12-14-11-13-04.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/","path":"2019/12/14/ssh基本使用/","title":"ssh基本使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ssh基本使用 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%A6%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text">约定</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80"><span class="nav-number">2.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-OpenSSH-Server"><span class="nav-number">3.</span> <span class="nav-text">安装 OpenSSH Server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%85%A5"><span class="nav-number">4.</span> <span class="nav-text">免密码登入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%88%AB%E5%90%8D"><span class="nav-number">5.</span> <span class="nav-text">配置别名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">传输文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81%E7%A8%8B%E5%BA%8F%E5%9C%A8%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C"><span class="nav-number">7.</span> <span class="nav-text">保持程序在后台运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%9A%E4%BE%8B%E5%AD%901"><span class="nav-number">8.</span> <span class="nav-text">反向端口转发：例子1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%9A%E4%BE%8B%E5%AD%902"><span class="nav-number">9.</span> <span class="nav-text">反向端口转发：例子2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%EF%BC%9A%E4%BE%8B%E5%AD%903"><span class="nav-number">10.</span> <span class="nav-text">反向端口转发：例子3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="nav-number">11.</span> <span class="nav-text">正向端口转发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E4%BD%9C-SOCKS5-%E4%BB%A3%E7%90%86"><span class="nav-number">12.</span> <span class="nav-text">用作 SOCKS5 代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%A0%E9%80%92%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="nav-number">13.</span> <span class="nav-text">传递图形界面</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ssh基本使用 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ssh基本使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-14 10:50:02" itemprop="dateCreated datePublished" datetime="2019-12-14T10:50:02+00:00">2019-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://abcdabcd987.com/ssh/">https://abcdabcd987.com/ssh/</a></p>
+</blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#%E7%BA%A6%E5%AE%9A">约定</a></li>
+<li><a href="#%E5%9F%BA%E7%A1%80">基础</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-openssh-server">安装 OpenSSH Server</a></li>
+<li><a href="#%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%85%A5">免密码登入</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E5%88%AB%E5%90%8D">配置别名</a></li>
+<li><a href="#%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6">传输文件</a></li>
+<li><a href="#%E4%BF%9D%E6%8C%81%E7%A8%8B%E5%BA%8F%E5%9C%A8%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C">保持程序在后台运行</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%901">反向端口转发：例子1</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%902">反向端口转发：例子2</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%903">反向端口转发：例子3</a></li>
+<li><a href="#%E6%AD%A3%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91">正向端口转发</a></li>
+<li><a href="#%E7%94%A8%E4%BD%9C-socks5-%E4%BB%A3%E7%90%86">用作 SOCKS5 代理</a></li>
+<li><a href="#%E4%BC%A0%E9%80%92%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2">传递图形界面</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h1><p>本文不讲解 Linux 使用方法，只讲解机器之间的通信方法。<br>下文中行首的 local$ 以及 remote$ 等为命令行的提示符，不是输入的内容，用于区分当前是在哪台机子上。</p>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><p>在 Linux 系统上 SSH 是非常常用的工具，通过 SSH Client 我们可以连接到运行了 SSH Server 的远程机器上。SSH Client 的基本使用方法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh user@remote -p port</span><br></pre></td></tr></table></figure>
+<ul>
+<li>user 是你在远程机器上的用户名，如果不指定的话默认为当前用户</li>
+<li>remote 是远程机器的地址，可以是 IP，域名，或者是后面会提到的别名</li>
+<li>port 是 SSH Server 监听的端口，如果不指定的话就为默认值 22</li>
+</ul>
+<p>实际上，知道了上面这三个参数，用任意的 SSH Client 都能连接上 SSH Server，例如在 Windows 上 PuTTY 就是很常用的 SSH Client。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh user@remote -p port</span><br><span class="line">user@remote&#x27;s password:</span><br></pre></td></tr></table></figure>
+<p>在执行了 ssh 命令之后，远程机器会询问你的密码。在输入密码的时候，屏幕上不会显示明文密码，也不会显示 <code>******</code>，这样别人就不会看到你的密码长度了，按下回车即可登入。</p>
+<p>登入之后，你就可以操作远程机器啦！</p>
+<h1 id="安装-OpenSSH-Server"><a href="#安装-OpenSSH-Server" class="headerlink" title="安装 OpenSSH Server"></a>安装 OpenSSH Server</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh user@remote -p port </span><br><span class="line">ssh: connect to host remote port 22: Connection refused</span><br></pre></td></tr></table></figure>
+<p>如果你遇到了上面的消息，说明在远程机器上没有安装 <code>SSH Server</code>，特别地，如果远程机器运行的是 <code>Ubuntu Desktop</code> 系统，那么默认是没有安装 <code>SSH Server</code> 的。这个时候，你可以联系管理员让他安装 <code>SSH Server</code>，或者如果你有 <code>sudo</code> 权限的话，可以执行下面命令安装：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure>
+
+<h1 id="免密码登入"><a href="#免密码登入" class="headerlink" title="免密码登入"></a>免密码登入</h1><p>每次 <code>ssh</code> 都要输入密码是不是很烦呢？与密码验证相对的，是公钥验证。也就是说，要实现免密码登入，首先要设置 <code>SSH</code> 钥匙。</p>
+<p>执行 <code>ssh-keygen</code> 即可生成 <code>SSH</code> 钥匙，一路回车即可。<code>Windows</code> 用户可以使用 <code>PuTTY</code> 配套的 <code>PuTTYgen</code> 工具。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/home/user/.ssh/id_rsa):</span><br><span class="line">Created directory &#x27;/home/user/.ssh&#x27;.</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved in /home/user/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /home/user/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:47VkvSjlFhKRgz/6RYdXM2EULtk9TQ65PDWJjYC5Jys user@local</span><br><span class="line">The key&#x27;s randomart image is:</span><br><span class="line">+---[RSA 2048]----+</span><br><span class="line">|       ...o...X+o|</span><br><span class="line">|      . o+   B=Oo|</span><br><span class="line">|       .....ooo*=|</span><br><span class="line">|        o+ooo.+ .|</span><br><span class="line">|       .SoXo.  . |</span><br><span class="line">|      .E X.+ .   |</span><br><span class="line">|       .+.= .    |</span><br><span class="line">|        .o       |</span><br><span class="line">|                 |</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure>
+<p>这段话告诉了我们，生成的公钥放在了 <code>~/.ssh/id_rsa.pub</code>，私钥放在了 <code>~/.ssh/id_rsa</code>。接下来，我们要让远程机器记住我们的公钥。最简单的方法是 <code>ssh-copy-id user@remote -p port</code> .</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh-copy-id user@remote -p port</span><br><span class="line">/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: &quot;/home/user/.ssh/id_rsa.pub&quot;</span><br><span class="line">/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed</span><br><span class="line">/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys</span><br><span class="line">user@remote&#x27;s password:</span><br><span class="line"></span><br><span class="line">Number of key(s) added: 1</span><br><span class="line"></span><br><span class="line">Now try logging into the machine, with:   &quot;ssh &#x27;user@remote&#x27; -p port&quot;</span><br><span class="line">and check to make sure that only the key(s) you wanted were added.</span><br></pre></td></tr></table></figure>
+<p><code>ssh-copy-id</code> 在绝大多数发行版上都有预装，在 <code>Mac</code> 上也可以通过 <code>brew install ssh-copy-id</code> 一键安装。</p>
+<p>在没有 <code>ssh-copy-id</code> 的情况下（比如在 <code>Windows</code> 上），也是可以轻松做到这件事的。用命令的话也是一句话搞定</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh user@remote -p port &#x27;mkdir -p .ssh &amp;&amp; cat &gt;&gt; .ssh/authorized_keys&#x27; &lt; ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<p>这句话的意思是，在远端执行新建 <code>.ssh</code> 文件夹，并把本地的 <code>~/.ssh/id_rsa.pub</code> （也就是公钥）追加到远端的 <code>.ssh/authorized_keys</code> 中。当然，不使用这条命令的话，你也可以手动操作这个过程，即先复制公钥，再登入远程机器，粘贴到 <code>.ssh/authorized_keys</code> 当中。</p>
+<p>在完成这一步之后，ssh 进入远程机器时就不用输入密码了。Windows 用户在 PuTTY 上面设置登入用户名和 PuTTYgen 生成的私钥之后也可以免密码登入。</p>
+<h1 id="配置别名"><a href="#配置别名" class="headerlink" title="配置别名"></a>配置别名</h1><p>每次都输入 <code>ssh user@remote -p port</code>，时间久了也会觉得很麻烦，特别是当 <code>user</code>, <code>remote</code> 和 <code>port</code> 都得输入，而且还不好记忆的时候。配置别名可以让我们进一步偷懒。</p>
+<p>比如我想用 <code>ssh lab</code> 来替代上面这么一长串，那么在 <code>~/.ssh/config</code> 里面追加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host lab</span><br><span class="line">    HostName remote</span><br><span class="line">    User user</span><br><span class="line">    Port port</span><br></pre></td></tr></table></figure>
+<p>保存之后，即可用 <code>ssh lab</code> 登入，如果还配置了公钥登入，那就连密码都不用输入了。</p>
+<p><code>Windows</code> 用户使用 <code>PuTTY</code> 直接保存配置即可。</p>
+<h1 id="传输文件"><a href="#传输文件" class="headerlink" title="传输文件"></a>传输文件</h1><p>在两台机之间传输文件可以用 <code>scp</code>，它的地址格式与 <code>ssh</code> 基本相同，都是可以省略用户名和端口，稍微的差别在与指定端口时用的是大写的 <code>-P</code> 而不是小写的。不过，如果你已经配置了别名，那么这都不重要，因为 <code>scp</code> 也支持直接用别名。<code>scp</code> 用起来很简单，看看下面的例子就明白了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 把本地的 /path/to/local/file 文件传输到远程的 /path/to/remote/file</span><br><span class="line">scp -P port /path/to/local/file user@remote:/path/to/remote/file</span><br><span class="line"></span><br><span class="line"># 也可以使用别名</span><br><span class="line">scp /path/to/local/file lab:/path/to/remote/file</span><br><span class="line"></span><br><span class="line"># 把远程的 /path/to/remote/file 下载到本地的 /path/to/local/file</span><br><span class="line">scp lab:/path/to/remote/file /path/to/local/file</span><br><span class="line"></span><br><span class="line"># 远程的默认路径是家目录</span><br><span class="line"># 下面命令把当前目录下的 file 传到远程的 ~/dir/file</span><br><span class="line">scp file lab:dir/file</span><br><span class="line"></span><br><span class="line"># 加上 -r 命令可以传送文件夹</span><br><span class="line"># 下面命令可以把当前目录下的 dir 文件夹传到远程的家目录下</span><br><span class="line">scp -r dir lab:</span><br><span class="line"></span><br><span class="line"># 别忘了 . 可以用来指代当前目录</span><br><span class="line"># 下面命令可以把远程的 ~/dir 目录下载到当前目录里面</span><br><span class="line">scp -r lab:dir/ .</span><br></pre></td></tr></table></figure>
+<p><code>Windows</code> 用户可以使用 <a target="_blank" rel="noopener" href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a> 配套的 <code>PSCP</code>。</p>
+<p>如果觉得使用命令行传输文件浑身不自在，你还可以使用 SFTP 协议。任何支持 SFTP 协议的客户端都能用你的 SSH 账号信息登入并管理文件，比如开源的有图形化界面的FTP客户端 <a target="_blank" rel="noopener" href="https://filezilla-project.org/download.php?type=client">FileZilla</a>。别忘了，在这些客户端里面，你也可以指定你的私钥（<code>~/.ssh/id_rsa</code>），然后就能做到无密码登入了。</p>
+<h1 id="保持程序在后台运行"><a href="#保持程序在后台运行" class="headerlink" title="保持程序在后台运行"></a>保持程序在后台运行</h1><p>有时候你想要在远程的机器上跑一个需要长时间运行的程序，比如一些计算，然后当你睡了一觉再登入远程的机子上却发现什么结果都没有。这是因为一旦 ssh 进程退出，所有它之前启动的程序都会被杀死。那么有什么办法可以保持程序在后台运行呢？</p>
+<p>你需要在远程的机子上使用 <code>tmux</code>。<code>tmux</code> 是一个会话管理程序，他会保持程序一直运行着。在 Ubuntu 上你可以通过 <code>sudo apt-get install tmux</code> 来安装。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remote$ tmux</span><br></pre></td></tr></table></figure>
+<p>这样你就进入到了 <code>tmux</code> 管理的会话中，之后你再运行任何东西都不会因为你退出 ssh 而被杀死。要暂时离开这个会话，可以先按下 <code>ctrl+b</code> 再按下 <code>d</code>。要恢复之前的会话，只需要执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remote$ tmux attach</span><br></pre></td></tr></table></figure>
+<p><code>tmux</code> 还能管理多个窗口、水平竖直切分、复制粘贴等等，你可以看看<a target="_blank" rel="noopener" href="http://blog.jobbole.com/87584/">这篇不错的文章</a>来入门。</p>
+<p>如果你是Mac用户，那么十分幸运的是，你几乎不需要任何学习，只要把你的终端由系统自带的 <code>Terminal</code> 换成 <code>iTerm 2</code>。<code>iTerm 2</code> 自带超好的 <code>tmux</code> 支持，你可以像操作本机的标签页一样操作 <code>tmux</code> 会话。你只需要在新建会话的时候使用 <code>tmux -CC</code>，在恢复的时候使用 <code>tmux -CC attach</code> 即可。具体的可以参见 <a target="_blank" rel="noopener" href="https://gitlab.com/gnachman/iterm2/wikis/TmuxIntegration">iTerm2 and tmux Integration</a>。</p>
+<p>最后强调一遍，tmux 应该运行在远程的机子上，而不是本机上，否则程序在 ssh 退出时依然会被杀死。</p>
+<h1 id="反向端口转发：例子1"><a href="#反向端口转发：例子1" class="headerlink" title="反向端口转发：例子1"></a>反向端口转发：例子1</h1><p>相信很多人都会有这样的需求：我实验室的机器和宿舍的机器都处在局域网中，但我需要在宿舍访问实验室的机器，或者反过来。这个时候，你需要一台处在公网的机器，如果没有的话，可以考虑腾讯云或者阿里云的学生优惠。</p>
+<p>假设现在你有一台处在公网的机器 <code>jumpbox</code>，这台机器是在任何地方都能访问到的；你在实验室也有一台机子 <code>lab</code>，这台机子只能在实验室内部访问，但他可以访问公网，你希望能在任何地方都能访问这台机器。使用 <code>ssh -R</code> 可以轻松地做到这个事情。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lab$ ssh -R 10022:localhost:22 jumpbox</span><br><span class="line">jumpbox$ ssh user@localhost -p 10022</span><br><span class="line">lab$ </span><br></pre></td></tr></table></figure>
+<p>如果上面这个过程成功了，就说明在你执行 <code>ssh -R 10022:localhost:22 jumpbox</code> 之后，你成功地将 <code>lab</code> 上的 22 端口反向转发到了 <code>jumpbox</code> 的 10022 端口。只要保持这个 <code>ssh</code> 不断，任何一台机器都可以首先连接到 <code>jumpbox</code>，然后通过 <code>ssh user@localhost -p 10022</code> 连回到 <code>lab</code>。可以看到，这里 <code>jumpbox</code> 起到了一个跳板的作用，所以我们把它称作跳板机。</p>
+<p>不过上面这么做并不稳健，如果因为网络波动导致 <code>ssh -R</code> 那个连接断了，那么从 <code>jumpbox</code> 就完全失去了到 <code>lab</code> 的控制。万幸的是，有一个叫做 <code>autossh</code> 的软件，可以自动的检测断线，并在断线的时候重连。在 Ubuntu 上你可以使用 <code>sudo apt-get install autossh</code> 来安装，在 Mac 上则是 <code>brew install autossh</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lab$ autossh -NfR 10022:localhost:22 jumpbox</span><br></pre></td></tr></table></figure>
+<p>上面这句话里面 <code>-N</code> 表示非不执行命令，只做端口转发；<code>-f</code> 表示在后台运行，也就是说，这句话执行之后 <code>autossh</code> 就在后台默默工作啦；<code>-R 10022:localhost:22</code> 就是把本地的22端口转发到远程的10022端口。</p>
+<p>现在，任何一台电脑先连上跳板机，就可以连回内网的机子啦！</p>
+<p>你甚至可以将这句话设置为开机时运行：在 <code>/etc/rc.local</code> 里面 <code>exit 0</code> 这句话之前加上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - user -c autossh -NfR 10022:localhost:22 jumpbox</span><br></pre></td></tr></table></figure>
+<p>其中 <code>user</code> 是你的用户名。需要注意的是，如果你需要开机时运行 <code>autossh</code>，你需要配置公钥登入，因为开机运行的时候是没有交互界面让你来输入密码的。</p>
+<p>这里顺带说一句，你可以绑定1024到65535之间的任意端口，只要这个端口之前没有程序在用就行。</p>
+<h1 id="反向端口转发：例子2"><a href="#反向端口转发：例子2" class="headerlink" title="反向端口转发：例子2"></a>反向端口转发：例子2</h1><p>还是反向端口转发，再举一个很常见的例子：我在本地跑了一个网站，我想临时把我的网站发给朋友看看。你可以很容易的复现这个实验：在本地运行 <code>python -m SimpleHTTPServer</code> 即可在本地的8000端口启动一个网站，你可以在浏览器中通过 <code>http://localhost:8000/</code> 看到。下面我们想让远方的朋友看到这个网站。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh -NR 0.0.0.0:18000:localhost:8000 jumpbox</span><br></pre></td></tr></table></figure>
+<p>远方的朋友即可通过 <code>http://jumpbox:18000/</code> 看到了。注意到这里和上面的命令有一个小小的不同，就是多了 <code>0.0.0.0</code>，这告诉 <code>ssh</code>，要把18000端口绑定在远端的所有IP上。如果像之前那样省略的话，缺省值是只绑定在 <code>localhost</code>，也就是只有在 <code>jumpbox</code> 本机才可以访问，而其他人都不能访问。</p>
+<h1 id="反向端口转发：例子3"><a href="#反向端口转发：例子3" class="headerlink" title="反向端口转发：例子3"></a>反向端口转发：例子3</h1><p>比方说在本地的<code>127.0.0.1:1080</code>运行了HTTP代理服务，现在我想让另一台机子 <code>remote</code> 也能够使用这个HTTP代理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh -NR 11080:localhost:1080 remote</span><br><span class="line">local$ ssh remote</span><br><span class="line">remote$ export http_proxy=http://127.0.0.1:11080/</span><br><span class="line">remote$ export https_proxy=http://127.0.0.1:11080/</span><br><span class="line">remote$ curl http://ifconfig.co</span><br></pre></td></tr></table></figure>
+<p>看看返回的IP，是不是 <code>remote</code> 也用上了代理？</p>
+<h1 id="正向端口转发"><a href="#正向端口转发" class="headerlink" title="正向端口转发"></a>正向端口转发</h1><p>反向端口转发是把本机的端口转发到远程的机子上；与之对应，正向端口转发则是把远程的端口转发到本地。</p>
+<p>比方说，之前我们把 <code>lab</code> 的22端口反向转发到了 <code>jumpbox</code> 的10022端口，现在我想把它转发到本机的20022端口，只需要执行 <code>ssh -L</code> 就行了，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh -NL 20022:localhost:10022 jumpbox</span><br><span class="line">local$ ssh localhost -p 20022</span><br><span class="line">lab$ </span><br></pre></td></tr></table></figure>
+<h1 id="用作-SOCKS5-代理"><a href="#用作-SOCKS5-代理" class="headerlink" title="用作 SOCKS5 代理"></a>用作 SOCKS5 代理</h1><p>要是想要在家访问公司内网的一些网站，但是公司又没有提供进入内网的VPN，那怎么办呢？通过 <code>ssh -D</code> 可以在本地建立起一个 <code>SOCKS5</code> 代理：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh -ND 1080 workplace</span><br></pre></td></tr></table></figure>
+<p>如果 <code>workplace</code> 处在内网，不要忘记前面讲到可以用反向端口转发和跳板机来解决这个问题。现在，你可以在浏览器的设置里面，把代理服务器设成 <code>socks5://127.0.0.1:1080</code>，然后你就可以看到 <code>workplace</code> 能看到的所有网站啦。</p>
+<h1 id="传递图形界面"><a href="#传递图形界面" class="headerlink" title="传递图形界面"></a>传递图形界面</h1><p>上面我们都是在运行命令行程序，那如果远程有一些程序是不得不用图形界面的话，是不是无解了呢？实际上，恰恰相反，X11的设计天生就支持这样的行为。</p>
+<p>首先，我们需要在本机装上 X Server：Linux 桌面用户本身就已经有了 X Server，Windows 用户可以使用 <a target="_blank" rel="noopener" href="http://www.straightrunning.com/XmingNotes/">Xming</a>，Mac 用户需要使用 <a target="_blank" rel="noopener" href="https://www.xquartz.org/">XQuartz</a> 。</p>
+<p>安装好了 X Server 之后，我们通过 <code>ssh -X</code> 进行连接，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">local$ ssh -X remote</span><br><span class="line">remote$ xeyes</span><br></pre></td></tr></table></figure>
+<p>现在你应该会看到一对傻傻的眼睛，这就说明成功了，注意，这个眼睛是跑在远程的，而输入和输出都是在本地。这个方法几乎可以运行任何图形界面的程序，比如你可以试试看运行 <code>nautilus</code> 或者 <code>firefox</code>。</p>
+<img src="/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/2019-12-14-11-13-04.png" class="">
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/" rel="prev" title="Django学习-入门">
+                  <i class="fa fa-chevron-left"></i> Django学习-入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/14/Django%E5%AD%A6%E4%B9%A0-%E6%A8%A1%E5%9E%8B/" rel="next" title="Django学习-模型">
+                  Django学习-模型 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

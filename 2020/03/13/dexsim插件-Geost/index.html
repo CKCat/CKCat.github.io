@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。  样本来源：https:&#x2F;&#x2F;blog.trendmicro.com&#x2F;trendlabs-security-intelligence&#x2F;dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks&#x2F;  样本下载 分析字符串解密特点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dexsim插件-Geost">
+<meta property="og:url" content="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。  样本来源：https:&#x2F;&#x2F;blog.trendmicro.com&#x2F;trendlabs-security-intelligence&#x2F;dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks&#x2F;  样本下载 分析字符串解密特点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-14-51-04.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-01-28.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-03-56.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-05-33.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-12-09.png">
+<meta property="article:published_time" content="2020-03-13T14:39:46.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.668Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="dex字符串解密">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-14-51-04.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/","path":"2020/03/13/dexsim插件-Geost/","title":"dexsim插件-Geost"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>dexsim插件-Geost | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E5%AF%86%E7%89%B9%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">分析字符串解密特点</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="dexsim插件-Geost | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dexsim插件-Geost
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-13 14:39:46" itemprop="dateCreated datePublished" datetime="2020-03-13T14:39:46+00:00">2020-03-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。</p>
+<blockquote>
+<p>样本来源：<a target="_blank" rel="noopener" href="https://blog.trendmicro.com/trendlabs-security-intelligence/dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks/">https://blog.trendmicro.com/trendlabs-security-intelligence/dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks/</a></p>
+</blockquote>
+<p><a href="dexsim%E6%8F%92%E4%BB%B6-Geost/92394e82d9cf5de5cb9c7ac072e774496bd1c7e2944683837d30b188804c1810">样本下载</a></p>
+<h1 id="分析字符串解密特点"><a href="#分析字符串解密特点" class="headerlink" title="分析字符串解密特点"></a>分析字符串解密特点</h1><p>首先查看样本中解密字符串方法的特点</p>
+<img src="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-14-51-04.png" class="">
+
+<p>可以发现解密字符串函数为 <code>Lcom/rgamtgid/hnsolues/QLwdDnU;-&gt;UGanmSarY([B)[B</code> , 此代码的特征为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fill-array-data v2, :array_2e</span><br><span class="line">invoke-virtual &#123;p0, v2&#125;, Lcom/rgamtgid/hnsolues/QLwdDnU;-&gt;UGanmSarY([B)[B</span><br><span class="line">move-result-object v2</span><br><span class="line">invoke-direct &#123;v1, v2&#125;, Ljava/lang/String;-&gt;&lt;init&gt;([B)V</span><br></pre></td></tr></table></figure>
+
+<p>对应的正则表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">r&#x27;fill-array-data v\d+, :(\w+)\s+?&#x27;</span><br><span class="line">r&#x27;invoke-virtual &#123;p0, v\d&#125;, (.*?);-&gt;(.*?)\(\[B\)\[B\s+?&#x27;</span><br><span class="line">r&#x27;move-result-object v\d+\s+?&#x27;</span><br><span class="line">r&#x27;invoke-direct &#123;(v\d+), v\d+&#125;, Ljava/lang/String;-&gt;&lt;init&gt;\(\[B\)V&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>继续观察<code>Lcom/rgamtgid/hnsolues/QLwdDnU;-&gt;UGanmSarY([B)[B</code> 函数，发现该函数为非静态函数，需要先调用函数所在类的构造函数，然后再调用该解密函数，并且该函数返回值为 <code>byte[]</code> , 需要转成 <code>String</code> 类型, 所以需要修改 <code>dss</code> 相关代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Object obj = null;</span><br><span class="line">try&#123;</span><br><span class="line">    Constructor&lt;?&gt; con = clz.getConstructor();</span><br><span class="line">    obj = con.newInstance();</span><br><span class="line">&#125;catch (Exception e)&#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br><span class="line">ret = mtd.invoke(obj, target.getParameters());</span><br><span class="line">result = new String((byte[])ret);</span><br></pre></td></tr></table></figure>
+<p>开始解密，发现解密结果为乱码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;f2e3d508ee217c095861d260a3a9eee8f61603ed045bb4817fd28a7da11b3d9f&quot;: [&quot;ġ��\\u001D3\\u0002��&quot;],</span><br><span class="line">	&quot;38a80467b6d5b816cd91776ed8e51cce0df8a73d46bd47b7d188d1d84eaa678f&quot;: [&quot;ˮ��\\u0019(\\u0003&quot;],</span><br><span class="line">	&quot;b4e499760697584cc82d02559489ce6a99e497ab066d1a2b34a33cbfce943193&quot;: [&quot;���&quot;],</span><br><span class="line">	&quot;70216d6f207a1c0e370b7113334d14e9ebb12c766568369eda1a1f8afee15fc7&quot;: [&quot;����\\u0019,\\u0006���i�&quot;],</span><br><span class="line">	&quot;d1cdc906ab0b7c1c64a29537e9c4020f52790b0ac1e5045eaf321e9bbfe14d6f&quot;: [&quot;Δ��\\u0005!\\u0000��n�&quot;],</span><br><span class="line">	&quot;d0532ef95194e0763b588f5b2ac1304c5f15333bfda545f929b3c0a8885643c3&quot;: [&quot;ŭ��\\u001D&quot;],</span><br><span class="line">	&quot;df2641fd22aa51c58d5150e925d75b797dac6cdd9491950a912b8c4230e22836&quot;: [&quot;ġ��\\u00072&quot;],</span><br><span class="line">	&quot;1c3fbc0ef0a73334f447ceb1e6eeb53afc8d38c5e054d4ceaef30ccd828b4ff3&quot;: [&quot;ʪ��\\u0007!\\u000B&quot;],</span><br><span class="line">	&quot;1a9a46b987f24ecf7d3be2e6501c7b6622d169a7af407a9e31ef0337bc0141d6&quot;: [&quot;ǥ��\\u0007+I��|����;o�xl���\\u0003b6�&quot;],</span><br><span class="line">	&quot;ff3cb5db4c0284f1bfe203fee5804cd6724267b24ee7d9596f775cd5eead7c2e&quot;: [&quot;ġ��\\u0001.\\u0014��k���&quot;],</span><br><span class="line">	&quot;40e2c22abf4d042c6e20a11e6ba7b2065f709005f6044ed3a4fe7835d041033a&quot;: [&quot;ѡ��&quot;],</span><br><span class="line">	&quot;d5f583b8ec55407eadf5a51dd3ff16b493fb94fae0e202ffd6000af1561bbd9f&quot;: [&quot;ġ��\\u000C3\\u0008��m����&quot;],</span><br><span class="line">	&quot;13a9e458bb010ab664661af1f4f08f084937847fc0768ca47ace65b17243fcb7&quot;: [&quot;(��\\u000B&quot;],</span><br><span class="line">	&quot;a0bcd2c1609d0cd07c8e2a41adbbb3cda932c6c6dca4bfefe481e0adbc83b0cd&quot;: [&quot;д��\\u000B&quot;],</span><br><span class="line">	&quot;7787842e5212469cec7aaa95cd6d8df30d34fb6d0e7a6f1713c0cb5df550f714&quot;: [&quot;ɥ��@,\\u0006誅z���=c�Wb���\\u0017e&#x27;�I&quot;],</span><br><span class="line">	&quot;4d44e4687a94b79a8665bdf15134fd026587af5eed3ecae594fafe6f1a9d891d&quot;: [&quot;ȯ��\\n*\\u0014��&#123;���(q�pa���\\u0015&quot;],</span><br><span class="line">	&quot;73101d880bbfd59702d96ecc3c47618dffdcf243bb3bd275484c002cb76e32db&quot;: [&quot;¶��\\u0017#\\u0008��&quot;],</span><br><span class="line">	&quot;8f03d383773c013569e3e1d910bd8c32fcbed206d3b5c7907bbb99310e33d617&quot;: [&quot;ɥ��@)\\u0008���d�ތ�.b�Gy����&quot;],</span><br><span class="line">	&quot;83718a06bf29a60b800595e9b9ca01708b6e7147b7a3513ecf7b7daa9516c24b&quot;: [&quot;Զ��\\u000B&quot;],</span><br><span class="line">	&quot;05711d0cc4b04eb073b4401b429f20868cba513f4828112442a2c64e379252d1&quot;: [&quot;ġ��\\u0002!\\u0014��i���&quot;],</span><br><span class="line">	&quot;454cf7696e8e0c6abcb6881b67a2831a5465ee7325ee08bf70cf4cc3f42d8e9c&quot;: [&quot;ǡ�&quot;],</span><br><span class="line">	&quot;40848d17e138ba5da879256aea50c6cda50167d856ad7c65ccfd15c60d15455b&quot;: [&quot;ū��\\u000F-\\u0002&quot;],</span><br><span class="line">	&quot;473b6b3f80874a14505ac2577547c5e7e3c96766c74f571bdd736c3844ae33c6&quot;: [&quot;����\\u000F,\\u0014��g���-c�y&#125;�浺[&gt;d�\\n�&quot;],</span><br><span class="line">	&quot;11b2149c2d5239839c10533b4e5363f104d69b7c79c5355ea45d8c5c884dce77&quot;: [&quot;ש��\\u0008)\\u000B�&quot;],</span><br><span class="line">	&quot;bc84eb8f3200f991cd94bf299877f0ffdec6503b41bc344e19e354c1acb1e794&quot;: [&quot;С�&quot;],</span><br><span class="line">	&quot;a47cf816863a4ecf54a03e1a6aaae35f33ddf4ba3f5139286e2bafa26bac0a6e&quot;: [&quot;����&quot;],</span><br><span class="line">	&quot;43ec42d64409376307a36c21db552f5335267593004c139ea1d2d5bd14d6c224&quot;: [&quot;̴�� /\\tǾ�m�ם&quot;],</span><br><span class="line">	&quot;04e8065097330a367c4cd538afc8678d6c9ef24584d7d20c07e94cc754a88816&quot;: [&quot;ǡ��\\u001A%&quot;],</span><br><span class="line">	&quot;561904e2cb0afd0008c5d16fbe3a4ba7cf0b5e5b13ba27eb8092287f0bfb96f8&quot;: [&quot;͡��\\u00003\\u0013��m&quot;],</span><br><span class="line">	&quot;77659956a9e869a9b051ac32cc4f457066332bb0195076d4ed1a8e8019ad4041&quot;: [&quot;ɥ��@,\\u0006誅J����?y&quot;],</span><br><span class="line">	&quot;c16af871c0dd1a66fc41afdc138004641939e1e2b78df4b157037466a5979423&quot;: [&quot;̾��&quot;],</span><br><span class="line">	&quot;f640b5ab7d87d84978011661e769a196fbd3198caaea6fa9263bfa745bd6dd88&quot;: [&quot;ġ��\\u000F3\\u0002Ţ�|���&quot;],</span><br><span class="line">	&quot;9153ef9514c3d163349095f4701d2cba5c06dd49c00c8a3c659d28ef81927040&quot;: [&quot;С��\\u000D#\\u0002��j��&quot;],</span><br><span class="line">	&quot;75dd6f4f0e3b7cffb60fc0fdae51becfb27ce3d6a7ad6518db5a7fe0fb4145fb&quot;: [&quot;ɥ��@,\\u0006誅K���\\u0012x�ph��&quot;],</span><br><span class="line">	&quot;ce505ef1025a3c319094bfd9c0173e62448f78ab255ab4af8d11520bd8767c73&quot;: [&quot;6��\\u001A%.��|���?z&quot;],</span><br><span class="line">	&quot;7a3b634862a85e9cdd1946f52e8080a613aaff393c75715971ed562f940e3e7d&quot;: [&quot;ɥ��@)\\u0008���d�&quot;],</span><br><span class="line">	&quot;cfdf953a68d2b070f380deaefaec4020a2851a2eebb9826f7079272f6b6edd88&quot;: [&quot;ɥ��@,\\u0006誅K���\\u0012x�ph�&quot;],</span><br><span class="line">	&quot;7a193ee83f77b5f3f484573fe8d7645066f0698cc31d9abfc80bd1ba32a9c158&quot;: [&quot;·��\\u001D3+��m�&quot;],</span><br><span class="line">	&quot;13aa89b020ddf7150202fa0bdfb9c28e9580edc3e2059eaf5ef5d12c7ac12bb2&quot;: [&quot;ͥ��&quot;],</span><br><span class="line">	&quot;2148fad735ee74a155c3b34327cde1ff3b50cd6e441f10a85babc7c9e3b9dad2&quot;: [&quot;+��\\u0007&#x27;I���&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>继续分析，发现 <code>Lcom/rgamtgid/hnsolues/QLwdDnU;-&gt;UGanmSarY([B)[B</code> 函数解密过程中需要成员变量 <code>GXGAvefgwV</code> 参与</p>
+<img src="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-01-28.png" class="">
+
+<p>查找该成员变量的初始地方，发现 <code>UGanmSarY</code> 函数。</p>
+<img src="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-03-56.png" class="">
+
+<p>该函数需要两个参数，继续找调用该函数的地方，发现在 <code>oVRoXE</code> 函数中被调用，并且 <code>oVRoXE</code> 为无参函数。</p>
+<img src="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-05-33.png" class="">
+
+<p>到此为止找到了解密函数所需的所有参数，开始编写解密脚本以及修改 <code>dss</code> 代码，相关代码如下：</p>
+<p><code>Geost.py</code> 代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import re</span><br><span class="line">import tempfile</span><br><span class="line">from json import JSONEncoder</span><br><span class="line"></span><br><span class="line">from colorclass.color import Color</span><br><span class="line">from dexsim import get_value</span><br><span class="line">from dexsim.plugin import Plugin</span><br><span class="line"></span><br><span class="line">PLUGIN_CLASS_NAME = &quot;Geost&quot;</span><br><span class="line"></span><br><span class="line"># fill-array-data v2, :array_2e</span><br><span class="line"># invoke-virtual &#123;p0, v2&#125;, Lcom/rgamtgid/hnsolues/QLwdDnU;-&gt;UGanmSarY([B)[B</span><br><span class="line"># move-result-object v2</span><br><span class="line"># invoke-direct &#123;v1, v2&#125;, Ljava/lang/String;-&gt;&lt;init&gt;([B)V</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Geost(Plugin):</span><br><span class="line">    name = PLUGIN_CLASS_NAME</span><br><span class="line">    enabled = True</span><br><span class="line">    tname = None</span><br><span class="line">    index = 3</span><br><span class="line"></span><br><span class="line">    def __init__(self, driver, smalidir):</span><br><span class="line">        Plugin.__init__(self, driver, smalidir)</span><br><span class="line"></span><br><span class="line">    def run(self):</span><br><span class="line">        if self.ONE_TIME:</span><br><span class="line">            return</span><br><span class="line">        self.ONE_TIME = True</span><br><span class="line">        print(&#x27;Run &#x27; + __name__, end=&#x27; &#x27;, flush=True)</span><br><span class="line"></span><br><span class="line">        regex = (</span><br><span class="line">            r&#x27;fill-array-data v\d+, :(\w+)\s+?&#x27;</span><br><span class="line">            r&#x27;invoke-virtual &#123;p0, v\d&#125;, (.*?);-&gt;(.*?)\(\[B\)\[B\s+?&#x27;</span><br><span class="line">            r&#x27;move-result-object v\d+\s+?&#x27;</span><br><span class="line">            r&#x27;invoke-direct &#123;(v\d+), v\d+&#125;, Ljava/lang/String;-&gt;&lt;init&gt;\(\[B\)V&#x27;</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        ptn = re.compile(regex, re.MULTILINE)</span><br><span class="line">        for sf in self.smalidir:</span><br><span class="line">            for mtd in sf.get_methods():</span><br><span class="line">                self._process_mtd(mtd, ptn)</span><br><span class="line">        self.decode()</span><br><span class="line"></span><br><span class="line">    def _process_mtd(self, mtd, ptn):</span><br><span class="line">        body = mtd.get_body()</span><br><span class="line"></span><br><span class="line">        for item in ptn.finditer(body):</span><br><span class="line">            old_content = item.group()  # 匹配到的内容，用来替换</span><br><span class="line">            arg_pos, cname, mname, rtn_name = item.groups()</span><br><span class="line">            cname = cname[1:].replace(&#x27;/&#x27;, &#x27;.&#x27;)</span><br><span class="line">            # 通过参数位置获取参数值</span><br><span class="line">            rex = arg_pos + &#x27;\s*.array-data 1([\w\W\s]+?).end array-data&#x27;</span><br><span class="line">            ptn_arr = re.compile(rex, re.MULTILINE)</span><br><span class="line">            bjson = []</span><br><span class="line">            for it in ptn_arr.finditer(body):</span><br><span class="line">                arr = it.groups()</span><br><span class="line">                for i in arr[0].split(&quot;\n&quot;):</span><br><span class="line">                    i = i.strip()</span><br><span class="line">                    if i == &quot;&quot;:</span><br><span class="line">                        continue</span><br><span class="line">                    bjson.append(int(i.replace(&#x27;t&#x27;, &#x27;&#x27;), 16))</span><br><span class="line">            arguments = [&#x27;[B:&#x27; + str(bjson)]</span><br><span class="line">            json_item = self.get_json_item(cname, mname, arguments)</span><br><span class="line">            self.append_json_item(json_item, mtd, old_content, rtn_name)</span><br><span class="line"></span><br><span class="line">    def decode(self):</span><br><span class="line">        if not self.json_list or not self.target_contexts:</span><br><span class="line">            return</span><br><span class="line"></span><br><span class="line">        jsons = JSONEncoder().encode(self.json_list)</span><br><span class="line"></span><br><span class="line">        outputs = &#123;&#125;</span><br><span class="line">        with tempfile.NamedTemporaryFile(mode=&#x27;w+&#x27;, delete=False) as tfile:</span><br><span class="line">            tfile.write(jsons)</span><br><span class="line">        outputs = self.driver.decode(tfile.name)</span><br><span class="line">        os.unlink(tfile.name)</span><br><span class="line"></span><br><span class="line">        if not outputs:</span><br><span class="line">            return</span><br><span class="line"></span><br><span class="line">        for key, value in outputs.items():</span><br><span class="line">            if key not in self.target_contexts:</span><br><span class="line">                print(key, value, &quot;not in&quot;)</span><br><span class="line">                continue</span><br><span class="line">            for mtd, old_content, new_content in self.target_contexts[key]:</span><br><span class="line">                old_body = mtd.get_body()</span><br><span class="line">                new_content = new_content.format(value[0])</span><br><span class="line">                body = old_body.replace(old_content, new_content)</span><br><span class="line">                mtd.set_body(body)</span><br><span class="line">                self.make_changes = True</span><br><span class="line">                mtd.set_modified(True)</span><br><span class="line">        self.smali_files_update()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>dss</code> 相关代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public Object invoke(InvocationTarget target) &#123;</span><br><span class="line">    Class&lt;?&gt; clz = loadClass(target.getClassName());</span><br><span class="line">    if (clz == null) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Method mtd = getMethod(clz, target);</span><br><span class="line">    if (mtd == null) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Object result = null;</span><br><span class="line">    Object obj = null;</span><br><span class="line">    try&#123;</span><br><span class="line">        Constructor&lt;?&gt; con = clz.getConstructor();</span><br><span class="line">        obj = con.newInstance();</span><br><span class="line">    &#125;catch (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    try &#123;</span><br><span class="line">        Object ret = null;</span><br><span class="line">        InvocationTarget aa= new InvocationTarget(null, null, &quot;oVRoXE&quot;, null, null);</span><br><span class="line">        Method init = getMethod(clz, aa);</span><br><span class="line">        init.invoke(obj,null);</span><br><span class="line">        ret = mtd.invoke(obj, target.getParameters());</span><br><span class="line">        result = new String((byte[])ret);</span><br><span class="line">    &#125; catch (IllegalAccessException ignore) &#123;</span><br><span class="line">        ignore.printStackTrace();</span><br><span class="line">    &#125; catch (InvocationTargetException ignore) &#123;</span><br><span class="line">        ignore.printStackTrace();</span><br><span class="line">    &#125; catch (ExceptionInInitializerError e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; catch (VerifyError e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>最后开始解密，对应的解密结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;f2e3d508ee217c095861d260a3a9eee8f61603ed045bb4817fd28a7da11b3d9f&quot;: [&quot;getAssets&quot;],</span><br><span class="line">	&quot;38a80467b6d5b816cd91776ed8e51cce0df8a73d46bd47b7d188d1d84eaa678f&quot;: [&quot;hjgfwhd&quot;],</span><br><span class="line">	&quot;b4e499760697584cc82d02559489ce6a99e497ab066d1a2b34a33cbfce943193&quot;: [&quot;TRUE&quot;],</span><br><span class="line">	&quot;70216d6f207a1c0e370b7113334d14e9ebb12c766568369eda1a1f8afee15fc7&quot;: [&quot;/ydxwlab.jar&quot;],</span><br><span class="line">	&quot;d1cdc906ab0b7c1c64a29537e9c4020f52790b0ac1e5045eaf321e9bbfe14d6f&quot;: [&quot;mPackageInfo&quot;],</span><br><span class="line">	&quot;d0532ef95194e0763b588f5b2ac1304c5f15333bfda545f929b3c0a8885643c3&quot;: [&quot;files&quot;],</span><br><span class="line">	&quot;df2641fd22aa51c58d5150e925d75b797dac6cdd9491950a912b8c4230e22836&quot;: [&quot;getDir&quot;],</span><br><span class="line">	&quot;1c3fbc0ef0a73334f447ceb1e6eeb53afc8d38c5e054d4ceaef30ccd828b4ff3&quot;: [&quot;initial&quot;],</span><br><span class="line">	&quot;1a9a46b987f24ecf7d3be2e6501c7b6622d169a7af407a9e31ef0337bc0141d6&quot;: [&quot;dalvik.system.DexClassLoader&quot;],</span><br><span class="line">	&quot;ff3cb5db4c0284f1bfe203fee5804cd6724267b24ee7d9596f775cd5eead7c2e&quot;: [&quot;getConstructor&quot;],</span><br><span class="line">	&quot;40e2c22abf4d042c6e20a11e6ba7b2065f709005f6044ed3a4fe7835d041033a&quot;: [&quot;read&quot;],</span><br><span class="line">	&quot;d5f583b8ec55407eadf5a51dd3ff16b493fb94fae0e202ffd6000af1561bbd9f&quot;: [&quot;getAbsolutePath&quot;],</span><br><span class="line">	&quot;13a9e458bb010ab664661af1f4f08f084937847fc0768ca47ace65b17243fcb7&quot;: [&quot;close&quot;],</span><br><span class="line">	&quot;a0bcd2c1609d0cd07c8e2a41adbbb3cda932c6c6dca4bfefe481e0adbc83b0cd&quot;: [&quot;space&quot;],</span><br><span class="line">	&quot;7787842e5212469cec7aaa95cd6d8df30d34fb6d0e7a6f1713c0cb5df550f714&quot;: [&quot;java.lang.reflect.Constructor&quot;],</span><br><span class="line">	&quot;4d44e4687a94b79a8665bdf15134fd026587af5eed3ecae594fafe6f1a9d891d&quot;: [&quot;kkksdjsdnssvfsnvfsdlfkjew&quot;],</span><br><span class="line">	&quot;73101d880bbfd59702d96ecc3c47618dffdcf243bb3bd275484c002cb76e32db&quot;: [&quot;arraycopy&quot;],</span><br><span class="line">	&quot;8f03d383773c013569e3e1d910bd8c32fcbed206d3b5c7907bbb99310e33d617&quot;: [&quot;java.io.FileOutputStream&quot;],</span><br><span class="line">	&quot;83718a06bf29a60b800595e9b9ca01708b6e7147b7a3513ecf7b7daa9516c24b&quot;: [&quot;write&quot;],</span><br><span class="line">	&quot;05711d0cc4b04eb073b4401b429f20868cba513f4828112442a2c64e379252d1&quot;: [&quot;getClassLoader&quot;],</span><br><span class="line">	&quot;454cf7696e8e0c6abcb6881b67a2831a5465ee7325ee08bf70cf4cc3f42d8e9c&quot;: [&quot;dex&quot;],</span><br><span class="line">	&quot;40848d17e138ba5da879256aea50c6cda50167d856ad7c65ccfd15c60d15455b&quot;: [&quot;forName&quot;],</span><br><span class="line">	&quot;473b6b3f80874a14505ac2577547c5e7e3c96766c74f571bdd736c3844ae33c6&quot;: [&quot;.localsinfotimestamp1494987116&quot;],</span><br><span class="line">	&quot;11b2149c2d5239839c10533b4e5363f104d69b7c79c5355ea45d8c5c884dce77&quot;: [&quot;tmp_file&quot;],</span><br><span class="line">	&quot;bc84eb8f3200f991cd94bf299877f0ffdec6503b41bc344e19e354c1acb1e794&quot;: [&quot;set&quot;],</span><br><span class="line">	&quot;a47cf816863a4ecf54a03e1a6aaae35f33ddf4ba3f5139286e2bafa26bac0a6e&quot;: [&quot;%s%s&quot;],</span><br><span class="line">	&quot;43ec42d64409376307a36c21db552f5335267593004c139ea1d2d5bd14d6c224&quot;: [&quot;openNonAssetFd&quot;],</span><br><span class="line">	&quot;04e8065097330a367c4cd538afc8678d6c9ef24584d7d20c07e94cc754a88816&quot;: [&quot;delete&quot;],</span><br><span class="line">	&quot;561904e2cb0afd0008c5d16fbe3a4ba7cf0b5e5b13ba27eb8092287f0bfb96f8&quot;: [&quot;newInstance&quot;],</span><br><span class="line">	&quot;77659956a9e869a9b051ac32cc4f457066332bb0195076d4ed1a8e8019ad4041&quot;: [&quot;java.lang.Boolean&quot;],</span><br><span class="line">	&quot;c16af871c0dd1a66fc41afdc138004641939e1e2b78df4b157037466a5979423&quot;: [&quot;ozht&quot;],</span><br><span class="line">	&quot;f640b5ab7d87d84978011661e769a196fbd3198caaea6fa9263bfa745bd6dd88&quot;: [&quot;getBaseContext&quot;],</span><br><span class="line">	&quot;9153ef9514c3d163349095f4701d2cba5c06dd49c00c8a3c659d28ef81927040&quot;: [&quot;setAccessible&quot;],</span><br><span class="line">	&quot;75dd6f4f0e3b7cffb60fc0fdae51becfb27ce3d6a7ad6518db5a7fe0fb4145fb&quot;: [&quot;java.lang.ClassLoader2&quot;],</span><br><span class="line">	&quot;ce505ef1025a3c319094bfd9c0173e62448f78ab255ab4af8d11520bd8767c73&quot;: [&quot;createInputStream&quot;],</span><br><span class="line">	&quot;7a3b634862a85e9cdd1946f52e8080a613aaff393c75715971ed562f940e3e7d&quot;: [&quot;java.io.File&quot;],</span><br><span class="line">	&quot;cfdf953a68d2b070f380deaefaec4020a2851a2eebb9826f7079272f6b6edd88&quot;: [&quot;java.lang.ClassLoader&quot;],</span><br><span class="line">	&quot;7a193ee83f77b5f3f484573fe8d7645066f0698cc31d9abfc80bd1ba32a9c158&quot;: [&quot;mClassLoader&quot;],</span><br><span class="line">	&quot;13aa89b020ddf7150202fa0bdfb9c28e9580edc3e2059eaf5ef5d12c7ac12bb2&quot;: [&quot;name&quot;],</span><br><span class="line">	&quot;2148fad735ee74a155c3b34327cde1ff3b50cd6e441f10a85babc7c9e3b9dad2&quot;: [&quot;config.xml&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/2020-03-13-15-12-09.png" class="">
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dex%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E5%AF%86/" rel="tag"># dex字符串解密</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/" rel="prev" title="史上最优雅的NDK加载pass方案">
+                  <i class="fa fa-chevron-left"></i> 史上最优雅的NDK加载pass方案
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/16/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%B8%89/" rel="next" title="ARMv8学习记录三">
+                  ARMv8学习记录三 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

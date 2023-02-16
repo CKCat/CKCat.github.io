@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文主要记录 git 使用过程中需要搜索的一些命令。 如何恢复初始的 git 提交。您可以删除 HEAD 并将存储库还原到新的状态，在该状态下可以创建一个新的初始提交： 1git update-ref -d HEAD  创建新提交之后，如果您已经将其推入远程，则需要强制将其发送到远程，以便覆盖先前的初始提交：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git使用记录">
+<meta property="og:url" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="本文主要记录 git 使用过程中需要搜索的一些命令。 如何恢复初始的 git 提交。您可以删除 HEAD 并将存储库还原到新的状态，在该状态下可以创建一个新的初始提交： 1git update-ref -d HEAD  创建新提交之后，如果您已经将其推入远程，则需要强制将其发送到远程，以便覆盖先前的初始提交：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-06-14-18-15-01.png">
+<meta property="article:published_time" content="2021-02-22T20:30:08.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.680Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-06-14-18-15-01.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/","path":"2021/02/22/git使用记录/","title":"git使用记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>git使用记录 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%81%A2%E5%A4%8D%E5%88%9D%E5%A7%8B%E7%9A%84-git-%E6%8F%90%E4%BA%A4%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">如何恢复初始的 git 提交。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%92%A4%E9%94%80-git-add%E5%92%8C-commit-%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">撤销 git add和 commit 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3-Git-%E6%9B%B4%E6%96%B0%E6%9C%AC%E5%9C%B0%E5%86%B2%E7%AA%81%EF%BC%9Acommit-your-changes-or-stash-them-before-you-can-merge"><span class="nav-number"></span> <span class="nav-text">解决 Git 更新本地冲突：commit your changes or stash them before you can merge</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%B8%85%E6%B4%97-Github-%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2"><span class="nav-number"></span> <span class="nav-text">如何清洗 Github 提交历史</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh-%E6%96%B9%E5%BC%8F%E5%8F%8A%E5%85%8D%E5%AF%86%E7%A0%81%E9%85%8D%E7%BD%AE"><span class="nav-number"></span> <span class="nav-text">ssh 方式及免密码配置</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="git使用记录 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          git使用记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-22 20:30:08" itemprop="dateCreated datePublished" datetime="2021-02-22T20:30:08+00:00">2021-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文主要记录 git 使用过程中需要搜索的一些命令。</p>
+<h3 id="如何恢复初始的-git-提交。"><a href="#如何恢复初始的-git-提交。" class="headerlink" title="如何恢复初始的 git 提交。"></a>如何恢复初始的 git 提交。</h3><p>您可以删除 HEAD 并将存储库还原到新的状态，在该状态下可以创建一个新的初始提交：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git update-ref -d HEAD</span><br></pre></td></tr></table></figure>
+
+<p>创建新提交之后，如果您已经将其推入远程，则需要强制将其发送到远程，以便覆盖先前的初始提交：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --force origin</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>不要使用 <code>rm -rf .git</code> 或者像这样的任何操作，这样都会彻底清除整个存储库，包括所有其他分支，以及您试图重置的分支。</p>
+</blockquote>
+<h3 id="撤销-git-add和-commit-操作"><a href="#撤销-git-add和-commit-操作" class="headerlink" title="撤销 git add和 commit 操作"></a>撤销 git add和 commit 操作</h3><p>还没有 push 的时候使用 reset 命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git reset --mixed commit_id    <span class="comment">#不删除工作空间改动代码，撤销 commit ，并且撤销 git add . 操作，默认操作。</span></span><br><span class="line">git reset --soft  commit_id    <span class="comment"># 不删除工作空间改动代码，撤销 commit ，不撤销 git add .  。</span></span><br><span class="line">git reset --hard commit_id     <span class="comment"># 删除工作空间改动代码，撤销 commit ，撤销 git add . 慎用这个命令。</span></span><br><span class="line">git reset –hard origin/master  <span class="comment"># 将本地的状态回退到和远程的一样</span></span><br><span class="line">git commit --amend             <span class="comment"># 只是改一下注释</span></span><br></pre></td></tr></table></figure>
+
+<p>已经 push 了，可以使用 git revert 还原已经提交的修改 ，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git revert HEAD          <span class="comment"># 撤销前一次 commit 。</span></span><br><span class="line">git revert HEAD~n        <span class="comment"># 撤销前n次 commit 。</span></span><br><span class="line">git revert commit-id     <span class="comment"># 撤销指定的版本，撤销也会作为一次提交进行保存。</span></span><br><span class="line">git reset HEAD^ file     <span class="comment"># 回退 flie 这个文件的版本到上一个版本</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge"><a href="#解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge" class="headerlink" title="解决 Git 更新本地冲突：commit your changes or stash them before you can merge"></a>解决 Git 更新本地冲突：commit your changes or stash them before you can merge</h2><p>方法一：stash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git stash               让工作区内容保证与上一次提交内容相同，同时备份当前修改的内容</span><br><span class="line">git pull                 拉取仓库的最新内容</span><br><span class="line">git stash pop       在仓库最新内容的基础上添加当前修改的内容</span><br></pre></td></tr></table></figure>
+
+
+<p>方法二：直接完全覆盖本地修改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<h1 id="如何清洗-Github-提交历史"><a href="#如何清洗-Github-提交历史" class="headerlink" title="如何清洗 Github 提交历史"></a>如何清洗 Github 提交历史</h1><p>当 Github 的 Repo 变得日益臃肿、或者上传了敏感内容时，常见的方法时清理相关文件的所有历史提交记录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git filter-branch --force --index-filter <span class="string">&#x27;git rm --cached --ignore-unmatch $&#123;FILEPATH&#125;&#x27;</span> --prune-empty --tag-name-filter <span class="built_in">cat</span> -- --all </span><br><span class="line">git push origin master --force </span><br><span class="line"><span class="built_in">rm</span> -rf .git/refs/original/ </span><br><span class="line">git reflog expire --expire=now --all </span><br><span class="line">git gc --prune=now </span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+<p>但若这类文件非常多的时候，一个可选的方法时直接清空所有历史记录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf .git </span><br><span class="line">git init git </span><br><span class="line">add -A </span><br><span class="line">git commit -m <span class="string">&quot;clear history&quot;</span> </span><br><span class="line">git remote add origin <span class="variable">$&#123;GITHUB_REPO_URL&#125;</span> </span><br><span class="line">git push -f -u origin master</span><br></pre></td></tr></table></figure>
+<p>参考链接: <a target="_blank" rel="noopener" href="https://exp-blog.com/scm/qing-xi-github-ti-jiao-li-shi/">https://exp-blog.com/scm/qing-xi-github-ti-jiao-li-shi/</a></p>
+<h1 id="ssh-方式及免密码配置"><a href="#ssh-方式及免密码配置" class="headerlink" title="ssh 方式及免密码配置"></a>ssh 方式及免密码配置</h1><p>git ssh 方式免密提交方式需要将 ssh-keygen 生成的公钥放到服务器上</p>
+<p>全局用户名密码配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;CKCat&quot; </span><br><span class="line">git config --global user.email &quot;ckcatck@qq.com&quot;</span><br></pre></td></tr></table></figure>
+<p>生成公钥和私钥</p>
+<p>1、首先需要检查你电脑是否已经有 SSH key</p>
+<p>运行 git Bash 客户端，检查本机的ssh密钥。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh </span><br><span class="line">$ <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+<p>如果不是第一次使用，已经存在 <code>id_rsa.pub</code> 或 <code>id_dsa.pub</code> 文件。请执行下面的操作，清理原有 ssh 密钥。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> key_backup   </span><br><span class="line">$ <span class="built_in">cp</span> id_rsa* key_backup   </span><br><span class="line">$ <span class="built_in">rm</span> id_rsa*</span><br></pre></td></tr></table></figure>
+
+<p>2、执行生成公钥和私钥的命令，生成新的密钥：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;CKCat&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>代码参数：</p>
+<p><code>-t</code> 指定密钥类型，默认是 rsa ，可以省略。</p>
+<p><code>-C</code> 设置注释文字，比如邮箱。</p>
+<p>执行命令时会提示要求输入邮箱密码，这个密码会在提交时使用，如果为空的话提交时则不用输入。这个设置是防止别人往你的项目里提交内容。我们自己的电脑，自己本机使用，当然不用密码了。</p>
+<p>按默认为空，直接按回车 3 下，生成 <code>id_rsa</code> 和 <code>id_rsa.pub</code> 两个秘钥文件。</p>
+<p>执行查看公钥信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<p>Windows 系统，位置在用户目录下 <code>.ssh</code>文件夹中。<code>%USERPROFILE%</code></p>
+<p>3、复制公钥信息，打开 github，我的账户 -&gt; setting -&gt; SSH and GPG keys，如下图所示，把公钥粘贴到公钥文本框中，标题自己定义，然后点击确定按键，输入密码。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-06-14-18-15-01.png" class="">
+
+<p>然后，提交时就不再需要用户名和密码了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/03/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/" rel="prev" title="WhatsAppWrom分析过程">
+                  <i class="fa fa-chevron-left"></i> WhatsAppWrom分析过程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/" rel="next" title="动态调试so">
+                  动态调试so <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="github 搜索技巧 案例 普通搜   搭配技巧搜 限定词 查找某个用户或组织的项目   辅助限定词 还没搞懂的（关于 forks、mirror、issues） 排序（放的是官网的链接） 使用指南 练习案例        github 搜索技巧参考自 B站 up 主 CodeSheep 的视频【如何高效地在网上找开源项目做！在职程序员实际演示一波视频教程操作】，然后写着写着一好奇就去看文档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="github项目搜索技巧">
+<meta property="og:url" content="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="github 搜索技巧 案例 普通搜   搭配技巧搜 限定词 查找某个用户或组织的项目   辅助限定词 还没搞懂的（关于 forks、mirror、issues） 排序（放的是官网的链接） 使用指南 练习案例        github 搜索技巧参考自 B站 up 主 CodeSheep 的视频【如何高效地在网上找开源项目做！在职程序员实际演示一波视频教程操作】，然后写着写着一好奇就去看文档">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/2020-03-05-21-48-14.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/2020-03-05-21-49-11.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/2020-03-05-21-59-49.png">
+<meta property="article:published_time" content="2020-03-05T21:44:32.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.676Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/2020-03-05-21-48-14.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/","path":"2020/03/05/github项目搜索技巧/","title":"github项目搜索技巧"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>github项目搜索技巧 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#github-%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7"><span class="nav-number">1.</span> <span class="nav-text">github 搜索技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E6%90%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">普通搜</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E9%85%8D%E6%8A%80%E5%B7%A7%E6%90%9C"><span class="nav-number">1.2.</span> <span class="nav-text">搭配技巧搜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%90%E5%AE%9A%E8%AF%8D"><span class="nav-number">1.3.</span> <span class="nav-text">限定词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E6%9F%90%E4%B8%AA%E7%94%A8%E6%88%B7%E6%88%96%E7%BB%84%E7%BB%87%E7%9A%84%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.3.1.</span> <span class="nav-text">查找某个用户或组织的项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%85%E5%8A%A9%E9%99%90%E5%AE%9A%E8%AF%8D"><span class="nav-number">1.4.</span> <span class="nav-text">辅助限定词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%98%E6%B2%A1%E6%90%9E%E6%87%82%E7%9A%84%EF%BC%88%E5%85%B3%E4%BA%8E-forks%E3%80%81mirror%E3%80%81issues%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">还没搞懂的（关于 forks、mirror、issues）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%EF%BC%88%E6%94%BE%E7%9A%84%E6%98%AF%E5%AE%98%E7%BD%91%E7%9A%84%E9%93%BE%E6%8E%A5%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">排序（放的是官网的链接）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97"><span class="nav-number">1.7.</span> <span class="nav-text">使用指南</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E6%A1%88%E4%BE%8B"><span class="nav-number">1.7.1.</span> <span class="nav-text">练习案例</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="github项目搜索技巧 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          github项目搜索技巧
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-05 21:44:32" itemprop="dateCreated datePublished" datetime="2020-03-05T21:44:32+00:00">2020-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <!-- TOC -->
+
+<ul>
+<li><a href="#github-%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7">github 搜索技巧</a><ul>
+<li><a href="#%E6%A1%88%E4%BE%8B">案例</a><ul>
+<li><a href="#%E6%99%AE%E9%80%9A%E6%90%9C">普通搜</a></li>
+</ul>
+</li>
+<li><a href="#%E6%90%AD%E9%85%8D%E6%8A%80%E5%B7%A7%E6%90%9C">搭配技巧搜</a></li>
+<li><a href="#%E9%99%90%E5%AE%9A%E8%AF%8D">限定词</a><ul>
+<li><a href="#%E6%9F%A5%E6%89%BE%E6%9F%90%E4%B8%AA%E7%94%A8%E6%88%B7%E6%88%96%E7%BB%84%E7%BB%87%E7%9A%84%E9%A1%B9%E7%9B%AE">查找某个用户或组织的项目</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BE%85%E5%8A%A9%E9%99%90%E5%AE%9A%E8%AF%8D">辅助限定词</a></li>
+<li><a href="#%E8%BF%98%E6%B2%A1%E6%90%9E%E6%87%82%E7%9A%84%E5%85%B3%E4%BA%8E-forksmirrorissues">还没搞懂的（关于 forks、mirror、issues）</a></li>
+<li><a href="#%E6%8E%92%E5%BA%8F%E6%94%BE%E7%9A%84%E6%98%AF%E5%AE%98%E7%BD%91%E7%9A%84%E9%93%BE%E6%8E%A5">排序（放的是官网的链接）</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97">使用指南</a><ul>
+<li><a href="#%E7%BB%83%E4%B9%A0%E6%A1%88%E4%BE%8B">练习案例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="github-搜索技巧"><a href="#github-搜索技巧" class="headerlink" title="github 搜索技巧"></a>github 搜索技巧</h1><p>参考自 B站 up 主 CodeSheep 的视频【<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av75587104">如何高效地在网上找开源项目做！在职程序员实际演示一波视频教程操作</a>】，然后写着写着一好奇就去看文档了</p>
+<p>现在这篇博客相当于官方文档的翻译版😂</p>
+<p>当然，你也可以去看【<a target="_blank" rel="noopener" href="https://help.github.com/en/github/searching-for-information-on-github/searching-on-github">官方文档</a>】体验原汁原味的教程</p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="普通搜"><a href="#普通搜" class="headerlink" title="普通搜"></a>普通搜</h3><p>关键词：<code>python</code></p>
+<img src="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/2020-03-05-21-48-14.png" class="">
+
+<h2 id="搭配技巧搜"><a href="#搭配技巧搜" class="headerlink" title="搭配技巧搜"></a>搭配技巧搜</h2><p>搜索 github 中，项目描述（description）中有 python 并且 2019-12-20 号之后有更新过的项目</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in:description python pushed:&gt;2019-12-20</span><br></pre></td></tr></table></figure>
+<p>效果：加了限制条件后，查出来的项目数有了明显的减少</p>
+<img src="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/2020-03-05-21-49-11.png" class="">
+
+<h2 id="限定词"><a href="#限定词" class="headerlink" title="限定词"></a>限定词</h2><p>可通过指定 仓库名(repository name)、项目描述(description)、内容(contents)、说明文件(readme.md) 来搜索项目</p>
+<table>
+<thead>
+<tr>
+<th>限定词</th>
+<th>案例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>in:name</code></td>
+<td><code>in:name python</code> 查出仓库名中有 python 的项目（python in:name 也是一样的）</td>
+</tr>
+<tr>
+<td><code>in:description</code></td>
+<td><code>in:name,description python</code> 查出仓库名或者项目描述中有 python 的项目</td>
+</tr>
+<tr>
+<td><code>in:readme</code></td>
+<td><code>in:readme python</code> 查出 <code>readme.md</code> 文件里有 python 的项目</td>
+</tr>
+<tr>
+<td><code>repo:owner/name</code></td>
+<td><code>repo:octocat/hello-world</code> 查出 octocat 的 hello-world 项目（指定了某个人的某个项目）</td>
+</tr>
+</tbody></table>
+<p>其他骚操作？自己看官方文档（感觉用不到，就不整理了吧）：【<a target="_blank" rel="noopener" href="https://help.github.com/en/github/searching-for-information-on-github/finding-files-on-github">找仓库中的某个文件</a>】、【<a target="_blank" rel="noopener" href="https://help.github.com/en/github/searching-for-information-on-github/searching-code">在 github 上查找代码片段</a>】</p>
+<h3 id="查找某个用户或组织的项目"><a href="#查找某个用户或组织的项目" class="headerlink" title="查找某个用户或组织的项目"></a>查找某个用户或组织的项目</h3><table>
+<thead>
+<tr>
+<th>限定词</th>
+<th>案例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>user:USERNAME</code></td>
+<td><code>user:1335951413 stars:&lt;10</code> 查出用户 1335951413 名下 stars 少于 10 的项目</td>
+</tr>
+<tr>
+<td><code>org:ORGNAME</code></td>
+<td><code>org:github</code> 查出 github 名下的项目</td>
+</tr>
+</tbody></table>
+<h2 id="辅助限定词"><a href="#辅助限定词" class="headerlink" title="辅助限定词"></a>辅助限定词</h2><p>可以通过限制 项目大小(size)、拥护者数(followers)、fork数(forks)、stars数(stars)、创建时间(created)、更新时间(pushed)、项目所用语言(language)、topic标签(topic)、topic标签数(topics)… 来筛选项目</p>
+<p>辅助限定词可以多个并用，用空格隔开就行，可以搭配限定词使用，也可单独使用</p>
+<p>（关于项目是否被 fork 这个点我不是很懂，就不写案例了）</p>
+<ul>
+<li><p><code>in:name python size:&lt;=1000</code> 查出项目名字中有 python 且小于 1MB 的项目</p>
+</li>
+<li><p><code>size:&lt;=1000</code> 查出项目大小小于 1MB 的项目</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>限定词</th>
+<th>案例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>stars:n</code></td>
+<td><code>stars:&gt;=5</code> 查出 star数大于等于 5 个 的项目（支持大于小于区间等）</td>
+</tr>
+<tr>
+<td><code>pushed:YYYY-MM-DD</code></td>
+<td><code>css pushed:&gt;2013-02-01</code> 查出仓库中包含 css 关键字，并且在 2013年1月 之后更新过的项目</td>
+</tr>
+<tr>
+<td><code>language:LANGUAGE</code></td>
+<td><code>rails language:javascript</code> 查出仓库包含 rails 关键字，并且使用 javscript 语言的项目</td>
+</tr>
+<tr>
+<td><code>created:YYYY-MM-DD</code></td>
+<td><code>webos created:&lt;2011-01-01</code> 查出仓库中包含 webos 关键字并且是在 2011 年之前创建的项目（也支持时分秒，支持大于小于区间等）</td>
+</tr>
+<tr>
+<td><code>size:n</code></td>
+<td><code>size:1000</code> 查出仓库大小等于 1MB 的项目, <code>size:&gt;=30000</code> 查出仓库大小至少大于 30MB 的项目, <code>size:50..120</code> 查出仓库大小在 50KB 至 120KB 之间的项目</td>
+</tr>
+<tr>
+<td><code>followers:n</code></td>
+<td><code>followers:1000</code> 查出有 1000 个拥护者（followers） 的项目（支持大于小于区间等）</td>
+</tr>
+<tr>
+<td><code>forks:n</code></td>
+<td><code>forks:5</code> 查出有 5 个 forks 的项目（支持大于小于区间等）</td>
+</tr>
+<tr>
+<td><code>topic:TOPIC</code></td>
+<td><code>topic:jekyll</code> 查出含有 jekyll 这个 topic 的项目（项目描述下面的东西，相当于标签、分类）</td>
+</tr>
+<tr>
+<td><code>topics:n</code></td>
+<td><code>topics:&gt;5</code> 查出有 5 个以上 topic 的项目（支持大于小于区间等）</td>
+</tr>
+<tr>
+<td><code>archived:true/false</code></td>
+<td><code>archived:true GNOME</code> 查出已经封存了并且含有 GNOME 关键字的项目（已经不再维护了的项目）</td>
+</tr>
+<tr>
+<td><code>is:public/private</code></td>
+<td><code>is:public org:github</code> 查出仓库所有组织是 github 并且公开的项目</td>
+</tr>
+<tr>
+<td><code>is:private github</code> 查出含有 github 关键字并且是私有的项目（私有的别人看不到，所以这个是用来搜索自己的私有项目的）</td>
+<td></td>
+</tr>
+<tr>
+<td><code>license:LICENSE_KEYWORD</code></td>
+<td><code>license:apache-2.0</code> 查出仓库的开源协议是 apache-2.0 的</td>
+</tr>
+</tbody></table>
+<h2 id="还没搞懂的（关于-forks、mirror、issues）"><a href="#还没搞懂的（关于-forks、mirror、issues）" class="headerlink" title="还没搞懂的（关于 forks、mirror、issues）"></a>还没搞懂的（关于 forks、mirror、issues）</h2><p><a target="_blank" rel="noopener" href="https://github.com/search?q=stars:%3E=500+fork:true+language:php&type=Repositories">stars:&gt;&#x3D;500 fork:true language:php</a> matches repositories with the at least 500 stars, including forked ones, that are written in PHP.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/search?q=case+pushed:%3E=2013-03-06+fork:only&type=Repositories">case pushed:&gt;&#x3D;2013-03-06 fork:only</a> matches repositories with the word “case” that were pushed to on or after March 6th, 2013, and that are forks.<br><a target="_blank" rel="noopener" href="https://github.com/search?utf8=%E2%9C%93&q=mirror:true+GNOME&type=">mirror:true GNOME</a> matches repositories that are mirrors and contain the word “GNOME.” 查出是镜像并且包含 GNOME 关键字的项目（github 上 mirror 啥意思不太懂）<br><a target="_blank" rel="noopener" href="https://github.com/search?utf8=%E2%9C%93&q=mirror:false+GNOME&type=">mirror:false GNOME</a> matches repositories that are not mirrors and contain the word “GNOME.”<br><a target="_blank" rel="noopener" href="https://github.com/search?utf8=%E2%9C%93&q=javascript+good-first-issues:%3E2&type=">good-first-issues:&gt;2 javascript</a> matches repositories with more than two issues labeled good-first-issue and that contain the word “javascript.”<br><a target="_blank" rel="noopener" href="https://github.com/search?utf8=%E2%9C%93&q=react+help-wanted-issues:%3E4&type=">help-wanted-issues:&gt;4 react</a> matches repositories with more than four issues labeled help-wanted and that contain the word “React.”</p>
+<h2 id="排序（放的是官网的链接）"><a href="#排序（放的是官网的链接）" class="headerlink" title="排序（放的是官网的链接）"></a>排序（放的是官网的链接）</h2><p>推荐直接在页面上的搜索结果点击排序，何必再去学一手呢？</p>
+<p>官网文档：【<a target="_blank" rel="noopener" href="https://help.github.com/en/github/searching-for-information-on-github/sorting-search-results">给你的查询结果排序</a>】</p>
+<img src="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/2020-03-05-21-59-49.png" class="">
+
+
+<h2 id="使用指南"><a href="#使用指南" class="headerlink" title="使用指南"></a>使用指南</h2><p>自己灵活的使用限定词和辅助限定词写出一套规则即可查出你想要的项目</p>
+<p>他们的位置先后、数量都无所谓，加上只是多了一个条件</p>
+<h3 id="练习案例"><a href="#练习案例" class="headerlink" title="练习案例"></a>练习案例</h3><p>常用到的其实有就是这些，上面的还是太多了，你有那个需求，又找不到方式的时候可以查查看</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 项目名字(name)里有 python 的</span><br><span class="line">in:name python</span><br><span class="line"></span><br><span class="line"># 名字(name)里有 python 的并且 stars 大于 3000 的</span><br><span class="line">in:name python starts:&gt;3000</span><br><span class="line"></span><br><span class="line"># 名字(name)里有 python 的并且 stars 大于 3000 、forks 大于 200 的</span><br><span class="line">in:name python starts:&gt;3000 forks:&gt;200</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 详情(readme)里面有 python 的并且 stars 大于 3000 的</span><br><span class="line">in:readme python starts:&gt;3000</span><br><span class="line"></span><br><span class="line"># 描述(description)里面有 python 的并且 stars 大于 3000 的</span><br><span class="line">in:description python starts:&gt;3000</span><br><span class="line"></span><br><span class="line"># 描述(description)里面有 python 的并且是 python 语言的</span><br><span class="line">in:description python language:python</span><br><span class="line"></span><br><span class="line"># 描述(description)里面有 python 的并且 2019-12-20 号之后有更新过的</span><br><span class="line">in:description python pushed:&gt;2019-12-20</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%E4%BA%8C/" rel="prev" title="ARMv8学习记录二">
+                  <i class="fa fa-chevron-left"></i> ARMv8学习记录二
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/" rel="next" title="史上最优雅的NDK加载pass方案">
+                  史上最优雅的NDK加载pass方案 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

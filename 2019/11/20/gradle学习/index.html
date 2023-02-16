@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. 安装gradle 2. 入门前奏 2.1. 实现 hello world 2.2. gradle 的任务 2.2.1. 创建任务 2.2.1.1. 直接用任务名称创建 2.2.1.2. 任务名称+任务配置创建 2.2.1.3. TaskContainer的create方法创建   2.2.2. 任务依赖 2.2.2.1. 动态定义任务   2.2.3. 任务的分组和描述   2.3.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gradle学习">
+<meta property="og:url" content="https://ckcat.github.io/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="1. 安装gradle 2. 入门前奏 2.1. 实现 hello world 2.2. gradle 的任务 2.2.1. 创建任务 2.2.1.1. 直接用任务名称创建 2.2.1.2. 任务名称+任务配置创建 2.2.1.3. TaskContainer的create方法创建   2.2.2. 任务依赖 2.2.2.1. 动态定义任务   2.2.3. 任务的分组和描述   2.3.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-20T20:54:41.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.680Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="gradle">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/","path":"2019/11/20/gradle学习/","title":"gradle学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>gradle学习 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85gradle"><span class="nav-number">1.</span> <span class="nav-text">1. 安装gradle</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%85%A5%E9%97%A8%E5%89%8D%E5%A5%8F"><span class="nav-number">2.</span> <span class="nav-text">2. 入门前奏</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%AE%9E%E7%8E%B0-hello-world"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 实现 hello world</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-gradle-%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. gradle 的任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1. 创建任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-1-%E7%9B%B4%E6%8E%A5%E7%94%A8%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E5%88%9B%E5%BB%BA"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">2.2.1.1. 直接用任务名称创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-2-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0-%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE%E5%88%9B%E5%BB%BA"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">2.2.1.2. 任务名称+任务配置创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-3-TaskContainer%E7%9A%84create%E6%96%B9%E6%B3%95%E5%88%9B%E5%BB%BA"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">2.2.1.3. TaskContainer的create方法创建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-%E4%BB%BB%E5%8A%A1%E4%BE%9D%E8%B5%96"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2. 任务依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-1-%E5%8A%A8%E6%80%81%E5%AE%9A%E4%B9%89%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">2.2.2.1. 动态定义任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%88%86%E7%BB%84%E5%92%8C%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3. 任务的分组和描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Gradle-%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB"><span class="nav-number">2.3.</span> <span class="nav-text">2.3. Gradle 日志级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Gradle-%E5%91%BD%E4%BB%A4%E8%A1%8C"><span class="nav-number">2.4.</span> <span class="nav-text">2.4. Gradle 命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E4%BB%BB%E5%8A%A1%E4%BF%A1%E6%81%AF"><span class="nav-number">2.4.1.</span> <span class="nav-text">2.4.1. 获取所有任务信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-2-%E6%8E%92%E9%99%A4%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.4.2.</span> <span class="nav-text">2.4.2. 排除任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-3-%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%B0%83%E7%94%A8"><span class="nav-number">2.4.3.</span> <span class="nav-text">2.4.3. 多任务调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-4-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E7%BC%A9%E5%86%99"><span class="nav-number">2.4.4.</span> <span class="nav-text">2.4.4. 任务名称缩写</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Groovy-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97"><span class="nav-number">3.</span> <span class="nav-text">3. Groovy 快速入门指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Groovy-%E6%A6%82%E8%BF%B0"><span class="nav-number">3.1.</span> <span class="nav-text">Groovy 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Groovy%E7%BC%96%E5%86%99%E5%92%8C%E8%B0%83%E8%AF%95"><span class="nav-number">3.2.</span> <span class="nav-text">Groovy编写和调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">3.3.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.4.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB"><span class="nav-number">3.5.</span> <span class="nav-text">类</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="gradle学习 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          gradle学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-20 20:54:41" itemprop="dateCreated datePublished" datetime="2019-11-20T20:54:41+00:00">2019-11-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/gradle/" itemprop="url" rel="index"><span itemprop="name">gradle</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <!-- TOC -->
+
+<ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85gradle">1. 安装<code>gradle</code></a></li>
+<li><a href="#2-%E5%85%A5%E9%97%A8%E5%89%8D%E5%A5%8F">2. 入门前奏</a><ul>
+<li><a href="#21-%E5%AE%9E%E7%8E%B0-hello-world">2.1. 实现 <code>hello world</code></a></li>
+<li><a href="#22-gradle-%E7%9A%84%E4%BB%BB%E5%8A%A1">2.2. <code>gradle</code> 的任务</a><ul>
+<li><a href="#221-%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1">2.2.1. 创建任务</a><ul>
+<li><a href="#2211-%E7%9B%B4%E6%8E%A5%E7%94%A8%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E5%88%9B%E5%BB%BA">2.2.1.1. 直接用任务名称创建</a></li>
+<li><a href="#2212-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE%E5%88%9B%E5%BB%BA">2.2.1.2. 任务名称+任务配置创建</a></li>
+<li><a href="#2213-taskcontainer%E7%9A%84create%E6%96%B9%E6%B3%95%E5%88%9B%E5%BB%BA">2.2.1.3. TaskContainer的create方法创建</a></li>
+</ul>
+</li>
+<li><a href="#222-%E4%BB%BB%E5%8A%A1%E4%BE%9D%E8%B5%96">2.2.2. 任务依赖</a><ul>
+<li><a href="#2221-%E5%8A%A8%E6%80%81%E5%AE%9A%E4%B9%89%E4%BB%BB%E5%8A%A1">2.2.2.1. 动态定义任务</a></li>
+</ul>
+</li>
+<li><a href="#223-%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%88%86%E7%BB%84%E5%92%8C%E6%8F%8F%E8%BF%B0">2.2.3. 任务的分组和描述</a></li>
+</ul>
+</li>
+<li><a href="#23-gradle-%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB">2.3. <code>Gradle</code> 日志级别</a></li>
+<li><a href="#24-gradle-%E5%91%BD%E4%BB%A4%E8%A1%8C">2.4. <code>Gradle</code> 命令行</a><ul>
+<li><a href="#241-%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E4%BB%BB%E5%8A%A1%E4%BF%A1%E6%81%AF">2.4.1. 获取所有任务信息</a></li>
+<li><a href="#242-%E6%8E%92%E9%99%A4%E4%BB%BB%E5%8A%A1">2.4.2. 排除任务</a></li>
+<li><a href="#243-%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%B0%83%E7%94%A8">2.4.3. 多任务调用</a></li>
+<li><a href="#244-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E7%BC%A9%E5%86%99">2.4.4. 任务名称缩写</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#3-groovy-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97">3. Groovy 快速入门指南</a><ul>
+<li><a href="#groovy-%E6%A6%82%E8%BF%B0">Groovy 概述</a></li>
+<li><a href="#groovy%E7%BC%96%E5%86%99%E5%92%8C%E8%B0%83%E8%AF%95">Groovy编写和调试</a></li>
+<li><a href="#%E5%8F%98%E9%87%8F">变量</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95">方法</a></li>
+<li><a href="#%E7%B1%BB">类</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+
+<h1 id="1-安装gradle"><a href="#1-安装gradle" class="headerlink" title="1. 安装gradle"></a>1. 安装<code>gradle</code></h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ sudo apt install gradle</span><br><span class="line"></span><br><span class="line">➜  ~ gradle -v</span><br><span class="line">WARNING: An illegal reflective access operation has occurred</span><br><span class="line">WARNING: Illegal reflective access by org.codehaus.groovy.reflection.CachedClass (file:/usr/share/java/groovy-all.jar) to method java.lang.Object.finalize()</span><br><span class="line">WARNING: Please consider reporting this to the maintainers of org.codehaus.groovy.reflection.CachedClass</span><br><span class="line">WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations</span><br><span class="line">WARNING: All illegal access operations will be denied in a future release</span><br><span class="line"></span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Gradle 4.4.1</span><br><span class="line">------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Build time:   2012-12-21 00:00:00 UTC</span><br><span class="line">Revision:     none</span><br><span class="line"></span><br><span class="line">Groovy:       2.4.16</span><br><span class="line">Ant:          Apache Ant(TM) version 1.10.5 compiled on March 28 2019</span><br><span class="line">JVM:          11.0.4 (Ubuntu 11.0.4+11-post-Ubuntu-1ubuntu218.04.3)</span><br><span class="line">OS:           Linux 5.0.0-36-generic amd64</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-入门前奏"><a href="#2-入门前奏" class="headerlink" title="2. 入门前奏"></a>2. 入门前奏</h1><h2 id="2-1-实现-hello-world"><a href="#2-1-实现-hello-world" class="headerlink" title="2.1. 实现 hello world"></a>2.1. 实现 <code>hello world</code></h2><p>新建一个目录，例如 <code>gradle01</code> ,在这个目录中新建一个 <code>build.gradle</code> 文件，输入以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task hello &#123;</span><br><span class="line">    doLast&#123;</span><br><span class="line">        println &quot;hello world&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行 <code>gradle -q hello</code> 命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle -q hello</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+<p> <code>task</code> （任务）和action(动作)是 <code>Gradle</code> 的重要元素。上面的代码中， <code>task</code> 代表一个独立的原子性操作，比如复制一个文件，编译一次Java代码，这里我们简单的定义一个名为 <code>hello</code> 的任务。 <code>doLast</code> 代表<code>task</code> 执行的最后一个 <code>action</code>，通俗来讲就是 <code>task</code> 执行完毕后会回调 <code>doLast</code> 中的代码，在上面这个例子中就会打印 <code>Hello world!</code> 。</p>
+<p>上面的例子可以写的更简洁一些：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt; &#123;</span><br><span class="line">    println &quot;Hello world&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2-gradle-的任务"><a href="#2-2-gradle-的任务" class="headerlink" title="2.2. gradle 的任务"></a>2.2. <code>gradle</code> 的任务</h2><p>为了更好的讲解后面的Gradle 命令行，这里简单的介绍下Gradle的任务，包括创建任务、任务依赖、 动态定义任务和任务的分组和描述。</p>
+<h3 id="2-2-1-创建任务"><a href="#2-2-1-创建任务" class="headerlink" title="2.2.1. 创建任务"></a>2.2.1. 创建任务</h3><p>除了前面实现 <code>Hello World</code> 的例子采用的创建任务方式，还有其他的3种创建任务方式。</p>
+<h4 id="2-2-1-1-直接用任务名称创建"><a href="#2-2-1-1-直接用任务名称创建" class="headerlink" title="2.2.1.1. 直接用任务名称创建"></a>2.2.1.1. 直接用任务名称创建</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def Task hello = task(hello)</span><br><span class="line">hello.doLast&#123;</span><br><span class="line">    println &quot;hello world&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-1-2-任务名称-任务配置创建"><a href="#2-2-1-2-任务名称-任务配置创建" class="headerlink" title="2.2.1.2. 任务名称+任务配置创建"></a>2.2.1.2. 任务名称+任务配置创建</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def Task hello =  task(hello, group:BasePlugin.BUILD_GROUP)</span><br><span class="line">hello.doLast&#123;</span><br><span class="line">    println &quot;hello world&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>group</code> 为任务配置项，它代表了分组。</p>
+<h4 id="2-2-1-3-TaskContainer的create方法创建"><a href="#2-2-1-3-TaskContainer的create方法创建" class="headerlink" title="2.2.1.3. TaskContainer的create方法创建"></a>2.2.1.3. TaskContainer的create方法创建</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tasks.create(name: &quot;hello&quot;) &lt;&lt; &#123;</span><br><span class="line">    println &quot;hello world&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-2-任务依赖"><a href="#2-2-2-任务依赖" class="headerlink" title="2.2.2. 任务依赖"></a>2.2.2. 任务依赖</h3><p>任务依赖会决定任务运行的先后顺序，被依赖的任务会在定义依赖的任务之前执行。创建任务间的依赖关系如下所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt; &#123;</span><br><span class="line">    println &quot;hello world&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task go(dependsOn: hello) &lt;&lt; &#123;</span><br><span class="line">    println &quot;go for it&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>hello</code> 任务的基础上增加了一个名为 <code>go</code> 的任务，通过 <code>dependsOn</code> 来指定依赖的任务为 <code>hello</code> ，因此 <code>go</code> 任务运行在 <code>hello</code> 之后。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle -q go   </span><br><span class="line">hello world</span><br><span class="line">go for it</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-2-1-动态定义任务"><a href="#2-2-2-1-动态定义任务" class="headerlink" title="2.2.2.1. 动态定义任务"></a>2.2.2.1. 动态定义任务</h4><p>动态定义任务指的是在运行时来定义任务的名称，如下所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">3.times&#123;</span><br><span class="line">    number-&gt;task &quot;task$number&quot; &lt;&lt; &#123;</span><br><span class="line">        println &quot;task$number&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里用到了 <code>Groovy</code> 语法，关于 <code>Groovy</code> 语法会在本系列后续的文章进行介绍。<code>times</code> 是 <code>Groovy</code> 在 <code>java.lang.Number</code> 中拓展的方法，是一个定时器。<code>3.times</code> 中循环创建了三个新任务，隐式变量 <code>number</code> 的值为 <code>0，1，2</code> ，任务的名称由 <code>task</code> 加上 <code>number</code> 的值组成，达到了动态定义任务的目的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle -q task0</span><br><span class="line">task0</span><br><span class="line">➜  gradle01 gradle -q task1</span><br><span class="line">task1</span><br><span class="line">➜  gradle01 gradle -q task2</span><br><span class="line">task2</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-3-任务的分组和描述"><a href="#2-2-3-任务的分组和描述" class="headerlink" title="2.2.3. 任务的分组和描述"></a>2.2.3. 任务的分组和描述</h3><p><code>Gradle</code> 有任务组的概念，可以为任务配置分组和描述，以便于更好的管理任务，拥有良好的可读性。改造前面的例子，为 <code>hello</code> 任务添加分组和描述。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">task hello &#123;</span><br><span class="line">    group = &quot;build&quot;</span><br><span class="line">    description = &quot;hello world&quot;</span><br><span class="line">    doLast&#123;</span><br><span class="line">        println &quot;任务分组： $&#123;group&#125;&quot;</span><br><span class="line">        println &quot;任务描述： $&#123;description&#125;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">task go(dependsOn: hello) &lt;&lt; &#123;</span><br><span class="line">    println &quot;go for it&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者采用创建任务的方式来为任务添加分组和描述：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def Task hello = task(hello)</span><br><span class="line">hello.description = &quot;hello world&quot;</span><br><span class="line">hello.group = BasePlugin.BUILD_GROUP</span><br><span class="line">hello.doLast&#123;</span><br><span class="line">    println &quot;任务分组: $&#123;group&#125;&quot;</span><br><span class="line">    println &quot;任务描述: $&#123;description&#125;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task go(dependsOn: hello)&#123;</span><br><span class="line">    println &quot;go for it&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终执行结果。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle -q go</span><br><span class="line">go for it</span><br><span class="line">任务分组: build</span><br><span class="line">任务描述: hello world</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-3-Gradle-日志级别"><a href="#2-3-Gradle-日志级别" class="headerlink" title="2.3. Gradle 日志级别"></a>2.3. <code>Gradle</code> 日志级别</h2><p>和Android一样，Gradle也定义了日志级别。</p>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>用于</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ERROR</td>
+<td>错误消息</td>
+</tr>
+<tr>
+<td>QUIET</td>
+<td>重要的信息消息</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>警告消息</td>
+</tr>
+<tr>
+<td>LIFECYCLE</td>
+<td>进度信息消息</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>信息性消息</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td>调试消息</td>
+</tr>
+</tbody></table>
+<p>前面我们通过 <code>gradle -q</code> + 任务名称来运行一个指定的 <code>task</code> ，这个 <code>q</code> 是命令行开关选项，通过开关选项可以控制输出的日志级别。</p>
+<table>
+<thead>
+<tr>
+<th>开关选项</th>
+<th>输出日志级别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无日志选项</td>
+<td>LIFECYCLE及更高级别</td>
+</tr>
+<tr>
+<td>-q或者 –quiet</td>
+<td>QUIET及更高级别</td>
+</tr>
+<tr>
+<td>-i或者 –info</td>
+<td>INFO及更高级别</td>
+</tr>
+<tr>
+<td>-d或者 –debug</td>
+<td>DEBUG及更高级别</td>
+</tr>
+</tbody></table>
+<h2 id="2-4-Gradle-命令行"><a href="#2-4-Gradle-命令行" class="headerlink" title="2.4. Gradle 命令行"></a>2.4. <code>Gradle</code> 命令行</h2><h3 id="2-4-1-获取所有任务信息"><a href="#2-4-1-获取所有任务信息" class="headerlink" title="2.4.1. 获取所有任务信息"></a>2.4.1. 获取所有任务信息</h3><p>这一节的命令行前面<a href="#223-%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%88%86%E7%BB%84%E5%92%8C%E6%8F%8F%E8%BF%B0">2.2.3. 任务的分组和描述</a>的代码为例，此前我们通过 <code>gradle -q +</code> 任务名称来运行一个指定的任务，如果不知道任务的名称，可以通过运行 <code>gradle -q tasks</code> 命令来获取所有的任务信息，这样就不需要打开源码了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle -a tasks</span><br><span class="line">--no-rebuild/-a has been deprecated and is scheduled to be removed in Gradle 5.0.</span><br><span class="line"></span><br><span class="line">&gt; Configure project : </span><br><span class="line">go for it</span><br><span class="line"></span><br><span class="line">&gt; Task :tasks </span><br><span class="line"></span><br><span class="line">------------------------------------------------------------</span><br><span class="line">All tasks runnable from root project</span><br><span class="line">------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Build tasks</span><br><span class="line">-----------</span><br><span class="line">hello - hello world</span><br><span class="line"></span><br><span class="line">Build Setup tasks</span><br><span class="line">-----------------</span><br><span class="line">init - Initializes a new Gradle build.</span><br><span class="line">wrapper - Generates Gradle wrapper files.</span><br><span class="line"></span><br><span class="line">Help tasks</span><br><span class="line">----------</span><br><span class="line">buildEnvironment - Displays all buildscript dependencies declared in root project &#x27;gradle01&#x27;.</span><br><span class="line">components - Displays the components produced by root project &#x27;gradle01&#x27;. [incubating]</span><br><span class="line">dependencies - Displays all dependencies declared in root project &#x27;gradle01&#x27;.</span><br><span class="line">dependencyInsight - Displays the insight into a specific dependency in root project &#x27;gradle01&#x27;.</span><br><span class="line">dependentComponents - Displays the dependent components of components in root project &#x27;gradle01&#x27;. [incubating]</span><br><span class="line">help - Displays a help message.</span><br><span class="line">model - Displays the configuration model of root project &#x27;gradle01&#x27;. [incubating]</span><br><span class="line">projects - Displays the sub-projects of root project &#x27;gradle01&#x27;.</span><br><span class="line">properties - Displays the properties of root project &#x27;gradle01&#x27;.</span><br><span class="line">tasks - Displays the tasks runnable from root project &#x27;gradle01&#x27;.</span><br><span class="line"></span><br><span class="line">To see all tasks and more detail, run gradle tasks --all</span><br><span class="line"></span><br><span class="line">To see more detail about a task, run gradle help --task &lt;task&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 0s</span><br><span class="line">1 actionable task: 1 executed</span><br></pre></td></tr></table></figure>
+<p>默认情况下，只会显示那些被分组的任务的名称和描述。比如 <code>Build tasks</code> （<code>Build</code> 任务组）中有我们定义的 <code>hello</code> 任务，<code>Build Setup tasks</code> 中有 <code>init</code> 和 <code>wrapper</code> ，<code>Help tasks</code> 有<code>buildEnvironment</code> 和 <code>components</code> 等等。</p>
+<h3 id="2-4-2-排除任务"><a href="#2-4-2-排除任务" class="headerlink" title="2.4.2. 排除任务"></a>2.4.2. 排除任务</h3><p>如果我们不想运行go任务，可以运行 <code>gradle hello -x go</code> 命令:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle hello -x go</span><br><span class="line"></span><br><span class="line">&gt; Configure project : </span><br><span class="line">go for it</span><br><span class="line"></span><br><span class="line">&gt; Task :hello </span><br><span class="line">任务分组: build</span><br><span class="line">任务描述: hello world</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 0s</span><br><span class="line">1 actionable task: 1 executed</span><br></pre></td></tr></table></figure>
+
+<p>获取任务帮助信息</p>
+<p>通过运行 <code>gradle -q help --task hello</code> 命令来显示 <code>hello</code> 任务的帮助信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle -q help --task hello</span><br><span class="line">go for it</span><br><span class="line">Detailed task information for hello</span><br><span class="line"></span><br><span class="line">Path</span><br><span class="line">     :hello</span><br><span class="line"></span><br><span class="line">Type</span><br><span class="line">     Task (org.gradle.api.Task)</span><br><span class="line"></span><br><span class="line">Description</span><br><span class="line">     hello world</span><br><span class="line"></span><br><span class="line">Group</span><br><span class="line">     build</span><br></pre></td></tr></table></figure>
+<p>可以看到hello任务的路径、类型、描述和分组。</p>
+<h3 id="2-4-3-多任务调用"><a href="#2-4-3-多任务调用" class="headerlink" title="2.4.3. 多任务调用"></a>2.4.3. 多任务调用</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task helloworld &lt;&lt;&#123;</span><br><span class="line">    println &quot;hello world!&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task goforit &lt;&lt; &#123;</span><br><span class="line">    println &quot;go for it!&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过命令行一次执行多个任务，每个任务通常只会执行一次，无论是在命令行中指定任务还是任务依赖。上面的例子我们运行 <code>gradle helloWorld goForit</code> ，会先执行<code>helloWorld</code> 任务后执行 <code>goforit</code> 任务。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle helloworld goforit</span><br><span class="line"></span><br><span class="line">&gt; Configure project : </span><br><span class="line">The Task.leftShift(Closure) method has been deprecated and is scheduled to be removed in Gradle 5.0. Please use Task.doLast(Action) instead.</span><br><span class="line"></span><br><span class="line">&gt; Task :helloworld </span><br><span class="line">hello world!</span><br><span class="line"></span><br><span class="line">&gt; Task :goforit </span><br><span class="line">go for it!</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 0s</span><br><span class="line">2 actionable tasks: 2 executed</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-4-任务名称缩写"><a href="#2-4-4-任务名称缩写" class="headerlink" title="2.4.4. 任务名称缩写"></a>2.4.4. 任务名称缩写</h3><p>可以对使用驼峰命名的任务进行缩写，对于名称特别长的任务这个特性非常有用，比如<a href="#243-%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%B0%83%E7%94%A8">2.4.3. 多任务调用</a>中的例子只需要执行<code>gradle hW gF</code> 就可以了，不过需要注意一点，那就是任务名称的缩写必须是唯一的，如果<a href="#243-%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%B0%83%E7%94%A8">2.4.3. 多任务调用</a>中第二个任务的名称为<code>helloWangshu</code>，那么就会报错。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle hW gF</span><br><span class="line"></span><br><span class="line">&gt; Configure project : </span><br><span class="line">The Task.leftShift(Closure) method has been deprecated and is scheduled to be removed in Gradle 5.0. Please use Task.doLast(Action) instead.</span><br><span class="line"></span><br><span class="line">&gt; Task :helloworld </span><br><span class="line">hello world!</span><br><span class="line"></span><br><span class="line">&gt; Task :goforit </span><br><span class="line">go for it!</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL in 0s</span><br><span class="line">2 actionable tasks: 2 executed</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-Groovy-快速入门指南"><a href="#3-Groovy-快速入门指南" class="headerlink" title="3. Groovy 快速入门指南"></a>3. Groovy 快速入门指南</h1><h2 id="Groovy-概述"><a href="#Groovy-概述" class="headerlink" title="Groovy 概述"></a>Groovy 概述</h2><p><code>Groovy</code> 是 <code>Apache</code> 旗下的一种基于 <code>JVM</code> 的面向对象编程语言，既可以用于面向对象编程，也可以用作纯粹的脚本语言。在语言的设计上它吸纳了<code>Python</code> 、<code>Ruby</code> 和 <code>Smalltalk</code> 语言的优秀特性，比如动态类型转换、闭包和元编程支持。<br><code>Groovy</code> 与 <code>Java</code> 可以很好的互相调用并结合编程 ，比如在写 <code>Groovy</code> 的时候忘记了语法可以直接按 <code>Java</code> 的语法继续写，也可以在 <code>Java</code>  中调用 <code>Groovy</code>  脚本。比起<code>Java</code>，<code>Groovy</code> 语法更加的灵活和简洁，可以用更少的代码来实现 <code>Java</code> 实现的同样功能。</p>
+<h2 id="Groovy编写和调试"><a href="#Groovy编写和调试" class="headerlink" title="Groovy编写和调试"></a>Groovy编写和调试</h2><p><code>Groovy</code> 的代码可以在 <code>Android Studio</code> 和 <code>IntelliJ IDEA</code> 等 <code>IDE</code> 中进行编写和调试，缺点是需要配置环境，这里推荐在文本中编写代码并结合命令行进行调试（文本推荐使用<code>VSCode</code>）。关于命令行请查看<a href="#2-%E5%85%A5%E9%97%A8%E5%89%8D%E5%A5%8F">2. 入门前奏</a>。</p>
+<p>具体的操作步骤就是：在一个目录中新建 <code>build.gradle</code> 文件，在 <code>build.gradle</code> 中新建一个 <code>task</code> ，在 <code>task</code> 中编写 <code>Groovy</code> 代码，用命令行进入这个 <code>build.gradle</code> 文件所在的目录，运行 <code>gradle task</code> 名称 等命令行对代码进行调试，本文中的例子都是这样编写和调试的。</p>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p><code>Groovy</code> 中用 <code>def</code> 关键字来定义变量，可以不指定变量的类型，默认访问修饰符是 <code>public</code> 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def a = 1;</span><br><span class="line">def int b = 1;</span><br><span class="line">def c = &quot;hello world&quot;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>方法使用返回类型或 <code>def</code> 关键字定义，方法可以接收任意数量的参数，这些参数可以不申明类型，如果不提供可见性修饰符，则该方法为 <code>public</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">task method &lt;&lt;&#123;</span><br><span class="line">    add(1, 2)</span><br><span class="line">    minus 1, 2  //语句后面的可以省略，方法的括号可以省略。</span><br><span class="line">    def n = mul 1, 2</span><br><span class="line">    println n</span><br><span class="line">    def f = div 2.0, 3</span><br><span class="line">    println f</span><br><span class="line">&#125;</span><br><span class="line">//用def关键字定义方法。</span><br><span class="line">def add(int a, int b)&#123;</span><br><span class="line">    println a + b</span><br><span class="line">&#125;</span><br><span class="line">def minus(a, b)&#123;//参数类型可以省略</span><br><span class="line">    println a - b</span><br><span class="line">&#125;</span><br><span class="line">//指定了方法返回类型，可以不需要def关键字来定义方法。</span><br><span class="line">int mul(a, b)&#123;</span><br><span class="line">    return a * b</span><br><span class="line">&#125;</span><br><span class="line">//如果不使用return ，方法的返回值为最后一行代码的执行结果。</span><br><span class="line">double div(a, b)&#123;//return可以省略掉</span><br><span class="line">    a/b </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  gradle01 gradle -q method</span><br><span class="line">3</span><br><span class="line">-1</span><br><span class="line">2</span><br><span class="line">0.6666666667</span><br></pre></td></tr></table></figure>
+
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p><code>Groovy</code> 类非常类似于 <code>Java</code> 类。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/gradle/" rel="tag"># gradle</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/11/17/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-dlopen/" rel="prev" title="Android源码阅读-dlopen">
+                  <i class="fa fa-chevron-left"></i> Android源码阅读-dlopen
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="next" title="python使用记录">
+                  python使用记录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

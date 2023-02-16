@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转载：https:&#x2F;&#x2F;blog.csdn.net&#x2F;feelabclihu&#x2F;article&#x2F;details&#x2F;105534146  前言Binder 从入门到放弃包括了上下篇，上篇是框架部分，下篇通过几个典型的 binder 通信过程来呈现其实现细节，即本文。 一、启动 service manager1. 流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Binder从入门到放弃（细节篇）">
+<meta property="og:url" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="转载：https:&#x2F;&#x2F;blog.csdn.net&#x2F;feelabclihu&#x2F;article&#x2F;details&#x2F;105534146  前言Binder 从入门到放弃包括了上下篇，上篇是框架部分，下篇通过几个典型的 binder 通信过程来呈现其实现细节，即本文。 一、启动 service manager1. 流程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-39-43.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-40-15.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-46-02.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-46-47.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-47-20.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-47-55.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-48-16.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-48-47.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-54-56.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-55-26.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-55-48.png">
+<meta property="article:published_time" content="2020-08-24T12:38:26.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.480Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="Android源码阅读">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-39-43.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/","path":"2020/08/24/Binder从入门到放弃（细节篇）/","title":"Binder从入门到放弃（细节篇）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Binder从入门到放弃（细节篇） | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%90%AF%E5%8A%A8-service-manager"><span class="nav-number">2.</span> <span class="nav-text">一、启动 service manager</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B5%81%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">1. 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E5%85%B3%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">2. 相关数据结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81client-%E5%A6%82%E4%BD%95%E6%89%BE%E5%88%B0-service-manager-%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">二、client 如何找到 service manager ？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%B5%81%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">1、流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E8%B7%AF%E7%94%B1%E8%BF%87%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">2、路由过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%B3%A8%E5%86%8C-Service-%E7%BB%84%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">三、注册 Service 组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B5%81%E7%A8%8B-1"><span class="nav-number">4.1.</span> <span class="nav-text">1. 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E6%95%B0%E6%8D%AE%E5%AF%B9%E8%B1%A1%E7%BB%BC%E8%BF%B0"><span class="nav-number">4.2.</span> <span class="nav-text">2、数据对象综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%B8%E5%85%B3%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">4.3.</span> <span class="nav-text">3. 相关数据结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%A6%82%E4%BD%95%E5%92%8C-Service-%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1"><span class="nav-number">5.</span> <span class="nav-text">四、如何和 Service 组件通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81Binder%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C"><span class="nav-number">6.</span> <span class="nav-text">五、Binder内存操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%80%BB%E8%BE%91%E8%BF%87%E7%A8%8B"><span class="nav-number">6.1.</span> <span class="nav-text">1.逻辑过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BB%E8%A6%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">6.2.</span> <span class="nav-text">2.主要的数据结构</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Binder从入门到放弃（细节篇） | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Binder从入门到放弃（细节篇）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-08-24 12:38:26" itemprop="dateCreated datePublished" datetime="2020-08-24T12:38:26+00:00">2020-08-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://blog.csdn.net/feelabclihu/article/details/105534146">https://blog.csdn.net/feelabclihu/article/details/105534146</a></p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>Binder</code> 从入门到放弃包括了上下篇，上篇是框架部分，下篇通过几个典型的 <code>binder</code> 通信过程来呈现其实现细节，即本文。</p>
+<h1 id="一、启动-service-manager"><a href="#一、启动-service-manager" class="headerlink" title="一、启动 service manager"></a>一、启动 service manager</h1><h2 id="1-流程"><a href="#1-流程" class="headerlink" title="1. 流程"></a>1. 流程</h2><p><code>Service manager</code> 进程和 <code>binder</code> 驱动的交互如下：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-39-43.png" class="">
+
+<p>在安卓系统启动过程中， <code>init</code> 进程会启动 <code>service manager</code> 进程。<code>service manager</code> 会打开 <code>/dev/binder</code> 设备，一个进程打开 <code>binder</code> 设备就意味着该进程会使用 <code>binder</code> 这种 <code>IPC</code> 机制，这时候在内核态会相应的构建一个 <code>binder proc</code> 对象，来管理该进程相关的 <code>binder</code> 资源（ <code>binder ref</code> 、 <code>binder node</code> 、 <code>binder thread</code> 等）。为了方便 <code>binder</code> 内存管控，这时候还会映射一段 128K 的内存地址用于 <code>binder</code> 通信。之后 <code>service manager</code> 会把自己设定为 <code>context manager</code> 。所谓 <code>context manager</code> 实际上就是一个“名字服务器”，可以完成 <code>service</code> 组件名字的解析。随后 <code>service manager </code>会通过 <code>binder</code> 协议（ <code>BC_ENTER_LOOPER</code> ）告知驱动自己已经准备好接收请求了。最后 <code>service manager</code> 会进入读阻塞状态，等待来自其他进程的服务请求。</p>
+<p>完成上面的一系列操作之后，内核相关的数据结构如下所示：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-40-15.png" class="">
+
+<p>由于 <code>Service manager</code> 也算是一个特殊的 <code>service</code> 组件，因此在内核态也有一个 <code>binder node</code> 对象与之对应。 <code>service manager</code> 和其他的 <code>service</code> 组件不同的是它没有使用线程池模型，而是一个单线程的进程，因此它在内核态只有一个 <code>binder proc</code> 和 <code>binder thread</code> 。整个系统系统只有一个 <code>binder context</code> ，系统中所有的 <code>binder proc</code> 都指向这个全局唯一的 <code>binder</code> 上下文对象。而找到了 <code>binder context</code> 也就找到了 <code>service manager</code> 对应的 <code>binder node</code> 。</p>
+<p><code>binder proc</code> 使用了红黑树来管理其所属的 <code>binder thread</code> 和 <code>binder node</code> ，不过在 <code>Service manager</code> 这个场景中， <code>binder proc</code> 只管理了一个 <code>binder thread</code> 和 <code>binder node</code> ，看起来似乎有些小题大做，不过在其他场景（例如 <code>system server</code> ）中，<code>binder proc</code> 会创建线程池，也可能注册多个 <code>service</code> 组件。</p>
+<h2 id="2-相关数据结构"><a href="#2-相关数据结构" class="headerlink" title="2. 相关数据结构"></a>2. 相关数据结构</h2><p>在内核态，每一个参与 <code>binder</code> 通信的进程都会用一个唯一的 <code>struct binder_proc</code> 对象来表示。 <code>struct binder_proc</code> 主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>struct hlist_node proc_node</td>
+<td>系统中的所有 binder proc 挂入 binder_procs 的链表中，这个成员是挂入全局 binder_procs 的链表的节点</td>
+</tr>
+<tr>
+<td>struct rb_root threads</td>
+<td>binder 进程对应的所有 binder thread 组成的红黑树， tid 作为 key</td>
+</tr>
+<tr>
+<td>struct rb_root nodes</td>
+<td>一个 binder 进程可以注册多个 service 组件，因此 binder proc 可以有很多的 binder node 。 Binder proc 对应的所有 binder node 组成一颗红黑树。当然对于 service manager 而言，它只有一个 binder node 。</td>
+</tr>
+<tr>
+<td>struct list_head waiting_threads</td>
+<td>该 binder 进程的线程池中等待处理 binder work 的 binder thread 链表</td>
+</tr>
+<tr>
+<td>int pid</td>
+<td>进程 ID</td>
+</tr>
+<tr>
+<td>struct task_struct *tsk</td>
+<td>指向该 binder 进程对应的进程描述符（指向 thread group leader 对应的 task struct ）</td>
+</tr>
+<tr>
+<td>struct list_head todo</td>
+<td>需要该 binder 进程处理的 binder work 链表</td>
+</tr>
+<tr>
+<td>int max_threads</td>
+<td>线程池中运行的最大数目</td>
+</tr>
+<tr>
+<td>struct binder_alloc alloc</td>
+<td>管理 binder 内存分配的数据结构</td>
+</tr>
+<tr>
+<td>struct binder_context *context</td>
+<td>保存 binder 上下文管理者的信息。通过 binder context 可以找到 service manager 对应的 bind node 。</td>
+</tr>
+</tbody></table>
+<p>和进程抽象类似，<code>binder proc</code> 也是管理 <code>binder</code> 资源的实体，但是真正执行 <code>binder</code> 通信的实体是 <code>binder thread</code> 。<code>struct binder_thread</code> 主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>struct binder_proc *proc</td>
+<td>该 binder thread 所属的 binder proc</td>
+</tr>
+<tr>
+<td>struct rb_node rb_node</td>
+<td>挂入 binder proc 红黑树的节点</td>
+</tr>
+<tr>
+<td>struct list_head waiting_thread_node</td>
+<td>无事可做的时候， binder thread 会挂入 binder proc 的等待队列</td>
+</tr>
+<tr>
+<td>int pid</td>
+<td>Thread id</td>
+</tr>
+<tr>
+<td>struct binder_transaction *transaction_stack</td>
+<td>该 binder thread 正在处理的transaction</td>
+</tr>
+<tr>
+<td>struct list_head todo</td>
+<td>需要该 binder 线程处理的 binder work 链表</td>
+</tr>
+<tr>
+<td>struct task_struct *task</td>
+<td>该 binder thread 对应的进程描述符</td>
+</tr>
+</tbody></table>
+<p><code>Binder node</code> 是用户空间 <code>service</code> 组件对象的内核态实体对象， <code>struct binder_node</code> 主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>struct rb_node rb_node;</td>
+<td>一个 binder proc 可能有多个 service 组件（提供多种服务），属于一个 binder proc 的 binder node 会挂入 binder proc 的红黑树，这个成员是嵌入红黑树的节点。</td>
+</tr>
+<tr>
+<td>struct binder_proc *proc</td>
+<td>该 binder node 所属的 binder proc</td>
+</tr>
+<tr>
+<td>int debug_id</td>
+<td>唯一标示该 node 的 id ，用于调试</td>
+</tr>
+<tr>
+<td>struct hlist_head refs</td>
+<td>一个 service 组件可能会有多个 client 发起服务请求，也就是说每一个 client 都是对 binder node 的一次引用，这个成员是就是保存 binder ref 的哈希表</td>
+</tr>
+<tr>
+<td>binder_uintptr_t ptr </br>binder_uintptr_t cookie</td>
+<td>指向用户空间 service 组件相关的信息</td>
+</tr>
+<tr>
+<td>u8 sched_policy:2; </br>u8 inherit_rt:1; </br>u8 min_priority;</td>
+<td>这些属性定义了该 service 组件在处理 transaction 的时候优先级的设定。</td>
+</tr>
+<tr>
+<td>bool has_async_transaction</td>
+<td>是否有异步通信需要处理</td>
+</tr>
+<tr>
+<td>struct list_head async_todo</td>
+<td>异步 binder 通信的队列</td>
+</tr>
+</tbody></table>
+<h1 id="二、client-如何找到-service-manager-？"><a href="#二、client-如何找到-service-manager-？" class="headerlink" title="二、client 如何找到 service manager ？"></a>二、client 如何找到 service manager ？</h1><h2 id="1、流程"><a href="#1、流程" class="headerlink" title="1、流程"></a>1、流程</h2><p>为了完成 <code>service</code> 组件注册， <code>Client</code> 需要首先定位 <code>service manager</code> 组件。在 <code>client</code> 这个 <code>binder process</code> 中，我们使用 <code>handle</code> 作为地址来标记 <code>service</code> 组件。<code>Service manager</code> 比较特殊，对任何一个 <code>binder process</code> 而言， <code>handle</code> 等于 0 的那个句柄就是指向 <code>service manager</code> 组件。对内核态 <code>binder</code> 驱动而言，寻找 <code>service manager</code> 实际上就是寻找其对应的 <code>binder node</code> 。下面是一个 <code>binder client</code> 向 <code>service manager</code> 请求注册服务的过程示例，我们重点关注 <code>binder</code> 驱动如何定位 <code>service manager</code> ：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-46-02.png" class="">
+
+<p>想要访问 <code>service manager</code> 的进程需要首先打开 <code>binder driver</code> ，这时候内核会创建该进程对应的 <code>binder proc</code> 对象，并建立 <code>binder proc</code> 和 <code>context manager</code> 的关系，这样进一步可以找到 <code>service manager</code> 对应的 <code>binder node</code> 。随后， <code>client</code> 进程会调用 <code>mmap</code> 映射了（ 1M-8K ）的 <code>binder</code> 内存空间。之所以映射这么怪异的内存 <code>size</code> 主要是为了有效的利用虚拟地址空间（ <code>VMA</code> 之间有 4K 的 <code>gap</code> ）。完成上面两步操作之后，<code>client process</code> 就可以通过 <code>ioctl</code> 向 <code>service manager</code> 发起 <code>transaction</code> 请求了，同时告知目标对象 <code>handle</code> 等于 0 。</p>
+<p>实际上这个阶段的主要工作在用户空间，主要是 <code>service manager</code> 组件代理 <code>BpServiceManager</code> 以及 <code>BpBinder</code> 的创建过程。一般的通信过程需要为组件代理对象分配一个句柄，但是 <code>service manager</code> 访问比较特殊，对于每一个进程，等于 0 的句柄都保留给了 <code>service manager</code> ，因此这里就不需要分配句柄这个过程了。</p>
+<h2 id="2、路由过程"><a href="#2、路由过程" class="headerlink" title="2、路由过程"></a>2、路由过程</h2><p>在 <code>binder C/S</code> 通信结构中， <code>binder client</code> 中的 <code>BpBinder</code> 找到 <code>binder server</code> 中的 <code>BBinder</code> 的过程需要如下过程：</p>
+<ol>
+<li><p><code>binder client</code> 用户空间中的 <code>service</code> 组件代理（ <code>BpBinder</code> ）用句柄表示要访问的 <code>server</code> 中的 <code>service</code> 组件（ <code>BBinder</code> ）。</p>
+</li>
+<li><p>对于每一个句柄， <code>binder client</code> 内核空间使用 <code>binder ref</code> 对象与之对应。</p>
+</li>
+<li><p><code>binder ref</code> 对象会指向一个 <code>binder node</code> 对象。</p>
+</li>
+<li><p><code>binder node</code> 对象对应一个 <code>binder server</code> 进程的 <code>service</code> 组件。</p>
+</li>
+</ol>
+<p>在我们这个场景中， <code>binder ref</code> 是在 <code>client</code> 第一次通过 <code>ioctl</code> 和 <code>binder</code> 驱动交互时候完成的。这时候 <code>binder</code> 驱动的 <code>binder_ioctl</code> 函数中会建立上面路由过程需要的完整的数据对象：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-46-47.png" class="">
+
+<p><code>Service manager</code> 的路由比较特殊，没有采用 <code>binder ref---&gt;binder node</code> 的过程。在 <code>binder</code> 驱动中，看到 0 号句柄自然就知道是去往 <code>service manager</code> 的请求。因此，通过 <code>binder proc---&gt;binder context-----binder node</code> 这条路径就找到了 <code>service manager</code> 。</p>
+<h1 id="三、注册-Service-组件"><a href="#三、注册-Service-组件" class="headerlink" title="三、注册 Service 组件"></a>三、注册 Service 组件</h1><h2 id="1-流程-1"><a href="#1-流程-1" class="headerlink" title="1. 流程"></a>1. 流程</h2><p>上一节描述了 <code>client</code> 如何找到 <code>service manager</code> 的过程，这是整个注册 <code>service</code> 组件的前半部分，这一节我们补全整个流程。由于 <code>client</code> 和 <code>service manager</code> 都完成了 <code>open</code> 和 <code>mmap</code> 的过程，双方都准备好，后续可以通过 <code>ioctl</code> 进行 <code>binder transaction</code> 的通信过程了，因此下面的流程图主要呈现 <code>binder transaction</code> 的流程（忽略 <code>client/server</code> 和 <code>binder</code> 驱动系统调用的细节）：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-47-20.png" class="">
+
+<p><code>Service manager</code> 是一个 <code>service</code> 组件管理中心，任何一个 <code>service</code> 组件都需要向 <code>service manager</code> 进行注册（ <code>add service</code> ），以便其他的 APP 可以通过 <code>service manager</code> 定位到该 <code>service</code> 组件（ <code>check service</code> ）。</p>
+<h2 id="2、数据对象综述"><a href="#2、数据对象综述" class="headerlink" title="2、数据对象综述"></a>2、数据对象综述</h2><p>注册服务相关数据结构全图如下：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-47-55.png" class="">
+
+<p>配合上面的流程， <code>binder</code> 驱动会为 <code>client</code> 和 <code>server</code> 分别创建对应的各种数据结构对象，具体过程如下：</p>
+<ol>
+<li><p>假设我们现在准备注册 A 服务组件，绑定 A 服务组件的进程在 <code>add service</code> 这个场景下是 <code>client process</code> ，它在用户空间首先会创建了 <code>service</code> 组件对象，在递交 <code>BC_TRANSACTION</code> 的时候会携带 <code>service</code> 组件的信息（把 <code>service</code> 组件地址信息封装在 <code>flat_binder_object</code> 数据结构中）。</p>
+</li>
+<li><p>在系统调用接口层面，我们使用 <code>ioctl</code> （ <code>BINDER_WRITE_READ</code> ）来完成具体 <code>transaction</code> 的递交过程。具体的 <code>transaction</code> 数据封装在 <code>struct binder_write_read</code> 对象中，具体如下图所示：</p>
+</li>
+</ol>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-48-16.png" class="">
+
+<ol>
+<li><p><code>Binder</code> 驱动创建 <code>binder_transaction</code> 对象来控制完成本次 <code>binder transaction</code> 。首先要初始化 <code>transaction</code> ，具体包括：和谁通信（用户空间通过 <code>binder_transaction_data</code> 的 <code>target</code> 成员告知 <code>binder</code> 驱动 <code>transaction</code> 的 <code>target</code> ）、为何通信（ <code>binder_transaction_data</code> 的 <code>code</code> ）等</p>
+</li>
+<li><p>对于每一个 <code>service</code> 组件，内核都会创建一个 <code>binder node</code> 与之对应。用户空间通过 <code>flat_binder_object</code> 这个数据结构把本次要注册的 <code>service</code> 组件扁平化，传递给 <code>binder</code> 驱动。驱动根据这个 <code>flat_binder_object</code> 创建并初始化了该 <code>service</code> 组件对应的 <code>binder node</code> 。由于是注册到 <code>service manager</code> ，也就是说 <code>service manager</code> 会有一个对本次注册组件的引用，所以需要在 <code>target proc</code>（即 <code>service manager</code> ）中建立一个 <code>binder ref</code> 对象（指向这个要注册的 <code>binder</code> 实体）并分配一个 <code>handle</code> 。</p>
+</li>
+<li><p>把一个 <code>BINDER_WORK_TRANSACTION_COMPLETE</code> 类型的 <code>binder work</code> 挂入 <code>client binder thread</code> 的 <code>todo list</code> ，通知 <code>client</code> 其请求的 <code>transaction</code> 已经被 <code>binder</code> 处理完毕，可以进行其他工作了（当然对于同步 <code>binder</code> 通信， <code>client</code> 一般会通过 <code>read</code> 类型的 <code>ioctl</code> 进入阻塞态，等待 <code>server</code> 端的回应）。</p>
+</li>
+<li><p>至此， <code>client</code> 端已经完成了所有操作，现在我们开始进入 <code>server</code> 端的数据流了。 <code>Binder</code> 驱动会把一个 <code>BINDER_WORK_TRANSACTION</code> 类型的 <code>binder work</code> （内嵌在 <code>binder transaction</code> ）挂入 <code>binder</code> 线程的 <code>todo list</code> ，然后唤醒它起来干活。</p>
+</li>
+<li><p><code>binder server</code> 端会使用 <code>ioctl</code> （ <code>BINDER_WRITE_READ</code> ）进入读阻塞状态，等待 <code>client</code> 的请求到来。一旦有请求到来，<code>Service manager</code> 进程会从 <code>binder_thread_read</code> 中醒来处理队列上的 <code>binder work</code> 。所谓处理 <code>binder work</code> 其实完成 <code>client transaction</code> 的向上递交过程。具体的<code>transaction</code> 数据封装在 <code>struct binder_write_read</code> 对象中，具体如下图所示：</p>
+</li>
+</ol>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-48-47.png" class="">
+
+<p>需要强调的一点是：在步骤2中， <code>flat_binder_object</code> 传递的是 <code>binder node</code> ，而这里传递的是 <code>handle</code> （即 <code>binder ref</code> ，步骤4中创建的）</p>
+<ol>
+<li><p>在 <code>Service manager</code> 进程的用户态，识别了本次 <code>transaction</code> 的 <code>code</code> 是 <code>add service</code> ，那么它会把（ <code>service name</code> ， <code>handle</code> ）数据写入其数据库，完成服务注册。</p>
+</li>
+<li><p>从 <code>transaction</code> 的角度看，上半场已经完成。现在开始下半场的 <code>transaction</code> 的处理，即 <code>BC_REPLY</code> 的处理。和 <code>BC_TRANSACTION</code> 处理类似，也是通过 <code>binder_ioctl ---&gt; binder_ioctl_write_read ---&gt; binder_thread_write ---&gt; binder_transaction</code> 这个调用链条进入 <code>binder transaction</code> 处理流程的。</p>
+</li>
+<li><p>和上半场类似，在这里 <code>Binder</code> 驱动同样会创建一个 <code>binder_transaction</code> 对象来控制完成本次 <code>BC_REPLY</code> 的 <code>binder transaction</code> 。通过 <code>thread-&gt;transaction_stack</code> 可以找到其对应的 <code>BC_TRANSACTION</code> 的 <code>binder transaction</code> 对象，进而找到回应给哪一个 <code>binder process</code> 和 <code>thread</code> 。后续的处理和上半场类似，这里就不再赘述了。</p>
+</li>
+</ol>
+<h2 id="3-相关数据结构"><a href="#3-相关数据结构" class="headerlink" title="3. 相关数据结构"></a>3. 相关数据结构</h2><p><code>struct transaction</code>主要用来表示 <code>binder client</code> 和 <code>server</code> 之间的一次通信，该数据结构的主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>work</td>
+<td>本次 transaction 涉及的 binder work ，它会挂入 target proc 或者 target binder thread 的 todo list 中。</td>
+</tr>
+<tr>
+<td>from</td>
+<td>发起 binder 通信的线程</td>
+</tr>
+<tr>
+<td>to_proc</td>
+<td>处理 binder 请求的进程</td>
+</tr>
+<tr>
+<td>to_thread</td>
+<td>处理 binder 请求的线程</td>
+</tr>
+<tr>
+<td>buffer</td>
+<td>binder 通信使用的 buffe r，当 A 向 B 服务请求 binder 通信的时候， B 进程分配 buffer ，并 copy A 的数据（ user space ）到 buffer 中。<strong>这是 binder 通信唯一一次内存拷贝。</strong></td>
+</tr>
+<tr>
+<td>code</td>
+<td>本次 transaction 的操作码。 Binder server 端根据操作码提供相应的服务</td>
+</tr>
+<tr>
+<td>flags</td>
+<td>本次 transaction 的一些属性标记</td>
+</tr>
+<tr>
+<td>Priority saved_priority</td>
+<td>和优先级处理相关的成员</td>
+</tr>
+</tbody></table>
+<p> <code>BC_TRANSACTION</code> 、 <code>BC_REPLY</code> 、 <code>BR_TRANSACTION</code> 和 <code>BR_REPLY</code> 这四个协议码的协议数据是 <code>struct binder_transaction_data</code> ，该数据结构的主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>target</td>
+<td>本次 transation 去向何方？ Target 有两种形式，一种是本地 binder 实体，另外一种是表示远端 binder 实体的句柄。在 client 向 service manager 发起 transaction 的时候，那么 target.handle 等于 0 。当该 transaction 到达 service manager 的时候， binder 实体变成本地对象，因此用 Target.ptr 和 cookie 来表示。</td>
+</tr>
+<tr>
+<td>cookie</td>
+<td>如果 transaction 的目的地是本地 binder 实体，那么这个成员保存了 binder 实体对象的用户空间地址</td>
+</tr>
+<tr>
+<td>code</td>
+<td>Client 和 service 组件之间的操作码， binder 驱动不关心这个码字。</td>
+</tr>
+<tr>
+<td>flags</td>
+<td>描述 transaction 特性的 flag 。例如 TF_ONE_WAY 说明是同步还是异步 binder 通信</td>
+</tr>
+<tr>
+<td>sender_pid sender_euid</td>
+<td>是谁发起 transaction ？在 binder 驱动中会根据当前线程设定。</td>
+</tr>
+<tr>
+<td>data_size offsets_size data</td>
+<td>本次 transaction 的数据缓冲区信息。</td>
+</tr>
+</tbody></table>
+<p><code>flat_binder_object</code> 主要用来在进程之间传递 <code>Binder</code> 对象，该数据结构的主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hdr</td>
+<td>用来描述 Binder 对象的类型，目前支持的类型有： binder 实体（本地 service 组件） Binder 句柄（远端的 service 组件） 文件描述符 本文主要关注前两种对象类型</td>
+</tr>
+<tr>
+<td>Binder handle</td>
+<td>如果 flat_binder_object 传递的是本地 service 组件，那么这个联合体中的 binder 成员有效，指向本地 service 组件（用户空间对象）的一个弱引用对象的地址。 如果 flat_binder_object 传递的是句柄，那么这个联合体中的 handle 成员有效，该 handle 对应的 binder ref 指向一个 binder 实体对象。</td>
+</tr>
+<tr>
+<td>cookie</td>
+<td>如果传递的是 binder 实体，那么这个成员保存了 binder 实体对象（ service 组件）的用户空间地址</td>
+</tr>
+</tbody></table>
+<p><code>struct binder_ref</code> 主要用来表示一个对 <code>Binder</code> 实体对象（ <code>binder node</code> ）的引用，该数据结构的主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>data</td>
+<td>这个成员最核心的数据是用户空间的句柄</td>
+</tr>
+<tr>
+<td>rb_node_desc</td>
+<td>挂入 binder proc 的红黑树（ key 是描述符， userspace 的句柄）</td>
+</tr>
+<tr>
+<td>rb_node_node</td>
+<td>挂入 binder proc 的红黑树（ key 是 binder node ）</td>
+</tr>
+<tr>
+<td>node_entry</td>
+<td>挂入 binder node 的哈希表</td>
+</tr>
+<tr>
+<td>proc</td>
+<td>该 binder ref 属于哪一个 binder  proc</td>
+</tr>
+<tr>
+<td>node</td>
+<td>该 binder ref 引用哪一个 binder node</td>
+</tr>
+</tbody></table>
+<h1 id="四、如何和-Service-组件通信"><a href="#四、如何和-Service-组件通信" class="headerlink" title="四、如何和 Service 组件通信"></a>四、如何和 Service 组件通信</h1><p>我们以 B 进程向 A 服务组件（位于 A 进程）发起服务请求为例来说明具体的操作流程。 B 进程不能直接请求 A 服务组件的服务，因为 B 进程唯一获知的信息是 A 服务组件的名字而已。由于 A 服务组件已经注册在案，因此 <code>service manager</code> 已经有（ A 服务组件名字，句柄）的记录，因此 B 进程可以通过下面的流程获得 A 服务组件的信息并建立其代理组件对象：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-54-56.png" class="">
+
+<p>B 进程首先发起 <code>BC_TRANSACTION</code> 操作，操作码是 <code>CHECK_SERVICE</code> ，数据是 A 服务组件的名字。 <code>Service manager</code> 找到了句柄后将其封装到 <code>BC_REPLY</code> 中。这里的句柄是 <code>service manager</code> 进程的句柄，这个句柄并不能直接被 B 进程直接使用，毕竟（进程，句柄）才对应唯一的 <code>binder</code> 实体。这里的 <code>binder driver</code> 有一个很关键的操作：把 <code>service manager</code> 中句柄 A 转换成 <code>B client</code> 进程中的句柄 B ，并封装在 <code>BR_REPLY</code> 中。这时候（ <code>service manager</code> 进程，句柄 A ）和（ <code>B client</code> 进程，句柄 B ）都指向 A 服务组件对应的 <code>bind node</code> 对象。</p>
+<p>一旦定位了 A 服务组件，那么可以继续进行如下的流程：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-55-26.png" class="">
+
+<h1 id="五、Binder内存操作"><a href="#五、Binder内存操作" class="headerlink" title="五、Binder内存操作"></a>五、Binder内存操作</h1><h2 id="1-逻辑过程"><a href="#1-逻辑过程" class="headerlink" title="1.逻辑过程"></a>1.逻辑过程</h2><p>在处理 <code>binder transaction</code> 的过程中，相关的内存操作如下所示：</p>
+<img src="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/2020-08-24-12-55-48.png" class="">
+
+<p>配合上面的流程，内存操作的逻辑过程如下：</p>
+<ol>
+<li><p>在 <code>binder client</code> 的用户空间中，发起 <code>transaction</code> 的一方会构建用户数据缓冲区（包括两部分：实际的数据区和 <code>offset</code> 区），把想要传递到 <code>server</code> 端的数据填充到缓冲区并封装在 <code>binder_transaction_data</code> 数据结构中。</p>
+</li>
+<li><p><code>binder_transaction_data</code> 会被 <code>copy</code> 到内核态， <code>binder</code> 驱动会根据它计算出本次需要 <code>binder</code> 通信的数据量。</p>
+</li>
+<li><p>根据 <code>binder</code> 通信的数据量在 <code>server</code> 进程的 <code>binder VMA</code> 分配数据缓冲区（ <code>binder buffer</code> 是这个缓冲区的控制数据对象），同时根据需要也会分配对应的物理 <code>page</code> 并建立地址映射，以便用户空间可以访问这段 <code>buffer</code> 的数据。</p>
+</li>
+<li><p>建立内核地址空间的映射，把用户空间的 <code>binder</code> 数据缓冲区拷贝到内核中，然后释放掉该映射。</p>
+</li>
+<li><p>在把 <code>binder buffer</code> 的数据传递到 <code>server</code> 用户空间的时候，我们需要一个 <code>binder_transaction_data</code> 来描述 <code>binder</code> 通信的缓冲区数据，这个数据对象需要拷贝到用户地址空间，而 <code>binder buffer</code> 中的数据则不需要拷贝，因为在上面步骤3中已经建立了地址映射， <code>server</code> 进程可以直接访问即可。</p>
+</li>
+</ol>
+<h2 id="2-主要的数据结构"><a href="#2-主要的数据结构" class="headerlink" title="2.主要的数据结构"></a>2.主要的数据结构</h2><p><code>struct binder_alloc</code> 用来描述 <code>binder</code> 进程内存分配器，该数据结构的主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vma</td>
+<td>binder 内存对应的 VMA</td>
+</tr>
+<tr>
+<td>vma_vm_mm</td>
+<td>binder 进程对应的地址空间描述符</td>
+</tr>
+<tr>
+<td>buffer</td>
+<td>该 binder proc 能用于 binder 通信的内存地址。该地址是 mmap 的用户空间虚拟地址。</td>
+</tr>
+<tr>
+<td>buffers</td>
+<td>所有的 binder buffers （包括空闲的和正在使用的）</td>
+</tr>
+<tr>
+<td>free_buffers</td>
+<td>空闲 binder buffers 的红黑树，按照 size 排序</td>
+</tr>
+<tr>
+<td>allocated_buffers</td>
+<td>已经分配的 binder buffers 的红黑树， key 是 buffer address</td>
+</tr>
+<tr>
+<td>free_async_space</td>
+<td>剩余的可用于异步 binder 通信的内存大小。初始化的时候配置为 2M （整个 binder 内存的一半）</td>
+</tr>
+<tr>
+<td>pages</td>
+<td>binder 内存区域对应的 page 们。在 reclaim binder 内存的时候</td>
+</tr>
+<tr>
+<td>buffer_size</td>
+<td>通过 mmap 映射的，用于 binder 通信的缓冲区大小，即 binder alloc 管理的整个内存的大小。</td>
+</tr>
+<tr>
+<td>pid</td>
+<td>Binder proc 的pid</td>
+</tr>
+</tbody></table>
+<p><code>struct binder_buffer</code> 用来描述一个用于 <code>binder</code> 通信的缓冲区，该数据结构的主要成员如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>成员变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>entry</td>
+<td>挂入 binder alloc buffer 链表（ buffers 成员）的节点</td>
+</tr>
+<tr>
+<td>rb_node</td>
+<td>挂入 binder alloc 红黑树的节点：如果是空闲的 buffer ，挂入空闲红黑树，如果是已经分配的，挂入已分配红黑树。</td>
+</tr>
+<tr>
+<td>transaction</td>
+<td>Binder 缓冲区都是用于某次 binder transaction 的，这个成员指向对应的 transaction 。</td>
+</tr>
+<tr>
+<td>target_node</td>
+<td>该 buffer 的去向哪一个 node （ service 组件）</td>
+</tr>
+<tr>
+<td>data_size offsets_size</td>
+<td>Binder 缓冲区的数据区域的大小以及 offset 区域的大小。</td>
+</tr>
+<tr>
+<td>user_data</td>
+<td>该 binder buffer 的用户空间地址</td>
+</tr>
+</tbody></table>
+<p>参考文献：</p>
+<p>[1]Android系统源代码情景分析，罗升阳著</p>
+<p>[2]<a target="_blank" rel="noopener" href="http://gityuan.com/tags/#binder">http://gityuan.com/tags/#binder</a> ，袁辉辉的博客</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/" rel="tag"># Android源码阅读</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E6%A1%86%E6%9E%B6%E7%AF%87%EF%BC%89/" rel="prev" title="Binder从入门到放弃（框架篇）">
+                  <i class="fa fa-chevron-left"></i> Binder从入门到放弃（框架篇）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/09/14/%E7%BC%96%E8%AF%91GDB/" rel="next" title="编译GDB">
+                  编译GDB <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

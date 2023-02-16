@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Xposed源码剖析——概述 XposedInstaller的构成 Xposed原理 Xposed的实现方案   Xposed 源码剖析 —— app_process 作用详解 app_main.cpp 源码阅读与对比 XposedBridge.java   Xposed源码剖析——Xposed初始化 xposed::initialize初始化 onVmCreated 初始化后的准备工作 l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xposde源码分析">
+<meta property="og:url" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="Xposed源码剖析——概述 XposedInstaller的构成 Xposed原理 Xposed的实现方案   Xposed 源码剖析 —— app_process 作用详解 app_main.cpp 源码阅读与对比 XposedBridge.java   Xposed源码剖析——Xposed初始化 xposed::initialize初始化 onVmCreated 初始化后的准备工作 l">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-17-48.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-19-33.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2021-09-03-14-36-00.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-22-42.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-23-35.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-24-05.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-24-34.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-25-24.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-27-01.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-28-24.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-29-28.png">
+<meta property="article:published_time" content="2020-02-12T01:16:03.000Z">
+<meta property="article:modified_time" content="2023-02-16T01:06:50.692Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="Xposed">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-17-48.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/","path":"2020/02/12/xposed源码分析/","title":"xposde源码分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>xposde源码分析 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E2%80%94%E2%80%94%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">Xposed源码剖析——概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#XposedInstaller%E7%9A%84%E6%9E%84%E6%88%90"><span class="nav-number">1.1.</span> <span class="nav-text">XposedInstaller的构成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Xposed%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">Xposed原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Xposed%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88"><span class="nav-number">1.3.</span> <span class="nav-text">Xposed的实现方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E2%80%94%E2%80%94-app-process-%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">Xposed 源码剖析 —— app_process 作用详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#app-main-cpp-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.</span> <span class="nav-text">app_main.cpp 源码阅读与对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XposedBridge-java"><span class="nav-number">2.2.</span> <span class="nav-text">XposedBridge.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E2%80%94%E2%80%94Xposed%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">Xposed源码剖析——Xposed初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#xposed-initialize%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.1.</span> <span class="nav-text">xposed::initialize初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onVmCreated-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8E%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">onVmCreated 初始化后的准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#libxposed-dalvik-cpp-hook-%E7%8E%AF%E5%A2%83%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.3.</span> <span class="nav-text">libxposed_dalvik.cpp hook 环境初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JNI%E6%96%B9%E6%B3%95%E6%B3%A8%E5%86%8C%E9%80%BB%E8%BE%91"><span class="nav-number">3.4.</span> <span class="nav-text">JNI方法注册逻辑</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E2%80%94%E2%80%94-hook-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">Xposed 源码剖析—— hook 具体实现</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="xposde源码分析 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          xposde源码分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-02-12 01:16:03" itemprop="dateCreated datePublished" datetime="2020-02-12T01:16:03+00:00">2020-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-16 01:06:50" itemprop="dateModified" datetime="2023-02-16T01:06:50+00:00">2023-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <!-- TOC -->
+
+<ul>
+<li><a href="#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0">Xposed源码剖析——概述</a><ul>
+<li><a href="#xposedinstaller%E7%9A%84%E6%9E%84%E6%88%90">XposedInstaller的构成</a></li>
+<li><a href="#xposed%E5%8E%9F%E7%90%86">Xposed原理</a></li>
+<li><a href="#xposed%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88">Xposed的实现方案</a></li>
+</ul>
+</li>
+<li><a href="#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90--app_process-%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3">Xposed 源码剖析 —— app_process 作用详解</a><ul>
+<li><a href="#app_maincpp-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%AF%B9%E6%AF%94">app_main.cpp 源码阅读与对比</a></li>
+<li><a href="#xposedbridgejava">XposedBridge.java</a></li>
+</ul>
+</li>
+<li><a href="#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90xposed%E5%88%9D%E5%A7%8B%E5%8C%96">Xposed源码剖析——Xposed初始化</a><ul>
+<li><a href="#xposedinitialize%E5%88%9D%E5%A7%8B%E5%8C%96">xposed::initialize初始化</a></li>
+<li><a href="#onvmcreated-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8E%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">onVmCreated 初始化后的准备工作</a></li>
+<li><a href="#libxposed_dalvikcpp-hook-%E7%8E%AF%E5%A2%83%E5%88%9D%E5%A7%8B%E5%8C%96">libxposed_dalvik.cpp hook 环境初始化</a></li>
+<li><a href="#jni%E6%96%B9%E6%B3%95%E6%B3%A8%E5%86%8C%E9%80%BB%E8%BE%91">JNI方法注册逻辑</a></li>
+</ul>
+</li>
+<li><a href="#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-hook-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0">Xposed 源码剖析—— hook 具体实现</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="Xposed源码剖析——概述"><a href="#Xposed源码剖析——概述" class="headerlink" title="Xposed源码剖析——概述"></a>Xposed源码剖析——概述</h1><p>XPosed 是与 Cydia 其名的工具，它能够让 Android 设备在没有修改源码的情况下修改系统中的 API 运行结果。我们通常称之为：God Mode（上帝模式）。</p>
+<p>之前享大家分享了 Xposed 的基础，Xposed 的作用和最简单的用法。那么，它的原理和它的内部构造是如何构成的？下面，我们从 Github 上看看，rovo89 大神是如何制作的。</p>
+<p>rovo89的github地址：<a target="_blank" rel="noopener" href="https://github.com/rovo89">https://github.com/rovo89</a></p>
+<p>在主页上我们看到了，xposed 其实主要是由三个项目来组成的，如下图所示；</p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-17-48.png" class="">
+
+<p>三个分别是：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Xposed</td>
+<td>Xposed 框架的 native 部分（主要是改性 app_process 二进制文件）</td>
+</tr>
+<tr>
+<td>XposedInstaller</td>
+<td>Xposed 框架的 Android 端本地管理，环境架构搭建，以及第三方 module 资源下载的工具。</td>
+</tr>
+<tr>
+<td>XposedBridge</td>
+<td>Xposed 向开发者提供的 API 与相应的工具类库</td>
+</tr>
+</tbody></table>
+<h2 id="XposedInstaller的构成"><a href="#XposedInstaller的构成" class="headerlink" title="XposedInstaller的构成"></a>XposedInstaller的构成</h2><p>Xposed 项目使我们最常用的项目，当然，他也是构造 Xposed 的核心部分。</p>
+<p>如下图所示，是我们在 XPosedInstaller apk 中见到的，安装 xposed 框架的界面。</p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-19-33.png" class="">
+
+<p>InstallerFragment 我们能够在其中找到 install 方法，其中主要就是针对使用不同方式的将自定义的 app_process 文件替换掉系统的 app_process 文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * xposed install</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 安装成功返回true，否则false</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">install</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 获取安装的方式，直接写入 or 使用 recovery进行安装</span></span><br><span class="line">    <span class="keyword">final</span> <span class="type">int</span> <span class="variable">installMode</span> <span class="operator">=</span> getInstallMode();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查获取Root权限</span></span><br><span class="line">    <span class="keyword">if</span> (!startShell())</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; messages = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;String&gt;();</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">showAlert</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        messages.add(getString(R.string.sdcard_location, XposedApp.getInstance().getExternalFilesDir(<span class="literal">null</span>)));</span><br><span class="line">        messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">        messages.add(getString(R.string.file_copying, <span class="string">&quot;Xposed-Disabler-Recovery.zip&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 把Xposed-Disabler-Recovery.zip文件 从asset copy到sdcard中</span></span><br><span class="line">        <span class="keyword">if</span> (AssetUtil.writeAssetToSdcardFile(<span class="string">&quot;Xposed-Disabler-Recovery.zip&quot;</span>, <span class="number">00644</span>) == <span class="literal">null</span>) &#123;</span><br><span class="line">            messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">            messages.add(getString(R.string.file_extract_failed, <span class="string">&quot;Xposed-Disabler-Recovery.zip&quot;</span>));</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将编译后的app_process二进制文件，从asset文件夹中，copy到/data/data/de.robv.android.xposed.installer/bin/app_process下</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">appProcessFile</span> <span class="operator">=</span> AssetUtil.writeAssetToFile(APP_PROCESS_NAME, <span class="keyword">new</span> <span class="title class_">File</span>(XposedApp.BASE_DIR + <span class="string">&quot;bin/app_process&quot;</span>), <span class="number">00700</span>);</span><br><span class="line">        <span class="keyword">if</span> (appProcessFile == <span class="literal">null</span>) &#123;</span><br><span class="line">            showAlert(getString(R.string.file_extract_failed, <span class="string">&quot;app_process&quot;</span>));</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (installMode == INSTALL_MODE_NORMAL) &#123;</span><br><span class="line">            <span class="comment">// 普通安装模式</span></span><br><span class="line">            <span class="comment">// 重新挂载/system为rw模式</span></span><br><span class="line">            messages.add(getString(R.string.file_mounting_writable, <span class="string">&quot;/system&quot;</span>));</span><br><span class="line">            <span class="keyword">if</span> (mRootUtil.executeWithBusybox(<span class="string">&quot;mount -o remount,rw /system&quot;</span>, messages) != <span class="number">0</span>) &#123;</span><br><span class="line">                messages.add(getString(R.string.file_mount_writable_failed, <span class="string">&quot;/system&quot;</span>));</span><br><span class="line">                messages.add(getString(R.string.file_trying_to_continue));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 查看原有的app_process文件是否已经备份，如果没有备份，现将原有的app_process文件备份一下</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/system/bin/app_process.orig&quot;</span>).exists()) &#123;</span><br><span class="line">                messages.add(getString(R.string.file_backup_already_exists, <span class="string">&quot;/system/bin/app_process.orig&quot;</span>));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (mRootUtil.executeWithBusybox(<span class="string">&quot;cp -a /system/bin/app_process /system/bin/app_process.orig&quot;</span>, messages) != <span class="number">0</span>) &#123;</span><br><span class="line">                    messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">                    messages.add(getString(R.string.file_backup_failed, <span class="string">&quot;/system/bin/app_process&quot;</span>));</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    messages.add(getString(R.string.file_backup_successful, <span class="string">&quot;/system/bin/app_process.orig&quot;</span>));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                mRootUtil.executeWithBusybox(<span class="string">&quot;sync&quot;</span>, messages);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 将项目中的自定义app_process文件copy覆盖系统的app_process,修改权限</span></span><br><span class="line">            messages.add(getString(R.string.file_copying, <span class="string">&quot;app_process&quot;</span>));</span><br><span class="line">            <span class="keyword">if</span> (mRootUtil.executeWithBusybox(<span class="string">&quot;cp -a &quot;</span> + appProcessFile.getAbsolutePath() + <span class="string">&quot; /system/bin/app_process&quot;</span>, messages) != <span class="number">0</span>) &#123;</span><br><span class="line">                messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">                messages.add(getString(R.string.file_copy_failed, <span class="string">&quot;app_process&quot;</span>, <span class="string">&quot;/system/bin&quot;</span>));</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (mRootUtil.executeWithBusybox(<span class="string">&quot;chmod 755 /system/bin/app_process&quot;</span>, messages) != <span class="number">0</span>) &#123;</span><br><span class="line">                messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">                messages.add(getString(R.string.file_set_perms_failed, <span class="string">&quot;/system/bin/app_process&quot;</span>));</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (mRootUtil.executeWithBusybox(<span class="string">&quot;chown root:shell /system/bin/app_process&quot;</span>, messages) != <span class="number">0</span>) &#123;</span><br><span class="line">                messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">                messages.add(getString(R.string.file_set_owner_failed, <span class="string">&quot;/system/bin/app_process&quot;</span>));</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (installMode == INSTALL_MODE_RECOVERY_AUTO) &#123;</span><br><span class="line">            <span class="comment">// 自动进入Recovery</span></span><br><span class="line">            <span class="keyword">if</span> (!prepareAutoFlash(messages, <span class="string">&quot;Xposed-Installer-Recovery.zip&quot;</span>))</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (installMode == INSTALL_MODE_RECOVERY_MANUAL) &#123;</span><br><span class="line">            <span class="comment">// 手动进入Recovery</span></span><br><span class="line">            <span class="keyword">if</span> (!prepareManualFlash(messages, <span class="string">&quot;Xposed-Installer-Recovery.zip&quot;</span>))</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">File</span> <span class="variable">blocker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(XposedApp.BASE_DIR + <span class="string">&quot;conf/disabled&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (blocker.exists()) &#123;</span><br><span class="line">            messages.add(getString(R.string.file_removing, blocker.getAbsolutePath()));</span><br><span class="line">            <span class="keyword">if</span> (mRootUtil.executeWithBusybox(<span class="string">&quot;rm &quot;</span> + blocker.getAbsolutePath(), messages) != <span class="number">0</span>) &#123;</span><br><span class="line">                messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">                messages.add(getString(R.string.file_remove_failed, blocker.getAbsolutePath()));</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// copy XposedBridge.jar 到私有目录 XposedBridge.jar是Xposed提供的jar文件，负责在Native层与FrameWork层进行交互</span></span><br><span class="line">        messages.add(getString(R.string.file_copying, <span class="string">&quot;XposedBridge.jar&quot;</span>));</span><br><span class="line">        <span class="type">File</span> <span class="variable">jarFile</span> <span class="operator">=</span> AssetUtil.writeAssetToFile(<span class="string">&quot;XposedBridge.jar&quot;</span>, <span class="keyword">new</span> <span class="title class_">File</span>(JAR_PATH_NEWVERSION), <span class="number">00644</span>);</span><br><span class="line">        <span class="keyword">if</span> (jarFile == <span class="literal">null</span>) &#123;</span><br><span class="line">            messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line">            messages.add(getString(R.string.file_extract_failed, <span class="string">&quot;XposedBridge.jar&quot;</span>));</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mRootUtil.executeWithBusybox(<span class="string">&quot;sync&quot;</span>, messages);</span><br><span class="line"></span><br><span class="line">        showAlert = <span class="literal">false</span>;</span><br><span class="line">        messages.add(<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (installMode == INSTALL_MODE_NORMAL) &#123;</span><br><span class="line">            offerReboot(messages);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            offerRebootToRecovery(messages, <span class="string">&quot;Xposed-Installer-Recovery.zip&quot;</span>, installMode);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="comment">// 删除busybox 工具库</span></span><br><span class="line">        AssetUtil.removeBusybox();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (showAlert)</span><br><span class="line">            showAlert(TextUtils.join(<span class="string">&quot;\n&quot;</span>, messages).trim());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看完了代码，发现所有的工作都是为了 app_process 文件的替换。那么，系统中这个 app_process 是做什么的？为什么我们需要替换？替换成什么样？替换后对于我们么来说有什么帮助呢？</p>
+<h2 id="Xposed原理"><a href="#Xposed原理" class="headerlink" title="Xposed原理"></a>Xposed原理</h2><p>我们在 android 的源码中的 <code>init.rc</code> 文件可以看到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin –zygote –start-system-server</span><br><span class="line">socket zygote stream 666 </span><br><span class="line">onrestart write /sys/android_power/request_state wake</span><br><span class="line">onrestart write /sys/power/state on</span><br><span class="line">onrestart restart media</span><br><span class="line">onrestart restart netd</span><br></pre></td></tr></table></figure>
+<p>app_process 是 andriod app 的启动程序（具体形式是 zygote <code>fork()</code> 调用一个  app_process 作为 Android app 的载体）。</p>
+<h2 id="Xposed的实现方案"><a href="#Xposed的实现方案" class="headerlink" title="Xposed的实现方案"></a>Xposed的实现方案</h2><p>针对 Hook 的不同进程来说又可以分为全局 Hook 与单个应用程序进程 Hook ，我们知道在 Android 系统中，应用程序进程都是由 Zygote 进程孵化出来的，而 Zygote 进程是由 Init 进程启动的。</p>
+<p>Zygote 进程在启动时会创建一个 Dalvik 虚拟机实例，每当它孵化一个新的应用程序进程时，都会将这个 Dalvik 虚拟机实例复制到新的应用程序进程里面去，从而使得每一个应用程序进程都有一个独立的 Dalvik 虚拟机实例。所以如果选择对 Zygote 进程 Hook ，则能够达到针对系统上所有的应用程序进程 Hook ，即一个全局 Hook 。如下图所示：</p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2021-09-03-14-36-00.png" class="">
+
+
+<h1 id="Xposed-源码剖析-——-app-process-作用详解"><a href="#Xposed-源码剖析-——-app-process-作用详解" class="headerlink" title="Xposed 源码剖析 —— app_process 作用详解"></a>Xposed 源码剖析 —— app_process 作用详解</h1><p>上面我们分析 Xposed 项目的源码，从 XposedInstaller 开始说明了 Xposed 安装的原理与过程。我们知道，XposedInstaller 主要的工作就是：</p>
+<ul>
+<li>替换系统的 app_process（当然，这个操作需要 Root 权限）</li>
+<li>将 xposed 的 api 文件，<code>XposedBridge.jar</code> 文件放置到私有目录中</li>
+</ul>
+<p>至于为什么要替换 app_process 文件？</p>
+<p>系统中的 app_process 文件有什么作用？</p>
+<p>替换后的 app_process 为什么能够帮助我们hook？</p>
+<p>下面我们就开始看看， rovo89 大神的 xposed 开源项目。从 GitHub 上面 clone 下来 xposed 项目，我们在目录中看到其目录结构，如下所示：</p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-22-42.png" class="">
+
+<p>从目录中，我们能够清楚的了解到，其中 xposed 项目现在已经支持 Dalvik 虚拟机与 art 虚拟机的架构了。</p>
+<h2 id="app-main-cpp-源码阅读与对比"><a href="#app-main-cpp-源码阅读与对比" class="headerlink" title="app_main.cpp 源码阅读与对比"></a><code>app_main.cpp</code> 源码阅读与对比</h2><p>我们先从 app_process 的源码开始阅读，打开 <code>app_main.cpp</code> 文件，估计大家和我一下，一时间也看不出来 xposed 针对源码修改了一些什么。</p>
+<p>那么，我们就直接拿源码与 xposed 中的 <code>app_main.cpp</code> 进行对比。</p>
+<p>源码地址：<code>/frameworks/base/cmds/app_process/app_main.cpp</code></p>
+<p>发现了，rovo89 针对了一下几个地方进行了修改。</p>
+<p><strong>atrace_set_tracing_enabled 进行了替换修改</strong></p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-23-35.png" class="">
+
+<p><strong>onVmCreated 增加了 Xposed 的回调</strong></p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-24-05.png" class="">
+
+<p><strong>main 函数中，增加了 xposed 的 options 操作</strong></p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-24-34.png" class="">
+
+<p>我们在 <code>xposed.cpp</code> 中，能够看到其 handleOptions 的具体逻辑，其实就是处理一些 xposed 的特殊命令而已。如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Handle special command line options. */</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">handleOptions</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* <span class="type">const</span> argv[])</span> </span>&#123;</span><br><span class="line">    <span class="built_in">parseXposedProp</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">2</span> &amp;&amp; <span class="built_in">strcmp</span>(argv[<span class="number">1</span>], <span class="string">&quot;--xposedversion&quot;</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Xposed version: %s\n&quot;</span>, xposedVersion);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">2</span> &amp;&amp; <span class="built_in">strcmp</span>(argv[<span class="number">1</span>], <span class="string">&quot;--xposedtestsafemode&quot;</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Testing Xposed safemode trigger\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">detectSafemodeTrigger</span>(<span class="built_in">shouldSkipSafemodeDelay</span>())) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Safemode triggered\n&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Safemode not triggered\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// From Lollipop coding, used to override the process name</span></span><br><span class="line">    argBlockStart = argv[<span class="number">0</span>];</span><br><span class="line">    <span class="type">uintptr_t</span> start = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="type">uintptr_t</span> end = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(argv[argc - <span class="number">1</span>]);</span><br><span class="line">    end += <span class="built_in">strlen</span>(argv[argc - <span class="number">1</span>]) + <span class="number">1</span>;</span><br><span class="line">    argBlockLength = end - start;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>main 函数中，启动的时候增加了启动一些逻辑.</p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-25-24.png" class="">
+
+<p>具体的， 我们可以看到。<code>runtime.start</code> 那一段。做出了一个启动。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">isXposedLoaded = xposed::<span class="built_in">initialize</span>(zygote, startSystemServer, className, argc, argv);</span><br><span class="line"><span class="keyword">if</span> (zygote) &#123;</span><br><span class="line">    <span class="comment">// 当xposed成功启动的时候，start XPOSED_CLASS_DOTS_ZYGOTE这个类</span></span><br><span class="line">    runtime.<span class="built_in">start</span>(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : <span class="string">&quot;com.android.internal.os.ZygoteInit&quot;</span>,</span><br><span class="line">            startSystemServer ? <span class="string">&quot;start-system-server&quot;</span> : <span class="string">&quot;&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (className) &#123;</span><br><span class="line">    <span class="comment">// Remainder of args get passed to startup class main()</span></span><br><span class="line">    runtime.mClassName = className;</span><br><span class="line">    runtime.mArgC = argc - i;</span><br><span class="line">    runtime.mArgV = argv + i;</span><br><span class="line">    <span class="comment">// 当xposed成功启动的时候，start XPOSED_CLASS_DOTS_ZYGOTE这个类</span></span><br><span class="line">    runtime.<span class="built_in">start</span>(isXposedLoaded ? XPOSED_CLASS_DOTS_TOOLS : <span class="string">&quot;com.android.internal.os.RuntimeInit&quot;</span>,</span><br><span class="line">            application ? <span class="string">&quot;application&quot;</span> : <span class="string">&quot;tool&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;Error: no class name or --zygote supplied.\n&quot;</span>);</span><br><span class="line">    <span class="built_in">app_usage</span>();</span><br><span class="line">    <span class="built_in">LOG_ALWAYS_FATAL</span>(<span class="string">&quot;app_process: no class name or --zygote supplied.&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的我们看到，在 main 函数中启动了逻辑，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">runtime.start(isXposedLoaded ? XPOSED_CLASS_DOTS_ZYGOTE : &quot;com.android.internal.os.ZygoteInit&quot;,</span><br><span class="line">                startSystemServer ? &quot;start-system-server&quot; : &quot;&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>其中， XPOSED_CLASS_DOTS_ZYGOTE 变量在，<code>xposed.h</code> 头文件中有定义，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> XPOSED_CLASS_DOTS_ZYGOTE <span class="string">&quot;de.robv.android.xposed.XposedBridge&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>其实这个类就是我们之前向私有目录防止的 XposedBridge 项目的包名。</p>
+<p>而 <code>runtime.start</code> 这个包名有什么作用呢？我们在 AndroidRuntime 中找到 start 方法的具体逻辑。</p>
+<p>在源代码中<code>/frameworks/base/core/jni/AndroidRuntime.cpp</code>中看到</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Start the Android runtime.  This involves starting the virtual machine</span></span><br><span class="line"><span class="comment"> * and calling the &quot;static void main(String[] args)&quot; method in the class</span></span><br><span class="line"><span class="comment"> * named by &quot;className&quot;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Passes the main function two arguments, the class name and the specified</span></span><br><span class="line"><span class="comment"> * options string.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AndroidRuntime::start</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* className, <span class="type">const</span> <span class="type">char</span>* options)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>系统源码对 start 方法的定义，就是启动对应类的 start void main 入口函数。这里，就将三个项目的逻辑连接起来了。</p>
+<h2 id="XposedBridge-java"><a href="#XposedBridge-java" class="headerlink" title="XposedBridge.java"></a>XposedBridge.java</h2><p>我们在 <code>XposedBridge.java</code> 代码中，看到其 main 方法，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Called when native methods and other things are initialized, but before preloading classes etc.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="comment">// Initialize the Xposed framework and modules</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        SELinuxHelper.initOnce();</span><br><span class="line">        SELinuxHelper.initForProcess(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">        runtime = getRuntime();</span><br><span class="line">        <span class="keyword">if</span> (initNative()) &#123;</span><br><span class="line">            XPOSED_BRIDGE_VERSION = getXposedVersion();</span><br><span class="line">            <span class="keyword">if</span> (isZygote) &#123;</span><br><span class="line">                startsSystemServer = startsSystemServer();</span><br><span class="line">                <span class="comment">// 为启动一个新的 zygote做好 hook准备</span></span><br><span class="line">                initForZygote();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 载入Xposed的一些modules</span></span><br><span class="line">            loadModules();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            log(<span class="string">&quot;Errors during native Xposed initialization&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">        log(<span class="string">&quot;Errors during Xposed initialization&quot;</span>);</span><br><span class="line">        log(t);</span><br><span class="line">        disableHooks = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用系统原来的启动方法</span></span><br><span class="line">    <span class="keyword">if</span> (isZygote)</span><br><span class="line">        ZygoteInit.main(args);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        RuntimeInit.main(args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么，整个 app_process 的复制 hook 逻辑，到这里我们已经清楚了。逻辑如下图所示。</p>
+<img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-27-01.png" class="">
+
+<p>那么，xposed 具体怎么实现系统 api 逻辑的 replace 和 inject 我们下次在做分析。</p>
+<h1 id="Xposed源码剖析——Xposed初始化"><a href="#Xposed源码剖析——Xposed初始化" class="headerlink" title="Xposed源码剖析——Xposed初始化"></a>Xposed源码剖析——Xposed初始化</h1><p>之前我们看过了 <code>app_main.cpp</code> 源码，知道了在其中，启动了 <code>XposedBridge.jar</code> 方法。那么，其中还做了些什么事情呢？</p>
+<p>之前我们也看到了在 <code>app_main.cpp</code> 还有几处新增的逻辑。xposed::initialize和onVmCreated回调。下面我在仔细的阅读以下源码。</p>
+<h2 id="xposed-initialize初始化"><a href="#xposed-initialize初始化" class="headerlink" title="xposed::initialize初始化"></a>xposed::initialize初始化</h2><img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-28-24.png" class="">
+
+<p>对于 <code>xposed::initalize</code> 的初始化工作，我们能够在 <code>xposed.cpp</code> 中看到其具体的逻辑实现。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * 初始化xposed</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">initialize</span><span class="params">(<span class="type">bool</span> zygote, <span class="type">bool</span> startSystemServer, <span class="type">const</span> <span class="type">char</span>* className, <span class="type">int</span> argc, <span class="type">char</span>* <span class="type">const</span> argv[])</span> </span>&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> !defined(XPOSED_ENABLE_FOR_TOOLS)</span></span><br><span class="line">    <span class="keyword">if</span> (!zygote)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    xposed-&gt;zygote = zygote;</span><br><span class="line">    xposed-&gt;startSystemServer = startSystemServer;</span><br><span class="line">    xposed-&gt;startClassName = className;</span><br><span class="line">    xposed-&gt;xposedVersionInt = xposedVersionInt;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> XPOSED_WITH_SELINUX</span></span><br><span class="line">    xposed-&gt;isSELinuxEnabled   = <span class="built_in">is_selinux_enabled</span>() == <span class="number">1</span>;</span><br><span class="line">    xposed-&gt;isSELinuxEnforcing = xposed-&gt;isSELinuxEnabled &amp;&amp; <span class="built_in">security_getenforce</span>() == <span class="number">1</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">    xposed-&gt;isSELinuxEnabled   = <span class="literal">false</span>;</span><br><span class="line">    xposed-&gt;isSELinuxEnforcing = <span class="literal">false</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span>  <span class="comment">// XPOSED_WITH_SELINUX</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (startSystemServer) &#123;</span><br><span class="line">        xposed::logcat::<span class="built_in">start</span>();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (zygote) &#123;</span><br><span class="line">        <span class="comment">// TODO Find a better solution for this</span></span><br><span class="line">        <span class="comment">// Give the primary Zygote process a little time to start first.</span></span><br><span class="line">        <span class="comment">// This also makes the log easier to read, as logs for the two Zygotes are not mixed up.</span></span><br><span class="line">        <span class="built_in">sleep</span>(<span class="number">10</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打印rom信息</span></span><br><span class="line">    <span class="built_in">printRomInfo</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (startSystemServer) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!xposed::service::<span class="built_in">startAll</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> XPOSED_WITH_SELINUX</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (xposed-&gt;isSELinuxEnabled) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!xposed::service::<span class="built_in">startMembased</span>())</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span>  <span class="comment">// XPOSED_WITH_SELINUX</span></span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// FIXME Zygote has no access to input devices, this would need to be check in system_server context</span></span><br><span class="line">    <span class="keyword">if</span> (zygote &amp;&amp; !<span class="built_in">isSafemodeDisabled</span>() &amp;&amp; <span class="built_in">detectSafemodeTrigger</span>(<span class="built_in">shouldSkipSafemodeDelay</span>()))</span><br><span class="line">        <span class="built_in">disableXposed</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">isDisabled</span>() || (!zygote &amp;&amp; <span class="built_in">shouldIgnoreCommand</span>(argc, argv)))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将XposedBridge.jar的路径添加到环境变量classpath中</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">addJarToClasspath</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="onVmCreated-初始化后的准备工作"><a href="#onVmCreated-初始化后的准备工作" class="headerlink" title="onVmCreated 初始化后的准备工作"></a>onVmCreated 初始化后的准备工作</h2><img src="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2020-02-12-01-29-28.png" class="">
+
+<p>其具体的逻辑如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**   </span></span><br><span class="line"><span class="comment">  * 向当前的runtime中载入libxposed_*.so </span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">onVmCreated</span><span class="params">(JNIEnv* env)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Determine the currently active runtime</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* xposedLibPath = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">determineRuntime</span>(&amp;xposedLibPath)) &#123;</span><br><span class="line">        <span class="built_in">ALOGE</span>(<span class="string">&quot;Could not determine runtime, not loading Xposed&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Load the suitable libxposed_*.so for it</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *error;</span><br><span class="line">    <span class="type">void</span>* xposedLibHandle = <span class="built_in">dlopen</span>(xposedLibPath, RTLD_NOW);</span><br><span class="line">    <span class="keyword">if</span> (!xposedLibHandle) &#123;</span><br><span class="line">        <span class="built_in">ALOGE</span>(<span class="string">&quot;Could not load libxposed: %s&quot;</span>, <span class="built_in">dlerror</span>());</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clear previous errors</span></span><br><span class="line">    <span class="built_in">dlerror</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initialize the library</span></span><br><span class="line">    <span class="built_in">bool</span> (*xposedInitLib)(XposedShared* shared) = <span class="literal">NULL</span>;</span><br><span class="line">    *(<span class="type">void</span> **) (&amp;xposedInitLib) = <span class="built_in">dlsym</span>(xposedLibHandle, <span class="string">&quot;xposedInitLib&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!xposedInitLib)  &#123;</span><br><span class="line">        <span class="built_in">ALOGE</span>(<span class="string">&quot;Could not find function xposedInitLib&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> XPOSED_WITH_SELINUX</span></span><br><span class="line">    xposed-&gt;zygoteservice_accessFile = &amp;service::membased::accessFile;</span><br><span class="line">    xposed-&gt;zygoteservice_statFile   = &amp;service::membased::statFile;</span><br><span class="line">    xposed-&gt;zygoteservice_readFile   = &amp;service::membased::readFile;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span>  <span class="comment">// XPOSED_WITH_SELINUX</span></span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里的xposed变量，其实是一个全局的XposedShare。</span></span><br><span class="line">    <span class="comment">// 调用XposedShare的onVmCreated则会根据不同的vm架构针对不同的实现。</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">xposedInitLib</span>(xposed)) &#123;</span><br><span class="line">        xposed-&gt;<span class="built_in">onVmCreated</span>(env);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="libxposed-dalvik-cpp-hook-环境初始化"><a href="#libxposed-dalvik-cpp-hook-环境初始化" class="headerlink" title="libxposed_dalvik.cpp hook 环境初始化"></a><code>libxposed_dalvik.cpp</code> hook 环境初始化</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Called by Xposed&#x27;s app_process replacement. </span></span><br><span class="line"><span class="comment">  * 在被替换后的app_process中调用</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">xposedInitLib</span><span class="params">(xposed::XposedShared* shared)</span> </span>&#123;</span><br><span class="line">    xposed = shared;</span><br><span class="line">    <span class="comment">// 将自己的onVmCreated方法，指向onVmCreated方法</span></span><br><span class="line">    xposed-&gt;onVmCreated = &amp;onVmCreated;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Called very early during VM startup. </span></span><br><span class="line"><span class="comment">  * 在VM启动的时候调用，而且调用时机比较早</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">onVmCreated</span><span class="params">(JNIEnv* env)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">initMemberOffsets</span>(env))</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 找到小米系统的MIUI_RESOURCE做特殊处理</span></span><br><span class="line">    jclass classMiuiResources = env-&gt;<span class="built_in">FindClass</span>(CLASS_MIUI_RESOURCES);</span><br><span class="line">    <span class="keyword">if</span> (classMiuiResources != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        ClassObject* clazz = (ClassObject*)<span class="built_in">dvmDecodeIndirectRef</span>(<span class="built_in">dvmThreadSelf</span>(), classMiuiResources);</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">dvmIsFinalClass</span>(clazz)) &#123;</span><br><span class="line">            <span class="built_in">ALOGD</span>(<span class="string">&quot;Removing final flag for class &#x27;%s&#x27;&quot;</span>, CLASS_MIUI_RESOURCES);</span><br><span class="line">            clazz-&gt;accessFlags &amp;= ~ACC_FINAL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    env-&gt;<span class="built_in">ExceptionClear</span>();</span><br><span class="line"></span><br><span class="line">    jclass classXTypedArray = env-&gt;<span class="built_in">FindClass</span>(CLASS_XTYPED_ARRAY);</span><br><span class="line">    <span class="keyword">if</span> (classXTypedArray == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">ALOGE</span>(<span class="string">&quot;Error while loading XTypedArray class &#x27;%s&#x27;:&quot;</span>, CLASS_XTYPED_ARRAY);</span><br><span class="line">        <span class="built_in">dvmLogExceptionStackTrace</span>();</span><br><span class="line">        env-&gt;<span class="built_in">ExceptionClear</span>();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">prepareSubclassReplacement</span>(classXTypedArray);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取到全局的XposedBridge</span></span><br><span class="line">    classXposedBridge = env-&gt;<span class="built_in">FindClass</span>(CLASS_XPOSED_BRIDGE);</span><br><span class="line">    classXposedBridge = <span class="built_in">reinterpret_cast</span>&lt;jclass&gt;(env-&gt;<span class="built_in">NewGlobalRef</span>(classXposedBridge));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (classXposedBridge == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">ALOGE</span>(<span class="string">&quot;Error while loading Xposed class &#x27;%s&#x27;:&quot;</span>, CLASS_XPOSED_BRIDGE);</span><br><span class="line">        <span class="built_in">dvmLogExceptionStackTrace</span>();</span><br><span class="line">        env-&gt;<span class="built_in">ExceptionClear</span>();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注册一些 XposedBridge 的 native 方法</span></span><br><span class="line">    <span class="built_in">ALOGI</span>(<span class="string">&quot;Found Xposed class &#x27;%s&#x27;, now initializing&quot;</span>, CLASS_XPOSED_BRIDGE);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">register_natives_XposedBridge</span>(env, classXposedBridge) != JNI_OK) &#123;</span><br><span class="line">        <span class="built_in">ALOGE</span>(<span class="string">&quot;Could not register natives for &#x27;%s&#x27;&quot;</span>, CLASS_XPOSED_BRIDGE);</span><br><span class="line">        <span class="built_in">dvmLogExceptionStackTrace</span>();</span><br><span class="line">        env-&gt;<span class="built_in">ExceptionClear</span>();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    xposedLoadedSuccessfully = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="JNI方法注册逻辑"><a href="#JNI方法注册逻辑" class="headerlink" title="JNI方法注册逻辑"></a>JNI方法注册逻辑</h2><p>这里注册的几个方法都是，Xposed 核心的几个方法函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">register_natives_XposedBridge</span><span class="params">(JNIEnv* env, jclass clazz)</span> </span>&#123;</span><br><span class="line">    <span class="type">const</span> JNINativeMethod methods[] = &#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, getStartClassName, <span class="string">&quot;()Ljava/lang/String;&quot;</span>),</span><br><span class="line">        <span class="comment">// 获得Runtime</span></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, getRuntime, <span class="string">&quot;()I&quot;</span>),</span><br><span class="line">        <span class="comment">// 启动SystemServer</span></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, startsSystemServer, <span class="string">&quot;()Z&quot;</span>),</span><br><span class="line">        <span class="comment">// 获取Xposed的版本信息</span></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, getXposedVersion, <span class="string">&quot;()I&quot;</span>),</span><br><span class="line">        <span class="comment">// 初始化navtive</span></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, initNative, <span class="string">&quot;()Z&quot;</span>),</span><br><span class="line">        <span class="comment">// hook一个方法的native实现</span></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, hookMethodNative, <span class="string">&quot;(Ljava/lang/reflect/Member;Ljava/lang/Class;ILjava/lang/Object;)V&quot;</span>),</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> ART_TARGET</span></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, invokeOriginalMethodNative,</span><br><span class="line">            <span class="string">&quot;(Ljava/lang/reflect/Member;I[Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;&quot;</span>),</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, setObjectClassNative, <span class="string">&quot;(Ljava/lang/Object;Ljava/lang/Class;)V&quot;</span>),</span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, dumpObjectNative, <span class="string">&quot;(Ljava/lang/Object;)V&quot;</span>),</span><br><span class="line">        <span class="built_in">NATIVE_METHOD</span>(XposedBridge, cloneToSubclassNative, <span class="string">&quot;(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;&quot;</span>),</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> env-&gt;<span class="built_in">RegisterNatives</span>(clazz, methods, <span class="built_in">NELEM</span>(methods));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到 RegisterNatives 这个方法的时候不是很理解，这里做一个简介。</p>
+<p>以前在 jni 中写本地方法时，都会写成 <code>Java_com_example_hellojni_HelloJni_stringFromJNI</code> 的形式，函数名很长，而且当类名变了的时候，函数名必须一个一个的改，麻烦。</p>
+<p>现在好了有了 RegisterNatives ，可以简化我们的书写<br>和传统方法相比，使用 RegisterNative s的好处有三点：</p>
+<ol>
+<li>C＋＋中函数命名自由，不必像 javah 自动生成的函数声明那样，拘泥特定的命名方式；</li>
+<li>效率高。传统方式下，Java 类 call 本地函数时，通常是依靠 VM 去动态寻找 <code>.so</code> 中的本地函数(因此它们才需要特定规则的命名格式)，而使用 RegisterNatives 将本地函数向 VM 进行登记，可以让其更有效率的找到函数；</li>
+<li>运行时动态调整本地函数与 Java 函数值之间的映射关系，只需要多次 call  <code>RegisterNatives()</code> 方法，并传入不同的映射表参数即可。</li>
+</ol>
+<h1 id="Xposed-源码剖析——-hook-具体实现"><a href="#Xposed-源码剖析——-hook-具体实现" class="headerlink" title="Xposed 源码剖析—— hook 具体实现"></a>Xposed 源码剖析—— hook 具体实现</h1><p>之前我们看到了 xposed 各种初始化的工作，其实都是完成了针对系统中各种 method 的 hook 和替换工作。</p>
+<p>那么具体如何替换，其实都是调用了其中的。 XposedBridge_hookMethodNative 函数。这里，我们详细的看看 XposedBridge_hookMethodNative 函数中，做了一些什么操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * 将输入的Class中的Method方法的nativeFunc替换为xposedCallHandler </span></span><br><span class="line"><span class="comment">  * </span></span><br><span class="line"><span class="comment">  * @param env JniEnv</span></span><br><span class="line"><span class="comment">  * @param reflectedMethodIndirect 待反射的函数</span></span><br><span class="line"><span class="comment">  * @param declaredClassIndirect 定义的class</span></span><br><span class="line"><span class="comment">  * @param slot 函数偏移量</span></span><br><span class="line"><span class="comment">  * @param additionalInfoIndirect 添加的函数</span></span><br><span class="line"><span class="comment">  * </span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">XposedBridge_hookMethodNative</span><span class="params">(JNIEnv* env, jclass clazz, jobject reflectedMethodIndirect,</span></span></span><br><span class="line"><span class="params"><span class="function">            jobject declaredClassIndirect, jint slot, jobject additionalInfoIndirect)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 容错</span></span><br><span class="line">    <span class="keyword">if</span> (declaredClassIndirect == <span class="literal">NULL</span> || reflectedMethodIndirect == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">dvmThrowIllegalArgumentException</span>(<span class="string">&quot;method and declaredClass must not be null&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据函数的偏移量，从classloader中找到准备替换的函数。</span></span><br><span class="line">    ClassObject* declaredClass = (ClassObject*) <span class="built_in">dvmDecodeIndirectRef</span>(<span class="built_in">dvmThreadSelf</span>(), declaredClassIndirect);</span><br><span class="line">    Method* method = <span class="built_in">dvmSlotToMethod</span>(declaredClass, slot);</span><br><span class="line">    <span class="keyword">if</span> (method == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">dvmThrowNoSuchMethodError</span>(<span class="string">&quot;Could not get internal representation for method&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">isMethodHooked</span>(method)) &#123;</span><br><span class="line">        <span class="comment">// already hooked</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 保存替换前的数据信息</span></span><br><span class="line">    XposedHookInfo* hookInfo = (XposedHookInfo*) <span class="built_in">calloc</span>(<span class="number">1</span>, <span class="built_in">sizeof</span>(XposedHookInfo));</span><br><span class="line">    <span class="built_in">memcpy</span>(hookInfo, method, <span class="built_in">sizeof</span>(hookInfo-&gt;originalMethodStruct));</span><br><span class="line">    hookInfo-&gt;reflectedMethod = <span class="built_in">dvmDecodeIndirectRef</span>(<span class="built_in">dvmThreadSelf</span>(), env-&gt;<span class="built_in">NewGlobalRef</span>(reflectedMethodIndirect));</span><br><span class="line">    hookInfo-&gt;additionalInfo = <span class="built_in">dvmDecodeIndirectRef</span>(<span class="built_in">dvmThreadSelf</span>(), env-&gt;<span class="built_in">NewGlobalRef</span>(additionalInfoIndirect));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 替换函数方法 , 让nativeFunction指向本地的hookedMethodCallback</span></span><br><span class="line">    <span class="built_in">SET_METHOD_FLAG</span>(method, ACC_NATIVE);</span><br><span class="line">    method-&gt;nativeFunc = &amp;hookedMethodCallback;</span><br><span class="line">    method-&gt;insns = (<span class="type">const</span> u2*) hookInfo;</span><br><span class="line">    method-&gt;registersSize = method-&gt;insSize;</span><br><span class="line">    method-&gt;outsSize = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (PTR_gDvmJit != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="comment">// reset JIT cache</span></span><br><span class="line">        <span class="type">char</span> currentValue = *((<span class="type">char</span>*)PTR_gDvmJit + <span class="built_in">MEMBER_OFFSET_VAR</span>(DvmJitGlobals,codeCacheFull));</span><br><span class="line">        <span class="keyword">if</span> (currentValue == <span class="number">0</span> || currentValue == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="built_in">MEMBER_VAL</span>(PTR_gDvmJit, DvmJitGlobals, codeCacheFull) = <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">ALOGE</span>(<span class="string">&quot;Unexpected current value for codeCacheFull: %d&quot;</span>, currentValue);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对 vm 不熟悉的，解释一下几个不怎么常用的函数。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dvmDecodeIndirectRef</td>
+<td>将间接引用 jobject 转换为对象引用 Object*</td>
+</tr>
+<tr>
+<td>dvmSlotToMethod</td>
+<td>根据偏移量，从 ClassLoader 中获取函数指针</td>
+</tr>
+</tbody></table>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment">  * hook方法调用时的回调</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">hookedMethodCallback</span><span class="params">(<span class="type">const</span> u4* args, JValue* pResult, <span class="type">const</span> Method* method, ::Thread* self)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isMethodHooked</span>(method)) &#123;</span><br><span class="line">        <span class="built_in">dvmThrowNoSuchMethodError</span>(<span class="string">&quot;Could not find Xposed original method - how did you even get here?&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    XposedHookInfo* hookInfo = (XposedHookInfo*) method-&gt;insns;</span><br><span class="line">    Method* original = (Method*) hookInfo;</span><br><span class="line">    Object* originalReflected = hookInfo-&gt;reflectedMethod;</span><br><span class="line">    Object* additionalInfo = hookInfo-&gt;additionalInfo;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// convert/box arguments</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* desc = &amp;method-&gt;shorty[<span class="number">1</span>]; <span class="comment">// [0] is the return type.</span></span><br><span class="line">    Object* thisObject = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">size_t</span> srcIndex = <span class="number">0</span>;</span><br><span class="line">    <span class="type">size_t</span> dstIndex = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for non-static methods determine the &quot;this&quot; pointer</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">dvmIsStaticMethod</span>(original)) &#123;</span><br><span class="line">        thisObject = (Object*) args[<span class="number">0</span>];</span><br><span class="line">        srcIndex++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ArrayObject* argsArray = <span class="built_in">dvmAllocArrayByClass</span>(objectArrayClass, <span class="built_in">strlen</span>(method-&gt;shorty) - <span class="number">1</span>, ALLOC_DEFAULT);</span><br><span class="line">    <span class="keyword">if</span> (argsArray == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (*desc != <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">        <span class="type">char</span> descChar = *(desc++);</span><br><span class="line">        JValue value;</span><br><span class="line">        Object* obj;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> (descChar) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;Z&#x27;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;C&#x27;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;F&#x27;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;B&#x27;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;S&#x27;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;I&#x27;</span>:</span><br><span class="line">            value.i = args[srcIndex++];</span><br><span class="line">            obj = (Object*) <span class="built_in">dvmBoxPrimitive</span>(value, <span class="built_in">dvmFindPrimitiveClass</span>(descChar));</span><br><span class="line">            <span class="built_in">dvmReleaseTrackedAlloc</span>(obj, self);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;D&#x27;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;J&#x27;</span>:</span><br><span class="line">            value.j = <span class="built_in">dvmGetArgLong</span>(args, srcIndex);</span><br><span class="line">            srcIndex += <span class="number">2</span>;</span><br><span class="line">            obj = (Object*) <span class="built_in">dvmBoxPrimitive</span>(value, <span class="built_in">dvmFindPrimitiveClass</span>(descChar));</span><br><span class="line">            <span class="built_in">dvmReleaseTrackedAlloc</span>(obj, self);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;[&#x27;</span>:</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;L&#x27;</span>:</span><br><span class="line">            obj  = (Object*) args[srcIndex++];</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="built_in">ALOGE</span>(<span class="string">&quot;Unknown method signature description character: %c&quot;</span>, descChar);</span><br><span class="line">            obj = <span class="literal">NULL</span>;</span><br><span class="line">            srcIndex++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">setObjectArrayElement</span>(argsArray, dstIndex++, obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用Java中的对应方法，即之前我们用到，的handleHookedMethod</span></span><br><span class="line">    JValue result;</span><br><span class="line">    <span class="built_in">dvmCallMethod</span>(self, xposedHandleHookedMethod, <span class="literal">NULL</span>, &amp;result,</span><br><span class="line">        originalReflected, (<span class="type">int</span>) original, additionalInfo, thisObject, argsArray);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">dvmReleaseTrackedAlloc</span>(argsArray, self);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// exceptions are thrown to the caller</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">dvmCheckException</span>(self)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// return result with proper type</span></span><br><span class="line">    ClassObject* returnType = <span class="built_in">dvmGetBoxedReturnType</span>(method);</span><br><span class="line">    <span class="keyword">if</span> (returnType-&gt;primitiveType == PRIM_VOID) &#123;</span><br><span class="line">        <span class="comment">// ignored</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (result.l == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">dvmIsPrimitiveClass</span>(returnType)) &#123;</span><br><span class="line">            <span class="built_in">dvmThrowNullPointerException</span>(<span class="string">&quot;null result when primitive expected&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        pResult-&gt;l = <span class="literal">NULL</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">dvmUnboxPrimitive</span>(result.l, returnType, pResult)) &#123;</span><br><span class="line">            <span class="built_in">dvmThrowClassCastException</span>(result.l-&gt;clazz, returnType);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yzzst/article/details/47659987">https://blog.csdn.net/yzzst/article/details/47659987</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Xposed/" rel="tag"># Xposed</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/02/%E5%B7%A5%E5%85%B7/" rel="prev" title="工具">
+                  <i class="fa fa-chevron-left"></i> 工具
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/02/12/python-Cheat-Sheet/" rel="next" title="python Cheat Sheet">
+                  python Cheat Sheet <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
