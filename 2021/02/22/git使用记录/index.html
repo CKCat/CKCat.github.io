@@ -20,20 +20,39 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="本文主要记录 git 使用过程中需要搜索的一些命令。 如何恢复初始的 git 提交。您可以删除 HEAD 并将存储库还原到新的状态，在该状态下可以创建一个新的初始提交： 1git update-ref -d HEAD  创建新提交之后，如果您已经将其推入远程，则需要强制将其发送到远程，以便覆盖先前的初始提交：">
+    <meta name="description" content="本文主要记录 git 使用过程中需要搜索的一些命令。 基础篇配置 git 用户名和邮箱123git config --global user.name &quot;你的名字&quot;git config --global user.email “邮箱@邮箱.com”  这里的名字和邮箱决定了你在创建 commit 时的作者信息，与 git 托管平台的账号和邮箱没有关系。github 只认邮箱，也">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git使用记录">
 <meta property="og:url" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="本文主要记录 git 使用过程中需要搜索的一些命令。 如何恢复初始的 git 提交。您可以删除 HEAD 并将存储库还原到新的状态，在该状态下可以创建一个新的初始提交： 1git update-ref -d HEAD  创建新提交之后，如果您已经将其推入远程，则需要强制将其发送到远程，以便覆盖先前的初始提交：">
+<meta property="og:description" content="本文主要记录 git 使用过程中需要搜索的一些命令。 基础篇配置 git 用户名和邮箱123git config --global user.name &quot;你的名字&quot;git config --global user.email “邮箱@邮箱.com”  这里的名字和邮箱决定了你在创建 commit 时的作者信息，与 git 托管平台的账号和邮箱没有关系。github 只认邮箱，也">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E5%88%86%E6%94%AF.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/HEAD.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/stash.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/fast-forward%E5%92%8Cnon-fast-forward%E5%90%88%E5%B9%B6.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/rebase%E5%90%88%E5%B9%B6.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/graph.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/pull-fast-forward%E5%90%88%E5%B9%B6.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/pull-non-fast-forward%E5%90%88%E5%B9%B6.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/fetch.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E5%8F%96%E6%B6%88%E8%BF%87%E5%8E%BB%E7%9A%84%E6%8F%90%E4%BA%A4.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/revert.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E9%81%97%E5%BC%83%E6%8F%90%E4%BA%A4.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/reset.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E6%8F%90%E5%8F%96%E6%8F%90%E4%BA%A4.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E6%94%B9%E5%86%99%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/rebase.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E6%B1%87%E5%90%88%E5%88%86%E6%94%AF%E4%B8%8A%E7%9A%84%E6%8F%90%E4%BA%A4.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/merge-before.png">
+<meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/marge-after.png">
 <meta property="og:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-06-14-18-15-01.png">
 <meta property="article:published_time" content="2021-02-22T20:30:08.000Z">
-<meta property="article:modified_time" content="2023-02-18T02:20:37.353Z">
+<meta property="article:modified_time" content="2023-02-18T08:06:25.474Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="git">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-06-14-18-15-01.png">
+<meta name="twitter:image" content="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E5%88%86%E6%94%AF.png">
 
 
 <link rel="canonical" href="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
@@ -142,7 +161,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%81%A2%E5%A4%8D%E5%88%9D%E5%A7%8B%E7%9A%84-git-%E6%8F%90%E4%BA%A4%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">如何恢复初始的 git 提交。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%92%A4%E9%94%80-git-add%E5%92%8C-commit-%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">撤销 git add和 commit 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3-Git-%E6%9B%B4%E6%96%B0%E6%9C%AC%E5%9C%B0%E5%86%B2%E7%AA%81%EF%BC%9Acommit-your-changes-or-stash-them-before-you-can-merge"><span class="nav-number"></span> <span class="nav-text">解决 Git 更新本地冲突：commit your changes or stash them before you can merge</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%B8%85%E6%B4%97-Github-%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2"><span class="nav-number"></span> <span class="nav-text">如何清洗 Github 提交历史</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh-%E6%96%B9%E5%BC%8F%E5%8F%8A%E5%85%8D%E5%AF%86%E7%A0%81%E9%85%8D%E7%BD%AE"><span class="nav-number"></span> <span class="nav-text">ssh 方式及免密码配置</span></a></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">基础篇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-git-%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E9%82%AE%E7%AE%B1"><span class="nav-number">1.1.</span> <span class="nav-text">配置 git 用户名和邮箱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.</span> <span class="nav-text">常用命令的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.</span> <span class="nav-text">新建数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E6%96%87%E4%BB%B6"><span class="nav-number">1.4.</span> <span class="nav-text">提交文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#push-%E5%88%B0%E8%BF%9C%E7%A8%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.5.</span> <span class="nav-text">push 到远程数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E4%BF%AE%E6%94%B9%E8%AE%B0%E5%BD%95"><span class="nav-number">1.6.</span> <span class="nav-text">合并修改记录</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">高级篇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">分支概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HEAD"><span class="nav-number">2.1.1.</span> <span class="nav-text">HEAD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stash"><span class="nav-number">2.1.2.</span> <span class="nav-text">stash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#merge"><span class="nav-number">2.1.3.</span> <span class="nav-text">merge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rebase"><span class="nav-number">2.1.4.</span> <span class="nav-text">rebase</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">分支操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%88%86%E6%94%AF"><span class="nav-number">2.2.1.</span> <span class="nav-text">建立分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF"><span class="nav-number">2.2.2.</span> <span class="nav-text">切换分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF"><span class="nav-number">2.2.3.</span> <span class="nav-text">合并分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF"><span class="nav-number">2.2.4.</span> <span class="nav-text">删除分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.5.</span> <span class="nav-text">并行操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%90%88%E5%B9%B6%E7%9A%84%E5%86%B2%E7%AA%81"><span class="nav-number">2.2.6.</span> <span class="nav-text">解决合并的冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8-rebase-%E5%90%88%E5%B9%B6"><span class="nav-number">2.2.7.</span> <span class="nav-text">用 rebase 合并</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.3.</span> <span class="nav-text">远端数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pull"><span class="nav-number">2.3.1.</span> <span class="nav-text">pull</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fetch"><span class="nav-number">2.3.2.</span> <span class="nav-text">fetch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push"><span class="nav-number">2.3.3.</span> <span class="nav-text">push</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE"><span class="nav-number">2.4.</span> <span class="nav-text">标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E8%BD%BB%E6%A0%87%E7%AD%BE"><span class="nav-number">2.4.1.</span> <span class="nav-text">添加轻标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%B3%A8%E8%A7%A3%E6%A0%87%E7%AD%BE"><span class="nav-number">2.4.2.</span> <span class="nav-text">添加注解标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%A0%87%E7%AD%BE"><span class="nav-number">2.4.3.</span> <span class="nav-text">删除标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E5%86%99%E6%8F%90%E4%BA%A4"><span class="nav-number">2.5.</span> <span class="nav-text">改写提交</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%80%E8%BF%91%E7%9A%84%E6%8F%90%E4%BA%A4"><span class="nav-number">2.5.1.</span> <span class="nav-text">修改最近的提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E8%BF%87%E5%8E%BB%E7%9A%84%E6%8F%90%E4%BA%A4"><span class="nav-number">2.5.2.</span> <span class="nav-text">取消过去的提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%97%E5%BC%83%E6%8F%90%E4%BA%A4"><span class="nav-number">2.5.3.</span> <span class="nav-text">遗弃提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E6%8F%90%E4%BA%A4"><span class="nav-number">2.5.4.</span> <span class="nav-text">提取提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E5%86%99%E6%8F%90%E4%BA%A4%E7%9A%84%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95"><span class="nav-number">2.5.5.</span> <span class="nav-text">改写提交的历史记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8-rebase-i-%E6%B1%87%E5%90%88%E6%8F%90%E4%BA%A4"><span class="nav-number">2.5.5.1.</span> <span class="nav-text">用 rebase -i 汇合提交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8-rebase-i-%E4%BF%AE%E6%94%B9%E6%8F%90%E4%BA%A4"><span class="nav-number">2.5.5.2.</span> <span class="nav-text">用 rebase -i 修改提交</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%87%E5%90%88%E5%88%86%E6%94%AF%E4%B8%8A%E7%9A%84%E6%8F%90%E4%BA%A4%EF%BC%8C%E7%84%B6%E5%90%8E%E4%B8%80%E5%90%8C%E5%90%88%E5%B9%B6%E5%88%B0%E5%88%86%E6%94%AF"><span class="nav-number">2.5.6.</span> <span class="nav-text">汇合分支上的提交，然后一同合并到分支</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97"><span class="nav-number">3.</span> <span class="nav-text">风格指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Branches"><span class="nav-number">3.1.</span> <span class="nav-text">Branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Commits"><span class="nav-number">3.2.</span> <span class="nav-text">Commits</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Messages"><span class="nav-number">3.2.1.</span> <span class="nav-text">Messages</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Merging"><span class="nav-number">3.3.</span> <span class="nav-text">Merging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Misc"><span class="nav-number">3.4.</span> <span class="nav-text">Misc.</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%81%A2%E5%A4%8D%E5%88%9D%E5%A7%8B%E7%9A%84-git-%E6%8F%90%E4%BA%A4%E3%80%82"><span class="nav-number">3.4.1.</span> <span class="nav-text">如何恢复初始的 git 提交。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%92%A4%E9%94%80-git-add-%E5%92%8C-commit-%E6%93%8D%E4%BD%9C"><span class="nav-number">3.4.2.</span> <span class="nav-text">撤销 git add 和 commit 操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3-Git-%E6%9B%B4%E6%96%B0%E6%9C%AC%E5%9C%B0%E5%86%B2%E7%AA%81%EF%BC%9Acommit-your-changes-or-stash-them-before-you-can-merge"><span class="nav-number">3.4.3.</span> <span class="nav-text">解决 Git 更新本地冲突：commit your changes or stash them before you can merge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%B8%85%E6%B4%97-Github-%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2"><span class="nav-number">3.4.4.</span> <span class="nav-text">如何清洗 Github 提交历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-%E6%96%B9%E5%BC%8F%E5%8F%8A%E5%85%8D%E5%AF%86%E7%A0%81%E9%85%8D%E7%BD%AE"><span class="nav-number">3.4.5.</span> <span class="nav-text">ssh 方式及免密码配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">参考：</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -237,7 +256,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -267,41 +286,546 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>本文主要记录 git 使用过程中需要搜索的一些命令。</p>
+<h1 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h1><h2 id="配置-git-用户名和邮箱"><a href="#配置-git-用户名和邮箱" class="headerlink" title="配置 git 用户名和邮箱"></a>配置 git 用户名和邮箱</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;你的名字&quot;</span></span><br><span class="line"></span><br><span class="line">git config --global user.email “邮箱@邮箱.com”</span><br></pre></td></tr></table></figure>
+
+<p>这里的名字和邮箱决定了你在创建 <code>commit</code> 时的作者信息，与 <code>git</code> 托管平台的账号和邮箱没有关系。github 只认邮箱，也就是说 <code>user.email</code> 决定了在 github 的网页上要显示谁的用户名和头像。</p>
+<p>你可以把上面的 <code>global</code> 改成 <code>local</code> 来为所在仓库指定默认作者，<code>global</code> 代表针对所有仓库的全局变量</p>
+<h2 id="常用命令的介绍"><a href="#常用命令的介绍" class="headerlink" title="常用命令的介绍"></a>常用命令的介绍</h2><ul>
+<li><p><code>git clone</code> 其作用是把一个远程仓库下载到本地, 用法如下：</p>
+<ul>
+<li>使用 <code>git clone &lt;仓库地址&gt;</code> 来克隆一个仓库的默认分支</li>
+<li>使用 <code>git clone &lt;地址&gt; -b &lt;分支名/TAG 名&gt;</code> 来克隆指定分支&#x2F;tag</li>
+<li>使用 <code>git clone &lt;地址&gt; &lt;目录名&gt;</code> 来克隆到一个指定目录（当然还可以和上面的<code>-b</code> 结合·一下）</li>
+<li>使用 <code>git clone &lt;地址&gt; --depth=1</code> 来克隆最小仓库</li>
+</ul>
+</li>
+<li><p><code>git add</code> 用来往缓冲区中增加文件，用法如下：</p>
+<ul>
+<li><code>git add &lt;文件名/目录&gt;</code>，来把一个文件加入缓冲区</li>
+<li>也可以使用 <code>git add *</code> 来把所有修改都加入缓冲区（隐藏文件除外）</li>
+</ul>
+</li>
+<li><p><code>git commit</code> 是把缓冲区中的修改，作为一个新的 commit(提交)，用法如下：</p>
+<ul>
+<li><code>git commit -m &quot;我是提交的内容&quot;</code> 直接创建 commit message</li>
+<li><code>git commit -a</code> 来省去 <code>git add</code> 的过程，直接把所有的修改创建为一个新提交</li>
+</ul>
+</li>
+<li><p><code>git status</code> 用来查看当前仓库的状态，包括被修改的文件以及未追踪的文件等。</p>
+</li>
+<li><p><code>git diff</code> 用来查看文件的修改内容，用法如下：</p>
+<ul>
+<li><code>git diff</code> 来查看当前已经被修改，但尚未加入缓冲区的文件的修改内容</li>
+<li><code>git diff &lt;文件名&gt;</code> 查看单独文件的修改</li>
+</ul>
+</li>
+<li><p><code>git checkout</code> 这个命令翻译过来应该叫做“检出”，没法一句话概括“检出”的含义，直接来看用法吧</p>
+<ul>
+<li>在你 <code>git add</code> 了一个文件后，你想反向 <code>add</code>（从缓冲区删除），你可以使用 <code>git checkout &lt;文件名&gt;</code></li>
+<li>当你想要切换分支时，可以使用 <code>git checkout &lt;分支名&gt;</code> 来切换到另一个已经存在的分支</li>
+<li>当你想要创建新分支时，可以使用 <code>git checkout -b &lt;新分支名&gt;</code>来切换到一个新分支</li>
+<li>当你想要把一个文件的内容，用它在另一个分支里的内容覆盖时，可以使用 <code>git checkout &lt;分支名&gt; &lt;文件名&gt;</code></li>
+</ul>
+</li>
+<li><p><code>git log</code> 这是最重要的命令之一，查看当前仓库的“提交历史记录”，使用方式：</p>
+<ul>
+<li><code>git log</code> 打开日志界面，按 Q 退出</li>
+<li><code>git log --oneline</code> 打开简洁版历史界面，按 Q 退出</li>
+<li><code>git log &lt;本地分支名&gt;</code> 来查看某一分支的日志</li>
+<li><code>git log &lt;文件/目录名&gt;</code> 来查看某一文件&#x2F;目录的日志</li>
+</ul>
+</li>
+<li><p><code>git reset</code> 这个命令是用来改变头指针的位置的，头指针可以理解为，把当前的仓库内容状态，与哪个提交进行比较，那个提交就是头指针。用法如下。</p>
+<ul>
+<li><code>git reset &lt;sha1&gt;</code>并不会改变仓库的文件内容， 仓库里的文件还在原来的状态，只是它们所在的提交都消失了，因此那些文件都变成了尚未加入缓冲区的状态。</li>
+<li>使用 <code>git reset --hard &lt;sha1&gt;</code> 来把当前分支还原到指定提交时的状态，即使是当时未追踪的文件也会消失。</li>
+</ul>
+</li>
+<li><p><code>git revert</code> 反转一个提交，就是把指定提交的内容倒着做一遍，比如上个提交加了文件，反转之后就是把那个文件删了，它和 <code>git reset --hard</code> 并不一样，那个是重置仓库的状态，这个是反转指定的内容并作为一个新的提交创建。不过 它们两个其实可以达到相同的目的 那就是干掉导致问题的提交，使用方法：</p>
+<ul>
+<li><code>git revert &lt;sha1&gt;</code>来反转一个提交</li>
+</ul>
+</li>
+<li><p><code>git cherry-pick</code> 用来为当前分支应用指定的提交的，使用方法</p>
+<ul>
+<li><code>git cherry-pick &lt;sha1&gt;</code> 把指定提交打到当前分支上</li>
+<li><code>git cherry-pick &lt;头&gt;^..&lt;尾&gt;</code> 把连续多个提交打到当前分支上（包含头尾</li>
+<li>连续 <code>pick</code> 在冲突解决完后 执行 <code>git cherry-pick --continue</code> 即可继续 <code>pick</code></li>
+</ul>
+</li>
+<li><p><code>git branch</code> 就是查看已存在的分支的命令了</p>
+<ul>
+<li><code>git branch</code> 来查看本地的所有分支</li>
+<li><code>git branch -r</code> 查看远程服务器上的所有分支</li>
+<li><code>git branch -D &lt;本地分支名&gt;</code> 使用前提时你当前不在这个被删除的分支上（先切换到别的分支）</li>
+</ul>
+</li>
+<li><p><code>git remote</code> 这个命令和远程服务器相关</p>
+<ul>
+<li><code>git remote</code> 来查看本地已保存的全部远程服务器</li>
+<li><code>git remote get-url &lt;远程服务器名称&gt;</code>来查看一个远程服务器的地址</li>
+<li><code>git remote add &lt;服务器名称&gt; &lt;地址&gt;</code>来新增远程服务器</li>
+<li><code>git remote remove &lt;名称&gt;</code>来删除远程服务器</li>
+</ul>
+</li>
+<li><p><code>git push</code> 这个命令用来将本地修改推送到远程服务器</p>
+<ul>
+<li><code>git push</code> 来推送修改到与当前分支绑定的远程分支</li>
+<li><code>git push --set-upstream &lt;远程服务器名&gt; &lt;本地分支名&gt;</code> 来创建上述绑定。注意！这个命令是将本地分支设为追踪同名远程分支，如果想追踪名字不同的远程分支，<code>请使用 git push --set-upstream &lt;远程服务器名&gt; &lt;本地分支名&gt;:&lt;远程分支名&gt;</code></li>
+<li><code>git push &lt;远程服务器名&gt; &lt;本地分支名&gt;:&lt;远程分支名&gt;</code> 来把指定的本地分支推送到指定的远程分支（是否绑定无所谓）</li>
+<li>git push -f 这适用于强制覆盖，就是在提交历史被修改&#x2F;本地分支落后于远程分支等情况下，强制更新远程分支 （比如 git reset –hard 之后）</li>
+<li><code>git push --delete &lt;远程服务器名&gt; &lt;远程分支名&gt;</code> 删除服务器上的分支</li>
+</ul>
+</li>
+<li><p><code>git fetch</code> 在 <code>git</code> 仓库已经存在的情况下，想要在当前仓库中获取别的仓库&#x2F;分支的内容时使用，使用方式：</p>
+<ul>
+<li><code>git fetch &lt;远程地址/远程服务器名称&gt;</code> 把指定的远程服务器的默认分支，下载到本地的一个叫做 <code>FETCH_HEAD</code> 的临时分支里（你可以这么理解）（一般临时使用远程仓库时才会这么用，比如 <code>merge/cherry-pick</code>）</li>
+<li><code>git fetch &lt;远程地址/服务器名称&gt; &lt;远程分支名&gt;</code> 把指定远程服务器的指定分支下载到 <code>FETCH_HEAD</code> 中</li>
+<li><code>git fetch &lt;远程地址/服务器名称&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;</code> 把远程服务器的指定分支下载到本地的指定分支</li>
+</ul>
+</li>
+<li><p><code>git merge</code> 合并分支，使用方式：</p>
+<ul>
+<li><code>git merge &lt;本地分支名/FETCH_HEAD&gt;</code>来合并一个分支（可能会有冲突）</li>
+</ul>
+</li>
+<li><p><code>git pull</code> 可以把这个命令理解为 <code>git fetch &lt;绑定的远程服务器&gt; &lt;绑定的分支&gt; &amp;&amp; git merge FETCH_HEAD</code></p>
+</li>
+</ul>
+<h2 id="新建数据库"><a href="#新建数据库" class="headerlink" title="新建数据库"></a>新建数据库</h2><p>创建一个目录 <code>basis</code> ，进入目录中右键打开 Git Bash Here ，执行 <code>git init</code> 命令即可新建数据库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br><span class="line">Initialized empty Git repository <span class="keyword">in</span> /basis/.git/</span><br></pre></td></tr></table></figure>
+
+<p>创建成功后，basis 目录中将会出现一个 <code>.git</code> 的目录。</p>
+<h2 id="提交文件"><a href="#提交文件" class="headerlink" title="提交文件"></a>提交文件</h2><p>在 <code>basis</code> 目录中新建一个名为 <code>sample.txt</code> 的文本文件，并输入下列内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">连猴子都懂的Git命令</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>git status</code> 命令确认工作树和索引的状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line">        sample.txt</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use <span class="string">&quot;git add&quot;</span> to track)</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>git add</code> 命令将 <code>sample.txt</code> 文件加入到索引。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ git add sample.txt</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git rm --cached &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line">        new file:   sample.txt</span><br></pre></td></tr></table></figure>
+
+<p>指定参数 <code>.</code> ，可以把当前目录下所有的文件加入到索引。</p>
+<p>执行 <code>git commit</code> 命令之后确认状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m<span class="string">&quot;first commit&quot;</span></span><br><span class="line">[master (root-commit) 90fd96a] first commit</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"> create mode 100644 sample.txt</span><br><span class="line"></span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">nothing to commit, working tree clean</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>git log</code> 命令，我们可以在数据库的提交记录看到新的提交。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit 90fd96aa3edba60e1ef8d1c07a431612c29a9e86 (HEAD -&gt; master)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Wed Jun 22 20:41:42 2022 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
+
+<h2 id="push-到远程数据库"><a href="#push-到远程数据库" class="headerlink" title="push 到远程数据库"></a>push 到远程数据库</h2><p>使用 <code>git remote</code> 指令添加远程数据库，并且使用 <code>push</code> 命令向数据库推送更改内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin https://github.com/CKCat/git-tutorial.git</span><br><span class="line">$ git branch -M main</span><br><span class="line">$ git push -u origin main</span><br><span class="line">Enumerating objects: 3, <span class="keyword">done</span>.</span><br><span class="line">Counting objects: 100% (3/3), <span class="keyword">done</span>.</span><br><span class="line">Writing objects: 100% (3/3), 236 bytes | 236.00 KiB/s, <span class="keyword">done</span>.</span><br><span class="line">Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span><br><span class="line">To https://github.com/CKCat/git-tutorial</span><br><span class="line"> * [new branch]      main -&gt; main</span><br><span class="line">branch <span class="string">&#x27;main&#x27;</span> <span class="built_in">set</span> up to track <span class="string">&#x27;origin/main&#x27;</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>git remote add &lt;name&gt; &lt;url&gt;</code></p>
+<ul>
+<li><code>name</code> : 远程数据库名称，默认名称为 <code>origin</code></li>
+<li><code>url</code> : 远程数据库的 <code>URL</code></li>
+</ul>
+</li>
+<li><p><code>git push &lt;repository&gt; &lt;refspec&gt;</code><br><code>- </code>repository&#96; : 目标地址</p>
+</li>
+<li><p><code>refspec</code> : 推送的分支。如果指定了 <code>-u</code> 选项，那么下一次推送时就可以省略分支名称了。&#96;</p>
+</li>
+</ul>
+<p>通过 github 网站上修改 <code>sample.txt</code> 文件内容如下， 在 <code>commit</code> 消息中输入 <code>添加 add 的说明</code> 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">连猴子都懂的Git命令</span><br><span class="line">add 把变更录入到索引中</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>git pull</code> 指令进行拉取操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git pull</span><br><span class="line">remote: Enumerating objects: 5, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (5/5), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (2/2), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span><br><span class="line">Unpacking objects: 100% (3/3), 696 bytes | 49.00 KiB/s, <span class="keyword">done</span>.</span><br><span class="line">From https://github.com/CKCat/git-tutorial</span><br><span class="line">   90fd96a..c9a9b2d  main       -&gt; origin/main</span><br><span class="line">Updating 90fd96a..c9a9b2d</span><br><span class="line">Fast-forward</span><br><span class="line"> sample.txt | 3 ++-</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>git pull &lt;repository&gt; &lt;refspec&gt;</code><ul>
+<li><code>repository</code> : 数据库名称，默认为 origin；</li>
+<li><code>refspec</code> : 分支。</li>
+</ul>
+</li>
+</ul>
+<p>使用 <code>git log</code> 指令来确认历史记录是否已更新。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit 83e0241f23bb8a18870a34fd2d0bca67a5a59e86 (HEAD -&gt; main, origin/main)</span><br><span class="line">Author: CKCat &lt;844045574@qq.com&gt;</span><br><span class="line">Date:   Wed Jun 22 21:05:20 2022 +0800</span><br><span class="line"></span><br><span class="line">    添加add的说明</span><br><span class="line"></span><br><span class="line">commit 90fd96aa3edba60e1ef8d1c07a431612c29a9e86</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Wed Jun 22 20:41:42 2022 +0800</span><br><span class="line"></span><br><span class="line">    first commit</span><br></pre></td></tr></table></figure>
+
+<h2 id="合并修改记录"><a href="#合并修改记录" class="headerlink" title="合并修改记录"></a>合并修改记录</h2><p>在 github 网站上修改文件内容并 <code>commit</code> 提交，修改内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">连猴子都懂的Git命令</span><br><span class="line">add 把变更录入到索引中</span><br><span class="line">github 远程修改内容</span><br></pre></td></tr></table></figure>
+
+<p>随后在修改本地仓库的文件内容并 <code>commit</code> 提交，修改内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> sample.txt</span><br><span class="line">连猴子都懂的Git命令</span><br><span class="line">add 把变更录入到索引中</span><br><span class="line">本地修改内容</span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line"></span><br><span class="line">$ git commit -m<span class="string">&quot;本地修改&quot;</span></span><br><span class="line">[main 844aa9c] 本地修改</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br></pre></td></tr></table></figure>
+
+<p>最后将本地仓库提交到远程仓库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin main</span><br><span class="line">To https://github.com/CKCat/git-tutorial</span><br><span class="line"> ! [rejected]        main -&gt; main (fetch first)</span><br><span class="line">error: failed to push some refs to <span class="string">&#x27;https://github.com/CKCat/git-tutorial&#x27;</span></span><br><span class="line">hint: Updates were rejected because the remote contains work that you <span class="keyword">do</span></span><br><span class="line">hint: not have locally. This is usually caused by another repository pushing</span><br><span class="line">hint: to the same ref. You may want to first integrate the remote changes</span><br><span class="line">hint: (e.g., <span class="string">&#x27;git pull ...&#x27;</span>) before pushing again.</span><br><span class="line">hint: See the <span class="string">&#x27;Note about fast-forwards&#x27;</span> <span class="keyword">in</span> <span class="string">&#x27;git push --help&#x27;</span> <span class="keyword">for</span> details.</span><br></pre></td></tr></table></figure>
+
+<p>可以看到发生了错误，推送被拒绝（rejected）了。</p>
+<p>为了把变更内容推送到远程数据库，我们必须手动解决冲突。首先请运行 <code>git pull</code>，以从远程数据库取得最新的变更记录吧。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ git pull</span><br><span class="line">remote: Enumerating objects: 5, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (5/5), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (2/2), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span><br><span class="line">Unpacking objects: 100% (3/3), 720 bytes | 32.00 KiB/s, <span class="keyword">done</span>.</span><br><span class="line">From https://github.com/CKCat/git-tutorial</span><br><span class="line">   83e0241..2f6ac56  main       -&gt; origin/main</span><br><span class="line">Auto-merging sample.txt</span><br><span class="line">CONFLICT (content): Merge conflict <span class="keyword">in</span> sample.txt</span><br><span class="line">Automatic merge failed; fix conflicts and <span class="keyword">then</span> commit the result.</span><br></pre></td></tr></table></figure>
+
+<p>打开 <code>sample.txt</code> 文件，我们看到 Git 已添加标示以显示冲突部分。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> sample.txt</span><br><span class="line">连猴子都懂的Git命令</span><br><span class="line">add 把变更录入到索引中</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; <span class="string">HEAD</span></span><br><span class="line"><span class="string">本地修改内容</span></span><br><span class="line"><span class="string">=======</span></span><br><span class="line"><span class="string">github 远程修改内容</span></span><br><span class="line"><span class="string">&gt;&gt;&gt;&gt;&gt;&gt;&gt; 2f6ac56c9bc7e2d95b48f28ba77607ebb6b98c97</span></span><br></pre></td></tr></table></figure>
+
+<p>导入两方的修改，并删除多余的标示行以解决冲突。文件的内容发生了修改，所以需要进行提交。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> sample.txt</span><br><span class="line">连猴子都懂的Git命令</span><br><span class="line">add 把变更录入到索引中</span><br><span class="line">github 远程修改内容</span><br><span class="line">本地修改内容</span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line"></span><br><span class="line">$ git commit -m<span class="string">&quot;合并&quot;</span></span><br><span class="line">[main 94d7787] 合并</span><br></pre></td></tr></table></figure>
+
+<p>用 <code>git log</code> 命令来确认数据库的历史记录是否准确。指定 <code>--graph</code> 选项，能以文本形式显示更新记录的流程图。指定 <code>--oneline</code> 选项，能在一行中显示提交的信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">*   94d7787 (HEAD -&gt; main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 (origin/main) github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<p>最终就可以 <code>git push</code> 至远程仓库了。</p>
+<h1 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h1><h2 id="分支概念"><a href="#分支概念" class="headerlink" title="分支概念"></a>分支概念</h2><p>分支是为了将修改记录的整体流程分叉保存。分叉后的分支不受其他分支的影响，所以在同一个数据库里可以同时进行多个修改。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E5%88%86%E6%94%AF.png" class="">
+
+<p>在数据库进行最初的提交后, Git 会创建一个名为 master 的分支。</p>
+<h3 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h3><p>HEAD 指向的是现在使用中的分支的最后一次更新。通常默认指向 master 分支的最后一次更新。通过移动 HEAD，就可以变更使用的分支。提交时使用 <code>~</code> 和 <code>^</code> 就可以指定某个提交的相对位置。HEAD 后面加上 <code>~</code> 可以指定 HEAD 之前的提交记录。<code>^</code> 来指定使用哪个为根节点。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/HEAD.png" class="">
+
+<h3 id="stash"><a href="#stash" class="headerlink" title="stash"></a>stash</h3><p>还未提交的修改内容以及新添加的文件，留在索引区域或工作树的情况下切换到其他的分支时，修改内容会从原来的分支移动到目标分支。</p>
+<p>但是如果在 checkout 的目标分支中相同的文件也有修改，checkout 会失败的。这时要么先提交修改内容，要么用 stash 暂时保存修改内容后再 checkout。</p>
+<p>stash 是临时保存文件修改内容的区域。stash 可以暂时保存工作树和索引里还没提交的修改内容，您可以事后再取出暂存的修改，应用到原先的分支或其他的分支上。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/stash.png" class="">
+
+<h3 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h3><p>merge 合并保持修改内容的历史记录，但是历史记录会很复杂。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/fast-forward%E5%92%8Cnon-fast-forward%E5%90%88%E5%B9%B6.png" class="">
+
+<h3 id="rebase"><a href="#rebase" class="headerlink" title="rebase"></a>rebase</h3><p>rebase 合并历史记录简单，是在原有提交的基础上将差异内容反映进去。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/rebase%E5%90%88%E5%B9%B6.png" class="">
+
+<h2 id="分支操作"><a href="#分支操作" class="headerlink" title="分支操作"></a>分支操作</h2><h3 id="建立分支"><a href="#建立分支" class="headerlink" title="建立分支"></a>建立分支</h3><p>可以通过 branch 命令来创建分支。不指定参数直接执行 branch 命令的话，可以显示分支列表。 前面有 <code>*</code> 的就是现在的分支。</p>
+<p>创建名为 issue1 的分支，并显示分支列表。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git branch issue1</span><br><span class="line"></span><br><span class="line">$ git branch</span><br><span class="line">  issue1</span><br><span class="line">* main</span><br></pre></td></tr></table></figure>
+
+<h3 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h3><p>可以执行 checkout 命令切换分支，在 checkout 命令指定 <code>-b</code> 选项执行，可以创建分支并进行切换。</p>
+<p>切换到 issue1 分支的状态下，修改文件内容并提交，历史记录会被记录到 issue1 分支。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout issue1</span><br><span class="line">Switched to branch <span class="string">&#x27;issue1&#x27;</span></span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line">$ git commit -m<span class="string">&quot;issue1分支添加&quot;</span></span><br><span class="line">[issue1 b68b7e0] issue1分支添加</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line"> $ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* b68b7e0 (HEAD -&gt; issue1) issue1分支添加</span><br><span class="line">*   94d7787 (origin/main, main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<h3 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h3><p>执行 merge 命令以合并分支。该命令将指定分支导入到 HEAD 指定的分支。</p>
+<p>执行 merge 命令命令，将 issue1 分支合并至 main 分支，这个是 fast-forward（快进）合并。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> $ git checkout main</span><br><span class="line">Switched to branch <span class="string">&#x27;main&#x27;</span></span><br><span class="line">Your branch is up to <span class="built_in">date</span> with <span class="string">&#x27;origin/main&#x27;</span>.</span><br><span class="line"></span><br><span class="line">(base) $ git merge issue1</span><br><span class="line">Updating 94d7787..b68b7e0</span><br><span class="line">Fast-forward</span><br><span class="line"> sample.txt | 3 ++-</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line">(base) $ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* b68b7e0 (HEAD -&gt; main, issue1) issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h3><p>在 branch 命令指定 <code>-d</code> 选项执行，以删除分支。</p>
+<p>删除 issue1 分支。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d issue1</span><br><span class="line">Deleted branch issue1 (was b68b7e0).</span><br><span class="line"></span><br><span class="line">$ git branch</span><br><span class="line">* main</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* b68b7e0 (HEAD -&gt; main) issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<h3 id="并行操作"><a href="#并行操作" class="headerlink" title="并行操作"></a>并行操作</h3><p>首先创建 issue2 分支和 issue3 分支，并切换到 issue2 分支，在 issue2 分支的 <code>sample.txt</code> 添加 commit 命令的说明后提交。然后切换到 issue3 分支，在 issue3 分支的 <code>sample.txt</code> 添加 commit 命令的说明后提交。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">$ git branch issue2</span><br><span class="line">$ git branch issue3</span><br><span class="line"></span><br><span class="line">$ git checkout issue2</span><br><span class="line">Switched to branch <span class="string">&#x27;issue2&#x27;</span></span><br><span class="line"></span><br><span class="line">$ git branch</span><br><span class="line">* issue2</span><br><span class="line">  issue3</span><br><span class="line">  main</span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line">$ git commit -m<span class="string">&quot;issue2操作&quot;</span></span><br><span class="line">[issue2 e0cb521] issue2操作</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* e0cb521 (HEAD -&gt; issue2) issue2操作</span><br><span class="line">* b68b7e0 (main, issue3) issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br><span class="line"></span><br><span class="line">$ git checkout issue3</span><br><span class="line">Switched to branch <span class="string">&#x27;issue3&#x27;</span></span><br><span class="line"></span><br><span class="line">$ git branch</span><br><span class="line">  issue2</span><br><span class="line">* issue3</span><br><span class="line">  main</span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line"></span><br><span class="line">$ git commit -m<span class="string">&quot;issue3操作&quot;</span></span><br><span class="line">[issue3 57b6972] issue3操作</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* 57b6972 (HEAD -&gt; issue3) issue3操作</span><br><span class="line">* b68b7e0 (main) issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<p>这样，添加 commit 的说明的操作，和添加 pull 的说明的操作就并行进行了。</p>
+<h3 id="解决合并的冲突"><a href="#解决合并的冲突" class="headerlink" title="解决合并的冲突"></a>解决合并的冲突</h3><p>把 issue2 分支和 issue3 分支的修改合并到 master。</p>
+<p>切换 master 分支后，与 issue2 分支合并，将执行 fast-forward（快进）合并。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout main</span><br><span class="line">Switched to branch <span class="string">&#x27;main&#x27;</span></span><br><span class="line">Your branch is ahead of <span class="string">&#x27;origin/main&#x27;</span> by 1 commit.</span><br><span class="line">  (use <span class="string">&quot;git push&quot;</span> to publish your <span class="built_in">local</span> commits)</span><br><span class="line"></span><br><span class="line">$ git merge issue2</span><br><span class="line">Updating b68b7e0..e0cb521</span><br><span class="line">Fast-forward</span><br><span class="line"> sample.txt | 3 ++-</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/graph.png" class="">
+
+<p>接着合并 issue3 分支，由于在同一行进行了修改，所以产生了冲突，自动合并失败</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ git merge issue3</span><br><span class="line">Auto-merging sample.txt</span><br><span class="line">CONFLICT (content): Merge conflict <span class="keyword">in</span> sample.txt</span><br><span class="line">Automatic merge failed; fix conflicts and <span class="keyword">then</span> commit the result.</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cat</span> sample.txt</span><br><span class="line">连猴子都懂的Git命令</span><br><span class="line">add 把变更录入到索引中</span><br><span class="line">github 远程修改内容</span><br><span class="line">本地修改内容</span><br><span class="line">在 issue1 分支下添加的内容</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; <span class="string">HEAD</span></span><br><span class="line"><span class="string">在 issue2 分支下添加的内容</span></span><br><span class="line"><span class="string">=======</span></span><br><span class="line"><span class="string">在 issue3 分支下添加的内容</span></span><br><span class="line"><span class="string">&gt;&gt;&gt;&gt;&gt;&gt;&gt; issue3</span></span><br></pre></td></tr></table></figure>
+
+<p>修改冲突的部分，重新提交。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ git add sample.txt</span><br><span class="line">$ git commit -m<span class="string">&quot;合并issue3分支&quot;</span></span><br><span class="line">[main e6d1f77] 合并issue3分支</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">*   e6d1f77 (HEAD -&gt; main) 合并issue3分支</span><br><span class="line">|\</span><br><span class="line">| * 57b6972 (issue3) issue3操作</span><br><span class="line">* | e0cb521 (issue2) issue2操作</span><br><span class="line">|/</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<h3 id="用-rebase-合并"><a href="#用-rebase-合并" class="headerlink" title="用 rebase 合并"></a>用 rebase 合并</h3><p>合并 issue3 分支的时候，使用 rebase 可以使提交的历史记录显得更简洁。</p>
+<p>现在暂时取消刚才的合并。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ git reset --hard HEAD~</span><br><span class="line">HEAD is now at e0cb521 issue2操作</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* e0cb521 (HEAD -&gt; main, issue2) issue2操作</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<p>切换到 issue3 分支后，对 main 执行 rebase。和 merge 时的操作相同，修改在 <code>sample.txt</code> 发生冲突的部分。</p>
+<p>rebase 的时候，修改冲突后的提交不是使用 commit 命令，而是执行 rebase 命令指定 <code>--continue</code> 选项。若要取消 rebase，指定 <code>--abort</code> 选项。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout issue3</span><br><span class="line">Switched to branch <span class="string">&#x27;issue3&#x27;</span></span><br><span class="line">$ git rebase main</span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line">$ git rebase --<span class="built_in">continue</span></span><br><span class="line">[detached HEAD babe974] issue3操作</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br><span class="line">Successfully rebased and updated refs/heads/issue3.</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* babe974 (HEAD -&gt; issue3) issue3操作</span><br><span class="line">* e0cb521 (main, issue2) issue2操作</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<p>这样，在 main 分支的 issue3 分支就可以 fast-forward 合并了。切换到 main 分支后执行合并。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout main</span><br><span class="line">Switched to branch <span class="string">&#x27;main&#x27;</span></span><br><span class="line">Your branch is ahead of <span class="string">&#x27;origin/main&#x27;</span> by 2 commits.</span><br><span class="line">  (use <span class="string">&quot;git push&quot;</span> to publish your <span class="built_in">local</span> commits)</span><br><span class="line"></span><br><span class="line">$ git merge issue3</span><br><span class="line">Updating e0cb521..babe974</span><br><span class="line">Fast-forward</span><br><span class="line"> sample.txt | 3 ++-</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* babe974 (HEAD -&gt; main, issue3) issue3操作</span><br><span class="line">* e0cb521 (issue2) issue2操作</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 (origin/main) 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<h2 id="远端数据库"><a href="#远端数据库" class="headerlink" title="远端数据库"></a>远端数据库</h2><h3 id="pull"><a href="#pull" class="headerlink" title="pull"></a>pull</h3><p>执行 pull 可以取得远程数据库的历史记录。</p>
+<p>本地数据库分支没有任何的更改将执行 fast-forward 合并。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/pull-fast-forward%E5%90%88%E5%B9%B6.png" class="">
+<p>图中的 master 是本地数据库的 master 分支，<code>origin/master</code> 是远程数据库的 origin 的 master 分支。</p>
+<p>如果本地数据库的 master 分支有新的历史记录，就需要合并双方的修改。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/pull-non-fast-forward%E5%90%88%E5%B9%B6.png" class="">
+
+<h3 id="fetch"><a href="#fetch" class="headerlink" title="fetch"></a>fetch</h3><p>执行 pull，远程数据库的内容就会自动合并。但是，有时只是想确认本地数据库的内容而不想合并。这种情况下，请使用 fetch。</p>
+<p>执行 fetch 就可以取得远程数据库的最新历史记录。取得的提交会导入到没有名字的分支，这个分支可以从名为 FETCH_HEAD 的退出。</p>
+<p>例如，在本地数据库和远程数据库的 origin，如果在从 B 进行提交的状态下执行 fetch，就会形成如下图所示的历史记录。</p>
+<p>在这个状态下，若要把远程数据库的内容合并到本地数据库，可以合并 FETCH_HEAD，或者重新执行 pull。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/fetch.png" class="">
+
+<blockquote>
+<p>合并后，历史记录会和 pull 相同。<strong>实际上 pull 的内容是 fetch + merge 组成的。</strong></p>
+</blockquote>
+<h3 id="push"><a href="#push" class="headerlink" title="push"></a>push</h3><p>从本地数据库 push 到远程数据库时，要 fast-forward 合并 push 的分支。如果发生冲突，push 会被拒绝的。</p>
+<p>若要共享在本地数据库创建的分支，需要明确的 push。因此，没有执行 push 就不会给远程数据库带来影响，因而可以自由的创建自己的分支。</p>
+<blockquote>
+<p>基本上，远程数据库共享的提交是不能修改的。如果修改的话，跟远程数据库同步的其他数据库的历史记录会变得很奇怪的。</p>
+</blockquote>
+<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><p>标签是为了更方便地参考提交而给它标上易懂的名称。</p>
+<p>Git 可以使用 2 种标签：轻标签和注解标签。打上的标签是固定的，不能像分支那样可以移动位置。</p>
+<p>轻标签</p>
+<ul>
+<li>添加名称</li>
+</ul>
+<p>注解标签</p>
+<ul>
+<li>添加名称</li>
+<li>添加注解</li>
+<li>添加签名</li>
+</ul>
+<p>一般情况下，发布标签是采用注解标签来添加注解或签名的。轻标签是为了在本地暂时使用或一次性使用。</p>
+<h3 id="添加轻标签"><a href="#添加轻标签" class="headerlink" title="添加轻标签"></a>添加轻标签</h3><p>使用<code> git tag &lt;tagname&gt;</code> 命令来添加标签，在 <code>&lt;tagname&gt;</code> 执行标签的名称。</p>
+<p>如果没有使用参数而执行 tag ，可以显示标签列表。</p>
+<p>如果在 log 命令添加 <code>--decorate</code> 选项执行，可以显示包含标签资料的历史记录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ git tag apple</span><br><span class="line">$ git tag</span><br><span class="line">apple</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --decorate</span><br><span class="line">commit babe9740fda8df3cb2fffb71efba89510561bc68 (HEAD -&gt; main, tag: apple, issue3)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"></span><br><span class="line">    issue3操作</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加注解标签"><a href="#添加注解标签" class="headerlink" title="添加注解标签"></a>添加注解标签</h3><p>若要添加注解标签，可以在 tag 命令指定 <code>-a</code> 选项执行。执行后会启动编辑区，请输入注解，也可以指定 <code>-m</code> 选项来添加注解。</p>
+<p>如果在 tag 命令指定 <code>-n</code> 选项执行，可以显示标签的列表和注解。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -am<span class="string">&quot;添加注解标签&quot;</span> banana</span><br><span class="line"></span><br><span class="line">$ git tag -n</span><br><span class="line">apple           issue3操作</span><br><span class="line">banana          添加注解标签</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除标签"><a href="#删除标签" class="headerlink" title="删除标签"></a>删除标签</h3><p>执行 <code>git tag -d &lt;tagname&gt;</code> 删除标签。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -d banana</span><br><span class="line">Deleted tag <span class="string">&#x27;banana&#x27;</span> (was 32445a9)</span><br><span class="line"></span><br><span class="line">$ git tag -n</span><br><span class="line">apple           issue3操作</span><br></pre></td></tr></table></figure>
+
+<h2 id="改写提交"><a href="#改写提交" class="headerlink" title="改写提交"></a>改写提交</h2><h3 id="修改最近的提交"><a href="#修改最近的提交" class="headerlink" title="修改最近的提交"></a>修改最近的提交</h3><p><code>commit --amend</code> 执行提交的话，可以修改同一个分支最近的提交内容和注解。</p>
+<p>主要使用的场合：</p>
+<ul>
+<li>添加最近提交时漏掉的档案</li>
+<li>修改最近提交的注解</li>
+</ul>
+<p>修改文件后执行 <code>commit --amend</code> 操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit 47b5320e7093bf243fed1385e777fd77621ce920 (HEAD -&gt; main)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"></span><br><span class="line">    操作issue3操作</span><br><span class="line">$ git add sample.txt</span><br><span class="line">$ git commit --amend</span><br><span class="line">[main d2ed9d0] 执行commit --amend操作issue3操作</span><br><span class="line"> Date: Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"> 1 file changed, 3 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line">E:\Study\NoteCode\git-tutorial(main -&gt; origin)</span><br><span class="line">(base) $ git <span class="built_in">log</span></span><br><span class="line">commit d2ed9d04cf81048ad711a595eab49dab90258ca2 (HEAD -&gt; main)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"></span><br><span class="line">    执行commit --amend操作issue3操作</span><br></pre></td></tr></table></figure>
+
+<h3 id="取消过去的提交"><a href="#取消过去的提交" class="headerlink" title="取消过去的提交"></a>取消过去的提交</h3><p>revert 可以取消指定的提交内容。使用后面要提到的 rebase -i 或 reset 也可以删除提交。但是，不能随便删除已经发布的提交，这时需要通过 revert 创建要否定的提交。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E5%8F%96%E6%B6%88%E8%BF%87%E5%8E%BB%E7%9A%84%E6%8F%90%E4%BA%A4.png" class="">
+
+<p>主要使用的场合：</p>
+<ul>
+<li>安全地取消过去发布的提交</li>
+</ul>
+<p>用 log 命令确认历史记录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit ca7dd5e0e3ecc86a7d4858a43583dfdb6b85357f (HEAD -&gt; issue3)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Fri Jun 24 09:00:30 2022 +0800</span><br><span class="line"></span><br><span class="line">    revert测试</span><br><span class="line"></span><br><span class="line">commit babe9740fda8df3cb2fffb71efba89510561bc68 (tag: apple)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"></span><br><span class="line">    issue3操作</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">$ git revert HEAD</span><br><span class="line">[issue3 ea92671] Revert <span class="string">&quot;取消revert&quot;</span></span><br><span class="line"> 1 file changed, 1 insertion(+), 2 deletions(-)</span><br><span class="line"></span><br><span class="line"> $ git <span class="built_in">log</span></span><br><span class="line">commit ea926713db229d11e91eaabab384c8e54376e7f4 (HEAD -&gt; issue3)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Fri Jun 24 09:01:40 2022 +0800</span><br><span class="line"></span><br><span class="line">    Revert <span class="string">&quot;取消revert&quot;</span></span><br><span class="line"></span><br><span class="line">    This reverts commit ca7dd5e0e3ecc86a7d4858a43583dfdb6b85357f.</span><br><span class="line"></span><br><span class="line">commit ca7dd5e0e3ecc86a7d4858a43583dfdb6b85357f</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Fri Jun 24 09:00:30 2022 +0800</span><br><span class="line"></span><br><span class="line">    revert测试</span><br><span class="line"></span><br><span class="line">commit babe9740fda8df3cb2fffb71efba89510561bc68 (tag: apple)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"></span><br><span class="line">    issue3操作</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/revert.png" class="">
+
+<h3 id="遗弃提交"><a href="#遗弃提交" class="headerlink" title="遗弃提交"></a>遗弃提交</h3><p>reset 可以遗弃不再使用的提交。执行遗弃时，需要根据影响的范围而指定不同的模式，可以指定是否复原索引或工作树的内容。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E9%81%97%E5%BC%83%E6%8F%90%E4%BA%A4.png" class="">
+
+<table>
+<thead>
+<tr>
+<th>模式名称</th>
+<th>HEAD 的位置</th>
+<th>索引</th>
+<th>工作树</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>soft</td>
+<td>修改</td>
+<td>不修改</td>
+<td>不修改</td>
+</tr>
+<tr>
+<td>mixed(默认)</td>
+<td>修改</td>
+<td>修改</td>
+<td>不修改</td>
+</tr>
+<tr>
+<td>hard</td>
+<td>修改</td>
+<td>修改</td>
+<td>修改</td>
+</tr>
+</tbody></table>
+<p>主要使用的场合：</p>
+<ul>
+<li>复原修改过的索引的状态(mixed)</li>
+<li>彻底取消最近的提交(hard)</li>
+<li>只取消提交(soft)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit ea926713db229d11e91eaabab384c8e54376e7f4 (HEAD -&gt; issue3)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Fri Jun 24 09:01:40 2022 +0800</span><br><span class="line"></span><br><span class="line">    Revert <span class="string">&quot;取消revert&quot;</span></span><br><span class="line"></span><br><span class="line">    This reverts commit ca7dd5e0e3ecc86a7d4858a43583dfdb6b85357f.</span><br><span class="line"></span><br><span class="line">commit ca7dd5e0e3ecc86a7d4858a43583dfdb6b85357f</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Fri Jun 24 09:00:30 2022 +0800</span><br><span class="line"></span><br><span class="line">    revert测试</span><br><span class="line"></span><br><span class="line">commit babe9740fda8df3cb2fffb71efba89510561bc68 (tag: apple)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"></span><br><span class="line">    issue3操作</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">$ git reset --hard HEAD~~</span><br><span class="line">HEAD is now at babe974 issue3操作</span><br><span class="line"></span><br><span class="line"> $ git <span class="built_in">log</span></span><br><span class="line">commit babe9740fda8df3cb2fffb71efba89510561bc68 (HEAD -&gt; issue3, tag: apple)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"></span><br><span class="line">    issue3操作</span><br><span class="line"></span><br><span class="line">commit e0cb521f5947288c8452b28f05524b1bc71cbb23 (issue2)</span><br><span class="line">Author: CKCat &lt;ckcatck@qq.com&gt;</span><br><span class="line">Date:   Thu Jun 23 15:42:11 2022 +0800</span><br><span class="line"></span><br><span class="line">    issue2操作</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/reset.png" class="">
+
+<blockquote>
+<p>在 reset 之前的提交可以参照 ORIG_HEAD。Reset 错误的时候，执行<code> git reset --hard ORIG_HEAD</code> 就可以还原到 reset 前的状态。</p>
+</blockquote>
+<h3 id="提取提交"><a href="#提取提交" class="headerlink" title="提取提交"></a>提取提交</h3><p>cherry-pick 您可以从其他分支复制指定的提交，然后导入到现在的分支。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E6%8F%90%E5%8F%96%E6%8F%90%E4%BA%A4.png" class="">
+
+<p>主要使用的场合：</p>
+<ul>
+<li>把弄错分支的提交移动到正确的地方</li>
+<li>把其他分支的提交添加到现在的分支</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* 40b4d95 (HEAD -&gt; main) cherry-pick</span><br><span class="line">* d2ed9d0 (origin/main) 执行commit --amend操作issue3操作</span><br><span class="line">* e0cb521 (issue2) issue2操作</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br><span class="line"></span><br><span class="line">$ git checkout bugfix</span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* 4d8800f (HEAD -&gt; bugfix) 修复bug2</span><br><span class="line">* d711099 修复bug1</span><br><span class="line">* babe974 (tag: apple, issue3) issue3操作</span><br><span class="line">* e0cb521 (issue2) issue2操作</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br><span class="line"></span><br><span class="line">$ git checkout main</span><br><span class="line">Already on <span class="string">&#x27;main&#x27;</span></span><br><span class="line">Your branch is ahead of <span class="string">&#x27;origin/main&#x27;</span> by 2 commits.</span><br><span class="line">  (use <span class="string">&quot;git push&quot;</span> to publish your <span class="built_in">local</span> commits)</span><br><span class="line">$ git cherry-pick d711099</span><br><span class="line">$ git add sample.txt</span><br><span class="line">$ git commit</span><br><span class="line">[main 99db644] 修复bug1</span><br><span class="line"> Date: Fri Jun 24 09:17:21 2022 +0800</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line">$ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* 99db644 (HEAD -&gt; main) 修复bug1</span><br><span class="line">* 40b4d95 cherry-pick</span><br><span class="line">* d2ed9d0 (origin/main) 执行commit --amend操作issue3操作</span><br><span class="line">* e0cb521 (issue2) issue2操作</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<h3 id="改写提交的历史记录"><a href="#改写提交的历史记录" class="headerlink" title="改写提交的历史记录"></a>改写提交的历史记录</h3><p>在 rebase 指定 i 选项，您可以改写、替换、删除或合并提交。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E6%94%B9%E5%86%99%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95.png" class="">
+
+<p>主要使用的场合：</p>
+<ul>
+<li>在 push 之前，重新输入正确的提交注解。</li>
+<li>清楚地汇合内容含义相同的提交。</li>
+<li>添加最近提交时漏掉的档案。</li>
+</ul>
+<h4 id="用-rebase-i-汇合提交"><a href="#用-rebase-i-汇合提交" class="headerlink" title="用 rebase -i 汇合提交"></a>用 rebase -i 汇合提交</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">$ git rebase -i HEAD~~</span><br><span class="line"></span><br><span class="line">pick 40b4d95 cherry-pick</span><br><span class="line">pick 99db644 修复bug1</span><br><span class="line"></span><br><span class="line"><span class="comment"># Rebase d2ed9d0..99db644 onto d2ed9d0 (2 commands)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Commands:</span></span><br><span class="line"><span class="comment"># p, pick &lt;commit&gt; = use commit</span></span><br><span class="line"><span class="comment"># r, reword &lt;commit&gt; = use commit, but edit the commit message</span></span><br><span class="line"><span class="comment"># e, edit &lt;commit&gt; = use commit, but stop for amending</span></span><br><span class="line"><span class="comment"># s, squash &lt;commit&gt; = use commit, but meld into previous commit</span></span><br><span class="line"><span class="comment"># f, fixup [-C | -c] &lt;commit&gt; = like &quot;squash&quot; but keep only the previous</span></span><br><span class="line"><span class="comment">#                    commit&#x27;s log message, unless -C is used, in which case</span></span><br><span class="line"><span class="comment">#                    keep only this commit&#x27;s message; -c is same as -C but</span></span><br><span class="line"><span class="comment">#                    opens the editor</span></span><br><span class="line"><span class="comment"># x, exec &lt;command&gt; = run command (the rest of the line) using shell</span></span><br><span class="line"><span class="comment"># b, break = stop here (continue rebase later with &#x27;git rebase --continue&#x27;)</span></span><br><span class="line"><span class="comment"># d, drop &lt;commit&gt; = remove commit</span></span><br><span class="line"><span class="comment"># l, label &lt;label&gt; = label current HEAD with a name</span></span><br><span class="line"><span class="comment"># t, reset &lt;label&gt; = reset HEAD to a label</span></span><br><span class="line"><span class="comment"># m, merge [-C &lt;commit&gt; | -c &lt;commit&gt;] &lt;label&gt; [# &lt;oneline&gt;]</span></span><br><span class="line"><span class="comment"># .       create a merge commit using the original merge commit&#x27;s</span></span><br><span class="line"><span class="comment"># .       message (or the oneline, if no original merge commit was</span></span><br><span class="line"><span class="comment"># .       specified); use -c &lt;commit&gt; to reword the commit message</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># These lines can be re-ordered; they are executed from top to bottom.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># If you remove a line here THAT COMMIT WILL BE LOST.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># However, if you remove everything, the rebase will be aborted.</span></span><br><span class="line"><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>将第二行的 <code>pick</code> 改成 <code>squash</code>，然后保存并退出。由于合并后要提交，所以接着会显示提交信息的编辑器，请编辑信息后保存并退出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> $ git <span class="built_in">log</span> --graph --oneline</span><br><span class="line">* 6d58763 (HEAD -&gt; main) cherry-pick</span><br><span class="line">* d2ed9d0 (origin/main) 执行commit --amend操作issue3操作</span><br><span class="line">* e0cb521 (issue2) issue2操作</span><br><span class="line">* b68b7e0 issue1分支添加</span><br><span class="line">*   94d7787 合并</span><br><span class="line">|\</span><br><span class="line">| * 2f6ac56 github 远程修改</span><br><span class="line">* | 844aa9c 本地修改</span><br><span class="line">|/</span><br><span class="line">* 83e0241 添加add的说明</span><br><span class="line">* 90fd96a first commit</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/rebase.png" class="">
+
+<h4 id="用-rebase-i-修改提交"><a href="#用-rebase-i-修改提交" class="headerlink" title="用 rebase -i 修改提交"></a>用 rebase -i 修改提交</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ git rebase -i HEAD~~</span><br><span class="line"></span><br><span class="line"><span class="comment"># Rebase e0cb521..6d58763 onto e0cb521 (2 commands)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Commands:</span></span><br><span class="line"><span class="comment"># p, pick &lt;commit&gt; = use commit</span></span><br><span class="line"><span class="comment"># r, reword &lt;commit&gt; = use commit, but edit the commit message</span></span><br><span class="line"><span class="comment"># e, edit &lt;commit&gt; = use commit, but stop for amending</span></span><br><span class="line"><span class="comment"># s, squash &lt;commit&gt; = use commit, but meld into previous commit</span></span><br><span class="line"><span class="comment"># f, fixup [-C | -c] &lt;commit&gt; = like &quot;squash&quot; but keep only the previous</span></span><br><span class="line"><span class="comment">#                    commit&#x27;s log message, unless -C is used, in which case</span></span><br><span class="line"><span class="comment">#                    keep only this commit&#x27;s message; -c is same as -C but</span></span><br><span class="line"><span class="comment">#                    opens the editor</span></span><br><span class="line"><span class="comment"># x, exec &lt;command&gt; = run command (the rest of the line) using shell</span></span><br><span class="line"><span class="comment"># b, break = stop here (continue rebase later with &#x27;git rebase --continue&#x27;)</span></span><br><span class="line"><span class="comment"># d, drop &lt;commit&gt; = remove commit</span></span><br><span class="line"><span class="comment"># l, label &lt;label&gt; = label current HEAD with a name</span></span><br><span class="line"><span class="comment"># t, reset &lt;label&gt; = reset HEAD to a label</span></span><br><span class="line"><span class="comment"># m, merge [-C &lt;commit&gt; | -c &lt;commit&gt;] &lt;label&gt; [# &lt;oneline&gt;]</span></span><br><span class="line"><span class="comment"># .       create a merge commit using the original merge commit&#x27;s</span></span><br><span class="line"><span class="comment"># .       message (or the oneline, if no original merge commit was</span></span><br><span class="line"><span class="comment"># .       specified); use -c &lt;commit&gt; to reword the commit message</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># These lines can be re-ordered; they are executed from top to bottom.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># If you remove a line here THAT COMMIT WILL BE LOST.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># However, if you remove everything, the rebase will be aborted.</span></span><br><span class="line"><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>将第一行的 <code>pick</code> 改成 <code>edit</code> ，然后保存并退出。将会显示以下内容，修改过的提交呈现退出状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Stopped at d2ed9d0...  执行commit --amend操作issue3操作</span><br><span class="line">You can amend the commit now, with</span><br><span class="line"></span><br><span class="line">  git commit --amend</span><br><span class="line"></span><br><span class="line">Once you are satisfied with your changes, run</span><br><span class="line"></span><br><span class="line">  git rebase --<span class="built_in">continue</span></span><br><span class="line"></span><br><span class="line">pick d2ed9d0 执行commit --amend操作issue3操作</span><br><span class="line">pick 6d58763 cherry-pick</span><br></pre></td></tr></table></figure>
+
+<p>打开 <code>sample.txt</code>，适当地修改，用 <code>commit --amend</code> 保存修改。</p>
+<p>现在已经 commit，但是 rebase 操作还没结束。若要通知这个提交的操作已经结束，请指定 <code>--continue</code> 选项执行 rebase。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ git add sample.txt</span><br><span class="line">$ git commit --amend</span><br><span class="line">[detached HEAD 1c5abb5] rebase 提交修改 执行commit --amend操作issue3操作</span><br><span class="line"> Date: Thu Jun 23 15:44:26 2022 +0800</span><br><span class="line"> 1 file changed, 4 insertions(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line">$ git rebase --<span class="built_in">continue</span></span><br><span class="line">Auto-merging sample.txt</span><br><span class="line">CONFLICT (content): Merge conflict <span class="keyword">in</span> sample.txt</span><br><span class="line">error: could not apply 6d58763... cherry-pick</span><br><span class="line">hint: Resolve all conflicts manually, mark them as resolved with</span><br><span class="line">hint: <span class="string">&quot;git add/rm &lt;conflicted_files&gt;&quot;</span>, <span class="keyword">then</span> run <span class="string">&quot;git rebase --continue&quot;</span>.</span><br><span class="line">hint: You can instead skip this commit: run <span class="string">&quot;git rebase --skip&quot;</span>.</span><br><span class="line">hint: To abort and get back to the state before <span class="string">&quot;git rebase&quot;</span>, run <span class="string">&quot;git rebase --abort&quot;</span>.</span><br><span class="line">Could not apply 6d58763... cherry-pick</span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line"></span><br><span class="line">$ git rebase --<span class="built_in">continue</span></span><br><span class="line">[detached HEAD f3082c9] cherry-pick</span><br><span class="line"> 1 file changed, 2 insertions(+)</span><br><span class="line">Successfully rebased and updated refs/heads/main.</span><br></pre></td></tr></table></figure>
+
+<p>提示发生冲突, 修改冲突部分后再执行 add 和 rebase –continue 即可，不需要 commit 操作。</p>
+<p>如果在中途要停止 rebase 操作，请在 rebase 指定 <code>--abort</code> 选项执行，这样就可以抹去并停止在 rebase 的操作。</p>
+<p>如果要把多个提交修改成 edit，下一个要修改的提交会退出，请执行同样的修改。</p>
+<blockquote>
+<p>实际上，在 rebase 之前的提交会以 ORIG_HEAD 之名存留。如果 rebase 之后无法复原到原先的状态，可以用 git reset –hard ORIG_HEAD 复原到 rebase 之前的状态。</p>
+</blockquote>
+<h3 id="汇合分支上的提交，然后一同合并到分支"><a href="#汇合分支上的提交，然后一同合并到分支" class="headerlink" title="汇合分支上的提交，然后一同合并到分支"></a>汇合分支上的提交，然后一同合并到分支</h3><p>merge 的特殊选项 squash 用这个选项指定分支的合并，就可以把所有汇合的提交添加到分支上。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%E6%B1%87%E5%90%88%E5%88%86%E6%94%AF%E4%B8%8A%E7%9A%84%E6%8F%90%E4%BA%A4.png" class="">
+
+<p>主要使用的场合：</p>
+<ul>
+<li>汇合主题分支的提交，然后合并提交到目标分支。</li>
+</ul>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/merge-before.png" class="">
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git merge --squash issue3</span><br><span class="line">Auto-merging sample.txt</span><br><span class="line">CONFLICT (content): Merge conflict <span class="keyword">in</span> sample.txt</span><br><span class="line">Squash commit -- not updating HEAD</span><br><span class="line">Automatic merge failed; fix conflicts and <span class="keyword">then</span> commit the result.</span><br><span class="line"></span><br><span class="line">$ git add sample.txt</span><br><span class="line">$ git commit</span><br><span class="line">[main feca35d] Squashed commit of the following:</span><br><span class="line"> 1 file changed, 2 insertions(+), 1 deletion(-)</span><br></pre></td></tr></table></figure>
+
+<p>issue3 分支上所有的提交都汇合并添加到 main 分支了。</p>
+<img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/marge-after.png" class="">
+
+<h1 id="风格指南"><a href="#风格指南" class="headerlink" title="风格指南"></a>风格指南</h1><p>下列内容主要来自：<a target="_blank" rel="noopener" href="https://github.com/aseaday/git-style-guide">https://github.com/aseaday/git-style-guide</a></p>
+<p>这份风格指南受到 <a target="_blank" rel="noopener" href="https://www.kernel.org/doc/Documentation/SubmittingPatches"><em>How to Get Your Change Into the Linux Kernel</em></a>，<a target="_blank" rel="noopener" href="http://git-scm.com/doc">git man pages</a> 和大量社区通用实践的启发。</p>
+<ol>
+<li><a href="#branches">分支</a></li>
+<li><a href="#commits">提交</a></li>
+<li><a href="#messages">消息</a></li>
+<li><a href="#merging">合并</a></li>
+<li><a href="#misc">杂项</a></li>
+</ol>
+<h2 id="Branches"><a href="#Branches" class="headerlink" title="Branches"></a>Branches</h2><ul>
+<li><p>选择<em>简短</em>和<em>具有描述性</em>的名字来命名分支：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">好</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git checkout -b oauth-migration</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">不好，过于模糊</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git checkout -b login_fix</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>来自外部的标识符也适合用作分支的名字，例如来自 Github 的 Issue 序号。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">GitHub issue <span class="comment">#15</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git checkout -b issue-15</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用破折号分割单词。</p>
+</li>
+<li><p>当不同的人围绕同一个特性开发时，维护整个团队的特性分支与每个人的独立分支是比较方便的做法。使用如下的命名方式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git checkout -b feature-a/master <span class="comment"># team-wide branch</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git checkout -b feature-a/maria <span class="comment"># Maria&#x27;s branch</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git checkout -b feature-a/nick <span class="comment"># Nick&#x27;s branch</span></span></span><br></pre></td></tr></table></figure>
+
+<p>合并时，由每个人的独立分支向全队的功能分支合并，最后合并到主分支。见<a href="#merging">合并</a> 。</p>
+</li>
+<li><p>合并之后，除非有特殊原因要求不删，否则从上游仓库中删除你的分支。使用如下命令查看已合并的分支：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git branch --merged | grep -v <span class="string">&quot;\*&quot;</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Commits"><a href="#Commits" class="headerlink" title="Commits"></a>Commits</h2><ul>
+<li>每个提交应当只包含一个简单的逻辑改动，不要在一个提交里包含多个逻辑改动。比如，如果一个补丁修复了一个 Bug，又优化了一个特性的性能，就将其拆分。</li>
+<li>不要将一个逻辑改动拆分提交。例如一个功能的实现及其对应的测试应当一并提交。</li>
+<li>尽早、尽快提交。出问题时，短小、完整的提交更容易发现并修正。</li>
+<li>提交应当依<em>逻辑</em>排序。例如，如果 X 提交依赖于 Y，那么 Y 提交应该在 X 前面。</li>
+</ul>
+<h3 id="Messages"><a href="#Messages" class="headerlink" title="Messages"></a>Messages</h3><ul>
+<li><p>使用编辑器编写提交信息，而非命令行。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">好</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git commit</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">不好</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git commit -m <span class="string">&quot;Quick fix&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>使用命令行会鼓励试图用一行概括提交內容的风气，而这会令提交信息难以理解。</p>
+</li>
+<li><p>概要行（即第一行）应当简明扼要。它最好不超过 50 个字符，首字母大写，使用现在时祈使语气。不要以句号结尾, 因为它相当于<em>标题</em>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">好</span></span><br><span class="line">Mark huge records as obsolete when clearing hinting faults</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">不好</span></span><br><span class="line">fixed ActiveModel::Errors deprecation messages failing when AR was used outside of Rails.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在那之后空一行，然后填写详细描述。每行不超过 _72 字符_，解释<em>为什么</em>需要改动, <em>如何</em>解决了这个 issue 以及它有什么<em>副作用</em>。</p>
+<p>最好提供相关资源的链接，例如 bug tracker 的 issue 编号：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Short (50 chars or fewer) summary of changes</span><br><span class="line"></span><br><span class="line">More detailed explanatory text, if necessary. Wrap it to</span><br><span class="line">72 characters. In some contexts, the first</span><br><span class="line">line is treated as the subject of an email and the rest of</span><br><span class="line">the text as the body.  The blank line separating the</span><br><span class="line">summary from the body is critical (unless you omit the body</span><br><span class="line">entirely); tools like rebase can get confused if you run</span><br><span class="line">the two together.</span><br><span class="line"></span><br><span class="line">Further paragraphs come after blank lines.</span><br><span class="line"></span><br><span class="line">- Bullet points are okay, too</span><br><span class="line"></span><br><span class="line">- Use a hyphen or an asterisk for the bullet,</span><br><span class="line">  followed by a single space, with blank lines in</span><br><span class="line">  between</span><br><span class="line"></span><br><span class="line">Source http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html</span><br></pre></td></tr></table></figure>
+
+<p>最后，编写提交信息时，设想一下你一年以后再看这段提交信息时，希望获取什么信息。</p>
+</li>
+<li><p>如果 <em>提交 A</em> 依赖于另一个 <em>提交 B</em> ，在前者的 commit message 中应当指明。援引对应提交的 Hash。</p>
+<p>同理，如果 <em>提交 A</em> 解决了 <em>提交 B</em> 引入的 bug，这应当也被在 <em>提交 A</em> 提及。</p>
+</li>
+<li><p>如果将一个提交 squash 到另一个提交，分别使用 <code>--squash</code> 和 <code>--fixup</code> 来强调目的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git commit --squash f387cab2</span></span><br></pre></td></tr></table></figure>
+<p><em>（Rebase 时使用 <code>--autosquash</code> 参数，标记的提交就会自动 squash。）</em></p>
+</li>
+</ul>
+<h2 id="Merging"><a href="#Merging" class="headerlink" title="Merging"></a>Merging</h2><ul>
+<li><p><strong>不要篡改提交历史</strong>。仓库的历史本身就很宝贵，重要的是它能够还原<em>实际发生了什么</em>。对任何参与项目的人来说，修改历史是万恶之源。</p>
+</li>
+<li><p>尽管如此，有些时候还是可以重写历史，例如：</p>
+<ul>
+<li>你一个人孤军奋战，而且你的代码不会被人看到。</li>
+<li>你希望整理分支（例如使用 squash），以便日后合并。<br>最重要的，<em>不要重写你的 master 分支历史</em> 或者任何有特殊意义的分支（例如发布分支或 CI 分支）。</li>
+</ul>
+</li>
+<li><p>保持你的提交历史<em>干净</em>、<em>简单_。_在你 merge</em> 你的分支之前：</p>
+<ol>
+<li>确保它符合风格指南，如果不符合就执行相应操作，比如 squash 或重写提交信息。</li>
+<li>将其 rebase 到目标分支：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[my-branch] $ git fetch</span><br><span class="line">[my-branch] $ git rebase origin/master</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="keyword">then</span> merge</span></span><br></pre></td></tr></table></figure>
+这样会在 master 后直接添加一个新版本，令提交历史更简洁。</li>
+</ol>
+<p><em>（这个策略更适合较短生命周期的分支，否则还是最好经常合并而不是 rebase。）</em></p>
+</li>
+<li><p>如果你的分支包含多个 commmit , 不要使用快进模式。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">好；注意添加合并信息</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git merge --no-ff my-branch</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">不好</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git merge my-branch</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc."></a>Misc.</h2><ul>
+<li><p>有许多工作流，每一个都有好有坏。一个工作流是否符合你的情况，取决于你的团队，项目，和你的开发规律。</p>
+<p>也就是说，重要的是认真 <em>选择</em> 合适的工作流并且坚持。</p>
+</li>
+<li><p>_保持统一_， 这涉及到从工作流到你的提交信息，分支名还有标签。 在整个 Repository 中保持统一的命名风格有助于辨认工作进度。</p>
+</li>
+<li><p>_push 前测试_， 不要提交未完成的工作。</p>
+</li>
+<li><p>使用 <a target="_blank" rel="noopener" href="http://git-scm.com/book/en/v2/Git-Basics-Tagging#Annotated-Tags">annotated tags</a> 标记发布版本或者其他重要的时间点。</p>
+<p>个人开发可以使用 <a target="_blank" rel="noopener" href="http://git-scm.com/book/en/v2/Git-Basics-Tagging#Lightweight-Tags">lightweight tags</a>，例如为以后参考做标记。</p>
+</li>
+<li><p>定期维护，保证你的仓库状态良好，包括本地还有远程的仓库。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://git-scm.com/docs/git-gc"><code>git-gc(1)</code></a></li>
+<li><a target="_blank" rel="noopener" href="http://git-scm.com/docs/git-prune"><code>git-prune(1)</code></a></li>
+<li><a target="_blank" rel="noopener" href="http://git-scm.com/docs/git-fsck"><code>git-fsck(1)</code></a></li>
+</ul>
+</li>
+</ul>
 <h3 id="如何恢复初始的-git-提交。"><a href="#如何恢复初始的-git-提交。" class="headerlink" title="如何恢复初始的 git 提交。"></a>如何恢复初始的 git 提交。</h3><p>您可以删除 HEAD 并将存储库还原到新的状态，在该状态下可以创建一个新的初始提交：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git update-ref -d HEAD</span><br></pre></td></tr></table></figure>
 
 <p>创建新提交之后，如果您已经将其推入远程，则需要强制将其发送到远程，以便覆盖先前的初始提交：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --force origin</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>不要使用 <code>rm -rf .git</code> 或者像这样的任何操作，这样都会彻底清除整个存储库，包括所有其他分支，以及您试图重置的分支。</p>
 </blockquote>
-<h3 id="撤销-git-add和-commit-操作"><a href="#撤销-git-add和-commit-操作" class="headerlink" title="撤销 git add和 commit 操作"></a>撤销 git add和 commit 操作</h3><p>还没有 push 的时候使用 reset 命令。</p>
+<h3 id="撤销-git-add-和-commit-操作"><a href="#撤销-git-add-和-commit-操作" class="headerlink" title="撤销 git add 和 commit 操作"></a>撤销 git add 和 commit 操作</h3><p>还没有 push 的时候使用 reset 命令。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git reset --mixed commit_id    <span class="comment">#不删除工作空间改动代码，撤销 commit ，并且撤销 git add . 操作，默认操作。</span></span><br><span class="line">git reset --soft  commit_id    <span class="comment"># 不删除工作空间改动代码，撤销 commit ，不撤销 git add .  。</span></span><br><span class="line">git reset --hard commit_id     <span class="comment"># 删除工作空间改动代码，撤销 commit ，撤销 git add . 慎用这个命令。</span></span><br><span class="line">git reset –hard origin/master  <span class="comment"># 将本地的状态回退到和远程的一样</span></span><br><span class="line">git commit --amend             <span class="comment"># 只是改一下注释</span></span><br></pre></td></tr></table></figure>
 
 <p>已经 push 了，可以使用 git revert 还原已经提交的修改 ，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git revert HEAD          <span class="comment"># 撤销前一次 commit 。</span></span><br><span class="line">git revert HEAD~n        <span class="comment"># 撤销前n次 commit 。</span></span><br><span class="line">git revert commit-id     <span class="comment"># 撤销指定的版本，撤销也会作为一次提交进行保存。</span></span><br><span class="line">git reset HEAD^ file     <span class="comment"># 回退 flie 这个文件的版本到上一个版本</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge"><a href="#解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge" class="headerlink" title="解决 Git 更新本地冲突：commit your changes or stash them before you can merge"></a>解决 Git 更新本地冲突：commit your changes or stash them before you can merge</h2><p>方法一：stash</p>
+<h3 id="解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge"><a href="#解决-Git-更新本地冲突：commit-your-changes-or-stash-them-before-you-can-merge" class="headerlink" title="解决 Git 更新本地冲突：commit your changes or stash them before you can merge"></a>解决 Git 更新本地冲突：commit your changes or stash them before you can merge</h3><p>方法一：stash</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git stash               让工作区内容保证与上一次提交内容相同，同时备份当前修改的内容</span><br><span class="line">git pull                 拉取仓库的最新内容</span><br><span class="line">git stash pop       在仓库最新内容的基础上添加当前修改的内容</span><br></pre></td></tr></table></figure>
-
 
 <p>方法二：直接完全覆盖本地修改</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
 
-<h1 id="如何清洗-Github-提交历史"><a href="#如何清洗-Github-提交历史" class="headerlink" title="如何清洗 Github 提交历史"></a>如何清洗 Github 提交历史</h1><p>当 Github 的 Repo 变得日益臃肿、或者上传了敏感内容时，常见的方法时清理相关文件的所有历史提交记录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git filter-branch --force --index-filter <span class="string">&#x27;git rm --cached --ignore-unmatch $&#123;FILEPATH&#125;&#x27;</span> --prune-empty --tag-name-filter <span class="built_in">cat</span> -- --all </span><br><span class="line">git push origin master --force </span><br><span class="line"><span class="built_in">rm</span> -rf .git/refs/original/ </span><br><span class="line">git reflog expire --expire=now --all </span><br><span class="line">git gc --prune=now </span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+<h3 id="如何清洗-Github-提交历史"><a href="#如何清洗-Github-提交历史" class="headerlink" title="如何清洗 Github 提交历史"></a>如何清洗 Github 提交历史</h3><p>当 Github 的 Repo 变得日益臃肿、或者上传了敏感内容时，常见的方法时清理相关文件的所有历史提交记录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git filter-branch --force --index-filter <span class="string">&#x27;git rm --cached --ignore-unmatch $&#123;FILEPATH&#125;&#x27;</span> --prune-empty --tag-name-filter <span class="built_in">cat</span> -- --all</span><br><span class="line">git push origin master --force</span><br><span class="line"><span class="built_in">rm</span> -rf .git/refs/original/</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --prune=now</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+
 <p>但若这类文件非常多的时候，一个可选的方法时直接清空所有历史记录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf .git </span><br><span class="line">git init git </span><br><span class="line">add -A </span><br><span class="line">git commit -m <span class="string">&quot;clear history&quot;</span> </span><br><span class="line">git remote add origin <span class="variable">$&#123;GITHUB_REPO_URL&#125;</span> </span><br><span class="line">git push -f -u origin master</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf .git</span><br><span class="line">git init git</span><br><span class="line">add -A</span><br><span class="line">git commit -m <span class="string">&quot;clear history&quot;</span></span><br><span class="line">git remote add origin <span class="variable">$&#123;GITHUB_REPO_URL&#125;</span></span><br><span class="line">git push -f -u origin master</span><br></pre></td></tr></table></figure>
+
 <p>参考链接: <a target="_blank" rel="noopener" href="https://exp-blog.com/scm/qing-xi-github-ti-jiao-li-shi/">https://exp-blog.com/scm/qing-xi-github-ti-jiao-li-shi/</a></p>
-<h1 id="ssh-方式及免密码配置"><a href="#ssh-方式及免密码配置" class="headerlink" title="ssh 方式及免密码配置"></a>ssh 方式及免密码配置</h1><p>git ssh 方式免密提交方式需要将 ssh-keygen 生成的公钥放到服务器上</p>
+<h3 id="ssh-方式及免密码配置"><a href="#ssh-方式及免密码配置" class="headerlink" title="ssh 方式及免密码配置"></a>ssh 方式及免密码配置</h3><p>git ssh 方式免密提交方式需要将 ssh-keygen 生成的公钥放到服务器上</p>
 <p>全局用户名密码配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;CKCat&quot; </span><br><span class="line">git config --global user.email &quot;ckcatck@qq.com&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;CKCat&quot;</span><br><span class="line">git config --global user.email &quot;ckcatck@qq.com&quot;</span><br></pre></td></tr></table></figure>
+
 <p>生成公钥和私钥</p>
 <p>1、首先需要检查你电脑是否已经有 SSH key</p>
-<p>运行 git Bash 客户端，检查本机的ssh密钥。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh </span><br><span class="line">$ <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+<p>运行 git Bash 客户端，检查本机的 ssh 密钥。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh</span><br><span class="line">$ <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
 <p>如果不是第一次使用，已经存在 <code>id_rsa.pub</code> 或 <code>id_dsa.pub</code> 文件。请执行下面的操作，清理原有 ssh 密钥。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> key_backup   </span><br><span class="line">$ <span class="built_in">cp</span> id_rsa* key_backup   </span><br><span class="line">$ <span class="built_in">rm</span> id_rsa*</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> key_backup</span><br><span class="line">$ <span class="built_in">cp</span> id_rsa* key_backup</span><br><span class="line">$ <span class="built_in">rm</span> id_rsa*</span><br></pre></td></tr></table></figure>
 
 <p>2、执行生成公钥和私钥的命令，生成新的密钥：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;CKCat&quot;</span></span><br></pre></td></tr></table></figure>
@@ -313,11 +837,14 @@
 <p>按默认为空，直接按回车 3 下，生成 <code>id_rsa</code> 和 <code>id_rsa.pub</code> 两个秘钥文件。</p>
 <p>执行查看公钥信息：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+
 <p>Windows 系统，位置在用户目录下 <code>.ssh</code>文件夹中。<code>%USERPROFILE%</code></p>
 <p>3、复制公钥信息，打开 github，我的账户 -&gt; setting -&gt; SSH and GPG keys，如下图所示，把公钥粘贴到公钥文本框中，标题自己定义，然后点击确定按键，输入密码。</p>
 <img src="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-06-14-18-15-01.png" class="">
 
 <p>然后，提交时就不再需要用户名和密码了。</p>
+<h1 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h1><p><a target="_blank" rel="noopener" href="https://backlog.com/git-tutorial/cn/">https://backlog.com/git-tutorial/cn/</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/aseaday/git-style-guide">https://github.com/aseaday/git-style-guide</a></p>
 
     </div>
 

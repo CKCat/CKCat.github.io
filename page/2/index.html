@@ -228,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -329,7 +329,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -352,7 +352,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="第一个-C-函数总体概述"><a href="#第一个-C-函数总体概述" class="headerlink" title="第一个 C 函数总体概述"></a>第一个 C 函数总体概述</h1><p>第一个 C 函数 hal_start 首先初始化 hal 层，其中执行了平台初始化，hal层的内存初始化、中断初始化，最后进入到内核初始化。下面展示了整个执行时序图，先有一个宏观的感官。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">hal_start.c -&gt; hal_start.c : hal_start 处理 hal 层开始函数。 </span><br><span class="line">hal_start.c -&gt; halinit.c : init_hal 初始化 hal 层。</span><br><span class="line">halinit.c -&gt; halplatform.c : init_halplaltform 初始化平台。</span><br><span class="line">halplatform.c -&gt; halplatform.c : init_machbstart 复制二级引导器收集的机器信息结构体。</span><br><span class="line">halplatform.c -&gt; bdvideo.c : init_bdvideo 初始化图形显示驱动。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : init_dftgraph 初始化图形数据结构，里面放有图形模式，分辨率，图形驱动函数指针。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : init_bga 初始 bga 图形显卡的函数指针。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : init_vbe 初始 vbe 图形显卡的函数指针。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : fill_graph 清空屏幕为黑色。</span><br><span class="line">bdvideo.c -&gt; bdvideo.c : set_charsdxwflush </span><br><span class="line">bdvideo.c -&gt; bdvideo.c : hal_background 显示背景图片。</span><br><span class="line">halinit.c -&gt; halinit.c : move_img2maxpadr 将 img 移动到高地址的内存空间，防止被覆盖。</span><br><span class="line">halinit.c -&gt; halmm.c : init_halmm 初始化内存。</span><br><span class="line">halmm.c -&gt; halmm.c : init_phymmarge 初始化内存并排序。</span><br><span class="line">halinit.c -&gt; halintupt.c : init_halintupt 初始化中断。</span><br><span class="line">halintupt.c -&gt; halintupt.c : init_descriptor 初始化 GDT 描述符 x64_gdt 。</span><br><span class="line">halintupt.c -&gt; halintupt.c : init_idt_descriptor 初始化 IDT 描述符 x64_idt ，绑定了中断编号及中断处理函数。</span><br><span class="line">halintupt.c -&gt; halintupt.c : init_intfltdsc 初始化中断异常表 machintflt ，拷贝了中断相关信息。</span><br><span class="line">halintupt.c -&gt; i8259.c : init_i8259 初始化 8259A 中断控制器。</span><br><span class="line">hal_start.c -&gt; hal_start.c : init_krl 初始化内核层。</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<img src="http://www.plantuml.com/plantuml/svg/dPNDJjj04CVlFCM-G7j0RTNsK56fKjLxxv4JEuc5dKIEG-cDKd0215m-aWP2gYP298W6p8V0E2OyJ3Dh-zHNwDhhO0USblQsCvx_RsRsOpoLbnb9BeZ2H9eHOfxnE84UlK9XysLW8TXRiBuehWF1oJoOSz1UWU8rhcW_v-PH18NFy9JXBcAUhjHmHUNga4AK4q4abUK4Havc9N54Ifo2vmqOS7K6gkOJGg9n5959fEF3LbQXT34mofRH1hC2noPiT_3MXLDNh9q5l6iGSt3Jn9-EhTuc_hOmkDwCp1DdPtYMomOvV4Ueo7eVhbkurhVs3EVW19OxBYZGHK7Of9oIc5pw7gMYuTKZMj4li-mKoqwZXRVwU7V93-WqmLJ99oWfThzZhHNTjVU9vgR7XSj5PwFqzphYASOl0NdBOIkmsYIxz6-icJWtP7dB_sGbUK68qSt1-g9rOC292bULWMuulNLxwVIFuZmdnn9fHigpin-IGY6VHkDZtTiSPnBJAIbRoB287g3zkOotZqdjrb8nwkRUNdWnEyF5U34rAJApEOQL46WA8ZQosZtt64gQSrY3NGqQSsxtoY9qQwGPv-kvUwwrKznjsQr3Ur-nwjMeHEBeun33hyA3-I9HZ9JaqXz5aP5It5qPN5tWjGqmrEZkv49kz45JLq0Pw5rSxTwA_VXeESlb4nAVaxDIQ2oyVVCUOLMrRpJhnpwQVVOabc9bz30Wpuw1lhi79Q68xBJLMuUZdO6XqBejimhg9QZBrAJpxdR2FQI2Z9mKP3QVkBiZOCw3hjlD3dA740rp2y0hb_Pv8oYWhiFY6Hqy4HdvvvDFNuIokMQeJTTyZIW9hxN9W2DJpCUCd-yUQbeIHgu2_gxxmtcAox3a7_4R">
 <p>下面在从微观角度看一下每一个功能的实现。</p>
 <h1 id="hal-层初始化"><a href="#hal-层初始化" class="headerlink" title="hal 层初始化"></a>hal 层初始化</h1>
           <!--noindex-->
@@ -424,7 +424,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -518,7 +518,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -611,7 +611,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -706,7 +706,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -803,7 +803,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -897,7 +897,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -993,7 +993,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1089,7 +1089,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 02:20:37" itemprop="dateModified" datetime="2023-02-18T02:20:37+00:00">2023-02-18</time>
+      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
