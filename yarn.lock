@@ -615,6 +615,11 @@ hexo-excerpt@^1.3.0:
     htmlparser2 "^6.1.0"
     lodash.defaults "^4.2.0"
 
+hexo-filter-markdown-plantuml@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/hexo-filter-markdown-plantuml/-/hexo-filter-markdown-plantuml-1.0.3.tgz"
+  integrity sha512-5DC1nTdbabeckciBC/DL3DriP/kvRuE1pUTk+NzaqUI7sCMnnMAp+xRnYrlabJr21G+X+44jiISoe1jQS2bGYg==
+
 hexo-front-matter@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/hexo-front-matter/-/hexo-front-matter-3.0.0.tgz"
