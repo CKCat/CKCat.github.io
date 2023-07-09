@@ -11,7 +11,7 @@ category: python
 
 在虚拟环境中安装包。
 
-```
+```bash
 pip install django-tinymce==2.6.0
 ```
 
@@ -21,7 +21,7 @@ pip install django-tinymce==2.6.0
 
 1）在 `test6/settings.py` 中为 INSTALLED_APPS 添加编辑器应用。
 
-```
+```python
 INSTALLED_APPS = (
     ...
     'tinymce',
@@ -537,12 +537,30 @@ celery 名词：
 - 工人 worker：在一个新进程中，负责执行队列中的任务。
 - 代理人 broker：负责调度，在布置环境中使用 redis。
 
-安装包：
+## 简单使用
+使用 Redis 作为中间人（Broker）必须要安装 Celery 的依赖库，您可以通过 `celery[redis]` 进行安装：
+```bash
+$ pip install -U celery[redis]
+```
 
+新建一个名为 tasks.py 的文件，其中内容如下：
+```python
+from celery import Celery
+
+# 第一个参数为 Celery 应用名
+# 第二个参数为 Celery 中间人
+# 第三个参数为 Celery 后端结果
+app = Celery('tasks', 
+             broker='redis://localhost:6379/0',
+             backend='redis://localhost:6379/1',)
+@app.task
+def add(x, y):
+    return x + y
 ```
-celery==3.1.25
-django-celery==3.1.17
-```
+
+
+
+
 
 # 布署
 

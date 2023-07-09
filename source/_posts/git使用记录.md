@@ -201,11 +201,12 @@ branch 'main' set up to track 'origin/main'.
 ```
 
 - `git remote add <name> <url>`
-    - `name` : 远程数据库名称，默认名称为 `origin`
-    - `url` : 远程数据库的 `URL` 
+
+  - `name` : 远程数据库名称，默认名称为 `origin`
+  - `url` : 远程数据库的 `URL`
 
 - `git push <repository> <refspec>`
-`- `repository` : 目标地址
+  `- `repository` : 目标地址
 - `refspec` : 推送的分支。如果指定了 `-u` 选项，那么下一次推送时就可以省略分支名称了。`
 
 通过 github 网站上修改 `sample.txt` 文件内容如下， 在 `commit` 消息中输入 `添加 add 的说明` 。
@@ -233,8 +234,8 @@ Fast-forward
 ```
 
 - `git pull <repository> <refspec>`
-    - `repository` : 数据库名称，默认为 origin；
-    - `refspec` : 分支。
+  - `repository` : 数据库名称，默认为 origin；
+  - `refspec` : 分支。
 
 使用 `git log` 指令来确认历史记录是否已更新。
 

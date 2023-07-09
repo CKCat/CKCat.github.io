@@ -7,30 +7,6 @@ category: Android
 
 > 转载 : https://blog.csdn.net/ganyao939543405/article/details/76146760
 
-<!-- TOC -->
-
-- [包结构](#包结构)
-  - [android.content](#androidcontent)
-  - [com.lody.virtual](#comlodyvirtual)
-    - [client](#client)
-    - [HOOK](#hook)
-    - [IPC](#ipc)
-    - [Stub](#stub)
-    - [remote](#remote)
-    - [server](#server)
-  - [mirror](#mirror)
-- [一些基础措施的封装](#一些基础措施的封装)
-  - [Mirror framework 层镜像](#mirror-framework-层镜像)
-    - [成员变量 Field 映射](#成员变量-field-映射)
-    - [Method 映射](#method-映射)
-  - [Java 层 Hook](#java-层-hook)
-    - [MethodProxy](#methodproxy)
-    - [MethodProxies](#methodproxies)
-- [运行时结构](#运行时结构)
-  - [系统原生的 framework 运作方式](#系统原生的-framework-运作方式)
-  - [VA 环境下 framework 运作方式](#va-环境下-framework-运作方式)
-
-<!-- /TOC -->
 最近发现了一个非常好的开源项目，基本实现了一个 Android 上的沙箱环境，不过应用场景最多的还是应用双开。
 * VA github: https://github.com/asLody/VirtualApp 
 * VA 的源码注释: https://github.com/ganyao114/VA_Doc 

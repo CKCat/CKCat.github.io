@@ -1,5 +1,5 @@
 ---
-title: ARMv8学习记录二
+title: ARMv8学习记录02
 date: 2020-03-01 20:37:23
 tags: 汇编
 category: ARMv8汇编
@@ -31,11 +31,11 @@ AArch64通用寄存器共31个 `X0-X30` , 其中各寄存器的作用如下表�
 ### 状态寄存器(SPSR)
 1. PSTATE at AArch64
 
-![](ARMv8学习记录二/2020-03-09-15-57-08.png)
+![](ARMv8学习记录02/2020-03-09-15-57-08.png)
 
 2. PSTATE at AArch32
 
-![](ARMv8学习记录二/2020-03-09-16-00-41.png)
+![](ARMv8学习记录02/2020-03-09-16-00-41.png)
 
 
 ### 条件码
@@ -177,7 +177,7 @@ lsr     x1, x0, 3
 lsl     x1, x0, 2
 ```
 
-![](ARMv8学习记录二/2020-03-09-19-15-20.png)
+![](ARMv8学习记录02/2020-03-09-19-15-20.png)
 
 
 ### 位和字节操作指令
@@ -199,11 +199,11 @@ lsl     x1, x0, 2
 | `SBFX`           | `Rd, Rn, #lsb, #width` | Signed Bitfield Extract extracts any number of adjacent bits at any position from a register, sign-extends them to the size of the register, and writes the result to the destination register.                                                                |
 | `{S,U}XT{B,H,W}` | `Rd, Rn`               | (S)igned/(U)nsigned eXtend (B)yte/(H)alfword/(W)ord extracts an 8-bit,16-bit or 32-bit value from a register, zero-extends it to the size of the register, and writes the result to the destination register. Alias of UBFM.                                   |
 
-![](ARMv8学习记录二/2020-03-09-21-46-28.png)
+![](ARMv8学习记录02/2020-03-09-21-46-28.png)
 
-![](ARMv8学习记录二/2020-03-09-21-48-58.png)
+![](ARMv8学习记录02/2020-03-09-21-48-58.png)
 
-![](ARMv8学习记录二/2020-03-09-21-49-14.png)
+![](ARMv8学习记录02/2020-03-09-21-49-14.png)
 
 
 ### 条件执行

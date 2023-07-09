@@ -7,7 +7,7 @@ category: linux
 
 # 1. Android studio 出现 grant current user access to /dev/kvm 以及/dev/kvm devices: permission denies
 
-linux 中启动模拟器出现 grant current user access to /dev/kvm 错误
+linux 中启动模拟器出现 `grant current user access to /dev/kvm` 错误
 
 - 临时解决方法：
 
@@ -15,14 +15,14 @@ linux 中启动模拟器出现 grant current user access to /dev/kvm 错误
 
 - 永久解决办法：
 
-```
-安装qemu-kvm
+```bash
+# 安装qemu-kvm
 sudo apt install qemu-kvm
 
-使用以下命令将您的用户添加到kvm组：
+# 使用以下命令将您的用户添加到kvm组：
 sudo adduser $USER kvm
 
-如果仍然显示拒绝权限：
+# 如果仍然显示拒绝权限：
 sudo chown $USER /dev/kvm
 ```
 
@@ -74,7 +74,7 @@ sudo apt-get install indicator-sysmonitor
 
 ## 5.1. 路径写法
 
-```
+```bash
 # 可执行文件(一般在文件夹bin内):
 export PATH=/usr/local/cuda-8.0/bin:$PATH
 
@@ -87,34 +87,33 @@ export LD_LIBRARY_PATH=/home/opencv2.4.9/lib:$LD_LIBRARY_PATH
 
 在终端中输入`export`命令：
 
-```
+```bash
 export PATH=/usr/local/cuda-8.0/bin:$PATH
 ```
 
 ## 5.3. 当前用户的全局设置
 
-打开~/.bashrc，在末尾添加环境变量,如下所示：
+打开 `~/.bashrc` ，在末尾添加环境变量,如下所示：
 
-```
+```bash
 export PATH=/home/public/software_install/protobuf-3.1.0/bin:$PATH
 export LD_LIBRARY_PATH=/home/public/software_install/protobuf-3.1.0/lib:$LD_LIBRARY_PATH
-
 ```
 
 执行：`source ~/.bashrc`使之生效。
 
 ## 5.4. 所有用户的全局设置
 
-使用`sudo vim /etc/profile`打开系统配置文件，在末尾添加环境变量，如下所示：
+使用 `sudo vim /etc/profile` 打开系统配置文件，在末尾添加环境变量，如下所示：
 
-```
+```bash
 export PATH=/home/public/software_install/protobuf-3.1.0/bin:$PATH
 export LD_LIBRARY_PATH=/home/public/software_install/protobuf-3.1.0/lib:$LD_LIBRARY_PATH
 ```
 
 执行：`source profile`使之生效。
 
-配置好后可以使用`echo $PATH`或`env`测试当前的环境变量。
+配置好后可以使用 `echo $PATH` 或 `env` 测试当前的环境变量。
 
 # 6. adb devices 报错 no permissions (user in plugdev group; are your udev rules wrong?)
 
@@ -124,7 +123,7 @@ export LD_LIBRARY_PATH=/home/public/software_install/protobuf-3.1.0/lib:$LD_LIBR
 
 ## 6.1. lsusb 找到你手机的 usb 地址
 
-```
+```bash
 $ lsusb
 Bus 002 Device 003: ID 18d1:4ee7 Google Inc.
 Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
@@ -140,22 +139,22 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
 创建`51-android.rules`文件
 
-```
+```bash
 $ sudo gedit /etc/udev/rules.d/51-android.rules
 [sudo] password for ckcat:
 ```
 
 添加下列内容
 
-```
+```bash
 ATTR{idProduct}=="4ee7", SYMLINK+="android_adb", MODE="0660", GROUP="plugdev", TAG+="uaccess", SYMLINK+="android"
 ```
 
-注意：ATTR{idProduct}的值是你查找手机设备的 usb 的地址。
+注意：`ATTR{idProduct}` 的值是你查找手机设备的 usb 的地址。
 
 ## 6.3. 执行下列命令
 
-```
+```bash
 $ sudo usermod -a -G plugdev $(id -u -n)
 $ sudo udevadm control --reload-rules
 $ sudo service udev restart
@@ -165,7 +164,7 @@ $ sudo udevadm trigger
 
 执行完上述命令后，重启 adb：
 
-```
+```bash
 $ adb kill-server
 $ adb devices
 * daemon not running; starting now at tcp:5037
@@ -186,11 +185,11 @@ https://juejin.im/post/5bed2b45f265da61530457ee
 
 # 7. VIM 普通用户保存文件时用 sudo 获取 root 权限
 
-```
+```bash
 :w !sudo tee %
 ```
 
-百分号 (“%”) 代表当前文件名，这条命令的含义是把当前编辑的文件的内容当做标准输入输出到命令 sudo tee 文件名的文件里去，也就是 sudo 保存为当前文件名。
+百分号 (`%`) 代表当前文件名，这条命令的含义是把当前编辑的文件的内容当做标准输入输出到命令 `sudo tee` 文件名的文件里去，也就是 `sudo` 保存为当前文件名。
 
 # 8. 安装 nodejs
 
@@ -673,17 +672,20 @@ sudo apt-get install fcitx-googlepinyin
 最后打开输入法配置，添加 Google Pinyin 既可。
 
 # 安装 Fcitx5 中文输入法
+
 Ubuntu 设置中打开 `Region & language` -- `Manaage Installed Languages`，安装 Chinese(simplified) 语言。
 
 然后最小安装 Fcitx 5 ，分别是主程序，中文输入法引擎，图形界面相关。
+
 ```bash
-sudo apt install fcitx5 \    
+sudo apt install fcitx5 \
 fcitx5-chinese-addons \
 fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 \
 fcitx5-frontend-qt5 kde-config-fcitx5
 ```
 
 然后安装[中文词库](https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases).
+
 ```bash
 # 下载词库文件
 wget https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.4/zhwiki-20220416.dict
@@ -694,11 +696,13 @@ mv zhwiki-20220416.dict ~/.local/share/fcitx5/pinyin/dictionaries/
 ```
 
 使用 im-config 配置 fcitx5 为首选输入法。
+
 ```bash
 im-config
 ```
 
 设置环境变量，即将以下配置项写入用户或系统环境变量，这里我写入系统环境变量 `/etc/profile` 中：
+
 ```bash
 export XMODIFIERS=@im=fcitx
 export GTK_IM_MODULE=fcitx
@@ -706,6 +710,7 @@ export QT_IM_MODULE=fcitx
 ```
 
 使用 Tweaks 设置 fcitx5 为自动启动。如果没有安装 Tweaks 可以运行下列命令安装。
+
 ```bash
 sudo apt install gnome-tweaks
 ```
@@ -725,7 +730,7 @@ sudo apt install gnome-tweaks
 进入 ubuntu 虚拟机，执行下列命令释放出磁盘空间。
 
 ```bash
-$cat /dev/zero > zero; sync; sleep 1; rm -f zero
+$ cat /dev/zero > zero; sync; sleep 1; rm -f zero
 ```
 
 当出现下列错误时，说明虚拟机上的剩余空间已经释放完成。
@@ -750,25 +755,24 @@ $ vmware-vdiskmanager -k ubuntu18.vmwarevm/虚拟磁盘.vmdk
 Shrink completed successfully.
 ```
 
-> 碎片整理和压缩空间也有图形化界面，就在 设置 -> 磁盘 对应的界面。
+> 碎片整理和压缩空间也有图形化界面，就在 设置 -> 磁盘 对应的选项。
 
 2. 使用 VMware Tools 的相关命令
-
-> 此方法未经验证
 
 前提是你已经安装了 Vmware-Tools 增强工具，进入虚拟机后，可以直接使用以下命令：
 
 ```bash
-$ vmware-toolbox-cmd disk list
-$ vmware-toolbox-cmd disk shrink /
+$ sudo vmware-toolbox-cmd disk list
+$ sudo vmware-toolbox-cmd disk shrink /
 
 Progress: 7 [=>         ]
 ```
 
-> 参考：
-> https://zzqcn.github.io/misc/vmware/reduce-disk-size.html#vmware
-> https://blog.csdn.net/Michael__One/article/details/103850274
-> https://www.hesc.info/archives/88
+参考：
+```
+https://zzqcn.github.io/misc/vmware/reduce-disk-size.html#vmware 
+https://blog.csdn.net/Michael__One/article/details/103850274 
+```
 
 ## 共享文件夹不显示
 
@@ -776,6 +780,16 @@ Progress: 7 [=>         ]
 
 ```bash
 vmhgfs-fuse .host:/ /mnt/hgfs -o subtype=vmhgfs-fuse,allow_other
+```
+
+## ubuntu 重置网络配置
+
+ubuntu 虚拟机突然崩了，重新进入后无法连接网络，重置网络配置就可以了。
+
+```bash
+sudo service network-manager stop
+sudo rm /var/lib/NetworkManager/NetworkManager.state
+sudo service network-manager start
 ```
 
 # 其他

@@ -184,10 +184,10 @@ $ git clone https://github.com/iissnan/hexo-theme-next themes/next
 2. 菜单显示 about 链接，在 **主题配置文件** 设置中将 menu 中 about
    前面的注释去掉即可。
    `   menu: 
- home: / 
- archives: /archives 
- tags: /tags 
- about: /about`
+home: / 
+archives: /archives 
+tags: /tags 
+about: /about`
 
 3. 友情链接编辑 **站点配置文件** 添加：
    ```
@@ -256,10 +256,13 @@ ProTip: [使用七牛 CDN 来加速 MathJax 脚本的加载](https://github.com/
 https://github.com/cocowool/hexo-image-link
 
 首先我们需要安装一个图片路径转换的插件，这个插件名字是 hexo-image-link
+
 ```bash
 npm install hexo-image-link --save
 ```
-修改  `_config.next.yml` 配置文件
+
+修改 `_config.next.yml` 配置文件
+
 ```bash
 hexo-asset-folder: true
 ```
@@ -424,9 +427,17 @@ local_search:
 
 参考：https://theme-next.js.org/docs/third-party-services/search-services.html
 
+## 添加 hexo-filter-markdown-plantuml 插件
+
+```bash
+npm install hexo-filter-markdown-plantuml --save
+```
+
+后续就可以 puml 或 plantuml 标记的代码生成对应的图片。
+
 ## 利用 github action 自动部署
 
-参考：https://hexo.io/zh-cn/docs/github-pages 
+参考：https://hexo.io/zh-cn/docs/github-pages
 
 最关键的一点是需要修改一下 `.github/workflows/pages.yml` 中的 GITHUB_TOKEN，使用自己添加的 TOKEN ，否则有随机出错的可能。
 

@@ -13,13 +13,13 @@ category: 数据库
 
 首先运行下面命令更新软件包：
 
-```
+```bash
 $ sudo apt update
 ```
 
 然后安装默认软件包：
 
-```
+```bash
 $ sudo apt install mysql-server
 ```
 
@@ -31,19 +31,19 @@ $ sudo apt install mysql-server
 
 在运行 MySQL 5.7（及更高版本）的 Ubuntu 系统中，默认情况下，MySQL root 用户设置为使用 `auth_socket` 插件而不是密码进行身份验证。
 
-为了使用密码以 root 用户身份连接到 MySQL ，您需要将其身份验证方法从切换 `auth_socket` 为 `mysql_native_password` ，首先使用 root 账号打开 mysql。
+为了使用密码，以 root 用户身份连接到 MySQL ，您需要将其身份验证方法从切换 `auth_socket` 为 `mysql_native_password` ，首先使用 root 账号打开 mysql。
 
-```
+```bash
 $ sudo mysql
 ```
 
 接下来，使用以下命令检查每个 MySQL 用户帐户使用的身份验证方法：
 
-```
+```bash
 mysql> SELECT user,authentication_string,plugin,host FROM mysql.user;
 ```
 
-```
+```bash
 Output
 +------------------+-------------------------------------------+-----------------------+-----------+
 | user             | authentication_string                     | plugin                | host      |
@@ -56,26 +56,22 @@ Output
 4 rows in set (0.00 sec)
 ```
 
-在此示例中，您可以看到 root 用户实际上使用 auth_socket 插件进行了身份验证。要将 root 帐户配置为使用密码进行身份验证，请运行以下 `ALTER USER` 命令。
+在此示例中，您可以看到 root 用户实际上使用 `auth_socket` 插件进行了身份验证。要将 root 帐户配置为使用密码进行身份验证，请运行以下 `ALTER USER` 命令。
 
-```
+```bash
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 ```
 
 然后，运行 `FLUSH PRIVILEGES` 告诉服务器重新加载授权表并使新的更改生效：
 
-```
+```bash
 mysql> FLUSH PRIVILEGES;
 ```
 
 再次检查每个用户使用的身份验证方法，以确认 root 不再使用该 auth_socket 插件进行身份验证：
 
-```
+```bash
 mysql> SELECT user,authentication_string,plugin,host FROM mysql.user;
-```
-
-```
-Output
 +------------------+-------------------------------------------+-----------------------+-----------+
 | user             | authentication_string                     | plugin                | host      |
 +------------------+-------------------------------------------+-----------------------+-----------+
@@ -101,45 +97,46 @@ $ mysql -u root -p
 
 接着创建一个新用户并为其设置一个强密码。
 
-```
+```bash
 mysql> CREATE USER 'username'@'host' IDENTIFIED BY 'password';
 ```
 
 - username: 创建的用户名。
-- host: 指定该用户在哪个主机上可以登陆，如果是本地用户可用 localhost，如果是远程登陆，可以使用通配符 `%` 。
+- host: 指定该用户在哪个主机上可以登陆，如果是本地用户可用 `localhost`，如果是远程登陆，可以使用通配符 `%` 。
 - password：用户的登陆密码。
 
-> 其中需要注意的是，如果 host 指定为 `%` ，那么还需要进入设置 `/etc/mysql/mysql.conf.d/mysqld.cnf` 配置文件，注释掉其中的 `bind-address = 127.0.0.1` 行，然后执行 `sudo systemctl restart mysql` 重新启动 mysql 服务。
+其中需要注意的是，如果 host 指定为 `%` ，那么还需要进入设置 `/etc/mysql/mysql.conf.d/mysqld.cnf` 配置文件，注释掉其中的 `bind-address = 127.0.0.1` 行，然后执行 `sudo systemctl restart mysql` 重新启动 mysql 服务。
 
 例如：
+
 ```bash
-CREATE USER 'ckcat'@'%' IDENTIFIED BY 'xxxxxxxx';
+mysql> CREATE USER 'ckcat'@'%' IDENTIFIED BY 'xxxxxxxx';
 ```
 
 ### 给新用户授权
 
-```
+```bash
 mysql> GRANT privileges ON databasename.tablename TO 'username'@'host'
 ```
 
 - privileges：用户的操作权限。如 SELECT，INSERT，UPDATE 等，如果要授予所的权限则使用 ALL
 - databasename：数据库名
-- tablename：表名，如果要授予该用户对所有数据库和表的相应操作权限则可用表示，如 `.*` 。
-
+- tablename：表名，如果要授予该用户对所有数据库和表的相应操作权限则可用`*.*`表示。
 
 例如：
+
 ```bash
 mysql> GRANT SELECT, INSERT ON test.user TO 'ckcat'@'%';
 mysql> GRANT ALL ON *.* TO 'ckcat'@'%';
 mysql> flush privileges;
-mysql> show grants for 'ckcat'@'%'
+mysql> show grants for 'ckcat'@'%';
 ```
 
 ## 配置 MySQL
 
 对于全新安装，您将需要运行随附的安全脚本。这会更改一些不太安全的默认选项，例如远程 root 登录和样本用户。
 
-```
+```bash
 $ sudo mysql_secure_installation
 ```
 
@@ -149,13 +146,13 @@ $ sudo mysql_secure_installation
 
 无论您如何安装，MySQL 都应该已经开始自动运行。要对此进行测试，请检查其状态。
 
-```
+```bash
 $  systemctl status mysql.service
 ```
 
 您将看到类似于以下内容的输出：
 
-```
+```bash
 ● mysql.service - MySQL Community Server
    Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: en
    Active: active (running) since Sun 2019-12-15 10:36:06 CST; 32min ago
@@ -172,19 +169,19 @@ Dec 15 10:36:06 ckcat-ubuntu systemd[1]: Started MySQL Community Server.
 
 启动服务
 
-```
+```bash
 $ sudo service mysql start
 ```
 
 停止服务
 
-```
+```bash
 $ sudo service mysql stop
 ```
 
 重启服务
 
-```
+```bash
 $ sudo service mysql restart
 ```
 
@@ -192,7 +189,7 @@ $ sudo service mysql restart
 
 安装 MySQL Workbench
 
-```
+```bash
 sudo apt update
 sudo apt install mysql-workbench
 ```
@@ -206,7 +203,7 @@ sudo apt install mysql-workbench
 
 ## 介绍
 
-数据库会随着时间增长，有时会超出文件系统上的空间。当 I/O 与操作系统的其余部分位于同一分区时，您也可能会遇到 I/O 竞争。 RAID 、网络块存储和其他设备可以提供冗余和其他所需的功能。无论您是要添加更多空间，评估优化性能的方式还是希望利用其他存储功能，本教程都将指导您重新定位 MySQL 的数据目录。
+数据库会随着时间增长，有时会超出文件系统上的空间。当 `I/O` 与操作系统的其余部分位于同一分区时，您也可能会遇到 `I/O` 竞争。 RAID 、网络块存储和其他设备可以提供冗余和其他所需的功能。无论您是要添加更多空间，评估优化性能的方式还是希望利用其他存储功能，本教程都将指导您重新定位 MySQL 的数据目录。
 
 ## 先决条件
 
@@ -221,13 +218,13 @@ sudo apt install mysql-workbench
 
 为了准备移动 MySQL 的数据目录，让我们通过使用管理凭据启动交互式 MySQL 会话来验证当前位置。
 
-```
+```bash
 $ mysql -u root -p
 ```
 
 出现提示时，提供 MySQL root 密码。然后在 MySQL 提示符下，选择数据目录：
 
-```
+```bash
 mysql> select @@datadir;
 ```
 
@@ -245,20 +242,19 @@ Output
 
 为了确保数据的完整性，在实际更改数据目录之前，我们将关闭 MySQL：
 
-```
+```bash
 $ sudo systemctl stop mysql
 ```
 
 `systemctl` 不会显示所有服务管理命令的结果，因此，如果要确保成功，请使用以下命令：
 
-```
+```bash
 $ sudo systemctl status mysql
 ```
 
 如果输出的最后一行告诉您服务器已停止，则可以确定它已关闭：
 
-```
-Output
+```bash
 . . .
 Dec 15 11:42:15 ckcat-ubuntu systemd[1]: Stopped MySQL Community Server.
 ```
@@ -267,13 +263,13 @@ Dec 15 11:42:15 ckcat-ubuntu systemd[1]: Stopped MySQL Community Server.
 
 > 注意：请确保目录上没有斜杠，如果使用制表符补全，可以添加斜杠。当出现斜杠时，rsync 会将目录的内容转储到安装点，而不是将其传输到包含 mysql 目录.
 
-```
+```bash
 $ sudo rsync -av /var/lib/mysql ~/.mysqldata
 ```
 
-一旦 rsync 完成，用.bak 扩展名重命名当前文件夹中保存，直到我们已经证实，此举是成功的。通过重命名，我们可以避免新旧位置文件引起的混乱：
+一旦 `rsync` 完成，用 `.bak` 扩展名重命名当前文件夹中保存，直到我们已经证实，此举是成功的。通过重命名，我们可以避免新旧位置文件引起的混乱：
 
-```
+```bash
 $ sudo mv /var/lib/mysql /var/lib/mysql.bak
 ```
 
@@ -283,7 +279,7 @@ $ sudo mv /var/lib/mysql /var/lib/mysql.bak
 
 MySQL 有几种方法可以覆盖配置值。默认情况下， `/etc/mysql/mysql.conf.d/mysqld.cnf` 在文件中 `datadir` 设置为 `/var/lib/mysql` 。编辑此文件以反映新的数据目录：
 
-```
+```bash
 $ sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
@@ -291,7 +287,7 @@ $ sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 
 在我们的例子中，更新后的文件如下所示：
 
-```
+```bash
 . . .
 datadir=~/.mysqldata/mysql
 . . .
@@ -303,13 +299,13 @@ datadir=~/.mysqldata/mysql
 
 我们需要告诉 AppArmor 通过在默认目录和新位置之间创建别名来让 MySQL 写入新目录。为此，请编辑 AppArmor `alias` 文件：
 
-```
+```bash
 $ sudo vim /etc/apparmor.d/tunables/alias
 ```
 
 在文件底部，添加以下别名规则：
 
-```
+```bash
 . . .
 alias /var/lib/mysql/ -> ~/.mysqldata/mysql,
 . . .
@@ -317,34 +313,32 @@ alias /var/lib/mysql/ -> ~/.mysqldata/mysql,
 
 为了使更改生效，请重新启动 AppArmor：
 
-```
+```bash
 $ sudo systemctl restart apparmor
 ```
 
-> 注意：如果跳过 AppArmor 配置步骤，则会遇到以下错误消息：
+ 注意：如果跳过 AppArmor 配置步骤，则会遇到以下错误消息：
 
-```
-Output
+```bash
 Job for mysql.service failed because the control process
 exited with error code. See "systemctl status mysql.service"
 and "journalctl -xe" for details.
 ```
 
-> 从 `systemctl` 和`journalctl` 两者的输出结尾判断：
+从 `systemctl` 和`journalctl` 两者的输出结尾判断：
 
-```
-Output
+```bash
 Jul 18 11:03:24 ubuntu-512mb-nyc1-01 systemd[1]:
 mysql.service: Main process exited, code=exited, status=1/FAILURE
 ```
 
-> 由于消息没有在 AppArmor 和数据目录之间建立显式连接，因此该错误可能需要一些时间才能弄清楚。
+由于消息没有在 AppArmor 和数据目录之间建立显式连接，因此该错误可能需要一些时间才能弄清楚。
 
 ## 第 4 步-重新启动 MySQL
 
 下一步是启动 MySQL ，但如果这样做，则会遇到另一个错误。这次不是发生 AppArmor 问题，而是因为该脚本 `mysql-systemd-start` 检查是否存在与两个默认路径匹配的目录 `-d` 或符号链接 `-L` 。如果找不到它们，它将失败：
 
-```
+```bash
 . . .
 if [ ! -d /var/lib/mysql ] && [ ! -L /var/lib/mysql ]; then
  echo "MySQL data dir not found at /var/lib/mysql. Please create one."
@@ -356,31 +350,30 @@ if [ ! -d /var/lib/mysql/mysql ] && [ ! -L /var/lib/mysql/mysql ]; then
  exit 1
 fi
 . . .
-
 ```
 
 因为我们需要这些来启动服务器，所以我们将创建最小的目录结构以通过脚本的环境检查。
 
-```
+```bash
 $ sudo mkdir /var/lib/mysql/mysql -p
 ```
 
 现在我们准备启动 MySQL。
 
-```
+```bash
 $ sudo systemctl start mysql
 $ sudo systemctl status mysql
 ```
 
 为了确保确实使用了新的数据目录，请启动 MySQL 监视器。
 
-```
+```bash
 $ mysql -u root -p
 ```
 
 再次查看数据目录的值：
 
-```
+```bash
 mysql> select @@datadir;
 
 +-------------------------------+
@@ -393,13 +386,13 @@ mysql> select @@datadir;
 
 现在，您已经重新启动了 MySQL 并确认它正在使用新位置，请借此机会确保您的数据库可以正常运行。验证所有现有数据的完整性后，即可删除备份数据目录：
 
-```
+```bash
 $ sudo rm -Rf /var/lib/mysql.bak
 ```
 
 最后一次重启 MySQL，以确保它能按预期运行：
 
-```
+```bash
 $ sudo systemctl restart mysql
 $ sudo systemctl status mysql
 ```

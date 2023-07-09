@@ -120,9 +120,9 @@ ${PROJECT_NAME} - 当前Project名称;
 
 # PYTHONPATH 作用
 
-PYTHONPATH 是 Python 搜索路径，默认我们 import 的模块都会从 PYTHONPATH 里面寻找。
+`PYTHONPATH` 是 Python 搜索路径，默认我们 `import` 的模块都会从 `PYTHONPATH` 里面寻找。
 
-默认情况下，PYTHONPATH 是个空值，可以通过命令设置临时环境变量 PYTHONPATH 。
+默认情况下，`PYTHONPATH` 是个空值，可以通过命令设置临时环境变量 `PYTHONPATH` 。
 
 ```bash
 # windows
@@ -132,9 +132,9 @@ set PYTHONPATH=path1;path2
 export  PYTHONPATH=path1:path2
 ```
 
-pycharm 默认会设置 PYTHONPATH 为源码根目录，vscode 则不会设置。
+pycharm 默认会设置 `PYTHONPATH` 为源码根目录，vscode 则不会设置。
 
-python 中获取 PYTHONPATH 值
+python 中获取 `PYTHONPATH` 值。
 
 ```bash
 import os
@@ -142,13 +142,15 @@ import os
 os.environ['PYTHONPATH']
 ```
 
+使用 `python -m` 执行python命令时， Python 将会在 `PYTHONPATH` 中添加当前目录。
+
 # Django 测试脚本
 
 当你只是想测试 django 中的某一个 py 文件内容 那么你可以不用书写前后端交互的形式，而是直接写一个测试脚本即可
 
 测试环境的准备：
 
-去 manage.py 中拷贝前四行代码 然后自己写两行
+去 `manage.py` 中拷贝前四行代码 然后自己写两行
 
 ```python
 import os

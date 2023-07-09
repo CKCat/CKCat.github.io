@@ -1,5 +1,5 @@
 ---
-title: ARMv8学习记录三
+title: ARMv8学习记录03
 date: 2020-03-16 21:10:15
 tags: 汇编
 category: ARMv8汇编
@@ -351,11 +351,11 @@ hello syscall v8
 
 首先通过目录 `The AArch32 Instruction Sets Overview  -> Branch instructions`找到跳转指令的页面，最终找到 b 指令文档页面。
 
-![](ARMv8学习记录三/2021-03-09-12-34-38.png)
+![](ARMv8学习记录03/2021-03-09-12-34-38.png)
 
 其中 cond 表示条件，需要去 `About the T32 and A32 Instruction Descriptions ->Conditional execution` 查找。
 
-![](ARMv8学习记录三/2021-03-09-12-36-32.png)
+![](ARMv8学习记录03/2021-03-09-12-36-32.png)
 
 通过文档我们可以知道，BEQ 指令为下列格式：
 ```
@@ -378,11 +378,11 @@ ssss ss xxxx xxxx xxxx xxxx xxxx xxxx00
 
 最终去 [armconverter](https://armconverter.com/) 网站进行验证：
 
-![](ARMv8学习记录三/2021-03-09-13-00-38.png)
+![](ARMv8学习记录03/2021-03-09-13-00-38.png)
 
 ## 查看 AArch64 平台 `ldr x2, [x3], 2` 指令
 
-![](ARMv8学习记录三/2021-03-10-13-22-33.png)
+![](ARMv8学习记录03/2021-03-10-13-22-33.png)
 
 根据文档，该指令二进制如下所示。
 ```bash
@@ -390,7 +390,7 @@ ssss ss xxxx xxxx xxxx xxxx xxxx xxxx00
 ```
 对应的 16 进制为 0xF8402462 。
 
-![](ARMv8学习记录三/2021-03-10-13-40-49.png)
+![](ARMv8学习记录03/2021-03-10-13-40-49.png)
 
 
 参考：

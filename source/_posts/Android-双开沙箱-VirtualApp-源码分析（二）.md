@@ -7,19 +7,6 @@ category: Android
 
 > 转载 : https://blog.csdn.net/ganyao939543405/article/details/76150725
 
-<!-- TOC -->
-
-- [VA 初始化](#va-初始化)
-  - [VirtualCore.startup](#virtualcorestartup)
-  - [InvocationStubManager.injectInternal](#invocationstubmanagerinjectinternal)
-- [Client App 的安装](#client-app-的安装)
-  - [VirtualCore.installPackage](#virtualcoreinstallpackage)
-  - [PackageParserEx.parsePackage](#packageparserexparsepackage)
-  - [VPackage](#vpackage)
-
-<!-- /TOC -->
-
-
 # VA 初始化
 ## VirtualCore.startup
 ```

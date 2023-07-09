@@ -9,7 +9,7 @@ category: Android源码
 
 有过 `linux` 编成经验的都应该知道使用 `dlopen` 需要包含 `dlfcn.h` 头文件，所以直接去`aosp/bionic/libc/include/dlfcn.h` 中找到 `dlopen` 的函数定义。
 
-```
+```c++
 void* dlopen(const char* filename, int flag);
 ```
 通过`dlopen`的定义找到其实现在 `aosp/bionic/libdl/libdl.c` 中，
@@ -31,7 +31,7 @@ void* __loader_dlopen(const char* filename, int flags, const void* caller_addr);
 ```
 通过搜索 `__loader_dlopen` 字符串，发现 `aosp/bionic/linker/dlfcn.cpp` 存在相关字符串。
 
-![](/Android源码阅读-dlopen/2019-11-17-15-12-04.png
+![](Android源码阅读-dlopen/2019-11-17-15-12-04.png)
 
 跟进去后发现，其被定义的在 `ANDROID_LIBDL_STRTAB` 字符串数组中
 ```

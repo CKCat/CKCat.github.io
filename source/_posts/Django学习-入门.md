@@ -5,125 +5,70 @@ tags: Django
 category: python
 ---
 
-# 虚拟环境
+## 虚拟环境
 
-虚拟环境其实就是对真实 python 环境的复制，这样我们在复制的 python 环境中安装包就不会影响到真实的 python 环境，在不同的虚拟环境中开发项目就实现了项目之间的隔离。
+为了避免各种不同环境的依赖互相干扰，这里我们使用 miniconda 创建虚拟环境来开发 django 应用。
 
-## virtualenvwrapper 虚拟环境
+镜像下载地址：https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/
 
-### 创建
-
-首先安装虚拟环境，命令如下:
-
-```bash
-sudo pip3 install virtualenv
-```
-
-接下来还要安装虚拟环境扩展包，命令如下：
+安装完成后，可以通过修改用户目录下的 `.condarc` 文件来使用 TUNA 镜像源。
+Windows 用户无法直接创建名为 `.condarc` 的文件，可先执行 `conda config --set show_channel_urls yes` 生成该文件之后再修改。
+Windows 平台 `.condarc` 文件的路径为 `%USERPROFILE%/.condarc` 。
 
 ```bash
-sudo pip3 install virtualenvwrapper
+channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
 ```
 
-安装虚拟环境包装器的目的是使用更加简单的命令来管理虚拟环境。
+为了使 cmder 默认打开就可以使用 conda ，进入 cmder `Setting -> Startup -> Tasks` 添加一个新的 task 。将 task 名称设置为 anaconda ，命令设置为 `cmd /k ""%ConEmuDir%\..\init.bat"" & D:\miniconda3\Scripts\activate.bat D:\miniconda3`，并勾选 default task for new console 。
 
-修改 home 目录下的配置文件 `.bashrc` ，添加如下内容：
+配置好了以后，打开 cmder 运行下列命令创建一个 python 虚拟环境。
 
 ```bash
-export WORKEON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+(base) $ conda create -n pyWeb python=3.6
 ```
 
-这里运行可能会出现 `/usr/bin/python: No module named virtualenvwrapper` 错误，修改 `/usr/local/bin/virtualenvwrapper.sh` 如下即可：
+`pyWeb` 为虚拟环境名称，`python=3.6` 为 python 版本设置为 3.6。
 
-![](Django学习-入门/2019-12-13-21-35-50.png)
+接着激活 pyWeb 环境并安装 django 即可。
 
-使用 `source .bashrc` 命令使配置文件生效。
-
-创建 python3 虚拟环境命令如下：
-
-```
-mkvirtualenv -p python env_name
+```bash
+(base) $ conda activate pyWeb
+(pyWeb) $ pip install django==3.2.18
 ```
 
-例如：
-![](Django学习-入门/2019-12-13-21-40-39.png)
+下面列出 conda 一些常用命令：
 
-可以看到已经创建了一个虚拟环境`/home/ckcat/.virtualenvs/django_study`，并且自动进入了该虚拟环境。
-
-### 退出
-
-退出虚拟环境的命令如下：
-
-```
-deactivate
-```
-
-![](Django学习-入门/2019-12-13-21-45-12.png)
-
-### 查看和使用
-
-查看所有虚拟环境命令如下：
-
-```
-workon 两次tab键
+```bash
+conda create -n myenv python=3.9             # 创建环境
+conda activate myenv                         # conda 激活名称为 myenv 的环境
+conda deactivate                             # conda 退出当前环境
+conda env list                               # 列出环境列表
+conda env export > environment.yaml          # 导出当前环境
+conda create -f environment.yaml -n myenv    # 从导出的 environment.yaml 文件创建环境
+conda env remove -n myenv                    # conda 删除环境
+pip freeze > requirements.txt                # 导出pip install 安装的包
+pip uninstall -r requirements.txt -y -v      # pip 删除全部包，-r 包列表文件，-y 不提示是否删除，-v 输出日志
 ```
 
-使用命令如下：
-
-```
-workon env_name
-```
-
-![](Django学习-入门/2019-12-13-21-48-46.png)
-
-### 删除
-
-删除虚拟环境使用如下命令：
-
-```
-rmvirtualenv env_name
-```
-
-但是删除前，必须先退出虚拟环境，例如：
-![](Django学习-入门/2019-12-13-21-51-42.png)
-
-### 包操作
-
-在虚拟环境中使用 pip 命令操作 python 包，安装命令如下：
-
-```
-pip install packegename
-```
-
-查看以安装的 python 包命令如下：
-
-```
-pip list
-pip freeze
-```
-
-## pipenv
-
-Pipenv 是 Python 项目的依赖管理器。
-
-## 安装 django 包
-
-本次学习中使用的是 `django1.8.2` 的版本，安装命令如下
-
-```
-pip install django==1.8.2
-```
-
-![](Django学习-入门/2019-12-13-21-58-25.png)
-
-至此，整个虚拟环境搭建完成，下面开始创建项目。
-
-# 2. 创建项目
+## 创建项目
 
 首先选定好项目的存放目录，我这里存放在 `/home/ckcat/code/PythonProjects/Django_Study` ，使用如下命令创建项目：
 
-```
+```bash
 django-admin startproject project_name
 ```
 
@@ -687,7 +632,8 @@ python manage.py startapp polls
 - name: 为你的 URL 取名能使你在 Django 的任意地方唯一地引用它，尤其是在模板中。
 
 4. 数据库配置：
-   ENGINE -- 可选值有 'django.db.backends.sqlite3'，'django.db.backends.postgresql'，'django.db.backends.mysql'，或 'django.db.backends.oracle'等。
+
+ENGINE -- 可选值有 'django.db.backends.sqlite3'，'django.db.backends.postgresql'，'django.db.backends.mysql'，或 'django.db.backends.oracle'等。
 
 NAME -- 数据库的名称。
 

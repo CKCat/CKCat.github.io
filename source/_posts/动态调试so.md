@@ -37,6 +37,8 @@ or export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so
 
 打开 monitor ，查看APP的调试端口，使用jdb 命令连接 ` jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。
 
+> 通过 `adb forward tcp:<hostport> jdwp:<pid>` 命令，替代使用DDMS的方式。
+
 此时 APP 将会运行起来，IDA 将会弹出下列界面，点击 same 就可以了。
 
 ![](动态调试so/2021-02-22-21-07-35.png)
