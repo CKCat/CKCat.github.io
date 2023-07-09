@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -192,7 +192,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">UEFI模式Windows10上安装Ubuntu 18.04.1 LTS双系统</a>
+          <a href="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">xposde源码分析</a>
         </h2>
 
         <div class="post-meta-container">
@@ -221,14 +221,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2019-11-08 10:40:16" itemprop="dateCreated datePublished" datetime="2019-11-08T10:40:16+00:00">2019-11-08</time>
+      <time title="创建时间：2020-02-12 01:16:03" itemprop="dateCreated datePublished" datetime="2020-02-12T01:16:03+00:00">2020-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -236,7 +236,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
         </span>
     </span>
 
@@ -250,236 +250,37 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>转载自：<a target="_blank" rel="noopener" href="https://www.mzihen.com/how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi/">https://www.mzihen.com/how-to-install-ubuntu-18-04-lts-with-windows-10-on-uefi/</a></p>
-</blockquote>
-<!-- TOC -->
+          <!-- TOC -->
 
 <ul>
-<li><a href="#%E4%B8%80%E5%88%B6%E4%BD%9C%E6%94%AF%E6%8C%81uefi%E5%90%AF%E5%8A%A8%E7%9A%84ubuntu-usb%E5%90%AF%E5%8A%A8%E7%9B%98">一、制作支持UEFI启动的Ubuntu USB启动盘</a></li>
-<li><a href="#%E4%BA%8Cwindows10%E4%B8%AD%E7%9A%84%E8%AE%BE%E7%BD%AE">二、Windows10中的设置</a></li>
-<li><a href="#%E4%B8%89%E5%88%86%E5%8C%BA">三、分区</a></li>
-<li><a href="#%E5%9B%9B%E5%AE%89%E8%A3%85ubuntu%E7%B3%BB%E7%BB%9F">四、安装Ubuntu系统</a></li>
-<li><a href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98">存在的问题。</a></li>
-</ul>
-<!-- /TOC -->
-<h1 id="一、制作支持UEFI启动的Ubuntu-USB启动盘"><a href="#一、制作支持UEFI启动的Ubuntu-USB启动盘" class="headerlink" title="一、制作支持UEFI启动的Ubuntu USB启动盘"></a>一、制作支持UEFI启动的Ubuntu USB启动盘</h1><p>我使用了开源软件Rufus（<a target="_blank" rel="noopener" href="https://rufus.akeo.ie/?locale=zh_CN">Rufus官网</a>）创建的USB启动盘，Ubuntu使用了最新版的Ubuntu 18.04.1 LTS（<a target="_blank" rel="noopener" href="https://www.ubuntu.com/download/desktop">ubuntu官网</a>）。</p>
-<p>现有台式机是SSD硬盘加机械硬盘，win10系统安装在SSD硬盘，SSD是MBR分区的，机械硬盘是GPT分区，主板使用的UEFI启动模式。因为要将Ubuntu安装在机械硬盘上，所以制作启动盘选择的 <strong>分区类型选择GPT，目标系统类型选择UEFI(非CSM)</strong> ，其它都按照我设置的即可，如下图。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/08/UEFI%E6%A8%A1%E5%BC%8FWindows10%E4%B8%8A%E5%AE%89%E8%A3%85Ubuntu-18-04-1-LTS%E5%8F%8C%E7%B3%BB%E7%BB%9F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/08/Ubuntu%E6%AD%BB%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/11/08/Ubuntu%E6%AD%BB%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/" class="post-title-link" itemprop="url">Ubuntu死机解决方法汇总</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-11-08 10:33:45" itemprop="dateCreated datePublished" datetime="2019-11-08T10:33:45+00:00">2019-11-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>转载自 : <a target="_blank" rel="noopener" href="https://blog.csdn.net/frogoscar/article/details/64921708">https://blog.csdn.net/frogoscar/article/details/64921708</a></p>
-</blockquote>
-<!-- TOC -->
-
-<ul>
-<li><a href="#1-%E8%BF%9B%E5%85%A5tty%E7%BB%88%E7%AB%AF">1. 进入TTY终端</a></li>
-<li><a href="#2-%E7%9B%B4%E6%8E%A5%E6%B3%A8%E9%94%80%E7%94%A8%E6%88%B7">2. 直接注销用户</a></li>
-<li><a href="#3-%E5%BA%95%E5%B1%82%E6%96%B9%E6%B3%95">3. 底层方法</a></li>
-</ul>
-<!-- /TOC -->
-<p>可尝试的解决方法</p>
-<h1 id="1-进入TTY终端"><a href="#1-进入TTY终端" class="headerlink" title="1. 进入TTY终端"></a>1. 进入TTY终端</h1><p><code>Ctrl+Alt+F1</code>进入<code>TTY1</code>终端字符界面, 输入用户名和密码以登录。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/08/Ubuntu%E6%AD%BB%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/" class="post-title-link" itemprop="url">Ubuntu下安装使用v2ray</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-11-04 12:18:56" itemprop="dateCreated datePublished" datetime="2019-11-04T12:18:56+00:00">2019-11-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>文章转载自：<a target="_blank" rel="noopener" href="https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/">https://deng55.github.io/2017/12/04/Ubuntu%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8V2ray/</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.imcaviare.com/2018-12-18-1/">https://www.imcaviare.com/2018-12-18-1/</a></p>
-</blockquote>
-<!-- TOC -->
-
-<ul>
-<li><a href="#1%E5%AE%89%E8%A3%85v2ray">1.安装v2ray</a></li>
-<li><a href="#2%E9%85%8D%E7%BD%AE">2.配置</a><ul>
-<li><a href="#1-%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1">1. 启动服务</a></li>
+<li><a href="#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0">Xposed源码剖析——概述</a><ul>
+<li><a href="#xposedinstaller%E7%9A%84%E6%9E%84%E6%88%90">XposedInstaller的构成</a></li>
+<li><a href="#xposed%E5%8E%9F%E7%90%86">Xposed原理</a></li>
+<li><a href="#xposed%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88">Xposed的实现方案</a></li>
 </ul>
 </li>
-<li><a href="#3-%E9%85%8D%E7%BD%AEpac">3. 配置PAC</a></li>
+<li><a href="#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90--app_process-%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3">Xposed 源码剖析 —— app_process 作用详解</a><ul>
+<li><a href="#app_maincpp-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%AF%B9%E6%AF%94">app_main.cpp 源码阅读与对比</a></li>
+<li><a href="#xposedbridgejava">XposedBridge.java</a></li>
+</ul>
+</li>
+<li><a href="#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90xposed%E5%88%9D%E5%A7%8B%E5%8C%96">Xposed源码剖析——Xposed初始化</a><ul>
+<li><a href="#xposedinitialize%E5%88%9D%E5%A7%8B%E5%8C%96">xposed::initialize初始化</a></li>
+<li><a href="#onvmcreated-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8E%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">onVmCreated 初始化后的准备工作</a></li>
+<li><a href="#libxposed_dalvikcpp-hook-%E7%8E%AF%E5%A2%83%E5%88%9D%E5%A7%8B%E5%8C%96">libxposed_dalvik.cpp hook 环境初始化</a></li>
+<li><a href="#jni%E6%96%B9%E6%B3%95%E6%B3%A8%E5%86%8C%E9%80%BB%E8%BE%91">JNI方法注册逻辑</a></li>
+</ul>
+</li>
+<li><a href="#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-hook-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0">Xposed 源码剖析—— hook 具体实现</a></li>
 </ul>
 <!-- /TOC -->
-<p>由于最近把系统换成了ubuntu，虽然已经用上了shadowsocks-qt5，但是本着折腾的态度，还是想把v2ray部署起来。</p>
-<h1 id="1-安装v2ray"><a href="#1-安装v2ray" class="headerlink" title="1.安装v2ray"></a>1.安装v2ray</h1><p>安装的过程比较简单，可直接按照官方教程。</p>
+
+<h1 id="Xposed源码剖析——概述"><a href="#Xposed源码剖析——概述" class="headerlink" title="Xposed源码剖析——概述"></a>Xposed源码剖析——概述</h1><p>XPosed 是与 Cydia 其名的工具，它能够让 Android 设备在没有修改源码的情况下修改系统中的 API 运行结果。我们通常称之为：God Mode（上帝模式）。</p>
+<p>之前享大家分享了 Xposed 的基础，Xposed 的作用和最简单的用法。那么，它的原理和它的内部构造是如何构成的？下面，我们从 Github 上看看，rovo89 大神是如何制作的。</p>
+<p>rovo89的github地址：<a target="_blank" rel="noopener" href="https://github.com/rovo89">https://github.com/rovo89</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/04/Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8v2ray/#more" rel="contents">
+              <a class="btn" href="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -510,7 +311,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/03/linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/02/%E5%B7%A5%E5%85%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -528,7 +329,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/11/03/linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">linux使用记录</a>
+          <a href="/2020/02/02/%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">工具</a>
         </h2>
 
         <div class="post-meta-container">
@@ -539,14 +340,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2019-11-03 14:12:52" itemprop="dateCreated datePublished" datetime="2019-11-03T14:12:52+00:00">2019-11-03</time>
+      <time title="创建时间：2020-02-02 04:49:50" itemprop="dateCreated datePublished" datetime="2020-02-02T04:49:50+00:00">2020-02-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:56" itemprop="dateModified" datetime="2023-07-09T10:10:56+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -554,7 +355,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
         </span>
     </span>
 
@@ -568,17 +369,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="1-Android-studio-出现-grant-current-user-access-to-x2F-dev-x2F-kvm-以及-x2F-dev-x2F-kvm-devices-permission-denies"><a href="#1-Android-studio-出现-grant-current-user-access-to-x2F-dev-x2F-kvm-以及-x2F-dev-x2F-kvm-devices-permission-denies" class="headerlink" title="1. Android studio 出现 grant current user access to &#x2F;dev&#x2F;kvm 以及&#x2F;dev&#x2F;kvm devices: permission denies"></a>1. Android studio 出现 grant current user access to &#x2F;dev&#x2F;kvm 以及&#x2F;dev&#x2F;kvm devices: permission denies</h1><p>linux 中启动模拟器出现 grant current user access to &#x2F;dev&#x2F;kvm 错误</p>
-<ul>
-<li>临时解决方法：</li>
-</ul>
-<p>打开 terminal 输入代码 <code>sudo chown username -R /dev/kvm</code> 注意 username 是你用的用户名， 重新启动模拟器就可以了。</p>
-<ul>
-<li>永久解决办法：</li>
-</ul>
+          <h1 id="Anroid-逆向工具"><a href="#Anroid-逆向工具" class="headerlink" title="Anroid 逆向工具"></a>Anroid 逆向工具</h1><h2 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h2><p><a target="_blank" rel="noopener" href="https://www.pnfsoftware.com/">JEB</a> - The Interactive Android Decompiler.</p>
+<p><a target="_blank" rel="noopener" href="http://www.gda.wiki:9090/">GDA</a> - GGJoy Dex Analysizer(GDA)，国内第一款也是唯一一款全交互式反编译器，同时也是世界上最早实现的 dalvik 字节码反编译器。</p>
+<p><a target="_blank" rel="noopener" href="https://www.hex-rays.com/products/ida/">IDA</a> - The IDA Disassembler and Debugger is an interactive, programmable, extensible, multi-processor disassembler hosted on Windows, Linux, or Mac OS X. IDA has become the de-facto standard for the analysis of hostile code, vulnerability research and commercial-off-the-shelf validation.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/03/linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
+              <a class="btn" href="/2020/02/02/%E5%B7%A5%E5%85%B7/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -609,7 +405,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/29/Flask%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -627,7 +423,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">编译Android系统</a>
+          <a href="/2020/01/29/Flask%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Flask简单学习</a>
         </h2>
 
         <div class="post-meta-container">
@@ -638,14 +434,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2019-11-03 13:03:10" itemprop="dateCreated datePublished" datetime="2019-11-03T13:03:10+00:00">2019-11-03</time>
+      <time title="创建时间：2020-01-29 13:55:27" itemprop="dateCreated datePublished" datetime="2020-01-29T13:55:27+00:00">2020-01-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -653,7 +449,198 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>由于是学习，所以直接在django的虚拟环境中安装Flask。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">指定Flask版本安装</span><br><span class="line">$ pip install flask==0.10.1</span><br></pre></td></tr></table></figure>
+
+<h1 id="从-Hello-World-开始"><a href="#从-Hello-World-开始" class="headerlink" title="从 Hello World 开始"></a>从 Hello World 开始</h1><h2 id="Flask程序运行过程："><a href="#Flask程序运行过程：" class="headerlink" title="Flask程序运行过程："></a>Flask程序运行过程：</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/29/Flask%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">Django学习-第三方模块</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-01-26 21:01:20" itemprop="dateCreated datePublished" datetime="2020-01-26T21:01:20+00:00">2020-01-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h1><p>借助富文本编辑器，网站的编辑人员能够像使用 offfice 一样编写出漂亮的、所见即所得的页面。此处以 tinymce 为例，其它富文本编辑器的使用也是类似的。</p>
+<p>在虚拟环境中安装包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-tinymce==2.6.0</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，可以使用在 Admin 管理中，也可以自定义表单使用。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/01/19/frida%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">frida环境配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-01-19 16:10:09" itemprop="dateCreated datePublished" datetime="2020-01-19T16:10:09+00:00">2020-01-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frida/" itemprop="url" rel="index"><span itemprop="name">frida</span></a>
         </span>
     </span>
 
@@ -668,14 +655,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <blockquote>
-<p>系统环境：Ubuntu 18.04.3</p>
-<p>编译 Android 系统版本： 8.1</p>
+<p>源码地址：<a target="_blank" rel="noopener" href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
 </blockquote>
-<h1 id="一、下载源码"><a href="#一、下载源码" class="headerlink" title="一、下载源码"></a>一、下载源码</h1><p>由于国内网络环境问题，下列下载源码方式均未采用 google 官方提供的方式。</p>
-<h2 id="1-下载-repo-工具"><a href="#1-下载-repo-工具" class="headerlink" title="1. 下载 repo 工具"></a>1. 下载 repo 工具</h2><p>使用清华 mirror 下载 repo 工具</p>
+<blockquote>
+<p>官网：<a target="_blank" rel="noopener" href="https://frida.re/">https://frida.re/</a></p>
+</blockquote>
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><h2 id="安装-Frida"><a href="#安装-Frida" class="headerlink" title="安装 Frida"></a>安装 Frida</h2><p>在安装 <code>Frida</code> 之前最好创建一个 <code>python</code> 虚拟环境，这样可以避免与其他环境产生干扰</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/03/%E7%BC%96%E8%AF%91Android%E7%B3%BB%E7%BB%9F/#more" rel="contents">
+              <a class="btn" href="/2020/01/19/frida%E4%BD%BF%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -706,7 +694,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/02/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/15/Django%E5%AD%A6%E4%B9%A0-%E5%85%B6%E4%BB%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -724,7 +712,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/11/02/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">Hexo｜快速搭建自己（Github）博客</a>
+          <a href="/2020/01/15/Django%E5%AD%A6%E4%B9%A0-%E5%85%B6%E4%BB%96/" class="post-title-link" itemprop="url">Django学习-其他</a>
         </h2>
 
         <div class="post-meta-container">
@@ -735,14 +723,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2019-11-02 14:12:52" itemprop="dateCreated datePublished" datetime="2019-11-02T14:12:52+00:00">2019-11-02</time>
+      <time title="创建时间：2020-01-15 15:31:58" itemprop="dateCreated datePublished" datetime="2020-01-15T15:31:58+00:00">2020-01-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -750,7 +738,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
         </span>
     </span>
 
@@ -764,15 +752,565 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h1><ul>
-<li>安装<a target="_blank" rel="noopener" href="https://nodejs.org/en/">nodejs</a></li>
-<li>安装<a target="_blank" rel="noopener" href="https://git-scm.com/">git</a></li>
-<li>注册<a target="_blank" rel="noopener" href="https://github.com/">github</a>账号</li>
-</ul>
-<h1 id="二、申请-github-博客"><a href="#二、申请-github-博客" class="headerlink" title="二、申请 github 博客"></a>二、申请 github 博客</h1><h2 id="1-创建-github-仓库"><a href="#1-创建-github-仓库" class="headerlink" title="1.创建 github 仓库"></a>1.创建 github 仓库</h2><p>创建一个新的 github 仓库，仓库名为<code>username.github.io</code>,其他选项可以默认。</p>
+          <h1 id="静态文件"><a href="#静态文件" class="headerlink" title="静态文件"></a>静态文件</h1><p>项目中的 CSS、图片、js 都是静态文件。一般会将静态文件放到一个单独的目录中，以方便管理。在 html 页面中调用时，也需要指定静态文件的路径，Django 中提供了一种解析的方式配置静态文件路径。静态文件可以放在项目根目录下，也可以放在应用的目录下，由于有些静态文件在项目中是通用的，所以推荐放在项目的根目录下，方便管理。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>创建 <code>test5</code> 项目并创建 <code>booktest</code> 应用.</p>
+<p>1）在 <code>test5/settings.py</code> 文件中定义静态文件存放的物理目录。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/02/Hexo%EF%BD%9C%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%EF%BC%88Github%EF%BC%89%E5%8D%9A%E5%AE%A2/#more" rel="contents">
+              <a class="btn" href="/2020/01/15/Django%E5%AD%A6%E4%B9%A0-%E5%85%B6%E4%BB%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/04/Django%E5%AD%A6%E4%B9%A0-%E6%A8%A1%E6%9D%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/01/04/Django%E5%AD%A6%E4%B9%A0-%E6%A8%A1%E6%9D%BF/" class="post-title-link" itemprop="url">Django学习-模板</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-01-04 20:51:52" itemprop="dateCreated datePublished" datetime="2020-01-04T20:51:52+00:00">2020-01-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <!-- TOC -->
+
+<ul>
+<li><a href="#%E6%A8%A1%E6%9D%BF">模板</a><ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E7%A4%BA%E4%BE%8B%E9%A1%B9%E7%9B%AE">创建示例项目</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A8%A1%E6%9D%BF%E8%AF%AD%E8%A8%80">模板语言</a><ul>
+<li><a href="#%E6%A8%A1%E6%9D%BF%E5%8F%98%E9%87%8F">模板变量</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A0%87%E7%AD%BE">标签</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BF%87%E6%BB%A4%E5%99%A8">过滤器</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4%E5%99%A8">自定义过滤器</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B3%A8%E9%87%8A">注释</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A8%A1%E6%9D%BF%E7%BB%A7%E6%89%BF">模板继承</a><ul>
+<li><a href="#%E7%88%B6%E6%A8%A1%E6%9D%BF">父模板</a></li>
+<li><a href="#%E5%AD%90%E6%A8%A1%E6%9D%BF">子模板</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#html-%E8%BD%AC%E4%B9%89">HTML 转义</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%B3%E9%97%AD%E8%BD%AC%E4%B9%89">关闭转义</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E5%80%BC">字符串字面值</a></li>
+</ul>
+</li>
+<li><a href="#csrf">CSRF</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+<li><a href="#%E9%98%B2%E6%AD%A2-csrf">防止 CSRF</a></li>
+<li><a href="#%E4%BF%9D%E6%8A%A4%E5%8E%9F%E7%90%86">保护原理</a></li>
+</ul>
+</li>
+<li><a href="#%E9%AA%8C%E8%AF%81%E7%A0%81">验证码</a><ul>
+<li><a href="#%E6%89%8B%E5%8A%A8%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81">手动实现验证码</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E9%AA%8C%E8%AF%81%E7%A0%81">调用验证码</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81">验证</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90">反向解析</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+<li><a href="#url-%E7%9A%84%E5%8F%82%E6%95%B0">URL 的参数</a><ul>
+<li><a href="#%E6%83%85%E5%86%B5%E4%B8%80%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0">情况一：位置参数</a></li>
+<li><a href="#%E6%83%85%E5%86%B5%E4%BA%8C%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%82%E6%95%B0">情况二：关键字参数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><p>作为 Web 框架，Django 提供了模板，用于编写 html 代码，还可以嵌入模板代码更快更方便的完成页面开发，再通过在视图中渲染模板，将生成最终的 html 字符串返回给客户端浏览器。模版致力于表达外观，而不是程序逻辑。模板的设计实现了业务逻辑 view 与显示内容 template 的分离，一个视图可以使用任意一个模板，一个模板可以供多个视图使用。</p>
+<p>模板包含两部分：</p>
+<ul>
+<li>静态部分，包含 html、css、js 。</li>
+<li>动态部分，就是模板语言。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/04/Django%E5%AD%A6%E4%B9%A0-%E6%A8%A1%E6%9D%BF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/31/Python-%E5%BA%93%E6%89%93%E5%8C%85%E5%88%86%E5%8F%91-setup-py-%E7%BC%96%E5%86%99-%E7%AE%80%E6%98%93%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/12/31/Python-%E5%BA%93%E6%89%93%E5%8C%85%E5%88%86%E5%8F%91-setup-py-%E7%BC%96%E5%86%99-%E7%AE%80%E6%98%93%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">Python 库打包分发(setup.py 编写)简易指南</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-31 16:53:46" itemprop="dateCreated datePublished" datetime="2019-12-31T16:53:46+00:00">2019-12-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>转载 <a target="_blank" rel="noopener" href="http://blog.konghy.cn/2018/04/29/setup-dot-py/">http://blog.konghy.cn/2018/04/29/setup-dot-py/</a></p>
+</blockquote>
+<p>Python 有非常丰富的第三方库可以使用，很多开发者会向 <a target="_blank" rel="noopener" href="https://pypi.org/">pypi</a> 上提交自己的 Python 包。要想向 pypi 包仓库提交自己开发的包，首先要将自己的代码打包，才能上传分发。</p>
+<h2 id="distutils-简介"><a href="#distutils-简介" class="headerlink" title="distutils 简介"></a>distutils 简介</h2><p><code>distutils</code> 是标准库中负责建立 Python 第三方库的安装器，使用它能够进行 Python 模块的安装和发布。<code>distutils</code> 对于简单的分发很有用，但功能缺少。大部分 Python 用户会使用更先进的 <code>setuptools</code> 模块.</p>
+<h2 id="setuptools-简介"><a href="#setuptools-简介" class="headerlink" title="setuptools 简介"></a>setuptools 简介</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/31/Python-%E5%BA%93%E6%89%93%E5%8C%85%E5%88%86%E5%8F%91-setup-py-%E7%BC%96%E5%86%99-%E7%AE%80%E6%98%93%E6%8C%87%E5%8D%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/" class="post-title-link" itemprop="url">Django学习-视图</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-27 17:07:47" itemprop="dateCreated datePublished" datetime="2019-12-27T17:07:47+00:00">2019-12-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <!-- TOC -->
+
+<ul>
+<li><a href="#%E8%A7%86%E5%9B%BE">视图</a><ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E7%A4%BA%E4%BE%8B%E9%A1%B9%E7%9B%AE">创建示例项目</a><ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE-test3">创建项目 test3</a></li>
+<li><a href="#%E8%BF%9B%E5%85%A5%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8-booktest">进入项目目录，创建应用 booktest</a></li>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD-installed_apps-%E9%A1%B9%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8">在 test3&#x2F;settings.py 中 INSTALLED_APPS 项安装应用</a></li>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD-databases-%E9%A1%B9%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8-mysql-%E6%95%B0%E6%8D%AE%E5%BA%93-test2">在 test3&#x2F;settings.py 中 DATABASES 项配置使用 MySQL 数据库 test2</a></li>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD-templates-%E9%A1%B9%E9%85%8D%E7%BD%AE%E6%A8%A1%E6%9D%BF%E6%9F%A5%E6%89%BE%E8%B7%AF%E5%BE%84">在 test3&#x2F;settings.py 中 TEMPLATES 项配置模板查找路径</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95-test3templatesbooktest-">创建模板目录 test3&#x2F;templates&#x2F;booktest 。</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE">使用视图</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1">启动服务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#urlconf">URLconf</a><ul>
+<li><a href="#%E9%85%8D%E7%BD%AE">配置</a><ul>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD%E9%80%9A%E8%BF%87-root_urlconf-%E6%8C%87%E5%AE%9A-url-%E9%85%8D%E7%BD%AE%E9%BB%98%E8%AE%A4%E5%B7%B2%E7%BB%8F%E6%9C%89%E6%AD%A4%E9%85%8D%E7%BD%AE">在 test3&#x2F;settings.py 中通过 ROOT_URLCONF 指定 url 配置，默认已经有此配置。</a></li>
+<li><a href="#%E6%89%93%E5%BC%80-test3urlspy-%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE">打开 test3&#x2F;urls.py 可以看到默认配置。</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AF%AD%E6%B3%95">语法</a><ul>
+<li><a href="#%E8%AF%AD%E6%B3%95%E4%B8%80">语法一</a></li>
+<li><a href="#%E8%AF%AD%E6%B3%95%E4%BA%8C">语法二</a></li>
+</ul>
+</li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E5%80%BC">获取值</a><ul>
+<li><a href="#%E6%96%B9%E5%BC%8F%E4%B8%80%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0">方式一：位置参数</a></li>
+<li><a href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%82%E6%95%B0">方式二：关键字参数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E8%A7%86%E5%9B%BE">视图</a><ul>
+<li><a href="#%E5%86%85%E7%BD%AE%E9%94%99%E8%AF%AF%E8%A7%86%E5%9B%BE">内置错误视图</a><ul>
+<li><a href="#%E9%94%99%E8%AF%AF%E5%8F%8A%E8%A7%86%E5%9B%BE">错误及视图</a></li>
+<li><a href="#%E9%94%99%E8%AF%AF%E5%8F%8A%E8%A7%86%E5%9B%BE">错误及视图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#httpreqeust-%E5%AF%B9%E8%B1%A1">HttpReqeust 对象</a><ul>
+<li><a href="#%E5%B1%9E%E6%80%A7">属性</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a><ul>
+<li><a href="#pathencoding">path、encoding</a></li>
+<li><a href="#method">method</a></li>
+</ul>
+</li>
+<li><a href="#querydict-%E5%AF%B9%E8%B1%A1">QueryDict 对象</a></li>
+<li><a href="#get-%E5%B1%9E%E6%80%A7">GET 属性</a></li>
+<li><a href="#post-%E5%B1%9E%E6%80%A7">POST 属性</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#httpresponse-%E5%AF%B9%E8%B1%A1">HttpResponse 对象</a><ul>
+<li><a href="#%E5%B1%9E%E6%80%A7">属性</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95">方法</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a><ul>
+<li><a href="#%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE">直接返回数据</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF">调用模板</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF%E7%AE%80%E5%86%99%E5%87%BD%E6%95%B0-render">调用模板简写函数 render</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AD%90%E7%B1%BB-jsonresponse">子类 JsonResponse</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AD%90%E7%B1%BB-httpresponseredirect">子类 HttpResponseRedirect</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+<li><a href="#%E9%87%8D%E5%AE%9A%E5%90%91%E7%AE%80%E5%86%99%E5%87%BD%E6%95%B0-redirect">重定向简写函数 redirect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81">状态保持</a><ul>
+<li><a href="#cookie">Cookie</a><ul>
+<li><a href="#cookie-%E7%9A%84%E7%89%B9%E7%82%B9">Cookie 的特点</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE-cookie">设置 Cookie</a></li>
+<li><a href="#%E8%AF%BB%E5%8F%96-cookie">读取 Cookie</a></li>
+</ul>
+</li>
+<li><a href="#session">Session</a><ul>
+<li><a href="#%E5%90%AF%E7%94%A8-session">启用 Session</a></li>
+<li><a href="#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F">存储方式</a></li>
+<li><a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E-cookie">依赖于 Cookie</a></li>
+<li><a href="#%E5%AF%B9%E8%B1%A1%E5%8F%8A%E6%96%B9%E6%B3%95">对象及方法</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a><ul>
+<li><a href="#%E5%86%99-session">写 session</a></li>
+<li><a href="#%E8%AF%BB-session">读 session</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4">删除</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4-session">删除 session</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>视图的功能</p>
+<p>视图负责接受 Web 请求 HttpRequest，进行逻辑处理，返回 Web 响应 HttpResponse 给请求者。</p>
+<h2 id="创建示例项目"><a href="#创建示例项目" class="headerlink" title="创建示例项目"></a>创建示例项目</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/21/r2Frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/12/21/r2Frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">r2Frida环境配置及使用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-21 23:54:06" itemprop="dateCreated datePublished" datetime="2019-12-21T23:54:06+00:00">2019-12-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frida/" itemprop="url" rel="index"><span itemprop="name">frida</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>本机环境：ubuntu 18.04</p>
+</blockquote>
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><h2 id="安装-redare2"><a href="#安装-redare2" class="headerlink" title="安装 redare2"></a>安装 <a target="_blank" rel="noopener" href="https://github.com/radareorg/radare2">redare2</a></h2><p>参考 github 使用下列命令安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/radare/radare2.git</span><br><span class="line">$ cd radare2</span><br><span class="line">$ ./sys/user.sh</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/21/r2Frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -796,7 +1334,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

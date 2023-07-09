@@ -46,7 +46,7 @@
 <meta property="og:image" content="https://ckcat.github.io/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-28-21-17-27.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/01/26/Django%E5%AD%A6%E4%B9%A0-%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97/2020-01-29-13-47-34.png">
 <meta property="article:published_time" content="2020-01-26T21:01:20.000Z">
-<meta property="article:modified_time" content="2023-02-18T08:06:25.298Z">
+<meta property="article:modified_time" content="2023-07-09T10:10:55.762Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="Django">
 <meta name="twitter:card" content="summary">
@@ -159,7 +159,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">富文本编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Admin-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">在 Admin 中使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">自定义使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA"><span class="nav-number">1.1.3.</span> <span class="nav-text">显示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2"><span class="nav-number">2.</span> <span class="nav-text">全文检索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%BC%95%E6%93%8E%E5%8F%8A%E7%B4%A2%E5%BC%95"><span class="nav-number">2.1.</span> <span class="nav-text">创建引擎及索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">发送邮件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#celery"><span class="nav-number">4.</span> <span class="nav-text">celery</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%83%E7%BD%B2"><span class="nav-number">5.</span> <span class="nav-text">布署</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">富文本编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Admin-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">在 Admin 中使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">自定义使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA"><span class="nav-number">1.1.3.</span> <span class="nav-text">显示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2"><span class="nav-number">2.</span> <span class="nav-text">全文检索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%BC%95%E6%93%8E%E5%8F%8A%E7%B4%A2%E5%BC%95"><span class="nav-number">2.1.</span> <span class="nav-text">创建引擎及索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">发送邮件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#celery"><span class="nav-number">4.</span> <span class="nav-text">celery</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">简单使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%83%E7%BD%B2"><span class="nav-number">5.</span> <span class="nav-text">布署</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -254,7 +254,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -285,11 +285,11 @@
     <div class="post-body" itemprop="articleBody">
         <h1 id="富文本编辑器"><a href="#富文本编辑器" class="headerlink" title="富文本编辑器"></a>富文本编辑器</h1><p>借助富文本编辑器，网站的编辑人员能够像使用 offfice 一样编写出漂亮的、所见即所得的页面。此处以 tinymce 为例，其它富文本编辑器的使用也是类似的。</p>
 <p>在虚拟环境中安装包。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-tinymce==2.6.0</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-tinymce==2.6.0</span><br></pre></td></tr></table></figure>
 
 <p>安装完成后，可以使用在 Admin 管理中，也可以自定义表单使用。</p>
 <h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>1）在 <code>test6/settings.py</code> 中为 INSTALLED_APPS 添加编辑器应用。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    ...</span><br><span class="line">    &#x27;tinymce&#x27;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = (</span><br><span class="line">    ...</span><br><span class="line">    <span class="string">&#x27;tinymce&#x27;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 
 <p>2）在 <code>test6/settings.py</code> 中添加编辑器配置。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TINYMCE_DEFAULT_CONFIG = &#123;</span><br><span class="line">    &#x27;theme&#x27;: &#x27;advanced&#x27;,</span><br><span class="line">    &#x27;width&#x27;: 600,</span><br><span class="line">    &#x27;height&#x27;: 400,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -490,8 +490,15 @@
 <li>工人 worker：在一个新进程中，负责执行队列中的任务。</li>
 <li>代理人 broker：负责调度，在布置环境中使用 redis。</li>
 </ul>
-<p>安装包：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">celery==3.1.25</span><br><span class="line">django-celery==3.1.17</span><br></pre></td></tr></table></figure>
+<h2 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h2><p>使用 Redis 作为中间人（Broker）必须要安装 Celery 的依赖库，您可以通过 <code>celery[redis]</code> 进行安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install -U celery[redis]</span><br></pre></td></tr></table></figure>
+
+<p>新建一个名为 tasks.py 的文件，其中内容如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一个参数为 Celery 应用名</span></span><br><span class="line"><span class="comment"># 第二个参数为 Celery 中间人</span></span><br><span class="line"><span class="comment"># 第三个参数为 Celery 后端结果</span></span><br><span class="line">app = Celery(<span class="string">&#x27;tasks&#x27;</span>, </span><br><span class="line">             broker=<span class="string">&#x27;redis://localhost:6379/0&#x27;</span>,</span><br><span class="line">             backend=<span class="string">&#x27;redis://localhost:6379/1&#x27;</span>,)</span><br><span class="line"><span class="meta">@app.task</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br></pre></td></tr></table></figure>
+
+
+
+
 
 <h1 id="布署"><a href="#布署" class="headerlink" title="布署"></a>布署</h1><p>当项目开发完成后，需要将项目代码放到服务器上，这个服务器拥有固定的 IP，再通过域名绑定，就可以供其它人浏览，对于 python web 开发，可以使用 wsgi、apache 服务器，此处以 wsgi 为例进行布署。</p>
 <p>服务器首先是物理上的一台性能高、线路全、运行稳定的机器，分为私有服务器、公有服务器。</p>

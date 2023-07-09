@@ -28,7 +28,7 @@
 <meta property="og:description" content="Anroid 逆向工具静态分析JEB - The Interactive Android Decompiler. GDA - GGJoy Dex Analysizer(GDA)，国内第一款也是唯一一款全交互式反编译器，同时也是世界上最早实现的 dalvik 字节码反编译器。 IDA - The IDA Disassembler and Debugger is an interactive, pro">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-02-02T04:49:50.000Z">
-<meta property="article:modified_time" content="2023-02-18T08:06:25.538Z">
+<meta property="article:modified_time" content="2023-07-09T10:10:56.006Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary">
@@ -140,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Anroid-%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">Anroid 逆向工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">静态分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-HOOK"><span class="nav-number">1.2.</span> <span class="nav-text">动态调试 HOOK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%B1%E5%A3%B3%E5%B7%A5%E5%85%B7"><span class="nav-number">1.3.</span> <span class="nav-text">脱壳工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PC-%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">PC 逆向工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%B1%E5%A3%B3"><span class="nav-number">2.1.</span> <span class="nav-text">脱壳</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text">抓包工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IDA-Pro-%E6%8F%92%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">IDA Pro 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ghidra-%E6%8F%92%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">Ghidra 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jeb-Pro-%E6%8F%92%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">Jeb Pro 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-%E5%B7%A5%E5%85%B7"><span class="nav-number">7.</span> <span class="nav-text">Frida 工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-%E9%80%86%E5%90%91"><span class="nav-number">8.</span> <span class="nav-text">Java 逆向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="nav-number">9.</span> <span class="nav-text">其他工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B"><span class="nav-number">10.</span> <span class="nav-text">编程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E5%BA%93"><span class="nav-number">10.1.</span> <span class="nav-text">python 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS-%E5%BA%93"><span class="nav-number">10.2.</span> <span class="nav-text">JS 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E5%BA%93"><span class="nav-number">10.3.</span> <span class="nav-text">C++ 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust-%E5%BA%93"><span class="nav-number">10.4.</span> <span class="nav-text">Rust 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%BA%93"><span class="nav-number">10.5.</span> <span class="nav-text">Java 库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%96%E8%AF%81"><span class="nav-number">11.</span> <span class="nav-text">取证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%90%E7%A7%81"><span class="nav-number">12.</span> <span class="nav-text">隐私</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5"><span class="nav-number">13.</span> <span class="nav-text">威胁情报</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Anroid-%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">Anroid 逆向工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">静态分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95-HOOK"><span class="nav-number">1.2.</span> <span class="nav-text">动态调试 HOOK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%B1%E5%A3%B3%E5%B7%A5%E5%85%B7"><span class="nav-number">1.3.</span> <span class="nav-text">脱壳工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PC-%E9%80%86%E5%90%91%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">PC 逆向工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%B1%E5%A3%B3"><span class="nav-number">2.1.</span> <span class="nav-text">脱壳</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%93%E5%8C%85%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text">抓包工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IDA-Pro-%E6%8F%92%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">IDA Pro 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ghidra-%E6%8F%92%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">Ghidra 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jeb-Pro-%E6%8F%92%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">Jeb Pro 插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-%E5%B7%A5%E5%85%B7"><span class="nav-number">7.</span> <span class="nav-text">Frida 工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-%E9%80%86%E5%90%91"><span class="nav-number">8.</span> <span class="nav-text">Java 逆向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="nav-number">9.</span> <span class="nav-text">其他工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B"><span class="nav-number">10.</span> <span class="nav-text">编程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Visual-Studio-Product-Keys"><span class="nav-number">10.1.</span> <span class="nav-text">Visual Studio Product Keys</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-2022"><span class="nav-number">10.1.1.</span> <span class="nav-text">Visual Studio 2022</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-2019"><span class="nav-number">10.1.2.</span> <span class="nav-text">Visual Studio 2019</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-2017"><span class="nav-number">10.1.3.</span> <span class="nav-text">Visual Studio 2017</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-2013"><span class="nav-number">10.1.4.</span> <span class="nav-text">Visual Studio 2013</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-2010-Express"><span class="nav-number">10.1.5.</span> <span class="nav-text">Visual Studio 2010 Express</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-2008"><span class="nav-number">10.1.6.</span> <span class="nav-text">Visual Studio 2008</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E5%BA%93"><span class="nav-number">10.2.</span> <span class="nav-text">python 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS-%E5%BA%93"><span class="nav-number">10.3.</span> <span class="nav-text">JS 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E5%BA%93"><span class="nav-number">10.4.</span> <span class="nav-text">C++ 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rust-%E5%BA%93"><span class="nav-number">10.5.</span> <span class="nav-text">Rust 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E5%BA%93"><span class="nav-number">10.6.</span> <span class="nav-text">Java 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#js"><span class="nav-number">10.7.</span> <span class="nav-text">js</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%96%E8%AF%81"><span class="nav-number">11.</span> <span class="nav-text">取证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%90%E7%A7%81"><span class="nav-number">12.</span> <span class="nav-text">隐私</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5"><span class="nav-number">13.</span> <span class="nav-text">威胁情报</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0"><span class="nav-number">14.</span> <span class="nav-text">机器学习</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -153,18 +153,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -235,7 +235,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:56" itemprop="dateModified" datetime="2023-07-09T10:10:56+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -333,10 +333,12 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/sepyeight/FartDexFix">FartDexFix</a> - hanbing 大佬 fart 工具脱壳后 dex 后修复.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/CodingGay/BlackDex">BlackDex</a> - BlackDex</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/Youlor/unpacker">unpacker</a> - unpacker</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dqzg12300/MikRom">MikRom</a> - ROM 逆向工具</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/ShivamKumarJha/android_tools">android_tools</a> - Bash scripts for ROM development stuff.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/iromise/fans">fans</a> - FANS: Fuzzing Android Native System Services.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/chason0528/profiler">profiler</a> - A tool to trace java method dynamically for android application.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/alitekin2fx/magiskboot">magiskboot</a> - ‘magiskboot’ command line application on linux.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x192/universal-android-debloater">universal-android-debloater</a> - Cross-platform GUI written in Rust using ADB to debloat non-rooted android devices. Improve your privacy, the security and battery life of your device.</p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><a target="_blank" rel="noopener" href="https://github.com/RealityNet/android_triage">android_triage</a> - Bash script to extract data from an Android device.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/droe/sslsplit">sslsplit</a> - 透明的 SSL&#x2F;TLS 拦截.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/anestisb/vdexExtractor">vdexExtractor</a> - Tool to decompile &amp; extract Android Dex bytecode from Vdex files.</p>
@@ -394,6 +396,7 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/BeneficialCode/Anti-Rootkit">Anti-Rootkit</a> - Windows Anti-Rootkit Tool.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/decalage2/oletools">oletools</a> - oletools - python tools to analyze MS OLE2 files.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/wallds/NoVmpy">NoVmpy</a> - This project is just a POC and only works with VMProtect 3.x .</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/icsharpcode/AvaloniaILSpy">AvaloniaILSpy</a> - Avalonia-based .NET Decompiler (port of ILSpy).</p>
 <h2 id="脱壳"><a href="#脱壳" class="headerlink" title="脱壳"></a>脱壳</h2><p><a target="_blank" rel="noopener" href="https://github.com/woxihuannisja/vmp3-import-fix">vmp3-import-fix</a> - Fix VMProtect3 IAT</p>
 <h1 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h1><p><a target="_blank" rel="noopener" href="https://portswigger.net/burp">BurpSuite</a> - Burp Suite is a leading range of cybersecurity tools, brought to you by PortSwigger. We believe in giving our users a competitive advantage through superior research.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/TrojanAZhen/BurpSuitePro-2.1">BurpSuitePro-2.1</a> - 免费的 BurpSuitePro 版本。</p>
@@ -497,6 +500,7 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/lucasg/findrpc">findrpc</a> - Idapython script to carve binary for internal RPC structures.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/matteyeux/ida-iboot-loader">ida-iboot-loader</a> - IDA loader for Apple’s iBoot, SecureROM and AVPBooter.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/alexhude/FRIEND">FRIEND</a> - FRIEND 是一个 IDA 插件，旨在改进反汇编并将注册&#x2F;指令文档直接引入 IDA 视图。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kweatherman/ida_missinglink">ida_missinglink</a> - IDA Plugin that fills in missing indirect CALL &amp; JMP target information.</p>
 <h1 id="Ghidra-插件"><a href="#Ghidra-插件" class="headerlink" title="Ghidra 插件"></a>Ghidra 插件</h1><p><a target="_blank" rel="noopener" href="https://github.com/0ffffffffh/dragondance">dragondance</a> - Binary code coverage visualizer plugin for Ghidra.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/RolfRolles/GhidraPAL">GhidraPAL</a> - Ghidra Program Analysis Library.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/RolfRolles/HexRaysDeob">HexRaysDeob</a> - Hex-Rays microcode API plugin for breaking an obfuscating compiler.</p>
@@ -564,6 +568,8 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/Col-E/Recaf">Recaf</a> - A modern Java bytecode editor.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/GraxCode/cafecompare">cafecompare</a> - Java code comparison tool (jar &#x2F; class)</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/GraxCode/Cafebabe">Cafebabe</a> - Easy-to-use java bytecode editor - successor of JByteMod!</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sim0n/Caesium">Caesium</a> - A Java bytecode obfuscator.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/java-deobfuscator/deobfuscator-gui">deobfuscator-gui</a> - A GUI for a the popular java-deobfuscator.</p>
 <h1 id="其他工具"><a href="#其他工具" class="headerlink" title="其他工具"></a>其他工具</h1><p><a target="_blank" rel="noopener" href="https://github.com/WerWolv/ImHex">ImHex</a> - A Hex Editor for Reverse Engineers.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/williamboman/nvim-lsp-installer">nvim-lsp-installer</a> - Companion plugin for nvim-lspconfig that allows you to seamlessly install LSP servers locally with :LspInstall.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/VSCodium/vscodium">vscodium</a> -它就是 VS Code 的一个分支，但它删除 VS Code 原版收集用户数据的功能。如果你不信任微软，如果你是一个开源纯粹主义者，可以试试。</p>
@@ -593,6 +599,12 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/kimci86/bkcrack">bkcrack</a> - 使用 Biham 和 Kocher 已知的明文攻击破解传统的 zip 加密。</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/Klocman/Bulk-Crap-Uninstaller">Bulk-Crap-Uninstaller</a> - Remove large amounts of unwanted applications quickly.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/amezin/vscode-linux-kernel">vscode-linux-kernel</a> - Visual Studio Code project&#x2F;compile_commands.json generator for Linux kernel sources and out-of-tree modules.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/SimpleMobileTools">SimpleMobileTools</a> - A group of simple, open source Android apps without ads and unnecessary permissions, with customizable colors.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/andreas-mausch/whatsapp-viewer">whatsapp-viewer</a> - Small tool to display chats from the Android msgstore.db database (crypt12).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tangshimin/MuJing">MuJing</a> - 幕境 - 沉浸式学英语,使用自己感兴趣的电影、美剧或文档，生成词库（单词本）。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/praetorian-inc/noseyparker">noseyparker</a> - Nosey Parker is a command-line program that finds secrets and sensitive information in textual data and Git history.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/iDvel/rime-ice">rime-ice</a> - Rime 配置：雾凇拼音 | 长期维护的简体词库。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vmdiff/vmdiff-prototype">vmdiff-prototype</a> - Diff and display virtual machine snapshots.</p>
 <blockquote>
 <p>以下工具来自 ：<a target="_blank" rel="noopener" href="https://github.com/yifeitao/learn/wiki/tools">https://github.com/yifeitao/learn/wiki/tools</a><br>windows</p>
 </blockquote>
@@ -702,7 +714,22 @@
 <li><p><a target="_blank" rel="noopener" href="https://code.labstack.com/">https://code.labstack.com/</a></p>
 </li>
 </ul>
-<h1 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h1><h2 id="python-库"><a href="#python-库" class="headerlink" title="python 库"></a>python 库</h2><p><a target="_blank" rel="noopener" href="https://github.com/Delgan/loguru">loguru</a> - Python logging made (stupidly) simple</p>
+<h1 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h1><h2 id="Visual-Studio-Product-Keys"><a href="#Visual-Studio-Product-Keys" class="headerlink" title="Visual Studio Product Keys"></a>Visual Studio Product Keys</h2><h3 id="Visual-Studio-2022"><a href="#Visual-Studio-2022" class="headerlink" title="Visual Studio 2022"></a>Visual Studio 2022</h3><p>Enterprise: VHF9H-NXBBB-638P6-6JHCY-88JWH</p>
+<p>Professional: TD244-P4NB7-YQ6XK-Y8MMM-YWV2J</p>
+<h3 id="Visual-Studio-2019"><a href="#Visual-Studio-2019" class="headerlink" title="Visual Studio 2019"></a>Visual Studio 2019</h3><p>Enterprise BF8Y8-GN2QH-T84XB-QVY3B-RC4DF | KBJFW-NXHK6-W4WJM-CRMQB-G3CD</p>
+<p>Professional NYWVH-HT4XC-R2WYW-9Y3CM-X4V3Y | NJVYC-BMHX2-G77MM-4XJMR-6Q8QF</p>
+<h3 id="Visual-Studio-2017"><a href="#Visual-Studio-2017" class="headerlink" title="Visual Studio 2017"></a>Visual Studio 2017</h3><p>Enterprise: NJVYC-BMHX2-G77MM-4XJMR-6Q8QF | N2VYX-9VR2K-T733M-MWD9X-KQCDF</p>
+<p>Professional: KBJFW-NXHK6-W4WJM-CRMQB-G3CDH | 4F3PR-NFKDB-8HFP7-9WXGY-K77T7</p>
+<h3 id="Visual-Studio-2013"><a href="#Visual-Studio-2013" class="headerlink" title="Visual Studio 2013"></a>Visual Studio 2013</h3><p>Visual Studio Ultimate 2013 ：BWG7X-J98B3-W34RT-33B3R-JVYW9</p>
+<p>Visual Studio Premium 2013 ：FBJVC-3CMTX-D8DVP-RTQCT-92494</p>
+<p>Visual Studio Professional 2013 ： XDM3T-W3T3V-MGJWK-8BFVD-GVPKY</p>
+<p>Team Foundation Server 2013 ：MHG9J-HHHX9-WWPQP-D8T7H-7KCQG</p>
+<h3 id="Visual-Studio-2010-Express"><a href="#Visual-Studio-2010-Express" class="headerlink" title="Visual Studio 2010 Express"></a>Visual Studio 2010 Express</h3><p>Visual Basic: 2KQT8-HV27P-GTTV9-2WBVV-M7X96</p>
+<p>C#: PQT8W-68YB2-MPY6C-9JV9X-42WJV</p>
+<p>C++: 6VPJ7-H3CXH-HBTPT-X4T74-3YVY7</p>
+<p>Web Developer: CY8XP-83P66-WCF9D-G3P42-K2VG3</p>
+<h3 id="Visual-Studio-2008"><a href="#Visual-Studio-2008" class="headerlink" title="Visual Studio 2008"></a>Visual Studio 2008</h3><p>Visual Studio 2008 pro ：XMQ2Y-4T3V6-XJ48Y-D3K2V-6C4WT</p>
+<h2 id="python-库"><a href="#python-库" class="headerlink" title="python 库"></a>python 库</h2><p><a target="_blank" rel="noopener" href="https://github.com/Delgan/loguru">loguru</a> - Python logging made (stupidly) simple</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/jmcnamara/XlsxWriter">XlsxWriter</a> - A Python module for creating Excel XLSX files.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/microsoft/playwright-python">playwright-python</a> - 微软开源的 Python 自动化神器 Playwright.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/pyppeteer/pyppeteer">pyppeteer</a> - Headless chrome&#x2F;chromium automation library (unofficial port of puppeteer).</p>
@@ -777,15 +804,25 @@
 <p><a target="_blank" rel="noopener" href="https://github.com/hanickadot/cthash">cthash</a> - This library is constexpr implementation of SHA-2 and SHA-3 family of hashes.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/partouf/Crosscables">Crosscables</a> - A cross platform C++98 library for Threading, Filesystem, Network, MySQL and other things .</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/soasis/text">ztd.text</a> - A spicy text library for C++ that has the explicit goal of enabling the entire ecosystem to share in proper forward progress towards a bright Unicode future.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/SRombauts/SQLiteCpp">SQLiteCpp</a> - </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/p-ranav/indicators">indicators</a> - Thread-safe progress bars and spinners.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/simdutf/simdutf">simdutf</a> - Unicode routines (UTF8, UTF16, UTF32): billions of characters per second using SSE2, AVX2, NEON, AVX-512. </p>
 <h2 id="Rust-库"><a href="#Rust-库" class="headerlink" title="Rust 库"></a>Rust 库</h2><h2 id="Java-库"><a href="#Java-库" class="headerlink" title="Java 库"></a>Java 库</h2><p><a target="_blank" rel="noopener" href="https://github.com/dhatim/fastexcel">fastexcel</a> - Generate and read big Excel files quickly.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/hzw1199/xml2axml">xml2axml</a> - encode xml to axml AND decode axml to xml–Hack Android Manifest easily.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/fornwall/jelf">jelf</a> - ELF parsing library in java.</p>
+<h2 id="js"><a href="#js" class="headerlink" title="js"></a>js</h2><p><a target="_blank" rel="noopener" href="https://github.com/LostMyCode/javascript-deobfuscator">javascript-deobfuscator</a></p>
 <h1 id="取证"><a href="#取证" class="headerlink" title="取证"></a>取证</h1><p><a target="_blank" rel="noopener" href="https://github.com/cugu/awesome-forensics">awesome-forensics</a> - A curated list of awesome forensic analysis tools and resources.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/den4uk/andriller">andriller</a> - Andriller - is software utility with a collection of forensic tools for smartphones.</p>
 <h1 id="隐私"><a href="#隐私" class="headerlink" title="隐私"></a>隐私</h1><p><a target="_blank" rel="noopener" href="https://github.com/zgjx6/SocialEngineeringDictionaryGenerator">SocialEngineeringDictionaryGenerator</a> - 社会工程学密码生成器，是一个利用个人信息生成密码的工具.</p>
 <h1 id="威胁情报"><a href="#威胁情报" class="headerlink" title="威胁情报"></a>威胁情报</h1><p><a target="_blank" rel="noopener" href="https://github.com/KasperskyLab/TinyCheck">TinyCheck</a> - TinyCheck allows you to easily capture network communications from a smartphone or any device which can be associated to a Wi-Fi access point in order to quickly analyze them.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/SpyGuard/SpyGuard">SpyGuard</a> - SpyGuard’s main objective is to detect signs of compromise by monitoring network flows transmitted by a device.</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/stamparm/maltrail">maltrail</a> - Malicious traffic detection system.</p>
+<h1 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h1><p><a target="_blank" rel="noopener" href="https://github.com/LiLittleCat/awesome-free-chatgpt">awesome-free-chatgpt</a> - 免费的 ChatGPT 镜像网站列表，持续更新。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/xx025/carrot">carrot</a> - 这儿为你准备了众多免费好用的ChatGPT镜像站点，当前100+站点.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/f/awesome-chatgpt-prompts">awesome-chatgpt-prompts</a> - This repo includes ChatGPT prompt curation to use ChatGPT better.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/PlexPt/awesome-chatgpt-prompts-zh">awesome-chatgpt-prompts-zh</a> - ChatGPT 中文调教指南。各种场景使用指南。学习怎么让它听你的话。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Chanzhaoyu/chatgpt-web">chatgpt-web</a> - 用 Express 和 Vue3 搭建的 ChatGPT 演示网页</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/acheong08/EdgeGPT">EdgeGPT</a> - Reverse engineered API of Microsoft’s Bing Chat AI.</p>
 
     </div>
 

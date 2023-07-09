@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="当内核执行 C 程序时（使用一个 exec 函数），在调用 main 前先调用一个特殊的启动例程。启动例程从内核取得命令行参数和环境变量值，然后参数传递给 main 函数执行。 有 8 种方式使进程终止，正常终止的方式有 5 种：  从 main 返回。 调用 exit 先执行清理，再返回内核。 调用 _exit 或 _Exit 立即进入内核。 最后一个线程从其启动例程返回。 从最后一个线程调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unix环境高级编程07-进程环境">
+<meta property="og:url" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="当内核执行 C 程序时（使用一个 exec 函数），在调用 main 前先调用一个特殊的启动例程。启动例程从内核取得命令行参数和环境变量值，然后参数传递给 main 函数执行。 有 8 种方式使进程终止，正常终止的方式有 5 种：  从 main 返回。 调用 exit 先执行清理，再返回内核。 调用 _exit 或 _Exit 立即进入内核。 最后一个线程从其启动例程返回。 从最后一个线程调用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/%E5%85%B8%E5%9E%8B%E7%9A%84%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E5%AE%89%E6%8E%92.png">
+<meta property="article:published_time" content="2023-04-10T17:21:23.000Z">
+<meta property="article:modified_time" content="2023-07-09T10:10:55.942Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="unix">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/%E5%85%B8%E5%9E%8B%E7%9A%84%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E5%AE%89%E6%8E%92.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/","path":"2023/04/10/unix环境高级编程07-进程环境/","title":"unix环境高级编程07-进程环境"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>unix环境高级编程07-进程环境 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">退出函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0-atexit"><span class="nav-number">2.</span> <span class="nav-text">函数 atexit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">命令行参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">环境表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E5%B8%83%E5%B1%80"><span class="nav-number">5.</span> <span class="nav-text">C 程序的存储空间布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BA%93"><span class="nav-number">6.</span> <span class="nav-text">共享库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E5%88%86%E9%85%8D"><span class="nav-number">7.</span> <span class="nav-text">存储空间分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">8.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0-setjmp-%E5%92%8C-longjmp"><span class="nav-number">9.</span> <span class="nav-text">函数 setjmp 和 longjmp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0-getrlimit-%E5%92%8C-setrlimit"><span class="nav-number">10.</span> <span class="nav-text">函数 getrlimit 和 setrlimit</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="unix环境高级编程07-进程环境 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          unix环境高级编程07-进程环境
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-10 17:21:23" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:23+00:00">2023-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>当内核执行 C 程序时（使用一个 exec 函数），在调用 main 前先调用一个特殊的启动例程。<br>启动例程从内核取得命令行参数和环境变量值，然后参数传递给 main 函数执行。</p>
+<p>有 8 种方式使进程终止，正常终止的方式有 5 种：</p>
+<ol>
+<li>从 main 返回。</li>
+<li>调用 <code>exit</code> 先执行清理，再返回内核。</li>
+<li>调用 <code>_exit</code> 或 <code>_Exit</code> 立即进入内核。</li>
+<li>最后一个线程从其启动例程返回。</li>
+<li>从最后一个线程调用 <code>pthread_exit</code>。</li>
+</ol>
+<p>异常终止有 3 种方式：</p>
+<ol>
+<li>调用 <code>abort</code> 。</li>
+<li>接到一个信号。</li>
+<li>最后一个线程对取消请求做出响应。</li>
+</ol>
+<h3 id="退出函数"><a href="#退出函数" class="headerlink" title="退出函数"></a>退出函数</h3><p>3 个函数用于正常终止一个程序：<code>_exit</code>和<code>_Exit</code>立即进入内核，<code>exit</code>则先执行一些清理处理，然后返回内核。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span>;</span><br><span class="line"><span class="type">void</span> _Exit(<span class="type">int</span> status);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> _exit(<span class="type">int</span> status);</span><br></pre></td></tr></table></figure>
+
+<p><code>exit</code> 和 <code>_Exit</code> 是 ISO C 标准定义的，<code>_exit</code> 是 <code>POSIX.1</code> 定义的。</p>
+<p>如果 <code>main</code> 函数终止时没有显示使用 <code>return</code> 语句或调用 <code>exit</code> 函数，那么进程终止状态时未定义的。</p>
+<p>例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Hello, world\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>; <span class="comment">// 可以使用 exit(1)替代 return 1 。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对该程序进行编译运行，可以查看其终止码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ gcc hello.c</span><br><span class="line">$ <span class="built_in">echo</span> $?</span><br><span class="line">0</span><br><span class="line">$ ./a.out</span><br><span class="line">Hello, world</span><br><span class="line">$ <span class="built_in">echo</span> $?</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数-atexit"><a href="#函数-atexit" class="headerlink" title="函数 atexit"></a>函数 atexit</h3><p>按照 ISO C 的规定，一个进程可以登记至多 32 个函数，这些函数将由 exit 自动调用。我们称这些函数为终止处理程序，并调用 atexit 函数来登记这些函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">atexit</span><span class="params">(<span class="type">void</span> (*func)(<span class="type">void</span>))</span>;</span><br></pre></td></tr></table></figure>
+
+<p>atexit 的参数是一个无参无返回值的函数地址；atexit 的返回值为 0 则成功，非 0 则出错。</p>
+<p>exit 调用这些函数的顺序与它们登记时候的顺序相反。同一个函数如果登记多次，也会被调用多次。</p>
+<p>可以使用 sysconf 函数查看系统支持终止处理程序的最大个数。</p>
+<p>atexit 例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">my_exit1</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">my_exit2</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(atexit(my_exit1) != <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;can&#x27;t register my_exit1&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(atexit(my_exit2) != <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;can&#x27;t register my_exit2&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(atexit(my_exit2) != <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;can&#x27;t register my_exit2&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;main is done\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">my_exit1</span><span class="params">()</span>&#123;</span><br><span class="line">    count ++;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;second exit hander.count = %d\n&quot;</span>, count);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">my_exit2</span><span class="params">()</span>&#123;</span><br><span class="line">    count ++;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;second exit hander.count = %d\n&quot;</span>, count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ chapter07 gcc atexit.c ../error.c</span><br><span class="line">$ chapter07 ./a.out</span><br><span class="line">main is <span class="keyword">done</span></span><br><span class="line">second <span class="built_in">exit</span> hander.count = 1</span><br><span class="line">second <span class="built_in">exit</span> hander.count = 2</span><br><span class="line">second <span class="built_in">exit</span> hander.count = 3</span><br></pre></td></tr></table></figure>
+
+<h3 id="命令行参数"><a href="#命令行参数" class="headerlink" title="命令行参数"></a>命令行参数</h3><p>内核想要执行一个程序，只有通过 <code>exec</code> 函数族，而且当启动一个新进程的时候，调用 <code>exec</code> 的进程可将命令行参数传递给新进程，即传递给 main 函数。</p>
+<p>例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;stdio.h&quot;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; argc; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argv[%d]: %s\n&quot;</span>, i, argv[i]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>编译运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 7.4echoarg.c</span><br><span class="line">$ ./a.out 1 2 3 4</span><br><span class="line">argv[0]: ./a.out</span><br><span class="line">argv[1]: 1</span><br><span class="line">argv[2]: 2</span><br><span class="line">argv[3]: 3</span><br><span class="line">argv[4]: 4</span><br></pre></td></tr></table></figure>
+
+<h3 id="环境表"><a href="#环境表" class="headerlink" title="环境表"></a>环境表</h3><p>每个程序都接收到一张环境表。与参数表一样，环境表也是一个字符指针数组，其中每个指针包含一个以 null 结束的字符串的地址。全局变量 <code>environ</code> 则包含了该指针数组的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">char</span> **environ;</span><br></pre></td></tr></table></figure>
+
+<p>例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> **environ;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(environ[i])&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;environ[%d]: %s\n&quot;</span>, i, environ[i]);</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 7.5environ.c</span><br><span class="line">$ ./a.out</span><br><span class="line">environ[0]: MAIL=/var/mail/ckcat</span><br><span class="line">environ[1]: USER=ckcat</span><br><span class="line">environ[2]: SSH_CLIENT=192.168.40.1 61412 22</span><br><span class="line">environ[3]: SHLVL=2</span><br><span class="line">environ[4]: OLDPWD=/home/ckcat/study/code/apue</span><br><span class="line">environ[5]: HOME=/home/ckcat</span><br><span class="line">environ[6]: DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><code>environ</code> 为环境指针，指针数组为环境表，其中各指针指向的字符串为环境字符串，其格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name=value</span><br></pre></td></tr></table></figure>
+
+<h3 id="C-程序的存储空间布局"><a href="#C-程序的存储空间布局" class="headerlink" title="C 程序的存储空间布局"></a>C 程序的存储空间布局</h3><p>C 程序一直有下列几部分组成：</p>
+<ul>
+<li>正文段：这是由 CPU 执行的机器指令部分。通常该段时可共享和只读的。</li>
+<li>初始化数据段：包含了程序种需明确地赋初值的变量。</li>
+<li>未初始化数据段：通常称为 bss 段，该段的数据初始化为 0 或空指针。</li>
+<li>栈：自动变量以及每次函数调用时所需保存的信息都存放再此段。栈从高地址向低地址方向增长。</li>
+<li>堆：通常在堆种进行动态存储分配。位于未初始化数据段和栈之间。</li>
+</ul>
+<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/%E5%85%B8%E5%9E%8B%E7%9A%84%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E5%AE%89%E6%8E%92.png" class="">
+
+<p>可以发现未初始化段内容并不存放在磁盘文件种，需要存放在磁盘程序文件种的段只有正文段和初始化数据段。</p>
+<p>size(1) 命令可以查看正文段、数据段和 bss 段的长度（单位为字节）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ size /usr/bin/cc /bin/sh</span><br><span class="line">   text    data     bss     dec     hex filename</span><br><span class="line">1025621   15120   10600 1051341  100acd /usr/bin/cc</span><br><span class="line"> 110609    4816   11312  126737   1ef11 /bin/sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="共享库"><a href="#共享库" class="headerlink" title="共享库"></a>共享库</h3><p>共享库使得可执行文件中不再需要包含公用的库函数，而只需在所有进程都可引用的存储区中保存这种库例程的一个副本。</p>
+<p>动态库的优点：</p>
+<ol>
+<li>减小了可执行文件的大小。</li>
+<li>可以直接使用新版本的动态库替换旧版本。</li>
+</ol>
+<p>动态库的缺点：</p>
+<ol>
+<li>程序每次运行时，增加了程序运行时间开销。</li>
+<li>不同版本的系统动态库可能不兼容，导致程序运行失败。</li>
+</ol>
+<h3 id="存储空间分配"><a href="#存储空间分配" class="headerlink" title="存储空间分配"></a>存储空间分配</h3><p>ISO C 定义了 3 个用于存储空间动态分配的函数以及 1 个释放存储空间的函数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line">void *malloc(size_t size);</span><br><span class="line">void *calloc(size_t nobj, size_t size);</span><br><span class="line">void *realloc(void *ptr, size_t newsize);</span><br><span class="line">void free(void *ptr);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>malloc：分配指定字节数的存储区，未初始化。</li>
+<li>calloc：为指定数量指定长度的对象分配存储空间，并初始化为 0。</li>
+<li>realloc：增加或减少以前分配区的长度。</li>
+</ul>
+<p>3 个函数返回值：若成功，返回非空指针；若出错，返回 NULL。返回的指针一定是适当对齐的，使其可用于任何数据对象。</p>
+<p>函数 free 释放 ptr 指向的存储空间。</p>
+<p>这些分配例程通常用 sbrk(2)系统调用实现扩充或缩小进程的堆。</p>
+<p>虽然 sbrk 可以扩充或缩小进程的存储空间，但是大多数 malloc 和 free 的<br>实现都不减小进程的存储空间。释放的空间可供以后再分配，但将它们保<br>持在 malloc 池中而不返回给内核。</p>
+<p>还可以使用其他的库替换上述的存储空间分配。</p>
+<h3 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h3><p>环境字符串的形式为：<code>name=value</code>，unix 内核并不关心这些字符串，它们的解释完全取决于各个应用程序。例如，shell 使用了大量的环境变量。</p>
+<p>ISO C 定义了一个函数 getenv，可以用其取环境变量值。其他标准定义及实现了各种修改环境表的函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> *<span class="title function_">getenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">putenv</span><span class="params">(<span class="type">char</span> *str)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">setenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name, <span class="type">const</span> <span class="type">char</span> *value, <span class="type">int</span></span></span><br><span class="line"><span class="params">rewrite)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">unsetenv</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">clearenv</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>getenv</code> 函数从环境中取一个指定环境变量的值。返回值：指向与 name 关联的 value 的指针；若未找到，返回 NULL。</p>
+<p><code>putenv</code> 函数以覆盖的模式设置幻境变量，返回值：若成功，返回 0；若出错，返回非 0。</p>
+<p><code>setenv</code> 和 <code>unsetenv</code> 两个函数的作用为将将 name 设置为 value 和删除 name 的定义。返回值：若成功，返回 0；若出错，返回 −1。</p>
+<p><code>clearenv</code> 函数用来删除环境表中的所有项，返回值：若成功，返回 0；若出错，返回非 0。</p>
+<p>需要注意的是 setenv 必须分配存储空间存放环境变量；而 putenv 可以使用栈空间的字符串，但是存在被覆盖的可能。</p>
+<p>修改环境表时内部流程。</p>
+<ol>
+<li>修改一个现有的 name:<ol>
+<li>新 value 的长度小于或等于现有 value 的长度，直接复制覆盖。</li>
+<li>新 value 的长度大于现有 value 的长度，先调用 malloc 分配空间，然后复制到新空间，接着使环境表指向新地址。</li>
+</ol>
+</li>
+<li>新增一个新的 name:<ol>
+<li>如果使第一次新增，则需要调用 malloc 为新的指针表分配空间。接着将原来环境表复制到新分配表，将新增的 name&#x3D;value 的指针移至指针表的表尾，然后将一个空指针存放在其后，最后使 environ 指向新指针表。</li>
+<li>如果不是第一次新增一个新的 name，只要调用 realloc，分配比原来空间多存放一个指针的空间，然后将指向新 name&#x3D;value 的字符串的指针放在该表表尾，后面跟着一个空指针。</li>
+</ol>
+</li>
+</ol>
+<h3 id="函数-setjmp-和-longjmp"><a href="#函数-setjmp-和-longjmp" class="headerlink" title="函数 setjmp 和 longjmp"></a>函数 setjmp 和 longjmp</h3><p>在 C 中，<code>goto</code> 语句是不能跨越函数的，而执行这种类型跳转功能的是函数 <code>setjmp</code> 和 <code>longjmp</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">setjmp</span><span class="params">(jmp_buf env)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">longjmp</span><span class="params">(jmp_buf env, <span class="type">int</span> val)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>setjmp</code> 参数 <code>env</code> 的类型是一个特殊类型 <code>jmp_buf</code>。这一数据类型是某种形式的数组，其中存放在调用 <code>longjmp</code> 时能用来恢复栈状态的所有信息。通常将 <code>env</code> 变量定义为全局变量。</p>
+<p><code>setjmp</code> 返回值：</p>
+<ul>
+<li>若直接调用，返回 0；若从 <code>longjmp</code> 返回，则为非 0。</li>
+</ul>
+<p><code>longjmp</code> 函数第一个就是在调用 <code>setjmp</code> 时所用的 <code>env</code>；第二个参数是具非 0<br>值的 val，它将成为从 <code>setjmp</code> 处返回的值。使用第二个参数的原因是对于一<br>个 <code>setjmp</code> 可以有多个 <code>longjmp</code>。</p>
+<p>当 <code>longjmp</code> 返回到 <code>setjmp</code> 函数时，大多数实现并不回滚这些自动变量和寄存器变量的值，而所有标准则称它们的值是不确定的。</p>
+<p>例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">f1</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>, <span class="type">int</span>, <span class="type">int</span>)</span>;</span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">f2</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> jmp_buf jmpbuff;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> globval;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">int</span> autoval;</span><br><span class="line">    <span class="keyword">register</span> <span class="type">int</span> regival;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">int</span> volaval;</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> statval;</span><br><span class="line">    globval = <span class="number">1</span>; autoval = <span class="number">2</span>; regival = <span class="number">3</span>; volaval = <span class="number">4</span>; statval = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">if</span>(setjmp(jmpbuff) != <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;after longjmp:\n&quot;</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;globval = %d, autoval = %d, regival = %d&quot;</span></span><br><span class="line">        <span class="string">&quot; volaval = %d, statval = %d\n&quot;</span>, globval, autoval, regival, volaval, statval);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在 longjmp 之前 setjmp 之后改变值</span></span><br><span class="line">    globval = <span class="number">95</span>; autoval = <span class="number">96</span>; regival = <span class="number">97</span>; volaval = <span class="number">98</span>; statval = <span class="number">99</span>;</span><br><span class="line"></span><br><span class="line">    f1(autoval, regival, volaval, statval);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">f1</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j, <span class="type">int</span> k, <span class="type">int</span> l)</span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;in f1():\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;globval = %d, autoval = %d, regival = %d&quot;</span></span><br><span class="line">        <span class="string">&quot; volaval = %d, statval = %d\n&quot;</span>, globval, i, j, k, l);</span><br><span class="line">    f2();</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">f2</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    longjmp(jmpbuff, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 7.10jmp_value.c</span><br><span class="line">$ ./a.out</span><br><span class="line"><span class="keyword">in</span> f1():</span><br><span class="line">globval = 95, autoval = 96, regival = 97 volaval = 98, statval = 99</span><br><span class="line">after longjmp:</span><br><span class="line">globval = 95, autoval = 96, regival = 3 volaval = 98, statval = 99</span><br><span class="line">$ gcc -O 7.10jmp_value.c</span><br><span class="line">$ ./a.out</span><br><span class="line"><span class="keyword">in</span> f1():</span><br><span class="line">globval = 95, autoval = 96, regival = 97 volaval = 98, statval = 99</span><br><span class="line">after longjmp:</span><br><span class="line">globval = 95, autoval = 2, regival = 3 volaval = 98, statval = 99</span><br></pre></td></tr></table></figure>
+
+<p>使用不带优化和带优化选项进行编译运行，得到的结果是不同的。全局变量、静态变量和易失变量不受优化的影响。</p>
+<h3 id="函数-getrlimit-和-setrlimit"><a href="#函数-getrlimit-和-setrlimit" class="headerlink" title="函数 getrlimit 和 setrlimit"></a>函数 getrlimit 和 setrlimit</h3><p>每个进程都有一组资源限制，其中一些可以用 getrlimit 和 setrlimit 函数查询和更改。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/resource.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">getrlimit</span><span class="params">(<span class="type">int</span> resource, <span class="keyword">struct</span> rlimit *rlptr)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">setrlimit</span><span class="params">(<span class="type">int</span> resource, <span class="type">const</span> <span class="keyword">struct</span> rlimit *rlptr)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>两个函数返回值：若成功，返回 0；若出错，返回非 0。</p>
+<p>其中 struct rlimit 结构：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rlimit</span> &#123;</span></span><br><span class="line">    <span class="type">rlim_t</span> rlim_cur; <span class="comment">/* soft limit: current limit */</span></span><br><span class="line">    <span class="type">rlim_t</span> rlim_max; <span class="comment">/* hard limit: maximum value for rlim_cur */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在更改资源限制时，须遵循下列 3 条规则。</p>
+<ol>
+<li>任何一个进程都可将一个软限制值更改为小于或等于其硬限制值。</li>
+<li>任何一个进程都可降低其硬限制值，但它必须大于或等于其软限制值。这种降低，对普通用户而言是不可逆的。</li>
+<li>只有超级用户进程可以提高硬限制值。</li>
+</ol>
+<p>这两个函数的 resource 参数取下列值之一。</p>
+<ul>
+<li><code>RLIMIT_AS</code> 进程总的可用存储空间的最大长度（字节）。这影响到 <code>sbrk</code> 函数和 <code>mmap</code> 函数。</li>
+<li><code>RLIMIT_CORE</code> core 文件的最大字节数，若其值为 0 则阻止创建 core 文件。</li>
+<li><code>RLIMIT_CPU</code> CPU 时间的最大量值（秒），当超过此软限制时，向该进程发送 <code>SIGXCPU</code> 信号。</li>
+<li><code>RLIMIT_DATA</code> 数据段的最大字节长度。这是初始化数据、非初始以及堆的总和。</li>
+<li><code>RLIMIT_FSIZE</code> 可以创建的文件的最大字节长度。当超过此软限制时，则向该进程发送 <code>SIGXFSZ</code> 信号。</li>
+<li><code>RLIMIT_MEMLOCK</code> 一个进程使用 mlock(2)能够锁定在存储空间中的最大字节长度。</li>
+<li><code>RLIMIT_MSGQUEUE</code> 进程为 POSIX 消息队列可分配的最大存储字节数。</li>
+<li><code>RLIMIT_NICE</code> 为了影响进程的调度优先级，nice 值可设置的最大限制。</li>
+<li><code>RLIMIT_NOFILE</code> 每个进程能打开的最多文件数。更改此限制将影响到 <code>sysconf</code> 函数在参数 <code>_SC_OPEN_MAX</code> 中返回的值。</li>
+<li><code>RLIMIT_NPROC</code> 每个实际用户 ID 可拥有的最大子进程数。更改此限制将影响到 <code>sysconf</code> 函数在参数 <code>_SC_CHILD_MAX</code> 中返回的值。</li>
+<li><code>RLIMIT_NPTS</code> 用户可同时打开的伪终端的最大数量。</li>
+<li><code>RLIMIT_RSS</code> 最大驻内存集字节长度（resident set size in bytes，RSS）。如果可用的物理存储器非常少，则内核将从进程处取回超过 RSS 的部分。</li>
+<li><code>RLIMIT_SBSIZE</code> 在任一给定时刻，一个用户可以占用的套接字缓冲区的最大长度（字节）。</li>
+<li><code>RLIMIT_SIGPENDING</code> 一个进程可排队的信号最大数量。这个限制是 <code>sigqueue</code> 函数实施的。</li>
+<li><code>RLIMIT_STACK</code> 栈的最大字节长度。</li>
+<li><code>RLIMIT_SWAP</code> 用户可消耗的交换空间的最大字节数</li>
+<li><code>RLIMIT_VMEM</code> 这是 RLIMIT_AS 的同义词。</li>
+</ul>
+<p>资源限制影响到调用进程并由其子进程继承。</p>
+<p>例子，打印由系统支持的所有资源当前的软限制和硬限制。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/resource.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> doit(name) pr_limits(#name, name)</span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">pr_limits</span><span class="params">(<span class="type">char</span>*, <span class="type">int</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_AS</span></span><br><span class="line">    doit(RLIMIT_AS);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    doit(RLIMIT_CORE);</span><br><span class="line">    doit(RLIMIT_CPU);</span><br><span class="line">    doit(RLIMIT_DATA);</span><br><span class="line">    doit(RLIMIT_FSIZE);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_MEMLOCK</span></span><br><span class="line">    doit(RLIMIT_MEMLOCK);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_MSGQUEUE</span></span><br><span class="line">    doit(RLIMIT_MSGQUEUE);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_NICE</span></span><br><span class="line">    doit(RLIMIT_NICE);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    doit(RLIMIT_NOFILE);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_NPROC</span></span><br><span class="line">    doit(RLIMIT_NPROC);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_NPTS</span></span><br><span class="line">    doit(RLIMIT_NPTS);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_RSS</span></span><br><span class="line">    doit(RLIMIT_RSS);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_SBSIZE</span></span><br><span class="line">    doit(RLIMIT_SBSIZE);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_SIGPENDING</span></span><br><span class="line">    doit(RLIMIT_SIGPENDING);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    doit(RLIMIT_STACK);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_SWAP</span></span><br><span class="line">    doit(RLIMIT_SWAP);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> RLIMIT_VIEW</span></span><br><span class="line">    doit(RLIMIT_VIEW);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">pr_limits</span><span class="params">(<span class="type">char</span>* name, <span class="type">int</span> resource)</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rlimit</span> <span class="title">limit</span>;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span> lim;</span><br><span class="line">    <span class="keyword">if</span>(getrlimit(resource, &amp;limit) &lt; <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;getrlimit error for %s&quot;</span>, name);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%-14s &quot;</span>, name);</span><br><span class="line">    <span class="keyword">if</span>(limit.rlim_cur == RLIM_INFINITY)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;(infinite) &quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        lim = limit.rlim_cur;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%10lld &quot;</span>, lim);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (limit.rlim_max == RLIM_INFINITY)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;(infinite) &quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        lim = limit.rlim_cur;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%10lld &quot;</span>, lim);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">putchar</span>((<span class="type">int</span>)<span class="string">&#x27;\n&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 7.11limit.c ../error.c</span><br><span class="line">$ ./a.out</span><br><span class="line">RLIMIT_AS      (infinite) (infinite)</span><br><span class="line">RLIMIT_CORE             0 (infinite)</span><br><span class="line">RLIMIT_CPU     (infinite) (infinite)</span><br><span class="line">RLIMIT_DATA    (infinite) (infinite)</span><br><span class="line">RLIMIT_FSIZE   (infinite) (infinite)</span><br><span class="line">RLIMIT_MEMLOCK   67108864   67108864</span><br><span class="line">RLIMIT_MSGQUEUE     819200     819200</span><br><span class="line">RLIMIT_NICE             0          0</span><br><span class="line">RLIMIT_NOFILE     1048576    1048576</span><br><span class="line">RLIMIT_NPROC        15411      15411</span><br><span class="line">RLIMIT_RSS     (infinite) (infinite)</span><br><span class="line">RLIMIT_SIGPENDING      15411      15411</span><br><span class="line">RLIMIT_STACK      8388608 (infinite)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/unix/" rel="tag"># unix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B06-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/" rel="prev" title="unix环境高级编程06-系统数据文件和信息">
+                  <i class="fa fa-chevron-left"></i> unix环境高级编程06-系统数据文件和信息
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/" rel="next" title="unix环境高级编程08-进程控制">
+                  unix环境高级编程08-进程控制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -20,18 +20,18 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76146760     包结构 android.content com.lody.virtual client HOOK IPC Stub remote server   mirror   一些基础措施的封装 Mirror framework 层镜像 成员变量 Field 映射">
+    <meta name="description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76146760  最近发现了一个非常好的开源项目，基本实现了一个 Android 上的沙箱环境，不过应用场景最多的还是应用双开。  VA github: https:&#x2F;&#x2F;github.com&#x2F;asLody&#x2F;VirtualApp  VA 的源码注释: https:&#x2F;&#x2F;github">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android 双开沙箱 VirtualApp 源码分析（一）">
 <meta property="og:url" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76146760     包结构 android.content com.lody.virtual client HOOK IPC Stub remote server   mirror   一些基础措施的封装 Mirror framework 层镜像 成员变量 Field 映射">
+<meta property="og:description" content="转载 : https:&#x2F;&#x2F;blog.csdn.net&#x2F;ganyao939543405&#x2F;article&#x2F;details&#x2F;76146760  最近发现了一个非常好的开源项目，基本实现了一个 Android 上的沙箱环境，不过应用场景最多的还是应用双开。  VA github: https:&#x2F;&#x2F;github.com&#x2F;asLody&#x2F;VirtualApp  VA 的源码注释: https:&#x2F;&#x2F;github">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-17-09-11.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-20-12-02.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/2020-08-03-20-48-38.png">
 <meta property="article:published_time" content="2020-08-03T17:03:51.000Z">
-<meta property="article:modified_time" content="2023-02-18T08:06:25.198Z">
+<meta property="article:modified_time" content="2023-07-09T10:10:55.674Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="VirtualApp">
 <meta name="twitter:card" content="summary">
@@ -157,18 +157,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -239,7 +239,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -271,43 +271,6 @@
         <blockquote>
 <p>转载 : <a target="_blank" rel="noopener" href="https://blog.csdn.net/ganyao939543405/article/details/76146760">https://blog.csdn.net/ganyao939543405/article/details/76146760</a></p>
 </blockquote>
-<!-- TOC -->
-
-<ul>
-<li><a href="#%E5%8C%85%E7%BB%93%E6%9E%84">包结构</a><ul>
-<li><a href="#androidcontent">android.content</a></li>
-<li><a href="#comlodyvirtual">com.lody.virtual</a><ul>
-<li><a href="#client">client</a></li>
-<li><a href="#hook">HOOK</a></li>
-<li><a href="#ipc">IPC</a></li>
-<li><a href="#stub">Stub</a></li>
-<li><a href="#remote">remote</a></li>
-<li><a href="#server">server</a></li>
-</ul>
-</li>
-<li><a href="#mirror">mirror</a></li>
-</ul>
-</li>
-<li><a href="#%E4%B8%80%E4%BA%9B%E5%9F%BA%E7%A1%80%E6%8E%AA%E6%96%BD%E7%9A%84%E5%B0%81%E8%A3%85">一些基础措施的封装</a><ul>
-<li><a href="#mirror-framework-%E5%B1%82%E9%95%9C%E5%83%8F">Mirror framework 层镜像</a><ul>
-<li><a href="#%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F-field-%E6%98%A0%E5%B0%84">成员变量 Field 映射</a></li>
-<li><a href="#method-%E6%98%A0%E5%B0%84">Method 映射</a></li>
-</ul>
-</li>
-<li><a href="#java-%E5%B1%82-hook">Java 层 Hook</a><ul>
-<li><a href="#methodproxy">MethodProxy</a></li>
-<li><a href="#methodproxies">MethodProxies</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E7%BB%93%E6%9E%84">运行时结构</a><ul>
-<li><a href="#%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%94%9F%E7%9A%84-framework-%E8%BF%90%E4%BD%9C%E6%96%B9%E5%BC%8F">系统原生的 framework 运作方式</a></li>
-<li><a href="#va-%E7%8E%AF%E5%A2%83%E4%B8%8B-framework-%E8%BF%90%E4%BD%9C%E6%96%B9%E5%BC%8F">VA 环境下 framework 运作方式</a></li>
-</ul>
-</li>
-</ul>
-<!-- /TOC -->
 <p>最近发现了一个非常好的开源项目，基本实现了一个 Android 上的沙箱环境，不过应用场景最多的还是应用双开。</p>
 <ul>
 <li>VA github: <a target="_blank" rel="noopener" href="https://github.com/asLody/VirtualApp">https://github.com/asLody/VirtualApp</a> </li>

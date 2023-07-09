@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="终端登录在早期的 UNIX 系统中，用户用哑终端（用硬连接连到主机）进行登录。终端或者是本地的或者是远程的。在这两种情况下，登录都经由内核中的终端设备驱动程序。 BSD 终端登录init 进程读取文件 &#x2F;etc&#x2F;ttys，对每一个允许登录的终端设备，init 调用一次 fork，它所生成的子进程则 exec getty 程序。getty 对终端设备调用 open 函数，以读、写方式将端打开。一旦设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unix环境高级编程09-进程关系">
+<meta property="og:url" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="终端登录在早期的 UNIX 系统中，用户用哑终端（用硬连接连到主机）进行登录。终端或者是本地的或者是远程的。在这两种情况下，登录都经由内核中的终端设备驱动程序。 BSD 终端登录init 进程读取文件 &#x2F;etc&#x2F;ttys，对每一个允许登录的终端设备，init 调用一次 fork，它所生成的子进程则 exec getty 程序。getty 对终端设备调用 open 函数，以读、写方式将端打开。一旦设">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/%E4%BD%9C%E4%B8%9A%E6%8E%A7%E5%88%B6%E5%8A%9F%E8%83%BD%E6%80%BB%E7%BB%93.png">
+<meta property="article:published_time" content="2023-04-10T17:21:51.000Z">
+<meta property="article:modified_time" content="2023-07-09T10:10:55.946Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="unix">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/%E4%BD%9C%E4%B8%9A%E6%8E%A7%E5%88%B6%E5%8A%9F%E8%83%BD%E6%80%BB%E7%BB%93.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/","path":"2023/04/10/unix环境高级编程09-进程关系/","title":"unix环境高级编程09-进程关系"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>unix环境高级编程09-进程关系 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E7%99%BB%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">终端登录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BSD-%E7%BB%88%E7%AB%AF%E7%99%BB%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">BSD 终端登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E7%BB%88%E7%AB%AF%E7%99%BB%E5%BD%95"><span class="nav-number">1.2.</span> <span class="nav-text">Linux 终端登录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%99%BB%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">网络登录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BSD-%E7%BD%91%E7%BB%9C%E7%99%BB%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">BSD 网络登录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%BB%84"><span class="nav-number">3.</span> <span class="nav-text">进程组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D"><span class="nav-number">4.</span> <span class="nav-text">会话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E7%BB%88%E7%AB%AF"><span class="nav-number">5.</span> <span class="nav-text">控制终端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0-tcgetpgrp%E3%80%81tcsetpgrp-%E5%92%8C-tcgetsid"><span class="nav-number">6.</span> <span class="nav-text">函数 tcgetpgrp、tcsetpgrp 和 tcgetsid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A%E6%8E%A7%E5%88%B6"><span class="nav-number">7.</span> <span class="nav-text">作业控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-number">8.</span> <span class="nav-text">shell执行程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%E7%BB%84"><span class="nav-number">9.</span> <span class="nav-text">孤儿进程组</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="unix环境高级编程09-进程关系 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          unix环境高级编程09-进程关系
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-10 17:21:51" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:51+00:00">2023-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="终端登录"><a href="#终端登录" class="headerlink" title="终端登录"></a>终端登录</h2><p>在早期的 UNIX 系统中，用户用哑终端（用硬连接连到主机）进行登录。终端或者是本地的或者是远程的。在这两种情况下，登录都经由内核中的终端设备驱动程序。</p>
+<h3 id="BSD-终端登录"><a href="#BSD-终端登录" class="headerlink" title="BSD 终端登录"></a>BSD 终端登录</h3><p>init 进程读取文件 <code>/etc/ttys</code>，对每一个允许登录的终端设备，<code>init</code> 调用一次 <code>fork</code>，它所生成的子进程则 <code>exec getty</code> 程序。<code>getty</code> 对终端设备调用 <code>open</code> 函数，以读、写方式将端打开。一旦设备被打开，则文件描述符 0、1、2 就被设置到该设备。然后 <code>getty</code> 输出“login:”之类的信息，并等待用户键入用户名。当用户键入了用户名后，<code>getty</code> 的工作就完成了。然后它以类似于下列的方式调用 <code>login</code> 程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execle(<span class="string">&quot;/bin/login&quot;</span>, <span class="string">&quot;login&quot;</span>, <span class="string">&quot;-p&quot;</span>, username, (<span class="type">char</span> *)<span class="number">0</span>,envp);</span><br></pre></td></tr></table></figure>
+
+<p><code>getty</code> 以终端名和在 <code>gettytab</code> 中说明的环境字符串为 <code>login</code> 创建一个环境。</p>
+<p><code>login</code> 能处理多项工作:</p>
+<ul>
+<li>调用 <code>getpwnam</code> 取得相应用户的口令文件登录项。</li>
+<li>调用 <code>getpass(3)</code>以显示提示“Password: ”，接着读用户键入的口令。</li>
+<li>调用 <code>crypt(3)</code>将用户键入的口令加密，并与该用户在阴影口令文件中登录项的 <code>pw_passwd</code> 字段相比较。</li>
+<li>如果用户几次键入的口令都无效，则 <code>login</code> 以参数 1 调用 <code>exit</code> 表示登录过程失败。</li>
+</ul>
+<p>如果用户正确登录，<code>login</code> 就将完成如下工作。</p>
+<ul>
+<li>将当前工作目录更改为该用户的起始目录（chdir）。</li>
+<li>调用 <code>chown</code> 更改该终端的所有权，使登录用户成为它的所有者。</li>
+<li>将对该终端设备的访问权限改变成“用户读和写”。</li>
+<li>调用 <code>setgid</code> 及 <code>initgroups</code> 设置进程的组 ID。</li>
+<li>用 <code>login</code> 得到的所有信息初始化环境：起始目录（HOME）、shell（SHELL）、用户 名（USER 和 LOGNAME）以及一个系统默认路径（PATH）。</li>
+<li><code>login</code> 进程更改为登录用户的用户 ID（<code>setuid</code>）并调用该用户的登录 shell，其方式类似于：<code>execl(&quot;/bin/sh&quot;, &quot;-sh&quot;, (char *)0);</code> 。</li>
+</ul>
+<p>至此，登录用户的登录 shell 开始运行。然后登录 shell 读取其启动文件（<code>.bash_profile</code>）更改某些环境变量并增加很多环境变量。当执行完启动文件后，用户最后得到 shell 提示符，并能键入命令。</p>
+<p>Mac OS X 终端登录与 BSD 终端登录进程的工作步骤基本相同。主要有以下不同：</p>
+<ul>
+<li>init 的工作是由 launchd 完成的。</li>
+<li>一开始提供的就是图形终端。</li>
+</ul>
+<h3 id="Linux-终端登录"><a href="#Linux-终端登录" class="headerlink" title="Linux 终端登录"></a>Linux 终端登录</h3><p>Linux 的终端登录过程非常类似于 BSD。BSD 登录过程与 Linux 登录过程的主要区别在于说明终端配置的方式。</p>
+<p>在一些系统中，<code>/etc/inittab</code> 包含配置信息，指定了 <code>init</code> 应当为之启动 <code>getty</code> 进程的各终端设备。</p>
+<p>Ubuntu 发行版，配有称为“Upstart”的 <code>init</code> 程序。使用存放在 <code>/etc/init</code> 目录的<code>*.conf</code> 命名的配置文件。</p>
+<h2 id="网络登录"><a href="#网络登录" class="headerlink" title="网络登录"></a>网络登录</h2><p>通过串行终端登录至系统和经由网络登录至系统两者之间的主要区别是：网络登录时，在终端和计算机之间的连接不再是点到点的。在网络登录情况下，login 仅仅是一种可用的服务，这与其他网络服务（如 FTP 或 SMTP）的性质相同。</p>
+<p>为使同一个软件既能处理终端登录，又能处理网络登录，系统使用了一种称为伪终端（pseudo terminal）的软件驱动程序，它仿真串行终端的运行行为，并将终端操作映射为网络操作，反之亦然。</p>
+<h3 id="BSD-网络登录"><a href="#BSD-网络登录" class="headerlink" title="BSD 网络登录"></a>BSD 网络登录</h3><p>在 BSD 中，有一个 <code>inetd</code> <code>进程，它等待大多数网络连接。作为系统启动的一部分，init</code> 调用一个 <code>shell</code>，使其执行 <code>shell</code> 脚本<code>/etc/rc</code>。由此 <code>shell</code> 脚本启动一个守护进程 <code>inetd</code>。一旦此 <code>shell</code> 脚本终止，<code>inetd</code> 的父进程就变成 <code>init</code>。<code>inetd</code> 等待 <code>TCP/IP</code> 连接请求到达主机，而当一个连接请求到达时，它执行一次 <code>fork</code>，然后生成的子进程 <code>exec</code> 适当的程序。</p>
+<p>客户进程的用户现在登录到了服务进程所在的主机后，<code>telnetd</code> 进程打开一个伪终端设备，并用 <code>fork</code> 分成两个进程。父进程处理通过网络连接的通信，子进程则执行 login 程序。父进程和子进程通过伪终端相连接。如果登录正确，<code>login</code> 就执行动作与终端登录中 <code>login</code> 的执行动作一致。</p>
+<p>Mac OS X 网络登录与 BSD 网络登录基本相同。但 Mac OS X 上 <code>telnet</code> 守护进程是从 <code>launchd</code> 运行的。</p>
+<p>除了有些版本使用扩展的因特网服务守护进程 <code>xinetd</code> 代替 <code>inetd</code> 进程外，Linux 网络登录的其他方面与 BSD 网络登录相同。</p>
+<p>当通过终端或网络登录时，我们得到一个登录 shell，其标准输入、标准输出和标准错误要么连接到一个终端设备，要么连接到一个伪终端设备上。</p>
+<h2 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h2><p>每个进程除了有一进程 ID 之外，还属于一个进程组，进程组是一个或多个进程的集合。</p>
+<p>同一进程组中的各进程接收来自同一终端的各种信号。每个进程组有一个唯一的进程组 ID。进程组 ID 类似于进程 ID——它是一个正整数，并可存放在 <code>pid_t</code> 数据类型中。函数 <code>getpgrp</code> 返回调用进程的进程组 ID。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getpgrp</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：调用进程的进程组 ID</p>
+<p>Single UNIX Specification 定义了 getpgid 函数模仿此种运行行为。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getpgid</span><span class="params">(<span class="type">pid_t</span> pid)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：若成功，返回进程组 ID；若出错，返回 −1</p>
+<p>若 pid 是 0，返回调用进程的进程组 ID。</p>
+<p>每个进程组有一个组长进程。组长进程的进程组 ID 等于其进程 ID。</p>
+<p>进程组组长可以创建一个进程组、创建该组中的进程，然后终止。只要在某个进程组中有一个进程存在，则该进程组就存在，这与其组长进程是否终止无关。从进程组创建开始到其中最后一个进程离开为止的时间区间称为进程组的生命期。某个进程组中的最后一个进程可以终止，也可以转移到另一个进程组。</p>
+<p>进程调用 setpgid 可以加入一个现有的进程组或者创建一个新进程组。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">setpgid</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">pid_t</span> pgid)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：若成功，返回 0；若出错，返回 −1</p>
+<p>setpgid 函数将 pid 进程的进程组 ID 设置为 pgid。如果这两个参数相等，则由 pid 指定的进程变成进程组组长。如果 pid 是 0，则使用调用者的进程 ID。另外，如果 pgid 是 0，则由 pid 指定的进程 ID 用作进程组 ID。</p>
+<p>一个进程只能为它自己或它的子进程设置进程组 ID。在它的子进程调用了 exec 后，它就不再更改该子进程的进程组 ID。</p>
+<p>在大多数作业控制 shell 中，在 fork 之后调用此函数，使父进程设置其子进程的进程组 ID，并且也使子进程设置其自己的进程组 ID。</p>
+<p>waitpid 函数可被用来等待一个进程或者指定进程组中的一个进程终止。</p>
+<h2 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h2><p>会话（session）是一个或多个进程组的集合。通常是由 shell 的管道将几个进程编成一组的。</p>
+<p>进程调用 setsid 函数建立一个新会话。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">setsid</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：若成功，返回进程组 ID；若出错，返回-1</p>
+<p>如果调用此函数的进程不是一个进程组的组长，则此函数创建一个新会话。具体会发生以下 3 件事。</p>
+<ol>
+<li>该进程变成新会话的会话首进程（session leader，会话首进程是创建该会话的进程）。此时，该进程是新会话中的唯一进程。</li>
+<li>该进程成为一个新进程组的组长进程。新进程组 ID 是该调用进程的进程 ID。</li>
+<li>该进程没有控制终端。如果在调用 setsid 之前该进程有一个控制终端，那么这种联系也被切断。</li>
+</ol>
+<p>如果该调用进程已经是一个进程组的组长，则此函数返回出错。为了保证不处于这种情况，通常先调用 fork，然后使其父进程终止，而子进程则继续。因为子进程继承了父进程的进程组 ID，而其进程 ID 则是新分配的，两者不可能相等，这就保证了子进程不是一个进程组的组长。</p>
+<p>会话首进程是具有唯一进程 ID 的单个进程，所以可以将会话首进程的进程 ID 视为会话 ID。getsid 函数返回会话首进程的进程组 ID。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">getsid</span><span class="params">(<span class="type">pid_t</span> pid)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：若成功，返回会话首进程的进程组 ID；若出错，返回-1</p>
+<p>如若 pid 是 0，getsid 返回调用进程的会话首进程的进程组 ID。</p>
+<h2 id="控制终端"><a href="#控制终端" class="headerlink" title="控制终端"></a>控制终端</h2><p>会话和进程组还有一些其他特性。</p>
+<ul>
+<li>一个会话可以有一个控制终端（controlling terminal）。这通常是终端设备或伪终端设备。</li>
+<li>建立与控制终端连接的会话首进程被称为控制进程（controlling process）。</li>
+<li>一个会话中的几个进程组可被分成一个前台进程组（foreground process group）以及一个或多个后台进程组（background process group）。</li>
+<li>如果一个会话有一个控制终端，则它有一个前台进程组，其他进程组为后台进程组。</li>
+<li>无论何时键入终端的中断键，都会将中断信号发送至前台进程组的所有进程。</li>
+<li>无论何时键入终端的退出键，都会将退出信号发送至前台进程组的所有进程。</li>
+<li>如果终端接口检测到调制解调器（或网络）已经断开连接，则将挂断信号发送至控制进程（会话首进程）。</li>
+</ul>
+<p>当会话首进程打开第一个尚未与一个会话相关联的终端设备时，只要在调用 open 时没有指定 O_NOCTTY 标志，System V 派生的系统将此作为控制终端分配给此会话。</p>
+<p>当会话首进程用 TIOCSCTTY 作为 request 参数（第三个参数是空指针）调用 ioctl 时，基于 BSD 的系统为会话分配控制终端。</p>
+<p>保证程序能与控制终端对话的方法是 open 文件&#x2F;dev&#x2F;tty。在内核中，此特殊文件是控制终端的同义语。</p>
+<h2 id="函数-tcgetpgrp、tcsetpgrp-和-tcgetsid"><a href="#函数-tcgetpgrp、tcsetpgrp-和-tcgetsid" class="headerlink" title="函数 tcgetpgrp、tcsetpgrp 和 tcgetsid"></a>函数 tcgetpgrp、tcsetpgrp 和 tcgetsid</h2><p>需要有一种方法来通知内核哪一个进程组是前台进程组，这样，终端设备驱动程序就能知道将终端输入和终端产生的信号发送到何处。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">tcgetpgrp</span><span class="params">(<span class="type">int</span> fd)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">tcsetpgrp</span><span class="params">(<span class="type">int</span> fd, <span class="type">pid_t</span> pgrpid)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>tcgetpgrp 返回值：若成功，返回前台进程组 ID；若出错，返回 −1<br>tcsetpgrp 返回值：若成功，返回 0；若出错，返回 −1</p>
+<p>函数 tcgetpgrp 返回前台进程组 ID，它与在 fd 上打开的终端相关联。</p>
+<p>如果进程有一个控制终端，则该进程可以调用 tcsetpgrp 将前台进程组 ID 设置为 pgrpid。pgrpid 值应当是在同一会话中的一个进程组的 ID。fd 必须引用该会话的控制终端。</p>
+<p>给出控制 TTY 的文件描述符，通过 tcgetsid 函数，应用程序就能获得会话首进程的进程组 ID。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;termios.h&gt;</span></span></span><br><span class="line"><span class="type">pid_t</span> <span class="title function_">tcgetsid</span><span class="params">(<span class="type">int</span> fd)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：若成功，返回会话首进程的进程组 ID；若出错，返回 −1</p>
+<p>需要管理控制终端的应用程序可以调用 <code>tcgetsid</code> 函数识别出控制终端的会话首进程的会话 ID。</p>
+<h2 id="作业控制"><a href="#作业控制" class="headerlink" title="作业控制"></a>作业控制</h2><p>作业控制是 BSD 在 1980 年左右增加的一个特性。它允许在一个终端上启动多个作业（进程组），它控制哪一个作业可以访问该终端以及哪些作业在后台运行。作业控制要求以下 3 种形式的支持。</p>
+<ol>
+<li>支持作业控制的 shell。</li>
+<li>内核中的终端驱动程序必须支持作业控制。</li>
+<li>内核必须提供对某些作业控制信号的支持。</li>
+</ol>
+<p>从shell使用作业控制功能的角度观察，用户可以在前台或后台启动一个作业。一个作业只是几个进程的集合，通常是一个进程管道。</p>
+<p>实际上有 3 个特殊字符可使终端驱动程序产生信号，并将它们发送至前台进程组，它们是：</p>
+<ul>
+<li>中断字符（一般采用<code>Delete</code>或<code>Ctrl+C</code>）产生 <code>SIGINT</code>；</li>
+<li>退出字符（一般采用<code>Ctrl+\</code>）产生 <code>SIGQUIT</code>；</li>
+<li>挂起字符（一般采用<code>Ctrl+Z</code>）产生 <code>SIGTSTP</code>。</li>
+</ul>
+<p>只有前台作业接收终端输入。如果后台作业试图读终端，这并不是一个错误，但是终端驱动程序将检测这种情况，并且向后台作业发送一个特定信号 <code>SIGTTIN</code>。</p>
+<p>终端驱动程序必须处理与作业控制有关的另一种情况，只有前台作业接收终端输入。</p>
+<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/%E4%BD%9C%E4%B8%9A%E6%8E%A7%E5%88%B6%E5%8A%9F%E8%83%BD%E6%80%BB%E7%BB%93.png" class="">
+
+<h2 id="shell执行程序"><a href="#shell执行程序" class="headerlink" title="shell执行程序"></a>shell执行程序</h2><h2 id="孤儿进程组"><a href="#孤儿进程组" class="headerlink" title="孤儿进程组"></a>孤儿进程组</h2><p>POSIX.1将孤儿进程组（orphaned process group）定义为：该组中每个成员的父进程要么是该组的一个成员，要么不是该组所属会话的成员。</p>
+<p>一个进程组不是孤儿进程组的条件是——该组中有一个进程，其父进程在属于同一会话的另一个组中。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/unix/" rel="tag"># unix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/" rel="prev" title="unix环境高级编程08-进程控制">
+                  <i class="fa fa-chevron-left"></i> unix环境高级编程08-进程控制
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/" rel="next" title="unix环境高级编程10-信号">
+                  unix环境高级编程10-信号 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

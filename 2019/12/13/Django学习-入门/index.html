@@ -20,19 +20,13 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="虚拟环境虚拟环境其实就是对真实 python 环境的复制，这样我们在复制的 python 环境中安装包就不会影响到真实的 python 环境，在不同的虚拟环境中开发项目就实现了项目之间的隔离。 virtualenvwrapper 虚拟环境创建首先安装虚拟环境，命令如下:">
+    <meta name="description" content="虚拟环境为了避免各种不同环境的依赖互相干扰，这里我们使用 miniconda 创建虚拟环境来开发 django 应用。 镜像下载地址：https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;help&#x2F;anaconda&#x2F; 安装完成后，可以通过修改用户目录下的 .condarc 文件来使用 TUNA 镜像源。Windows 用户无法直接创建名为 .condarc 的文件，可先执行 c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Django学习-入门">
 <meta property="og:url" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="虚拟环境虚拟环境其实就是对真实 python 环境的复制，这样我们在复制的 python 环境中安装包就不会影响到真实的 python 环境，在不同的虚拟环境中开发项目就实现了项目之间的隔离。 virtualenvwrapper 虚拟环境创建首先安装虚拟环境，命令如下:">
+<meta property="og:description" content="虚拟环境为了避免各种不同环境的依赖互相干扰，这里我们使用 miniconda 创建虚拟环境来开发 django 应用。 镜像下载地址：https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;help&#x2F;anaconda&#x2F; 安装完成后，可以通过修改用户目录下的 .condarc 文件来使用 TUNA 镜像源。Windows 用户无法直接创建名为 .condarc 的文件，可先执行 c">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-35-50.png">
-<meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-40-39.png">
-<meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-45-12.png">
-<meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-48-46.png">
-<meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-51-42.png">
-<meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-58-25.png">
 <meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-22-04-29.png">
 <meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-22-15-11.png">
 <meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-22-23-28.png">
@@ -57,11 +51,11 @@
 <meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-14-17-13-06.png">
 <meta property="og:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-14-17-27-26.png">
 <meta property="article:published_time" content="2019-12-13T21:12:48.000Z">
-<meta property="article:modified_time" content="2023-02-18T08:06:25.270Z">
+<meta property="article:modified_time" content="2023-07-09T10:10:55.742Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="Django">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-35-50.png">
+<meta name="twitter:image" content="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-22-04-29.png">
 
 
 <link rel="canonical" href="https://ckcat.github.io/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/">
@@ -170,7 +164,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">虚拟环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#virtualenvwrapper-%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">1.1.</span> <span class="nav-text">virtualenvwrapper 虚拟环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA"><span class="nav-number">1.1.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%80%E5%87%BA"><span class="nav-number">1.1.2.</span> <span class="nav-text">退出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">查看和使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">1.1.4.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.5.</span> <span class="nav-text">包操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pipenv"><span class="nav-number">1.2.</span> <span class="nav-text">pipenv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-django-%E5%8C%85"><span class="nav-number">1.3.</span> <span class="nav-text">安装 django 包</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">2. 创建项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">2.1. 创建应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">2.2. 安装应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%BC%80%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.3.</span> <span class="nav-text">2.3. 开发服务器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">3. 设计模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-ORM-%E6%A1%86%E6%9E%B6"><span class="nav-number">3.1.</span> <span class="nav-text">3.1. ORM 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">3.2. 定义模型类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1-%E8%AE%BE%E8%AE%A1%E5%9B%BE%E4%B9%A6%E7%B1%BB"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1. 设计图书类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-2-%E6%A8%A1%E5%9E%8B%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2. 模型类设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E8%BF%81%E7%A7%BB"><span class="nav-number">3.3.</span> <span class="nav-text">3.3. 迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1-%E8%AE%BE%E8%AE%A1%E8%8B%B1%E9%9B%84%E7%B1%BB"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1. 设计英雄类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="nav-number">3.4.</span> <span class="nav-text">3.4. 数据操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-1-%E5%AF%B9%E8%B1%A1%E5%85%B3%E8%81%94%E6%93%8D%E4%BD%9C"><span class="nav-number">3.4.1.</span> <span class="nav-text">3.4.1. 对象关联操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">4. 后台管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E6%9C%AC%E5%9C%B0%E5%8C%96"><span class="nav-number">4.1.</span> <span class="nav-text">4.1. 管理页面本地化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%88%9B%E5%BB%BA%E7%AE%A1%E7%90%86%E5%91%98"><span class="nav-number">4.2.</span> <span class="nav-text">4.2. 创建管理员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%B3%A8%E5%86%8C%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="nav-number">4.3.</span> <span class="nav-text">4.3. 注册模型类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2"><span class="nav-number">4.4.</span> <span class="nav-text">4.4. 自定义管理页面</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E8%A7%86%E5%9B%BE%E4%BB%A5%E5%8F%8A-URL"><span class="nav-number">5.</span> <span class="nav-text">5. 视图以及 URL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E5%AE%9A%E4%B9%89%E8%A7%86%E5%9B%BE"><span class="nav-number">5.1.</span> <span class="nav-text">5.1. 定义视图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E9%85%8D%E7%BD%AE-URLconf"><span class="nav-number">5.2.</span> <span class="nav-text">5.2. 配置 URLconf</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-%E6%9F%A5%E6%89%BE%E8%A7%86%E5%9B%BE%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">5.2.1.</span> <span class="nav-text">5.2.1. 查找视图的过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AE"><span class="nav-number">5.3.</span> <span class="nav-text">5.3. 请求访问</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E6%A8%A1%E6%9D%BF"><span class="nav-number">6.</span> <span class="nav-text">6. 模板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%88%9B%E5%BB%BA%E6%A8%A1%E6%9D%BF"><span class="nav-number">6.1.</span> <span class="nav-text">6.1. 创建模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF"><span class="nav-number">6.2.</span> <span class="nav-text">6.2. 自定义模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E8%A7%86%E5%9B%BE%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF"><span class="nav-number">6.3.</span> <span class="nav-text">6.3. 视图调用模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%86%E5%9B%BE%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF%E7%AE%80%E5%86%99"><span class="nav-number">6.4.</span> <span class="nav-text">6.4. 视图调用模板简写</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">2.1. 创建应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">2.2. 安装应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%BC%80%E5%8F%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">2.3. 开发服务器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number"></span> <span class="nav-text">3. 设计模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-ORM-%E6%A1%86%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">3.1. ORM 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">3.2. 定义模型类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1-%E8%AE%BE%E8%AE%A1%E5%9B%BE%E4%B9%A6%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">3.2.1. 设计图书类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-2-%E6%A8%A1%E5%9E%8B%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.</span> <span class="nav-text">3.2.2. 模型类设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E8%BF%81%E7%A7%BB"><span class="nav-number">3.</span> <span class="nav-text">3.3. 迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1-%E8%AE%BE%E8%AE%A1%E8%8B%B1%E9%9B%84%E7%B1%BB"><span class="nav-number">3.1.</span> <span class="nav-text">3.3.1. 设计英雄类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">3.4. 数据操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-1-%E5%AF%B9%E8%B1%A1%E5%85%B3%E8%81%94%E6%93%8D%E4%BD%9C"><span class="nav-number">4.1.</span> <span class="nav-text">3.4.1. 对象关联操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86"><span class="nav-number"></span> <span class="nav-text">4. 后台管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E6%9C%AC%E5%9C%B0%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">4.1. 管理页面本地化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%88%9B%E5%BB%BA%E7%AE%A1%E7%90%86%E5%91%98"><span class="nav-number">2.</span> <span class="nav-text">4.2. 创建管理员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%B3%A8%E5%86%8C%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">4.3. 注册模型类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2"><span class="nav-number">4.</span> <span class="nav-text">4.4. 自定义管理页面</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E8%A7%86%E5%9B%BE%E4%BB%A5%E5%8F%8A-URL"><span class="nav-number"></span> <span class="nav-text">5. 视图以及 URL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E5%AE%9A%E4%B9%89%E8%A7%86%E5%9B%BE"><span class="nav-number">1.</span> <span class="nav-text">5.1. 定义视图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E9%85%8D%E7%BD%AE-URLconf"><span class="nav-number">2.</span> <span class="nav-text">5.2. 配置 URLconf</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-%E6%9F%A5%E6%89%BE%E8%A7%86%E5%9B%BE%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">5.2.1. 查找视图的过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E8%AF%B7%E6%B1%82%E8%AE%BF%E9%97%AE"><span class="nav-number">3.</span> <span class="nav-text">5.3. 请求访问</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E6%A8%A1%E6%9D%BF"><span class="nav-number"></span> <span class="nav-text">6. 模板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%88%9B%E5%BB%BA%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.</span> <span class="nav-text">6.1. 创建模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF"><span class="nav-number">2.</span> <span class="nav-text">6.2. 自定义模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E8%A7%86%E5%9B%BE%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF"><span class="nav-number">3.</span> <span class="nav-text">6.3. 视图调用模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%86%E5%9B%BE%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF%E7%AE%80%E5%86%99"><span class="nav-number">4.</span> <span class="nav-text">6.4. 视图调用模板简写</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
         </div>
         <!--/noindex-->
 
@@ -183,18 +177,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -265,7 +259,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -294,62 +288,24 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="虚拟环境"><a href="#虚拟环境" class="headerlink" title="虚拟环境"></a>虚拟环境</h1><p>虚拟环境其实就是对真实 python 环境的复制，这样我们在复制的 python 环境中安装包就不会影响到真实的 python 环境，在不同的虚拟环境中开发项目就实现了项目之间的隔离。</p>
-<h2 id="virtualenvwrapper-虚拟环境"><a href="#virtualenvwrapper-虚拟环境" class="headerlink" title="virtualenvwrapper 虚拟环境"></a>virtualenvwrapper 虚拟环境</h2><h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>首先安装虚拟环境，命令如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install virtualenv</span><br></pre></td></tr></table></figure>
+        <h2 id="虚拟环境"><a href="#虚拟环境" class="headerlink" title="虚拟环境"></a>虚拟环境</h2><p>为了避免各种不同环境的依赖互相干扰，这里我们使用 miniconda 创建虚拟环境来开发 django 应用。</p>
+<p>镜像下载地址：<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</a></p>
+<p>安装完成后，可以通过修改用户目录下的 <code>.condarc</code> 文件来使用 TUNA 镜像源。<br>Windows 用户无法直接创建名为 <code>.condarc</code> 的文件，可先执行 <code>conda config --set show_channel_urls yes</code> 生成该文件之后再修改。<br>Windows 平台 <code>.condarc</code> 文件的路径为 <code>%USERPROFILE%/.condarc</code> 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: <span class="literal">true</span></span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br></pre></td></tr></table></figure>
 
-<p>接下来还要安装虚拟环境扩展包，命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip3 install virtualenvwrapper</span><br></pre></td></tr></table></figure>
+<p>为了使 cmder 默认打开就可以使用 conda ，进入 cmder <code>Setting -&gt; Startup -&gt; Tasks</code> 添加一个新的 task 。将 task 名称设置为 anaconda ，命令设置为 <code>cmd /k &quot;&quot;%ConEmuDir%\..\init.bat&quot;&quot; &amp; D:\miniconda3\Scripts\activate.bat D:\miniconda3</code>，并勾选 default task for new console 。</p>
+<p>配置好了以后，打开 cmder 运行下列命令创建一个 python 虚拟环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(base) $ conda create -n pyWeb python=3.6</span><br></pre></td></tr></table></figure>
 
-<p>安装虚拟环境包装器的目的是使用更加简单的命令来管理虚拟环境。</p>
-<p>修改 home 目录下的配置文件 <code>.bashrc</code> ，添加如下内容：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> WORKEON_HOME=<span class="variable">$HOME</span>/.virtualenvs</span><br><span class="line"><span class="built_in">source</span> /usr/local/bin/virtualenvwrapper.sh</span><br></pre></td></tr></table></figure>
+<p><code>pyWeb</code> 为虚拟环境名称，<code>python=3.6</code> 为 python 版本设置为 3.6。</p>
+<p>接着激活 pyWeb 环境并安装 django 即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) $ conda activate pyWeb</span><br><span class="line">(pyWeb) $ pip install django==3.2.18</span><br></pre></td></tr></table></figure>
 
-<p>这里运行可能会出现 <code>/usr/bin/python: No module named virtualenvwrapper</code> 错误，修改 <code>/usr/local/bin/virtualenvwrapper.sh</code> 如下即可：</p>
-<img src="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-35-50.png" class="">
+<p>下面列出 conda 一些常用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">conda create -n myenv python=3.9             <span class="comment"># 创建环境</span></span><br><span class="line">conda activate myenv                         <span class="comment"># conda 激活名称为 myenv 的环境</span></span><br><span class="line">conda deactivate                             <span class="comment"># conda 退出当前环境</span></span><br><span class="line">conda <span class="built_in">env</span> list                               <span class="comment"># 列出环境列表</span></span><br><span class="line">conda <span class="built_in">env</span> <span class="built_in">export</span> &gt; environment.yaml          <span class="comment"># 导出当前环境</span></span><br><span class="line">conda create -f environment.yaml -n myenv    <span class="comment"># 从导出的 environment.yaml 文件创建环境</span></span><br><span class="line">conda <span class="built_in">env</span> remove -n myenv                    <span class="comment"># conda 删除环境</span></span><br><span class="line">pip freeze &gt; requirements.txt                <span class="comment"># 导出pip install 安装的包</span></span><br><span class="line">pip uninstall -r requirements.txt -y -v      <span class="comment"># pip 删除全部包，-r 包列表文件，-y 不提示是否删除，-v 输出日志</span></span><br></pre></td></tr></table></figure>
 
-<p>使用 <code>source .bashrc</code> 命令使配置文件生效。</p>
-<p>创建 python3 虚拟环境命令如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkvirtualenv -p python env_name</span><br></pre></td></tr></table></figure>
-
-<p>例如：</p>
-<img src="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-40-39.png" class="">
-
-<p>可以看到已经创建了一个虚拟环境<code>/home/ckcat/.virtualenvs/django_study</code>，并且自动进入了该虚拟环境。</p>
-<h3 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h3><p>退出虚拟环境的命令如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
-
-<img src="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-45-12.png" class="">
-
-<h3 id="查看和使用"><a href="#查看和使用" class="headerlink" title="查看和使用"></a>查看和使用</h3><p>查看所有虚拟环境命令如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">workon 两次tab键</span><br></pre></td></tr></table></figure>
-
-<p>使用命令如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">workon env_name</span><br></pre></td></tr></table></figure>
-
-<img src="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-48-46.png" class="">
-
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>删除虚拟环境使用如下命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmvirtualenv env_name</span><br></pre></td></tr></table></figure>
-
-<p>但是删除前，必须先退出虚拟环境，例如：</p>
-<img src="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-51-42.png" class="">
-
-<h3 id="包操作"><a href="#包操作" class="headerlink" title="包操作"></a>包操作</h3><p>在虚拟环境中使用 pip 命令操作 python 包，安装命令如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install packegename</span><br></pre></td></tr></table></figure>
-
-<p>查看以安装的 python 包命令如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip list</span><br><span class="line">pip freeze</span><br></pre></td></tr></table></figure>
-
-<h2 id="pipenv"><a href="#pipenv" class="headerlink" title="pipenv"></a>pipenv</h2><p>Pipenv 是 Python 项目的依赖管理器。</p>
-<h2 id="安装-django-包"><a href="#安装-django-包" class="headerlink" title="安装 django 包"></a>安装 django 包</h2><p>本次学习中使用的是 <code>django1.8.2</code> 的版本，安装命令如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django==1.8.2</span><br></pre></td></tr></table></figure>
-
-<img src="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-21-58-25.png" class="">
-
-<p>至此，整个虚拟环境搭建完成，下面开始创建项目。</p>
-<h1 id="2-创建项目"><a href="#2-创建项目" class="headerlink" title="2. 创建项目"></a>2. 创建项目</h1><p>首先选定好项目的存放目录，我这里存放在 <code>/home/ckcat/code/PythonProjects/Django_Study</code> ，使用如下命令创建项目：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject project_name</span><br></pre></td></tr></table></figure>
+<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>首先选定好项目的存放目录，我这里存放在 <code>/home/ckcat/code/PythonProjects/Django_Study</code> ，使用如下命令创建项目：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject project_name</span><br></pre></td></tr></table></figure>
 
 <p>例如：</p>
 <img src="/2019/12/13/Django%E5%AD%A6%E4%B9%A0-%E5%85%A5%E9%97%A8/2019-12-13-22-04-29.png" class="">
@@ -628,8 +584,9 @@
 <li>name: 为你的 URL 取名能使你在 Django 的任意地方唯一地引用它，尤其是在模板中。</li>
 </ul>
 <ol start="4">
-<li>数据库配置：<br>ENGINE – 可选值有 ‘django.db.backends.sqlite3’，’django.db.backends.postgresql’，’django.db.backends.mysql’，或 ‘django.db.backends.oracle’等。</li>
+<li>数据库配置：</li>
 </ol>
+<p>ENGINE – 可选值有 ‘django.db.backends.sqlite3’，’django.db.backends.postgresql’，’django.db.backends.mysql’，或 ‘django.db.backends.oracle’等。</p>
 <p>NAME – 数据库的名称。</p>
 <blockquote>
 <p>除了 SQLite 以外，使用其他数据库之前必须先创建好数据库。</p>

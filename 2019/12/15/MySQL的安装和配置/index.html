@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ckcat.github.io/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/2019-12-15-11-30-54.png">
 <meta property="article:published_time" content="2019-12-15T11:31:55.000Z">
-<meta property="article:modified_time" content="2023-02-18T08:06:25.322Z">
+<meta property="article:modified_time" content="2023-07-09T10:10:55.786Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary">
@@ -155,18 +155,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -237,7 +237,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-18 08:06:25" itemprop="dateModified" datetime="2023-02-18T08:06:25+00:00">2023-02-18</time>
+      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -270,31 +270,29 @@
 <p>转载：<a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04">https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04</a></p>
 </blockquote>
 <h2 id="安装-MySQL"><a href="#安装-MySQL" class="headerlink" title="安装 MySQL"></a>安装 MySQL</h2><p>首先运行下面命令更新软件包：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt update</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt update</span><br></pre></td></tr></table></figure>
 
 <p>然后安装默认软件包：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install mysql-server</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install mysql-server</span><br></pre></td></tr></table></figure>
 
 <p>这将安装 MySQL，但不会提示您设置密码或进行任何其他配置更改。</p>
 <h2 id="调整用户身份验证和特权"><a href="#调整用户身份验证和特权" class="headerlink" title="调整用户身份验证和特权"></a>调整用户身份验证和特权</h2><h3 id="创建-root-密码"><a href="#创建-root-密码" class="headerlink" title="创建 root 密码"></a>创建 root 密码</h3><p>在运行 MySQL 5.7（及更高版本）的 Ubuntu 系统中，默认情况下，MySQL root 用户设置为使用 <code>auth_socket</code> 插件而不是密码进行身份验证。</p>
-<p>为了使用密码以 root 用户身份连接到 MySQL ，您需要将其身份验证方法从切换 <code>auth_socket</code> 为 <code>mysql_native_password</code> ，首先使用 root 账号打开 mysql。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mysql</span><br></pre></td></tr></table></figure>
+<p>为了使用密码，以 root 用户身份连接到 MySQL ，您需要将其身份验证方法从切换 <code>auth_socket</code> 为 <code>mysql_native_password</code> ，首先使用 root 账号打开 mysql。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mysql</span><br></pre></td></tr></table></figure>
 
 <p>接下来，使用以下命令检查每个 MySQL 用户帐户使用的身份验证方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT user,authentication_string,plugin,host FROM mysql.user;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT user,authentication_string,plugin,host FROM mysql.user;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| user             | authentication_string                     | plugin                | host      |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| root             |                                           | auth_socket           | localhost |</span><br><span class="line">| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| debian-sys-maint | *CC744277A401A7D25BE1CA89AFF17BF607F876FF | mysql_native_password | localhost |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| user             | authentication_string                     | plugin                | host      |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| root             |                                           | auth_socket           | localhost |</span><br><span class="line">| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| debian-sys-maint | *CC744277A401A7D25BE1CA89AFF17BF607F876FF | mysql_native_password | localhost |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
 
-<p>在此示例中，您可以看到 root 用户实际上使用 auth_socket 插件进行了身份验证。要将 root 帐户配置为使用密码进行身份验证，请运行以下 <code>ALTER USER</code> 命令。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;password&#x27;;</span><br></pre></td></tr></table></figure>
+<p>在此示例中，您可以看到 root 用户实际上使用 <code>auth_socket</code> 插件进行了身份验证。要将 root 帐户配置为使用密码进行身份验证，请运行以下 <code>ALTER USER</code> 命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER USER <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED WITH mysql_native_password BY <span class="string">&#x27;password&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
 <p>然后，运行 <code>FLUSH PRIVILEGES</code> 告诉服务器重新加载授权表并使新的更改生效：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
 
 <p>再次检查每个用户使用的身份验证方法，以确认 root 不再使用该 auth_socket 插件进行身份验证：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT user,authentication_string,plugin,host FROM mysql.user;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| user             | authentication_string                     | plugin                | host      |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| root             | *3636DACC8616D997782ADD0839F92C1571D6D78F | mysql_native_password | localhost |</span><br><span class="line">| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| debian-sys-maint | *CC744277A401A7D25BE1CA89AFF17BF607F876FF | mysql_native_password | localhost |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT user,authentication_string,plugin,host FROM mysql.user;</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| user             | authentication_string                     | plugin                | host      |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">| root             | *3636DACC8616D997782ADD0839F92C1571D6D78F | mysql_native_password | localhost |</span><br><span class="line">| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password | localhost |</span><br><span class="line">| debian-sys-maint | *CC744277A401A7D25BE1CA89AFF17BF607F876FF | mysql_native_password | localhost |</span><br><span class="line">+------------------+-------------------------------------------+-----------------------+-----------+</span><br><span class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
 
 <p>您可以在此示例输出中看到，MySQL 根用户现在使用密码进行了身份验证。</p>
 <h3 id="创建普通用户"><a href="#创建普通用户" class="headerlink" title="创建普通用户"></a>创建普通用户</h3><p>一般情况下，我们会创建一个普通用户操作 mysql 数据库，可以按下面方法创建一个普通用户。</p>
@@ -302,51 +300,49 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
 
 <p>接着创建一个新用户并为其设置一个强密码。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE USER &#x27;username&#x27;@&#x27;host&#x27; IDENTIFIED BY &#x27;password&#x27;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE USER <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;host&#x27;</span> IDENTIFIED BY <span class="string">&#x27;password&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>username: 创建的用户名。</li>
-<li>host: 指定该用户在哪个主机上可以登陆，如果是本地用户可用 localhost，如果是远程登陆，可以使用通配符 <code>%</code> 。</li>
+<li>host: 指定该用户在哪个主机上可以登陆，如果是本地用户可用 <code>localhost</code>，如果是远程登陆，可以使用通配符 <code>%</code> 。</li>
 <li>password：用户的登陆密码。</li>
 </ul>
-<blockquote>
 <p>其中需要注意的是，如果 host 指定为 <code>%</code> ，那么还需要进入设置 <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> 配置文件，注释掉其中的 <code>bind-address = 127.0.0.1</code> 行，然后执行 <code>sudo systemctl restart mysql</code> 重新启动 mysql 服务。</p>
-</blockquote>
 <p>例如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE USER <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED BY <span class="string">&#x27;xxxxxxxx&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE USER <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED BY <span class="string">&#x27;xxxxxxxx&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
-<h3 id="给新用户授权"><a href="#给新用户授权" class="headerlink" title="给新用户授权"></a>给新用户授权</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT privileges ON databasename.tablename TO &#x27;username&#x27;@&#x27;host&#x27;</span><br></pre></td></tr></table></figure>
+<h3 id="给新用户授权"><a href="#给新用户授权" class="headerlink" title="给新用户授权"></a>给新用户授权</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT privileges ON databasename.tablename TO <span class="string">&#x27;username&#x27;</span>@<span class="string">&#x27;host&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>privileges：用户的操作权限。如 SELECT，INSERT，UPDATE 等，如果要授予所的权限则使用 ALL</li>
 <li>databasename：数据库名</li>
-<li>tablename：表名，如果要授予该用户对所有数据库和表的相应操作权限则可用表示，如 <code>.*</code> 。</li>
+<li>tablename：表名，如果要授予该用户对所有数据库和表的相应操作权限则可用<code>*.*</code>表示。</li>
 </ul>
 <p>例如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT SELECT, INSERT ON test.user TO <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">mysql&gt; GRANT ALL ON *.* TO <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line">mysql&gt; show grants <span class="keyword">for</span> <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT SELECT, INSERT ON test.user TO <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">mysql&gt; GRANT ALL ON *.* TO <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line">mysql&gt; show grants <span class="keyword">for</span> <span class="string">&#x27;ckcat&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
 <h2 id="配置-MySQL"><a href="#配置-MySQL" class="headerlink" title="配置 MySQL"></a>配置 MySQL</h2><p>对于全新安装，您将需要运行随附的安全脚本。这会更改一些不太安全的默认选项，例如远程 root 登录和样本用户。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
 
 <p>这将引导您完成一系列提示，在其中您可以对 MySQL 安装的安全性选项进行一些更改。第一个提示将询问您是否要设置验证密码插件，该插件可用于测试 MySQL 密码的强度。无论您选择什么，下一个提示都是为 MySQL root 用户设置密码。输入，然后确认您选择的安全密码。</p>
 <h2 id="1-4-测试-MySQL"><a href="#1-4-测试-MySQL" class="headerlink" title="1.4. 测试 MySQL"></a>1.4. 测试 MySQL</h2><p>无论您如何安装，MySQL 都应该已经开始自动运行。要对此进行测试，请检查其状态。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  systemctl status mysql.service</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  systemctl status mysql.service</span><br></pre></td></tr></table></figure>
 
 <p>您将看到类似于以下内容的输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">● mysql.service - MySQL Community Server</span><br><span class="line">   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: en</span><br><span class="line">   Active: active (running) since Sun 2019-12-15 10:36:06 CST; 32min ago</span><br><span class="line"> Main PID: 8876 (mysqld)</span><br><span class="line">    Tasks: 35 (limit: 4915)</span><br><span class="line">   CGroup: /system.slice/mysql.service</span><br><span class="line">           └─8876 /usr/sbin/mysqld --daemonize --pid-file=/run/mysqld/mysqld.pid</span><br><span class="line"></span><br><span class="line">Dec 15 10:36:05 ckcat-ubuntu systemd[1]: Starting MySQL Community Server...</span><br><span class="line">Dec 15 10:36:06 ckcat-ubuntu systemd[1]: Started MySQL Community Server.</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">● mysql.service - MySQL Community Server</span><br><span class="line">   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: en</span><br><span class="line">   Active: active (running) since Sun 2019-12-15 10:36:06 CST; 32min ago</span><br><span class="line"> Main PID: 8876 (mysqld)</span><br><span class="line">    Tasks: 35 (<span class="built_in">limit</span>: 4915)</span><br><span class="line">   CGroup: /system.slice/mysql.service</span><br><span class="line">           └─8876 /usr/sbin/mysqld --daemonize --pid-file=/run/mysqld/mysqld.pid</span><br><span class="line"></span><br><span class="line">Dec 15 10:36:05 ckcat-ubuntu systemd[1]: Starting MySQL Community Server...</span><br><span class="line">Dec 15 10:36:06 ckcat-ubuntu systemd[1]: Started MySQL Community Server.</span><br></pre></td></tr></table></figure>
 
 <p>如果 MySQL 未运行，则可以使用来启动它 <code>sudo systemctl start mysql</code> ，也可以通过下列方法进行操作。</p>
 <p>启动服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql start</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql start</span><br></pre></td></tr></table></figure>
 
 <p>停止服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql stop</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql stop</span><br></pre></td></tr></table></figure>
 
 <p>重启服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql restart</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo service mysql restart</span><br></pre></td></tr></table></figure>
 
 <h2 id="使用-MySQL-Workbench-连接数据库"><a href="#使用-MySQL-Workbench-连接数据库" class="headerlink" title="使用 MySQL Workbench 连接数据库"></a>使用 MySQL Workbench 连接数据库</h2><p>安装 MySQL Workbench</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install mysql-workbench</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install mysql-workbench</span><br></pre></td></tr></table></figure>
 
 <p>启动 MySQL Workbench ，选择 ip、端口、用户名，输入密码连接对应的数据库</p>
 <img src="/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/2019-12-15-11-30-54.png" class="">
@@ -354,7 +350,7 @@
 <h1 id="将-MySQL-数据目录移动到新位置"><a href="#将-MySQL-数据目录移动到新位置" class="headerlink" title="将 MySQL 数据目录移动到新位置"></a>将 MySQL 数据目录移动到新位置</h1><blockquote>
 <p>参考：<a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-move-a-mysql-data-directory-to-a-new-location-on-ubuntu-18-04">https://www.digitalocean.com/community/tutorials/how-to-move-a-mysql-data-directory-to-a-new-location-on-ubuntu-18-04</a></p>
 </blockquote>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>数据库会随着时间增长，有时会超出文件系统上的空间。当 I&#x2F;O 与操作系统的其余部分位于同一分区时，您也可能会遇到 I&#x2F;O 竞争。 RAID 、网络块存储和其他设备可以提供冗余和其他所需的功能。无论您是要添加更多空间，评估优化性能的方式还是希望利用其他存储功能，本教程都将指导您重新定位 MySQL 的数据目录。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>数据库会随着时间增长，有时会超出文件系统上的空间。当 <code>I/O</code> 与操作系统的其余部分位于同一分区时，您也可能会遇到 <code>I/O</code> 竞争。 RAID 、网络块存储和其他设备可以提供冗余和其他所需的功能。无论您是要添加更多空间，评估优化性能的方式还是希望利用其他存储功能，本教程都将指导您重新定位 MySQL 的数据目录。</p>
 <h2 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h2><p>要完成本指南，您将需要：</p>
 <ul>
 <li>具有非 root 用户 sudo 特权的 Ubuntu 18.04 服务器。</li>
@@ -362,83 +358,77 @@
 </ul>
 <p>在此示例中，我们将数据移至 <code>~/.mysqldata</code> 目录中。</p>
 <h2 id="第-1-步-移动-MySQL-数据目录"><a href="#第-1-步-移动-MySQL-数据目录" class="headerlink" title="第 1 步-移动 MySQL 数据目录"></a>第 1 步-移动 MySQL 数据目录</h2><p>为了准备移动 MySQL 的数据目录，让我们通过使用管理凭据启动交互式 MySQL 会话来验证当前位置。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
 
 <p>出现提示时，提供 MySQL root 密码。然后在 MySQL 提示符下，选择数据目录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@datadir;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@datadir;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">+-----------------+</span><br><span class="line">| @@datadir       |</span><br><span class="line">+-----------------+</span><br><span class="line">| /var/lib/mysql/ |</span><br><span class="line">+-----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
 
 <p>此输出确认 MySQL 已配置为使用默认数据目录， <code>/var/lib/mysql/</code> ,因此这是我们需要移动的目录。</p>
 <p>为了确保数据的完整性，在实际更改数据目录之前，我们将关闭 MySQL：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl stop mysql</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl stop mysql</span><br></pre></td></tr></table></figure>
 
 <p><code>systemctl</code> 不会显示所有服务管理命令的结果，因此，如果要确保成功，请使用以下命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
 
 <p>如果输出的最后一行告诉您服务器已停止，则可以确定它已关闭：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">. . .</span><br><span class="line">Dec 15 11:42:15 ckcat-ubuntu systemd[1]: Stopped MySQL Community Server.</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">Dec 15 11:42:15 ckcat-ubuntu systemd[1]: Stopped MySQL Community Server.</span><br></pre></td></tr></table></figure>
 
 <p>现在服务器已关闭，我们将使用 <code>rsync</code> 将现有数据库目录复制到新位置。使用该 <code>-a</code> 标志保留权限和其他目录属性，同时 <code>-v</code> 提供详细的输出，以便您可以跟踪进度。</p>
 <blockquote>
 <p>注意：请确保目录上没有斜杠，如果使用制表符补全，可以添加斜杠。当出现斜杠时，rsync 会将目录的内容转储到安装点，而不是将其传输到包含 mysql 目录.</p>
 </blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rsync -av /var/lib/mysql ~/.mysqldata</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rsync -av /var/lib/mysql ~/.mysqldata</span><br></pre></td></tr></table></figure>
 
-<p>一旦 rsync 完成，用.bak 扩展名重命名当前文件夹中保存，直到我们已经证实，此举是成功的。通过重命名，我们可以避免新旧位置文件引起的混乱：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mv /var/lib/mysql /var/lib/mysql.bak</span><br></pre></td></tr></table></figure>
+<p>一旦 <code>rsync</code> 完成，用 <code>.bak</code> 扩展名重命名当前文件夹中保存，直到我们已经证实，此举是成功的。通过重命名，我们可以避免新旧位置文件引起的混乱：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo <span class="built_in">mv</span> /var/lib/mysql /var/lib/mysql.bak</span><br></pre></td></tr></table></figure>
 
 <p>现在，我们准备将注意力转向配置。</p>
 <h2 id="第-2-步-指向新数据位置"><a href="#第-2-步-指向新数据位置" class="headerlink" title="第 2 步-指向新数据位置"></a>第 2 步-指向新数据位置</h2><p>MySQL 有几种方法可以覆盖配置值。默认情况下， <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> 在文件中 <code>datadir</code> 设置为 <code>/var/lib/mysql</code> 。编辑此文件以反映新的数据目录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf</span><br></pre></td></tr></table></figure>
 
 <p>找到开头的行， <code>datadir=</code> 并更改其后的路径以反映新位置。</p>
 <p>在我们的例子中，更新后的文件如下所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">datadir=~/.mysqldata/mysql</span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">datadir=~/.mysqldata/mysql</span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
 
 <p>这似乎是重新启动 MySQL 的正确时机，但是在成功完成此配置之前，还需要配置一件事。</p>
 <h2 id="步骤-3-—配置-AppArmor-访问控制规则"><a href="#步骤-3-—配置-AppArmor-访问控制规则" class="headerlink" title="步骤 3 —配置 AppArmor 访问控制规则"></a>步骤 3 —配置 AppArmor 访问控制规则</h2><p>我们需要告诉 AppArmor 通过在默认目录和新位置之间创建别名来让 MySQL 写入新目录。为此，请编辑 AppArmor <code>alias</code> 文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/apparmor.d/tunables/alias</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/apparmor.d/tunables/alias</span><br></pre></td></tr></table></figure>
 
 <p>在文件底部，添加以下别名规则：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">alias /var/lib/mysql/ -&gt; ~/.mysqldata/mysql,</span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line"><span class="built_in">alias</span> /var/lib/mysql/ -&gt; ~/.mysqldata/mysql,</span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
 
 <p>为了使更改生效，请重新启动 AppArmor：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl restart apparmor</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl restart apparmor</span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>注意：如果跳过 AppArmor 配置步骤，则会遇到以下错误消息：</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">Job for mysql.service failed because the control process</span><br><span class="line">exited with error code. See &quot;systemctl status mysql.service&quot;</span><br><span class="line">and &quot;journalctl -xe&quot; for details.</span><br></pre></td></tr></table></figure>
+<p> 注意：如果跳过 AppArmor 配置步骤，则会遇到以下错误消息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Job <span class="keyword">for</span> mysql.service failed because the control process</span><br><span class="line">exited with error code. See <span class="string">&quot;systemctl status mysql.service&quot;</span></span><br><span class="line">and <span class="string">&quot;journalctl -xe&quot;</span> <span class="keyword">for</span> details.</span><br></pre></td></tr></table></figure>
 
-<blockquote>
 <p>从 <code>systemctl</code> 和<code>journalctl</code> 两者的输出结尾判断：</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Output</span><br><span class="line">Jul 18 11:03:24 ubuntu-512mb-nyc1-01 systemd[1]:</span><br><span class="line">mysql.service: Main process exited, code=exited, status=1/FAILURE</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Jul 18 11:03:24 ubuntu-512mb-nyc1-01 systemd[1]:</span><br><span class="line">mysql.service: Main process exited, code=exited, status=1/FAILURE</span><br></pre></td></tr></table></figure>
 
-<blockquote>
 <p>由于消息没有在 AppArmor 和数据目录之间建立显式连接，因此该错误可能需要一些时间才能弄清楚。</p>
-</blockquote>
 <h2 id="第-4-步-重新启动-MySQL"><a href="#第-4-步-重新启动-MySQL" class="headerlink" title="第 4 步-重新启动 MySQL"></a>第 4 步-重新启动 MySQL</h2><p>下一步是启动 MySQL ，但如果这样做，则会遇到另一个错误。这次不是发生 AppArmor 问题，而是因为该脚本 <code>mysql-systemd-start</code> 检查是否存在与两个默认路径匹配的目录 <code>-d</code> 或符号链接 <code>-L</code> 。如果找不到它们，它将失败：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line">if [ ! -d /var/lib/mysql ] &amp;&amp; [ ! -L /var/lib/mysql ]; then</span><br><span class="line"> echo &quot;MySQL data dir not found at /var/lib/mysql. Please create one.&quot;</span><br><span class="line"> exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ ! -d /var/lib/mysql/mysql ] &amp;&amp; [ ! -L /var/lib/mysql/mysql ]; then</span><br><span class="line"> echo &quot;MySQL system database not found. Please run mysql_install_db tool.&quot;</span><br><span class="line"> exit 1</span><br><span class="line">fi</span><br><span class="line">. . .</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">. . .</span><br><span class="line"><span class="keyword">if</span> [ ! -d /var/lib/mysql ] &amp;&amp; [ ! -L /var/lib/mysql ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;MySQL data dir not found at /var/lib/mysql. Please create one.&quot;</span></span><br><span class="line"> <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! -d /var/lib/mysql/mysql ] &amp;&amp; [ ! -L /var/lib/mysql/mysql ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;MySQL system database not found. Please run mysql_install_db tool.&quot;</span></span><br><span class="line"> <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">. . .</span><br></pre></td></tr></table></figure>
 
 <p>因为我们需要这些来启动服务器，所以我们将创建最小的目录结构以通过脚本的环境检查。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkdir /var/lib/mysql/mysql -p</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo <span class="built_in">mkdir</span> /var/lib/mysql/mysql -p</span><br></pre></td></tr></table></figure>
 
 <p>现在我们准备启动 MySQL。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl start mysql</span><br><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl start mysql</span><br><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
 
 <p>为了确保确实使用了新的数据目录，请启动 MySQL 监视器。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br></pre></td></tr></table></figure>
 
 <p>再次查看数据目录的值：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@datadir;</span><br><span class="line"></span><br><span class="line">+-------------------------------+</span><br><span class="line">| @@datadir                     |</span><br><span class="line">+-------------------------------+</span><br><span class="line">| /home/ckcat/.mysqldata/mysql/ |</span><br><span class="line">+-------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@datadir;</span><br><span class="line"></span><br><span class="line">+-------------------------------+</span><br><span class="line">| @@datadir                     |</span><br><span class="line">+-------------------------------+</span><br><span class="line">| /home/ckcat/.mysqldata/mysql/ |</span><br><span class="line">+-------------------------------+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
 
 <p>现在，您已经重新启动了 MySQL 并确认它正在使用新位置，请借此机会确保您的数据库可以正常运行。验证所有现有数据的完整性后，即可删除备份数据目录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo rm -Rf /var/lib/mysql.bak</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo <span class="built_in">rm</span> -Rf /var/lib/mysql.bak</span><br></pre></td></tr></table></figure>
 
 <p>最后一次重启 MySQL，以确保它能按预期运行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl restart mysql</span><br><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl restart mysql</span><br><span class="line">$ sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
 
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>在本教程中，我们将 MySQL 的数据目录移动到了新位置，并更新了 Ubuntu 的 AppArmor ACL 以适应该调整。尽管我们使用的是块存储设备，但无论底层技术如何，此处的说明都应适用于重新定义数据目录的位置。</p>
 <p>有关管理 MySQL 数据目录的更多信息，请参见 MySQL 官方文档中的以下部分：</p>
@@ -467,7 +457,7 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2019/12/20/c-%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="next" title="c++使用记录">
+                <a href="/2019/12/20/CPP%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="next" title="c++使用记录">
                   c++使用记录 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
