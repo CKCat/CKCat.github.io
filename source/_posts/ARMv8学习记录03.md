@@ -6,11 +6,15 @@ category: ARMv8汇编
 ---
 
 # ARMv7 汇编
+
 首先将 clang 添加到临时环境变量中，方便后面使用。
+
 ```bash
- ➜ export PATH=$PATH:$ANDROID_HOME/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/bin 
+ ➜ export PATH=$PATH:$ANDROID_HOME/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/bin
 ```
+
 ## 调用 printf 函数
+
 ```armasm
     .text
     .globl	main                    @ -- Begin function main
@@ -25,7 +29,9 @@ main:
     pop {lr}
     bx lr
 ```
+
 以上代码主要作用就是输出第一个参数，编译运行结果如下：
+
 ```bash
 clang -target arm-linux-android21 hello.s -o arm_hello
 adb push arm_hello /data/local/tmp/arm_hello
@@ -33,7 +39,9 @@ adb shell chmod +x /data/local/tmp/arm_hello
 adb shell /data/local/tmp/arm_hello
 /data/local/tmp/arm_hello%
 ```
+
 ## 实现 ls 功能
+
 ```armasm
     .text
     .globl	main                    @ -- Begin function main
@@ -81,7 +89,9 @@ main:
 .formart_str:
     .asciz "%s\r\n"     @ 表示定义一个以0结尾的字符串， ascii 表示定义一个不以0结尾的字符串
 ```
+
 以上代码实现了简单的 `ls` 功能，我们给定参数为 `/sdcard` ，编译运行结果如下：
+
 ```bash
 clang -target arm-linux-android21 arm_ls.s -o arm_ls
 adb push arm_ls /data/local/tmp/arm_ls
@@ -103,7 +113,9 @@ Music
 ```
 
 ## 系统调用
+
 ARMv7 系统调用使用 `R7` 保存系统调用号，`R0` 保存返回结果，`R0-R6` 保存参数。详细信息可以使用 `man syscall` 查看文档。
+
 ```armasm
     .text
     .global main
@@ -116,7 +128,7 @@ main:
     svc #0                  @ software interrupt
 
 _exit:
-    mov r0, 0               @ exit status 
+    mov r0, 0               @ exit status
     mov r7, #1              @ syscall for 'exit'
     svc #0                  @ software interrupt
 
@@ -124,7 +136,9 @@ msg:
     .ascii "hello syscall v7\n"
 len = . - msg
 ```
+
 以上代码主要作用就是输出 `hello syscall v7`，编译运行结果如下：
+
 ```bash
 clang -target arm-linux-android21 syscall.s -o syscall
 adb push syscall /data/local/tmp/syscall
@@ -135,6 +149,7 @@ hello syscall v7
 ```
 
 ## C 内联汇编
+
 ```c
 #include <stdio.h>
 
@@ -159,7 +174,9 @@ int main(void)
   printf("Result of %d + %d = %d\n", a, b, c);
 }
 ```
+
 以上代码主要作用就是内联汇编实现两数相加，编译运行结果如下：
+
 ```bash
 clang -target arm-linux-android21 helloc.c -o arm_helloc
 adb push arm_helloc /data/local/tmp/arm_helloc
@@ -169,6 +186,7 @@ Result of 1 + 2 = 3
 ```
 
 ## C 内联汇编 syscall
+
 ```c
 #include <inttypes.h>
 
@@ -206,7 +224,9 @@ void main(void) {
     }
 }
 ```
+
 以上代码主要作用就是内联汇编实现系统调用，编译运行结果如下：
+
 ```bash
 clang -target arm-linux-android21 hellosyscall.c -o hellosyscall
 adb push hellosyscall /data/local/tmp/hellosyscall
@@ -215,10 +235,10 @@ adb shell /data/local/tmp/hellosyscall
 hello c inline syscall v7
 ```
 
-
 ## C/C++ 调用汇编
 
 汇编代码
+
 ```armasm
 .text
 .global add
@@ -227,7 +247,9 @@ add:
     add r0, r1
     bx lr
 ```
+
 C 代码
+
 ```c
 #include <stdio.h>
 
@@ -241,6 +263,7 @@ int main(void)
 ```
 
 C++ 代码
+
 ```cpp
 #include <stdio.h>
 
@@ -252,7 +275,9 @@ int main(void)
     return 0;
 }
 ```
+
 以上代码主要作用就是内联汇编实现系统调用，编译运行结果如下：
+
 ```bash
 clang -target arm-linux-android21  -c add.s -o add.o
 clang -target arm-linux-android21  calladd.cpp add.o -o calladd
@@ -267,7 +292,9 @@ adb shell /data/local/tmp/calladd
 由于 ARMv8 汇编与 ARMv7 相比，使用的差别不到，这里就简单的举两个例子进行说明。
 
 ## 系统调用
+
 ARMv8 系统调用使用 `X8` 保存系统调用号，`X0` 保存返回结果，`X0-X5` 保存参数。详细信息可以使用 `man syscall` 查看文档。
+
 ```armasm
 .text
 .global main
@@ -287,7 +314,9 @@ msg:
     .asciz "hello syscall v8\n"
 len = . - msg
 ```
+
 以上代码主要作用就是输出 `hello syscall v8`，编译运行结果如下：
+
 ```bash
 clang -target arm-linux-android21 syscall.s -o syscall
 adb push syscall /data/local/tmp/syscall
@@ -296,7 +325,9 @@ adb shell chmod +x /data/local/tmp/syscall
 adb shell /data/local/tmp/syscall
 hello syscall v7
 ```
+
 ## C 内联汇编 syscall
+
 ```c
 #include <inttypes.h>
 
@@ -334,7 +365,9 @@ void main(void) {
     }
 }
 ```
+
 以上代码主要作用就是内联汇编实现系统调用，编译运行结果如下：
+
 ```bash
 clang -target aarch64-linux-android21 inline64.c -o inline64
 adb push inline64 /data/local/tmp/inline64
@@ -343,8 +376,8 @@ adb shell /data/local/tmp/inline64
 hello syscall v8
 ```
 
-
 # 如何查看文档
+
 我这里使用的文档是[DDI0487A_a_armv8_arm.pdf](http://kib.kiev.ua/x86docs/ARMARM/DDI0487A_a_armv8_arm.pdf)
 
 ## 查看 AArch32 平台 beq 指令
@@ -358,22 +391,29 @@ hello syscall v8
 ![](ARMv8学习记录03/2021-03-09-12-36-32.png)
 
 通过文档我们可以知道，BEQ 指令为下列格式：
+
 ```
 0000 1010 xxxx xxxx xxxx xxxx xxxx xxxx
 ```
-其中 `xxxx xxxx xxxx xxxx xxxx xxxx` 表示  imm24 ，根据 imm32 算法，最终 imm24 应该是如下方式显示，其中 `s` 表示符号。
+
+其中 `xxxx xxxx xxxx xxxx xxxx xxxx` 表示 imm24 ，根据 imm32 算法，最终 imm24 应该是如下方式显示，其中 `s` 表示符号。
+
 ```
 ssss ss xxxx xxxx xxxx xxxx xxxx xxxx00
 ```
+
 举例说明
+
 ```
 0000 1010 0000 0000 0000 0000 0000 0001   // 16进制为0100000A
 ```
 
- imm32 的值为：
+imm32 的值为：
+
 ```
 0000 000000 0000 0000 0000 0000 000100
 ```
+
 由于 RAM 指令的 3 级流水线，实际跳转指令为 `beq 0x4 + 2*指令长度` = `beq 0xC` 。
 
 最终去 [armconverter](https://armconverter.com/) 网站进行验证：
@@ -385,19 +425,21 @@ ssss ss xxxx xxxx xxxx xxxx xxxx xxxx00
 ![](ARMv8学习记录03/2021-03-10-13-22-33.png)
 
 根据文档，该指令二进制如下所示。
+
 ```bash
 11 111 0 00 01 0 000000010 01 00011 00010
 ```
+
 对应的 16 进制为 0xF8402462 。
 
 ![](ARMv8学习记录03/2021-03-10-13-40-49.png)
 
+# 参考
 
-参考：
-```bash
-https://developer.arm.com/documentation/100069/0610/A64-General-Instructions
-https://github.com/ARM-software/abi-aa/blob/master/aapcs64/aapcs64.rst
-https://man7.org/linux/man-pages/man2/syscall.2.html
-https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md
-https://github.com/cirosantilli/arm-assembly-cheat
-```
+[A64-General-Instructions](https://developer.arm.com/documentation/100069/0610/A64-General-Instructions)
+
+[aapcs64.rst](https://github.com/ARM-software/abi-aa/blob/master/aapcs64/aapcs64.rst)
+
+[linux syscall](https://man7.org/linux/man-pages/man2/syscall.2.html)
+
+[chromiumos syscalls](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)

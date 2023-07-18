@@ -7,7 +7,89 @@ category: ARMv8汇编
 
 # 从一个 HelloWorld 开始
 
+## 使用 clang 编译（推荐）
+
+首先使用 `which` 命令查看 `clang` 的位置，由于我没有将 `clang` 添加到环境变量，最终结果是找不到的，那么需要将 `clang` 添加到临时环境变量中。
+
+```bash
+export PATH="$ANDROID_HOME/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/bin/:$PATH"
+```
+
+然后参考 NDK 官方指南 [将 NDK 与其他构建系统配合使用](https://developer.android.com/ndk/guides/other_build_systems) 部分，可以知道使用 `clang` 编译时需要使用 `-target` 参数传递适当的目标，例如以下命令为编译 `minSdkVersion` 为 `21` 的 `64` 位 Android ARM 平台的应用。
+
+```bash
+➜  clang -target aarch64-linux-android21 hello.c -o hello
+➜  file hello
+hello: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /system/bin/linker64, not stripped
+```
+
+以上命令为一步编译成功，实际过程可以分为三步，我们以 ARM 平台为例进行讲解。
+
+1. 预处理
+
+```bash
+➜  clang -target arm-linux-android21 -E hello.c -o arm_hello.i
+```
+
+2. 编译成汇编文件
+
+```bash
+➜  clang -target arm-linux-android21 -S arm_hello.i -o arm_hello.s
+```
+
+3. 汇编成 obj 文件
+
+```bash
+➜  clang -target arm-linux-android21 -c arm_hello.s -o arm_hello.o
+```
+
+4. 链接成可执行程序
+
+```bash
+➜  clang -target arm-linux-android21 arm_hello.o -o arm_hello
+```
+
+编写 `makefile` 执行 `arm_hello` 。
+
+```makefile
+# 编译64位，需要指定 host=aarch64，例如: make host=aarch64
+host=arm
+ifeq ($(OS), Windows_NT)
+	PLATFORM=windows
+else
+	PLATFORM=linux
+endif
+
+# export ANDROID_NDK="$ANDROID_HOME/ndk/21.0.6113669"
+CC=$(ANDROID_NDK)/toolchains/llvm/prebuilt/$(PLATFORM)-x86_64/bin/clang
+all:
+	$(CC) -target $(host)-linux-android21 -E hello.c -o $(host)_hello.i
+	$(CC) -target $(host)-linux-android21 -S $(host)_hello.i -o $(host)_hello.s
+	$(CC) -target $(host)-linux-android21 -c $(host)_hello.s -o $(host)_hello.o
+	$(CC) -target $(host)-linux-android21 $(host)_hello.o -o $(host)_hello
+
+install:
+	adb push $(host)_hello /data/local/tmp/$(host)_hello
+	adb shell chmod +x /data/local/tmp/$(host)_hello
+
+run:
+	adb shell /data/local/tmp/$(host)_hello
+
+.PHONY : clean
+clean:
+	-rm -f *.o *.i *.s $(host)_hello
+```
+
+[代码](https://github.com/CKCat/CKCat.github.io/tree/main/source/_posts/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9501/src/)
+
 ## 使用 gcc 编译
+
+由于最新 ndk 环境中已经删除了 gcc 编译工具，因此下列方法在较新版本的 NDK 中不可用。
+
+首先配置环境变量:
+
+1. windows 下需要将 ndk 的根目录 `%ANDROID_NDK%` 和 `make.exe` 对应的目录 `%ANDROID_NDK%\prebuilt\windows-x86_64\bin` 添加到环境变量中。
+2. linux 下需要将 ndk 的根目录 `export PATH="$PATH:$ANDROID_NDK` 添加到 shell 对应的配置文件中。
 
 由于我们主要学习 ARMv8 的指令，所以直接使用 C 源文件生成一个 ARMv8 的汇编源文件。
 
@@ -27,12 +109,16 @@ Makefile 内容如下：
 ```makefile
 #文件名称
 MODALE_NAME=hello
-
+ifeq ($(OS), Windows_NT)
+	PLATFORM=windows
+else
+	PLATFORM=linux
+endif
 #ndk根目录
 NDK_ROOT = $(HOME)/DevTool/AndroidSdk/ndk-bundle
 #编译器根目录
-TOOLCHAINS_ROOT_ARM=$(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
-TOOLCHAINS_ROOT_AARCH64=$(NDK_ROOT)/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64
+TOOLCHAINS_ROOT_ARM=$(NDK_ROOT)/toolchains/arm-linux-androideabi-4.9/prebuilt/$(PLATFORM)-x86_64
+TOOLCHAINS_ROOT_AARCH64=$(NDK_ROOT)/toolchains/aarch64-linux-android-4.9/prebuilt/$(PLATFORM)-x86_64
 #编译器目录
 TOOLCHAINS_PREFIX=$(TOOLCHAINS_ROOT_ARM)/bin/arm-linux-androideabi
 TOOLCHAINS_PREFIX_AARCH64=$(TOOLCHAINS_ROOT_AARCH64)/bin/aarch64-linux-android
@@ -168,123 +254,87 @@ main:
 
 至此，已经从一个 HelloWorld 开始了 ARMv8 的旅程。
 
-## 使用 clang 编译
-
-首先使用 `which` 命令查看 `clang` 的位置，由于我没有将 `clang` 添加到环境变量，最终结果是找不到的，那么需要将 `clang` 添加到临时环境变量中。
-
-```bash
-export PATH="$ANDROID_HOME/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/bin/:$PATH"
-```
-
-然后参考 NDK 官方指南 [将 NDK 与其他构建系统配合使用](https://developer.android.com/ndk/guides/other_build_systems) 部分，可以知道调用 `clang` 时需要使用 `-target` 参数传递适当的目标，例如以下命令为编译 `minSdkVersion` 为 `21` 的 `64` 位 Android ARM 平台的应用。
-
-```bash
-➜  clang -target aarch64-linux-android21 hello.c -o hello
-➜  file hello
-hello: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /system/bin/linker64, not stripped
-```
-
-以上命令为一步编译成功，实际过程可以分为三步，我们以 ARM 平台为例进行讲解。
-
-1. 预处理
-
-```bash
-➜  clang -target arm-linux-android21 -E hello.c -o arm_hello.i
-```
-
-2. 编译成汇编文件
-
-```bash
-➜  clang -target arm-linux-android21 -S arm_hello.i -o arm_hello.s
-```
-
-3. 汇编成 obj 文件
-
-```bash
-➜  clang -target arm-linux-android21 -c arm_hello.s -o arm_hello.o
-```
-
-4. 链接成可执行程序
-
-```bash
-➜  clang -target arm-linux-android21 arm_hello.o -o arm_hello
-```
-
-编写 `makefile` 执行 `arm_hello` 。
-
-```makefile
-# 编译64位，需要指定 host=aarch64，例如: make host=aarch64
-host=arm
-ifeq ($(OS), Windows_NT)
-	PLATFORM=windows
-else
-	PLATFORM=linux
-endif
-
-CC=$(ANDROID_NDK)/toolchains/llvm/prebuilt/$(PLATFORM)-x86_64/bin/clang
-all:
-	$(CC) -target $(host)-linux-android21 -E hello.c -o $(host)_hello.i
-	$(CC) -target $(host)-linux-android21 -S $(host)_hello.i -o $(host)_hello.s
-	$(CC) -target $(host)-linux-android21 -c $(host)_hello.s -o $(host)_hello.o
-	$(CC) -target $(host)-linux-android21 $(host)_hello.o -o $(host)_hello
-
-install:
-	adb push $(host)_hello /data/local/tmp/$(host)_hello
-	adb shell chmod +x /data/local/tmp/$(host)_hello
-
-run:
-	adb shell /data/local/tmp/$(host)_hello
-
-.PHONY : clean
-clean:
-	-rm -f *.o *.i *.s $(host)_hello
-```
-
 ## ndk-build 编译
 
-### 方法一：
-
-1. 创建一个空文件`AndroidManifest.xml`。
-2. 创建一个`Application.mk`，内容如下所示：
+1. 在源码目录中创建一个`Application.mk`，内容如下所示：
 
 ```makefile
 APP_BUILD_SCRIPT := Android.mk
 APP_PLATFORM := android-21
 ```
 
-3. 创建一个`Android.mk`文件，内容如下所示：
+2. 在源码目录中创建一个`Android.mk`文件，内容如下所示：
 
 ```makefile
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
-LOCAL_SRC_FILES := foo.c
+LOCAL_SRC_FILES := hello.c
 LOCAL_MODULE := foo
 include $(BUILD_EXECUTABLE)
 ```
 
-4. 使用以下命令编译
+### 方法一（推荐）：
+
+将源码和`mk`文件放入 `jni` 目录，进入 `jni` 目录中，直接使用 `ndk-build` 命令编译即可。
 
 ```bash
-➜  ndk-build NDK_APPLICATION_MK=$(pwd)/Application.mk
+➜  jni ndk-build
+[arm64-v8a] Compile        : foo <= hello.c
+[arm64-v8a] Executable     : foo
+[arm64-v8a] Install        : foo => libs/arm64-v8a/foo
+[armeabi-v7a] Compile thumb  : foo <= hello.c
+[armeabi-v7a] Executable     : foo
+[armeabi-v7a] Install        : foo => libs/armeabi-v7a/foo
+[x86] Compile        : foo <= hello.c
+[x86] Executable     : foo
+[x86] Install        : foo => libs/x86/foo
+[x86_64] Compile        : foo <= hello.c
+[x86_64] Executable     : foo
+[x86_64] Install        : foo => libs/x86_64/foo
 ```
 
 ### 方法二：
 
-直接使用以下命令进行编译：
+进入源码目录使用以下命令编译：
 
 ```bash
-➜  ndk-build NDK_PROJECT_PATH=$(pwd)
-# 或
-➜  ndk-build NDK_PROJECT_PATH=$(pwd) APP_BUILD_SCRIPT=$(pwd)/Android.mk
+➜  ndk-build NDK_PROJECT_PATH=$(pwd) NDK_APPLICATION_MK=$(pwd)/Application.mk
+[arm64-v8a] Compile        : foo <= hello.c
+[arm64-v8a] Executable     : foo
+[arm64-v8a] Install        : foo => libs/arm64-v8a/foo
+[armeabi-v7a] Compile thumb  : foo <= hello.c
+[armeabi-v7a] Executable     : foo
+[armeabi-v7a] Install        : foo => libs/armeabi-v7a/foo
+[x86] Compile        : foo <= hello.c
+[x86] Executable     : foo
+[x86] Install        : foo => libs/x86/foo
+[x86_64] Compile        : foo <= hello.c
+[x86_64] Executable     : foo
+[x86_64] Install        : foo => libs/x86_64/foo
 ```
 
-### 方法三：
+或者进入源码目录使用以下命令进行编译：
 
-将所有的文件放入 `jni` 目录，进入 `jni` 目录直接使用 `ndk-build` 命令编译即可。
+```bash
+➜  ndk-build NDK_PROJECT_PATH=$(pwd) APP_BUILD_SCRIPT=$(pwd)/Android.mk
+Android NDK: APP_PLATFORM not set. Defaulting to minimum supported version android-19.
+[arm64-v8a] Compile        : foo <= hello.c
+[arm64-v8a] Executable     : foo
+[arm64-v8a] Install        : foo => libs/arm64-v8a/foo
+[armeabi-v7a] Compile thumb  : foo <= hello.c
+[armeabi-v7a] Executable     : foo
+[armeabi-v7a] Install        : foo => libs/armeabi-v7a/foo
+[x86] Compile        : foo <= hello.c
+[x86] Executable     : foo
+[x86] Install        : foo => libs/x86/foo
+[x86_64] Compile        : foo <= hello.c
+[x86_64] Executable     : foo
+[x86_64] Install        : foo => libs/x86_64/foo
+```
 
 # 调试环境搭建
 
-## IDA 调试
+## IDA 调试（推荐）
 
 ### 配置环境
 
@@ -396,10 +446,10 @@ cd keystone-engine
 
 ![](ARMv8学习记录01/2020-02-29-21-42-00.png)
 
-# 参考：
+# 参考
 
-```
 https://medium.com/bugbountywriteup/pwndbg-gef-peda-one-for-all-and-all-for-one-714d71bf36b8
+
 https://packmad.github.io/gdb-android/
+
 https://o0xmuhe.github.io/2016/06/29/install-gef/
-```

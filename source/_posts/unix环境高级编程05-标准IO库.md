@@ -68,15 +68,23 @@ int setvbuf(FILE *restrict fp, char *restrict buf, int mode, size_t size);
 - 若成功，返回 0；
 - 若出错，返回非 0
 
-可以使用 setbuf 函数打开或关闭缓冲机制。将 buf 设置为 NULL 则关闭缓冲机制。
+可以使用 `setbuf` 函数打开或关闭缓冲机制。将 `buf` 设置为 `NULL` 则关闭缓冲机制。
 
-使用 setvbuf，我们可以精确地说明所需的缓冲类型。这是用 mode 参数实现的：
+使用 `setvbuf`，我们可以精确地说明所需的缓冲类型。这是用 `mode` 参数实现的：
 
 - `_IOFBF` 全缓冲
 - `_IOLBF` 行缓冲
 - `_IONBF` 不带缓冲
 
-![](unix环境高级编程05-标准IO库/setbuf和setvbuf函数.png)
+| 函数      | mode     | buf    | 缓冲区及长度                       | 缓冲类型       |
+| --------- | -------- | ------ | ---------------------------------- | -------------- |
+| `setbuf`  |          | 非空   | 长度为 `BUFSIZ` 的用户缓冲区 `buf` | 全缓冲或行缓冲 |
+| `setbuf`  |          | `NULL` | (无缓冲区)                         | 不带缓冲       |
+| `setvbuf` | `_IOFBF` | 非空   | 长度为 `size` 的用户缓冲区 `buf`   | 全缓冲         |
+| `setvbuf` | `_IOFBF` | `NULL` | 合适长度的系统缓冲区 `buf`         | 全缓冲         |
+| `setvbuf` | `_IOLBF` | 非空   | 长度为 `size` 的用户缓冲区 `buf`   | 行缓冲         |
+| `setvbuf` | `_IOLBF` | `NULL` | 合适长度的系统缓冲区 `buf`         | 行缓冲         |
+| `setvbuf` | `_IONBF` | (忽略) | (无缓冲区)                         | 不带缓冲       |
 
 任何时候，我们都可强制冲洗一个流。
 
@@ -114,11 +122,24 @@ FILE *fdopen(int fd, const char *type);
 
 type 参数指定对该 `I/O` 流的读、写方式：
 
-![](unix环境高级编程05-标准IO库/打开标准IO流的type参数.png)
+| type            | 说明                                   | open(2)标志 |
+| --------------- | -------------------------------------- | ----------- | ------- | --------- |
+| r 或 rb         | 为读而打开                             | `O_RDONLY`  |
+| w 或 wb         | 把文件截断至 0 长，或为写而创建        | `O_WRONLY   | O_CREAT | O_TRUNC`  |
+| a 或 ab         | 追加；为在文件尾写而打开，或为写而创建 | `O_WRONLY   | O_CREAT | O_APPEND` |
+| r+或 r+b 或 rb+ | 为读和写而打开                         | `O_RDWR`    |
+| w+或 w+b 或 wb+ | 把文件截断至 0 长，或为读和写而打开    | `O_RDWR     | O_CREAT | O_TRUNC`  |
+| a+或 a+b 或 ab+ | 为在文件尾读和写而打开或创建           | `O_RDWR     | O_CREAT | O_APPEND` |
 
 如果有多个进程用标准 `I/O` 追加写方式打开同一文件，那么来自每个进程的数据都将正确地写到文件中。
 
-![](unix环境高级编程05-标准IO库/打开一个流的6种不同的方式.png)
+| 限制               | r   | w   | a   | r+  | w+  | a+  |
+| ------------------ | --- | --- | --- | --- | --- | --- |
+| 文件必须已存在     | x   |     |     | x   |     |     |
+| 放弃文件以前的内容 |     | x   |     |     | x   |     |
+| 流可以读           | x   |     |     | x   | x   | x   |
+| 流可以写           |     | x   | x   | x   | x   | x   |
+| 流只可在尾端处写   |     |     | x   |     |     | x   |
 
 POSIX.1 要求实现使用如下的权限位集来创建文件：
 `S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH`
@@ -333,16 +354,51 @@ int snprintf(char *restrict buf, size_t n, const char *restrict format, ...);
 一个转换说明有 4 个可选择的部分，下面将它们都示于方括号中：
 `%[flags][fldwidth][precision][lenmodifier]convtype`
 
-- flags
-  ![](unix环境高级编程05-标准IO库/转换说明中的标志部分.png)
+- `flags`
 
-- fldwidth 说明最小字段宽度。
-- precision 说明整型转换后最少输出数字位数、浮点数转换后小数点后的最少位数、字符串转换后最大字节数。
-- lenmodifier 说明参数长度。
-  ![](unix环境高级编程05-标准IO库/转换说明中的长度修饰符.png)
+| 标志   | 说明                                                     |
+| ------ | -------------------------------------------------------- |
+| `'`    | (撇号)将整数按千位分组字符                               |
+| `-`    | 在字段内左对齐输出                                       |
+| `+`    | 总是显示带符号转换的正负号                               |
+| (空格) | 如果第一个字符不是正负号，则在其前面加上一个空格         |
+| `#`    | 指定另一种转换形式（例如，对于十六进制格式，加 0x 前缀） |
+| `0`    | 添加前导 0（而非空格）进行填充                           |
 
-- convtype 不是可选的。它控制如何解释参数。
-  ![](unix环境高级编程05-标准IO库/转换说明中的转换类型.png)
+- `fldwidth` 说明最小字段宽度。
+- `precision` 说明整型转换后最少输出数字位数、浮点数转换后小数点后的最少位数、字符串转换后最大字节数。
+- `lenmodifier` 说明参数长度。
+
+| 长度修饰符 | 说明                                                        |
+| ---------- | ----------------------------------------------------------- |
+| `hh`       | 将相应的参数按 `signed` 或 `unsigned char` 类型输出         |
+| `h`        | 将相应的参数按 `signed` 或 `unsigned short` 类型输出        |
+| `l`        | 将相应的参数按 `signed` 或 `unsigned long` 或宽字符类型输出 |
+| `ll`       | 将相应的参数按 `signed` 或 `unsigned long long` 类型输出    |
+| `j`        | `intmax_t` 或 `uintmax_t`                                   |
+| `z`        | `size_t`                                                    |
+| `t`        | `ptrdiff_t`                                                 |
+| `L`        | `long double`                                               |
+
+- `convtype` 不是可选的。它控制如何解释参数。
+
+| 转换类型 | 说明                                                                           |
+| -------- | ------------------------------------------------------------------------------ |
+| `d`、`i` | 有符号十进制                                                                   |
+| `o`      | 无符号八进制                                                                   |
+| `u`      | 无符号十进制                                                                   |
+| `x`、`X` | 无符号十六进制                                                                 |
+| `f`、`F` | 双精度浮点数                                                                   |
+| `e`、`E` | 指数格式双精度浮点数                                                           |
+| `g`、`G` | 根据转换后的值解释为 `f`、`F`、`e` 或 `E`                                      |
+| `a`、`A` | 十六进制指数格式双精度浮点数                                                   |
+| `c`      | 字符（若带长度修饰符 1，为宽字符）                                             |
+| `s`      | 字符串（若带长度修饰符 1，为宽字符）                                           |
+| `P`      | 指向 void 的指针                                                               |
+| `n`      | 到目前为止，此 `printf` 调用输出的字符的数目将被写入到指针所指向的带符号整型中 |
+| `%`      | 一个 `%` 字符                                                                  |
+| `C`      | 宽字符(XSI 扩展，等效于 `1c`)                                                  |
+| `S`      | 宽字符串(XSI 扩展，等效于 `1s`)                                                |
 
 下列 5 种 printf 族的变体类似于上面的 5 种，但是可变参数表 `...` 替换成了 arg。
 
@@ -598,10 +654,11 @@ int mkstemp(char *template);
 - mkdtemp 若成功，返回指向目录名的指针；若出错，返回 NULL
 - mkstemp 返回值：若成功，返回文件描述符；若出错，返回 −1
 
-mkdtemp函数创建的目录使用下列访问权限位集：`S_IRUSR|S_IWUSR | S_IXUSR`。
-mkstemp创建的文件使用访问权限位 `S_IRUSR | S_IWUSR`。mkstemp创建的临时文件并不会自动删除。
+mkdtemp 函数创建的目录使用下列访问权限位集：`S_IRUSR|S_IWUSR | S_IXUSR`。
+mkstemp 创建的文件使用访问权限位 `S_IRUSR | S_IWUSR`。mkstemp 创建的临时文件并不会自动删除。
 
 例子：
+
 ```c
 #include "../apue.h"
 #include <errno.h>
@@ -609,7 +666,7 @@ mkstemp创建的文件使用访问权限位 `S_IRUSR | S_IWUSR`。mkstemp创建�
 void make_temp(char *template);
 
 int main(int argc, char const *argv[]){
-    char good_template[] = "/tmp/dirXXXXXX"; 
+    char good_template[] = "/tmp/dirXXXXXX";
     char *bad_template = "/tmp/dirXXXXXX"; // 只读
 
     printf("trying to create first temp file...\n");
@@ -637,10 +694,12 @@ void make_temp(char* template){
     }
 }
 ```
+
 编译运行：
+
 ```bash
-$ gcc 5.13mkstemp.c ../error.c 
-$ ./a.out 
+$ gcc 5.13mkstemp.c ../error.c
+$ ./a.out
 trying to create first temp file...
 temp name = /tmp/dirH31nLr
 file exists
@@ -650,7 +709,8 @@ try to create second temp file...
 
 ## 内存流
 
-有3个函数可用于内存流的创建
+有 3 个函数可用于内存流的创建
+
 ```c
 #include <stdio.h>
 FILE *fmemopen(void *restrict buf, size_t size, const char *restrict type);
@@ -658,19 +718,22 @@ FILE *open_memstream(char **bufp, size_t *sizep);
 #include <wchar.h>
 FILE *open_wmemstream(wchar_t **bufp, size_t *sizep);
 ```
-**返回值：**
-- 若成功，返回流指针；
-- 若出错，返回NULL
 
-buf 参数指向缓冲区的开始位置，size参数指定了缓冲区大小的字节数。
-type参数控制如何使用流。
+**返回值：**
+
+- 若成功，返回流指针；
+- 若出错，返回 NULL
+
+buf 参数指向缓冲区的开始位置，size 参数指定了缓冲区大小的字节数。
+type 参数控制如何使用流。
 ![](unix环境高级编程05-标准IO库/打开内存流的type参数.png)
 
-- 无论何时以追加写方式打开内存流时，当前文件位置设为缓冲区中的第一个null字节。
-- 如果buf参数是一个null指针，打开流进行读或者写都没有任何意义。
-- 任何时候需要增加流缓冲区中数据量以及调用fclose、fflush、fseek、fseeko以及fsetpos时都会在当前位置写入一个null字节。
+- 无论何时以追加写方式打开内存流时，当前文件位置设为缓冲区中的第一个 null 字节。
+- 如果 buf 参数是一个 null 指针，打开流进行读或者写都没有任何意义。
+- 任何时候需要增加流缓冲区中数据量以及调用 fclose、fflush、fseek、fseeko 以及 fsetpos 时都会在当前位置写入一个 null 字节。
 
 例子：
+
 ```c
 #include "../apue.h"
 
@@ -713,12 +776,14 @@ int main(int argc, char const *argv[]){
     return 0;
 }
 ```
+
 编译运行：
+
 ```bash
-$ gcc 5.14fmemopen.c ../error.c 
-$ ./a.out 
+$ gcc 5.14fmemopen.c ../error.c
+$ ./a.out
 initial buffer contents:      #在缓冲区开始处放置 null，所以输出为空
-before flush: 
+before flush:
 after fflush: hello, world    # 流冲洗后缓冲区才会变化
 len of string in buf = 12
 after fseek: bbbbbbbbbbbbhello, world    # fseek引起缓冲区冲洗
@@ -727,50 +792,30 @@ after fclose: hello, worldcccccccccccccccccccccccccccccccccc    # 没有追加�
 len of string in buf = 46
 ```
 
-用于创建内存流的其他两个函数分别是open_memstream和open_wmemstream。
+用于创建内存流的其他两个函数分别是 open_memstream 和 open_wmemstream。
+
 ```c
 #include <stdio.h>
 FILE *open_memstream(char **bufp, size_t *sizep);
 #include <wchar.h>
 FILE *open_wmemstream(wchar_t **bufp, size_t *sizep);
 ```
+
 返回值：
+
 - 若成功，返回流指针；
-- 若出错，返回NULL
+- 若出错，返回 NULL
 
-open_memstream函数创建的流是面向字节的，open_wmemstream函数创建的流是面向宽字节的。
+open_memstream 函数创建的流是面向字节的，open_wmemstream 函数创建的流是面向宽字节的。
 
-与fmemopen函数的不同在于：
+与 fmemopen 函数的不同在于：
+
 - 创建的流只能写打开；
-- 不能指定自己的缓冲区，但可以分别通过bufp和sizep参数访问缓冲区地址和大小；
+- 不能指定自己的缓冲区，但可以分别通过 bufp 和 sizep 参数访问缓冲区地址和大小；
 - 关闭流后需要自行释放缓冲区；
 - 对流添加字节会增加缓冲区大小。
 
 缓冲区地址和大小的使用上必须遵循一些原则
-- 缓冲区地址和长度只有在调用fclose或fflush后才有效；
-- 这些值只有在下一次流写入或调用fclose前才有效
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- 缓冲区地址和长度只有在调用 fclose 或 fflush 后才有效；
+- 这些值只有在下一次流写入或调用 fclose 前才有效

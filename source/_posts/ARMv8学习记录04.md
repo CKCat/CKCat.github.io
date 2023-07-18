@@ -5,9 +5,18 @@ tags: 汇编
 category: ARMv8汇编
 ---
 
-> 本文主要讲 ARMv7 逆向，下一篇将 ARMv8 逆向。
 
 # 基本数据类型
+
+##  main 函数
+一般情况下，IDA 会自动将 main 函数标记出来，但是还是有部分应用 IDA 无法自动标记，需要我们手动确认 main 函数。首先找到 start 函数，然后查找 `__libc_init` 的第 3 个参数 R2，该参数即为 main 函数的地址。
+
+![](ARMv8学习记录04/2021-04-18-16-23-38.png)
+
+可以通过 Android 源码进行验证，在 http://androidxref.com/ 网站上搜索 `__libc_init` 调用位置，可以发现其第三个参数为 main 函数的地址。
+
+![](ARMv8学习记录04/2021-04-19-13-14-06.png)
+
 
 ## IEEE 浮点数
 
@@ -23,15 +32,15 @@ category: ARMv8汇编
 
 十进制浮点数转换二进制数：
 - 整数部分采用除2取余法。
-- 小数部分转换乘2取整法。
+- 小数部分采用乘2取整法。
 
 由此可知，对于十进制浮点数，小数部分最后一位是5时，才可以用浮点数精确表示。
 
 **例1： 7.625 浮点数二进制数表示为：**
 
-整数部分：111
+整数部分转换结果：111
 
-小数部分：
+小数部分转换结果：
 ```
 0.625 * 2 = 1.25，	整数位为 1 ==> 0.1
 0.25 * 2 = 0.5，	整数位为 0 ==> 0.10
@@ -66,14 +75,6 @@ category: ARMv8汇编
 正数  指数为 127+ 0        尾数（小数部分）
 ```
 
-##  main 函数
-一般情况下，IDA 会自动将 main 函数标记出来，但是还是有部分应用 IDA 无法自动标记，需要我们手动确认 main 函数。首先找到 start 函数，然后查找 `__libc_init` 的第 3 个参数 R2，该参数即为 main 函数的地址。
-
-![](ARMv8学习记录04/2021-04-18-16-23-38.png)
-
-可以通过 Android 源码进行验证，在 http://androidxref.com/ 网站上搜索 `__libc_init` 调用位置，可以发现其第三个参数为 main 函数的地址。
-
-![](ARMv8学习记录04/2021-04-19-13-14-06.png)
 
 
 
@@ -104,7 +105,7 @@ int main(int argc, char const *argv[])
 }
 ```
 使用下列命令生成 ARMv7 汇编文件。
-```
+```bash
 ➜  export PATH=$PATH:$ANDROID_HOME/ndk/21.0.6113669/toolchains/llvm/prebuilt/linux-x86_64/bin
 ➜  clang -target arm-linux-android21 -S basic.c -o basic.s 
 ➜  clang -target arm-linux-android21 basic.s  -o basic
