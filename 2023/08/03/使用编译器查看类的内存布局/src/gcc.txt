@@ -1,0 +1,31 @@
+Vtable for Base
+Base::_ZTV4Base: 3 entries
+0     (int (*)(...))0
+8     (int (*)(...))(& _ZTI4Base)
+16    (int (*)(...))Base::bar
+
+Class Base
+   size=16 align=8
+   base size=12 base align=8
+Base (0x0x7fcb184c8420) 0
+    vptr=((& Base::_ZTV4Base) + 16)
+
+Class Point
+   size=16 align=8
+   base size=16 base align=8
+Point (0x0x7fcb184c8540) 0
+
+Vtable for Derived
+Derived::_ZTV7Derived: 3 entries
+0     (int (*)(...))0
+8     (int (*)(...))(& _ZTI7Derived)
+16    (int (*)(...))Base::bar
+
+Class Derived
+   size=48 align=8
+   base size=41 base align=8
+Derived (0x0x7fcb18374208) 0
+    vptr=((& Derived::_ZTV7Derived) + 16)
+  Base (0x0x7fcb184c85a0) 0
+      primary-for Derived (0x0x7fcb18374208)
+

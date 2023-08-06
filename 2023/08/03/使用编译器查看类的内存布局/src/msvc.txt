@@ -1,0 +1,24 @@
+main.cpp
+
+class Derived	size(40):
+	+---
+ 0	| +--- (base class Base)
+ 0	| | {vfptr}
+ 4	| | n
+	| +---
+ 8	| a
+12	| b
+16	| Point a_point
+32	| c
+  	| <alignment member> (size=7)
+	+---
+
+Derived::$vftable@:
+	| &Derived_meta
+	|  0
+ 0	| &Base::bar 
+Microsoft (R) Incremental Linker Version 14.29.30151.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:main.exe 
+main.obj 

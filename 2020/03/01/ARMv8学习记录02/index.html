@@ -20,12 +20,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述    位宽 分类      32-bit Wn（通用） WZR（0寄存器） WSP（堆栈指针）   64-bit Xn（通用） XZR（0寄存器） SP（堆栈指针）">
+    <meta name="description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8 寄存器寄存器名称描述    位宽 分类      32-bit Wn（通用） WZR（0 寄存器） WSP（堆栈指针）   64-bit Xn（通用） XZR（0 寄存器） SP（堆栈指针）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARMv8学习记录02">
 <meta property="og:url" content="https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8寄存器寄存器名称描述    位宽 分类      32-bit Wn（通用） WZR（0寄存器） WSP（堆栈指针）   64-bit Xn（通用） XZR（0寄存器） SP（堆栈指针）">
+<meta property="og:description" content="前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令 基本知识ARMv8 寄存器寄存器名称描述    位宽 分类      32-bit Wn（通用） WZR（0 寄存器） WSP（堆栈指针）   64-bit Xn（通用） XZR（0 寄存器） SP（堆栈指针）">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-15-57-08.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-16-00-41.png">
@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-21-48-58.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-21-49-14.png">
 <meta property="article:published_time" content="2020-03-01T20:37:23.000Z">
-<meta property="article:modified_time" content="2023-07-09T10:10:55.670Z">
+<meta property="article:modified_time" content="2023-08-06T04:55:24.997Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="汇编">
 <meta name="twitter:card" content="summary">
@@ -147,7 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARMv8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.1.</span> <span class="nav-text">ARMv8寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AArch64%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">AArch64通用寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%AF%84%E5%AD%98%E5%99%A8-SPSR"><span class="nav-number">1.1.2.</span> <span class="nav-text">状态寄存器(SPSR)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E7%A0%81"><span class="nav-number">1.1.3.</span> <span class="nav-text">条件码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">数据处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E5%92%8C%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术和逻辑运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%98%E6%B3%95%E5%92%8C%E9%99%A4%E6%B3%95%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.2.</span> <span class="nav-text">乘法和除法指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E4%BD%8D%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E5%92%8C%E5%AD%97%E8%8A%82%E6%93%8D%E4%BD%9C%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.4.</span> <span class="nav-text">位和字节操作指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%89%A7%E8%A1%8C"><span class="nav-number">2.1.5.</span> <span class="nav-text">条件执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">内存访问指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%AD%98%E5%82%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">2.2.1.</span> <span class="nav-text">加载和存储指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">寻址模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4"><span class="nav-number">2.3.</span> <span class="nav-text">流程控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System"><span class="nav-number">2.4.</span> <span class="nav-text">System</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E8%AE%B0%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">指令记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IT"><span class="nav-number">3.1.</span> <span class="nav-text">IT</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARMv8-%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.1.</span> <span class="nav-text">ARMv8 寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E7%A0%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">条件码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">数据处理指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E5%92%8C%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97"><span class="nav-number">2.1.1.</span> <span class="nav-text">算术和逻辑运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%98%E6%B3%95%E5%92%8C%E9%99%A4%E6%B3%95%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.2.</span> <span class="nav-text">乘法和除法指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E4%BD%8D%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.3.</span> <span class="nav-text">移位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E5%92%8C%E5%AD%97%E8%8A%82%E6%93%8D%E4%BD%9C%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.4.</span> <span class="nav-text">位和字节操作指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%89%A7%E8%A1%8C"><span class="nav-number">2.1.5.</span> <span class="nav-text">条件执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%8C%87%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">内存访问指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%AD%98%E5%82%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">2.2.1.</span> <span class="nav-text">加载和存储指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E5%9D%80%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">寻址模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E6%8C%87%E4%BB%A4"><span class="nav-number">2.3.</span> <span class="nav-text">流程控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System"><span class="nav-number">2.4.</span> <span class="nav-text">System</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E8%AE%B0%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">指令记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IT"><span class="nav-number">3.1.</span> <span class="nav-text">IT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TBNZ"><span class="nav-number">3.2.</span> <span class="nav-text">TBNZ</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,7 +160,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">111</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -242,7 +242,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+      <time title="修改时间：2023-08-06 04:55:24" itemprop="dateModified" datetime="2023-08-06T04:55:24+00:00">2023-08-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -272,7 +272,7 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>前面的环境搭建好了，下面主要学习 ARMv8 的一些基本知识和指令</p>
-<h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="ARMv8寄存器"><a href="#ARMv8寄存器" class="headerlink" title="ARMv8寄存器"></a>ARMv8寄存器</h2><p>寄存器名称描述</p>
+<h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="ARMv8-寄存器"><a href="#ARMv8-寄存器" class="headerlink" title="ARMv8 寄存器"></a>ARMv8 寄存器</h2><p>寄存器名称描述</p>
 <table>
 <thead>
 <tr>
@@ -285,17 +285,17 @@
 <tbody><tr>
 <td>32-bit</td>
 <td>Wn（通用）</td>
-<td>WZR（0寄存器）</td>
+<td>WZR（0 寄存器）</td>
 <td>WSP（堆栈指针）</td>
 </tr>
 <tr>
 <td>64-bit</td>
 <td>Xn（通用）</td>
-<td>XZR（0寄存器）</td>
+<td>XZR（0 寄存器）</td>
 <td>SP（堆栈指针）</td>
 </tr>
 </tbody></table>
-<h3 id="AArch64通用寄存器"><a href="#AArch64通用寄存器" class="headerlink" title="AArch64通用寄存器"></a>AArch64通用寄存器</h3><p>AArch64通用寄存器共31个 <code>X0-X30</code> , 其中各寄存器的作用如下表。</p>
+<p>AArch64 通用寄存器共 31 个 <code>X0-X30</code> , 其中各寄存器的作用如下表。</p>
 <table>
 <thead>
 <tr>
@@ -305,178 +305,55 @@
 </thead>
 <tbody><tr>
 <td><code>X0</code> – <code>X7</code></td>
-<td>参数和返回值</td>
+<td>参数寄存器，用来传递参数或保存返回值 （<code>X0</code>，<code>X1</code>）。</td>
 </tr>
 <tr>
-<td><code>X8</code> – <code>X18</code></td>
-<td>临时寄存器(X8一般保存结构体首地址)</td>
+<td><code>X8</code></td>
+<td>间接结果寄存器，一般保存返回值是结构体的地址。</td>
+</tr>
+<tr>
+<td><code>X9</code> – <code>X15</code></td>
+<td>易失性寄存器，调用者需要保存的临时寄存器。</td>
+</tr>
+<tr>
+<td><code>X16</code> – <code>X17</code></td>
+<td>子程序内部调用寄存器（Intra-Procedure-Call Temporary Registers）。</td>
+</tr>
+<tr>
+<td><code>X18</code></td>
+<td>平台寄存器（Platform Register），用于保存当前所用的平台的 ABI 。</td>
 </tr>
 <tr>
 <td><code>X19</code> – <code>X28</code></td>
-<td>被调用者保存的寄存器</td>
+<td>非易失性寄存器，被调用者保存的寄存器。</td>
 </tr>
 <tr>
 <td><code>X29</code></td>
-<td>帧指针(<code>FP</code>)</td>
+<td>帧指针寄存器（FP），用于连接栈帧，使用时必须保存。</td>
 </tr>
 <tr>
 <td><code>X30</code></td>
-<td>返回地址(<code>LR</code>)</td>
-</tr>
-<tr>
-<td><code>SP</code></td>
-<td>栈指针</td>
+<td>链接寄存器（LR） 用于保存子程序的返回地址。</td>
 </tr>
 </tbody></table>
-<h3 id="状态寄存器-SPSR"><a href="#状态寄存器-SPSR" class="headerlink" title="状态寄存器(SPSR)"></a>状态寄存器(SPSR)</h3><ol>
-<li>PSTATE at AArch64</li>
+<p>除了 31 个核心寄存器外，还有一些特殊的寄存器。</p>
+<p><strong>零寄存器 <code>XZR/WZR</code></strong> ：效果和软件层面的 <code>/dev/zero</code> 类似，作为源寄存器产生 0，作为目标寄存器丢弃传入的数据。</p>
+<p><strong>栈指针寄存器 <code>SP</code>（Stack Pointer）</strong>：指向栈当前的位置。</p>
+<p><strong>程序计数器 <code>PC</code>（Program Counter）</strong>：PC 总是指向当前指令下面的第二条指令的地址，不能被直接访问和修改。</p>
+<p><strong>异常链接寄存器 <code>ELR</code>（Exception Link Register）</strong>：ELR 的作用是保存异常返回地址。</p>
+<p><strong>进程状态保存寄存器</strong>：</p>
+<ol>
+<li>PSTATE at AArch64 (SPSR)</li>
 </ol>
 <img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-15-57-08.png" class="">
 
 <ol start="2">
-<li>PSTATE at AArch32</li>
+<li>PSTATE at AArch32 (CPSR)</li>
 </ol>
 <img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-16-00-41.png" class="">
 
-
 <h3 id="条件码"><a href="#条件码" class="headerlink" title="条件码"></a>条件码</h3><p>此处的条件码对应的上面状态寄存器对应的标志位。</p>
-<table>
-<thead>
-<tr>
-<th>Code</th>
-<th>Encoding</th>
-<th>Meaning (when set by CMP)</th>
-<th>Meaning (when set by FCMP)</th>
-<th>Condition flags</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>EQ</code></td>
-<td>0000</td>
-<td>Equal to.</td>
-<td>Equal to.</td>
-<td><code>Z = 1</code></td>
-</tr>
-<tr>
-<td><code>NE</code></td>
-<td>0001</td>
-<td>Not equal to.</td>
-<td>Unordered, or not equal to.</td>
-<td><code>Z = 0</code></td>
-</tr>
-<tr>
-<td><code>CS</code></td>
-<td>0010</td>
-<td>Carry set (identical to HS).</td>
-<td>Greater than, equal to, or unordered (identical to HS).</td>
-<td><code>C = 1</code></td>
-</tr>
-<tr>
-<td><code>HS</code></td>
-<td>0010</td>
-<td>Greater than, equal to (unsigned) (identical to CS).</td>
-<td>Greater than, equal to, or unordered (identical to CS).</td>
-<td><code>C = 1</code></td>
-</tr>
-<tr>
-<td><code>CC</code></td>
-<td>0011</td>
-<td>Carry clear (identical to LO).</td>
-<td>Less than (identical to LO).</td>
-<td><code>C = 0</code></td>
-</tr>
-<tr>
-<td><code>LO</code></td>
-<td>0011</td>
-<td>Unsigned less than (identical to CC).</td>
-<td>Less than (identical to CC).</td>
-<td><code>C = 0</code></td>
-</tr>
-<tr>
-<td><code>MI</code></td>
-<td>0100</td>
-<td>Minus, Negative.</td>
-<td>Less than.</td>
-<td><code>N = 1</code></td>
-</tr>
-<tr>
-<td><code>PL</code></td>
-<td>0101</td>
-<td>Positive or zero.</td>
-<td>Greater than, equal to, or unordered.</td>
-<td><code>N = 0</code></td>
-</tr>
-<tr>
-<td><code>VS</code></td>
-<td>0110</td>
-<td>Signed overflow.</td>
-<td>Unordered. (At least one argument was NaN).</td>
-<td><code>V = 1</code></td>
-</tr>
-<tr>
-<td><code>VC</code></td>
-<td>0111</td>
-<td>No signed overflow.</td>
-<td>Not unordered. (No argument was NaN).</td>
-<td><code>V = 0</code></td>
-</tr>
-<tr>
-<td><code>HI</code></td>
-<td>1000</td>
-<td>Greater than (unsigned).</td>
-<td>Greater than or unordered.</td>
-<td><code>(C = 1) &amp;&amp; (Z = 0)</code></td>
-</tr>
-<tr>
-<td><code>LS</code></td>
-<td>1001</td>
-<td>Less than or equal to (unsigned).</td>
-<td>Less than or equal to.</td>
-<td>&#96;(C &#x3D; 0)</td>
-</tr>
-<tr>
-<td><code>GE</code></td>
-<td>1010</td>
-<td>Greater than or equal to (signed).</td>
-<td>Greater than or equal to.</td>
-<td><code>N==V</code></td>
-</tr>
-<tr>
-<td><code>LT</code></td>
-<td>1011</td>
-<td>Less than (signed).</td>
-<td>Less than or unordered.</td>
-<td><code>N!=V</code></td>
-</tr>
-<tr>
-<td><code>GT</code></td>
-<td>1100</td>
-<td>Greater than (signed).</td>
-<td>Greater than.</td>
-<td><code>(Z==0) &amp;&amp; (N==V)</code></td>
-</tr>
-<tr>
-<td><code>LE</code></td>
-<td>1101</td>
-<td>Less than or equal to (signed).</td>
-<td>Less than, equal to or unordered.</td>
-<td>&#96;(Z&#x3D;&#x3D;1)</td>
-</tr>
-<tr>
-<td><code>AL</code></td>
-<td>1110</td>
-<td>Always executed.</td>
-<td>Default. Always executed.</td>
-<td><code>Any</code></td>
-</tr>
-<tr>
-<td><code>NV</code></td>
-<td>1111</td>
-<td>Always executed.</td>
-<td>Always executed.</td>
-<td><code>Any</code></td>
-</tr>
-</tbody></table>
+<p>| Code | Encoding | Meaning (when set by CMP)                            | Meaning (when set by FCMP)                              | Condition flags      |<br>| —- | ——– | —————————————————- | ——————————————————- | ——————– | — | ——– |<br>| <code>EQ</code> | 0000     | Equal to.                                            | Equal to.                                               | <code>Z = 1</code>              |<br>| <code>NE</code> | 0001     | Not equal to.                                        | Unordered, or not equal to.                             | <code>Z = 0</code>              |<br>| <code>CS</code> | 0010     | Carry set (identical to HS).                         | Greater than, equal to, or unordered (identical to HS). | <code>C = 1</code>              |<br>| <code>HS</code> | 0010     | Greater than, equal to (unsigned) (identical to CS). | Greater than, equal to, or unordered (identical to CS). | <code>C = 1</code>              |<br>| <code>CC</code> | 0011     | Carry clear (identical to LO).                       | Less than (identical to LO).                            | <code>C = 0</code>              |<br>| <code>LO</code> | 0011     | Unsigned less than (identical to CC).                | Less than (identical to CC).                            | <code>C = 0</code>              |<br>| <code>MI</code> | 0100     | Minus, Negative.                                     | Less than.                                              | <code>N = 1</code>              |<br>| <code>PL</code> | 0101     | Positive or zero.                                    | Greater than, equal to, or unordered.                   | <code>N = 0</code>              |<br>| <code>VS</code> | 0110     | Signed overflow.                                     | Unordered. (At least one argument was NaN).             | <code>V = 1</code>              |<br>| <code>VC</code> | 0111     | No signed overflow.                                  | Not unordered. (No argument was NaN).                   | <code>V = 0</code>              |<br>| <code>HI</code> | 1000     | Greater than (unsigned).                             | Greater than or unordered.                              | <code>(C = 1) &amp;&amp; (Z = 0)</code> |<br>| <code>LS</code> | 1001     | Less than or equal to (unsigned).                    | Less than or equal to.                                  | <code>(C = 0)             |     | (Z = 1)</code> |<br>| <code>GE</code> | 1010     | Greater than or equal to (signed).                   | Greater than or equal to.                               | <code>N==V</code>               |<br>| <code>LT</code> | 1011     | Less than (signed).                                  | Less than or unordered.                                 | <code>N!=V</code>               |<br>| <code>GT</code> | 1100     | Greater than (signed).                               | Greater than.                                           | <code>(Z==0) &amp;&amp; (N==V)</code>   |<br>| <code>LE</code> | 1101     | Less than or equal to (signed).                      | Less than, equal to or unordered.                       | <code>(Z==1)              |     | (N!=V)</code>  |<br>| <code>AL</code> | 1110     | Always executed.                                     | Default. Always executed.                               | <code>Any</code>                |<br>| <code>NV</code> | 1111     | Always executed.                                     | Always executed.                                        | <code>Any</code>                |</p>
 <h1 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h1><h2 id="数据处理指令"><a href="#数据处理指令" class="headerlink" title="数据处理指令"></a>数据处理指令</h2><h3 id="算术和逻辑运算"><a href="#算术和逻辑运算" class="headerlink" title="算术和逻辑运算"></a>算术和逻辑运算</h3><table>
 <thead>
 <tr>
@@ -601,19 +478,19 @@
 </tr>
 <tr>
 <td><code>ASR</code></td>
-<td>Arithmetic shift right</td>
+<td><strong>A</strong>rithmetic <strong>S</strong>hift <strong>R</strong>ight</td>
 </tr>
 <tr>
 <td><code>LSL</code></td>
-<td>Logical shift left</td>
+<td><strong>L</strong>ogical <strong>S</strong>hift <strong>L</strong>eft</td>
 </tr>
 <tr>
 <td><code>LSR</code></td>
-<td>Logical shift right</td>
+<td><strong>L</strong>ogical <strong>S</strong>hift <strong>R</strong>ight</td>
 </tr>
 <tr>
 <td><code>ROR</code></td>
-<td>Rotate right</td>
+<td><strong>RO</strong>tate <strong>R</strong>ight</td>
 </tr>
 <tr>
 <td><strong>Move</strong></td>
@@ -631,7 +508,6 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// x1 = x0 / 8</span><br><span class="line">lsr     x1, x0, 3</span><br><span class="line"></span><br><span class="line">// x1 = x0 * 4</span><br><span class="line">lsl     x1, x0, 2</span><br></pre></td></tr></table></figure>
 
 <img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-19-15-20.png" class="">
-
 
 <h3 id="位和字节操作指令"><a href="#位和字节操作指令" class="headerlink" title="位和字节操作指令"></a>位和字节操作指令</h3><table>
 <thead>
@@ -718,7 +594,6 @@
 
 <img src="/2020/03/01/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9502/2020-03-09-21-49-14.png" class="">
 
-
 <h3 id="条件执行"><a href="#条件执行" class="headerlink" title="条件执行"></a>条件执行</h3><table>
 <thead>
 <tr>
@@ -793,89 +668,12 @@
 <td>Conditional Negate returns, in the destination register, the negated value of the source register if the condition is TRUE, and otherwise returns the value of the source register.</td>
 </tr>
 </tbody></table>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CSINC X0, X1, X0, NE  // Set the return register X0 to X1 if Zero flag clear, else increment X0</span><br><span class="line">CINC X0, X0, LS       // If less than or same (LS) then X0 = X0 + 1</span><br><span class="line">CSET W0, EQ           // If the previous comparison was equal (Z=1) then W0 = 1, </span><br><span class="line">                      // else W0 = 0</span><br><span class="line">CSETM X0, NE          // If not equal then X0 = -1, else X0 = 0 </span><br><span class="line"></span><br><span class="line">                      //if (i == 0) r = r + 2; else r = r - 1;</span><br><span class="line">CMP w0, #0            // if (i == 0)</span><br><span class="line">SUB w2, w1, #1        // r = r - 1</span><br><span class="line">ADD w1, w1, #2        // r = r + 2</span><br><span class="line">CSEL w1, w1, w2, EQ   // select between the two results</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CSINC X0, X1, X0, NE  // Set the return register X0 to X1 if Zero flag clear, else increment X0</span><br><span class="line">CINC X0, X0, LS       // If less than or same (LS) then X0 = X0 + 1</span><br><span class="line">CSET W0, EQ           // If the previous comparison was equal (Z=1) then W0 = 1,</span><br><span class="line">                      // else W0 = 0</span><br><span class="line">CSETM X0, NE          // If not equal then X0 = -1, else X0 = 0</span><br><span class="line"></span><br><span class="line">                      //if (i == 0) r = r + 2; else r = r - 1;</span><br><span class="line">CMP w0, #0            // if (i == 0)</span><br><span class="line">SUB w2, w1, #1        // r = r - 1</span><br><span class="line">ADD w1, w1, #2        // r = r + 2</span><br><span class="line">CSEL w1, w1, w2, EQ   // select between the two results</span><br></pre></td></tr></table></figure>
 
-<h2 id="内存访问指令"><a href="#内存访问指令" class="headerlink" title="内存访问指令"></a>内存访问指令</h2><h3 id="加载和存储指令"><a href="#加载和存储指令" class="headerlink" title="加载和存储指令"></a>加载和存储指令</h3><table>
-<thead>
-<tr>
-<th>Mnemonic</th>
-<th>Operands</th>
-<th>Instruction</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&#96;LDR(B</td>
-<td>H</td>
-<td>SB</td>
-</tr>
-<tr>
-<td>&#96;LD(B</td>
-<td>H</td>
-<td>SB</td>
-</tr>
-<tr>
-<td>&#96;STR(B</td>
-<td>H</td>
-<td>SB</td>
-</tr>
-<tr>
-<td>&#96;STR(B</td>
-<td>H</td>
-<td>SB</td>
-</tr>
-<tr>
-<td><code>LDP</code></td>
-<td>&#96;Wt1, Wt2, [Xn</td>
-<td>SP], #imm&#96;</td>
-</tr>
-<tr>
-<td><code>STP</code></td>
-<td>&#96;Wt1, Wt2, [Xn</td>
-<td>SP], #imm&#96;</td>
-</tr>
-</tbody></table>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// load a byte from x1</span><br><span class="line">ldrb    w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a signed byte from x1</span><br><span class="line">ldrsb   w0, [x1]</span><br><span class="line"></span><br><span class="line">// store a 32-bit word to address in x1</span><br><span class="line">str     w0, [x1]</span><br><span class="line"></span><br><span class="line">// load two 32-bit words from stack, advance sp by 8</span><br><span class="line">ldp     w0, w1, [sp], 8</span><br><span class="line"></span><br><span class="line">// store two 64-bit words at [sp-96] and subtract 96 from sp </span><br><span class="line">stp     x0, x1, [sp, -96]!</span><br><span class="line"></span><br><span class="line">// load 32-bit immediate from literal pool</span><br><span class="line">ldr     w0, =0x12345678</span><br></pre></td></tr></table></figure>
+<h2 id="内存访问指令"><a href="#内存访问指令" class="headerlink" title="内存访问指令"></a>内存访问指令</h2><h3 id="加载和存储指令"><a href="#加载和存储指令" class="headerlink" title="加载和存储指令"></a>加载和存储指令</h3><p>| Mnemonic | Operands       | Instruction |<br>| ——– | ————– | ———– | —————————————————————————————————————————————————————————————————– | —- | ——– | ———– | ———————————————————————————————————————————————————————————————– | ———————————————————————————————————————————————————————————————————————————————– |<br>| <code>LDR(B   | H              | SB          | SH                                                                                                                                                                                                    | SW)</code> | <code>Wt, [Xn | SP], #simm</code> | Load Register (immediate) loads a word or doubleword from memory and writes it to a register. The address that is used for the load is calculated from a base register and an immediate offset. |<br>| <code>LD(B    | H              | SB          | SH                                                                                                                                                                                                    | SW)</code> | <code>Wt, [Xn | SP, (Wm     | Xm)&#123;, extend &#123;amount&#125;&#125;]</code>                                                                                                                                                                        | Load Register (register) calculates an address from a base register value and an offset register value, loads a byte&#x2F;half-word&#x2F;word from memory, and writes it to a register. The offset register value can optionally be shifted and extended. |<br>| <code>STR(B   | H              | SB          | SH                                                                                                                                                                                                    | SW)</code> | <code>Wt, [Xn | SP], #simm</code> | Store Register (immediate) stores a word or a doubleword from a register to memory. The address that is used for the store is calculated from a base register and an immediate offset.          |<br>| <code>STR(B   | H              | SB          | SH                                                                                                                                                                                                    | SW)</code> | <code>Wt, [Xn | SP, (Wm     | Xm)&#123;, extend &#123;amount&#125;&#125;]</code>                                                                                                                                                                        | Store Register (immediate) stores a word or a doubleword from a register to memory. The address that is used for the store is calculated from a base register and an immediate offset.                                                          |<br>| <code>LDP</code>    | <code>Wt1, Wt2, [Xn | SP], #imm</code>  | Load Pair of Registers calculates an address from a base register value and an immediate offset, loads two 32-bit words or two 64-bit doublewords from memory, and writes them to two registers.      |<br>| <code>STP</code>    | <code>Wt1, Wt2, [Xn | SP], #imm</code>  | Store Pair of Registers calculates an address from a base register value and an immediate offset, and stores two 32-bit words or two 64-bit doublewords to the calculated address, from two registers |</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// load a byte from x1</span><br><span class="line">ldrb    w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a signed byte from x1</span><br><span class="line">ldrsb   w0, [x1]</span><br><span class="line"></span><br><span class="line">// store a 32-bit word to address in x1</span><br><span class="line">str     w0, [x1]</span><br><span class="line"></span><br><span class="line">// load two 32-bit words from stack, advance sp by 8</span><br><span class="line">ldp     w0, w1, [sp], 8</span><br><span class="line"></span><br><span class="line">// store two 64-bit words at [sp-96] and subtract 96 from sp</span><br><span class="line">stp     x0, x1, [sp, -96]!</span><br><span class="line"></span><br><span class="line">// load 32-bit immediate from literal pool</span><br><span class="line">ldr     w0, =0x12345678</span><br></pre></td></tr></table></figure>
 
-<h3 id="寻址模式"><a href="#寻址模式" class="headerlink" title="寻址模式"></a>寻址模式</h3><table>
-<thead>
-<tr>
-<th>Addressing Mode</th>
-<th>Immediate</th>
-<th>Register</th>
-<th>Extended Register</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Base register only (no offset)</td>
-<td><code>[base&#123;, 0&#125;]</code></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Base plus offset</td>
-<td><code>[base&#123;, imm&#125;]</code></td>
-<td><code>[base, Xm&#123;, LSL imm&#125;]</code></td>
-<td>&#96;[base, Wm, (S</td>
-</tr>
-<tr>
-<td>Pre-indexed</td>
-<td><code>[base, imm]!</code></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Post-indexed</td>
-<td><code>[base], imm</code></td>
-<td><code>[base], Xm a</code></td>
-<td></td>
-</tr>
-<tr>
-<td>Literal (PC-relative)</td>
-<td><code>label</code></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
+<h3 id="寻址模式"><a href="#寻址模式" class="headerlink" title="寻址模式"></a>寻址模式</h3><p>| Addressing Mode                | Immediate       | Register                | Extended Register |<br>| —————————— | ————— | ———————– | —————– | —————- |<br>| Base register only (no offset) | <code>[base&#123;, 0&#125;]</code>   |                         |                   |<br>| Base plus offset               | <code>[base&#123;, imm&#125;]</code> | <code>[base, Xm&#123;, LSL imm&#125;]</code> | <code>[base, Wm, (S    | U)XTW &#123; #imm &#125;]</code> |<br>| Pre-indexed                    | <code>[base, imm]!</code>  |                         |                   |<br>| Post-indexed                   | <code>[base], imm</code>   | <code>[base], Xm a</code>          |                   |<br>| Literal (PC-relative)          | <code>label</code>         |                         |                   |</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">// load a byte from x1</span><br><span class="line">ldrb   w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a half-word from x1</span><br><span class="line">ldrh   w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a word from x1</span><br><span class="line">ldr    w0, [x1]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1</span><br><span class="line">ldr    x0, [x1]</span><br><span class="line"></span><br><span class="line">// load a byte from x1 plus 1</span><br><span class="line">ldrb   w0, [x1, 1]</span><br><span class="line"></span><br><span class="line">// load a half-word from x1 plus 2</span><br><span class="line">ldrh   w0, [x1, 2]</span><br><span class="line"></span><br><span class="line">// load a word from x1 plus 4</span><br><span class="line">ldr    w0, [x1, 4]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 plus 8</span><br><span class="line">ldr    x0, [x1, 8]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 using x2 as index</span><br><span class="line">// w2 is multiplied by 8</span><br><span class="line">ldr    x0, [x1, x2, lsl 3]</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 using w2 as index</span><br><span class="line">// w2 is zero-extended and multiplied by 8</span><br><span class="line">ldr    x0, [x1, w2, uxtw 3]</span><br><span class="line">// load a byte from x1 plus 1, then advance x1 by 1</span><br><span class="line">ldrb   w0, [x1, 1]!</span><br><span class="line"></span><br><span class="line">// load a half-word from x1 plus 2, then advance x1 by 2</span><br><span class="line">ldrh   w0, [x1, 2]!</span><br><span class="line"></span><br><span class="line">// load a word from x1 plus 4, then advance x1 by 4</span><br><span class="line">ldr    w0, [x1, 4]!</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1 plus 8, then advance x1 by 8</span><br><span class="line">ldr    x0, [x1, 8]!</span><br><span class="line">// load a byte from x1, then advance x1 by 1</span><br><span class="line">ldrb   w0, [x1], 1</span><br><span class="line"></span><br><span class="line">// load a half-word from x1, then advance x1 by 2</span><br><span class="line">ldrh   w0, [x1], 2</span><br><span class="line"></span><br><span class="line">// load a word from x1, then advance x1 by 4</span><br><span class="line">ldr    w0, [x1], 4</span><br><span class="line"></span><br><span class="line">// load a doubleword from x1, then advance x1 by 8</span><br><span class="line">ldr    x0, [x1], 8</span><br><span class="line"></span><br><span class="line">  // load address of label</span><br><span class="line">adr    x0, label</span><br><span class="line"></span><br><span class="line">// load address of label</span><br><span class="line">adrp   x0, label</span><br></pre></td></tr></table></figure>
 
 <h2 id="流程控制指令"><a href="#流程控制指令" class="headerlink" title="流程控制指令"></a>流程控制指令</h2><table>
@@ -962,12 +760,19 @@
 </tr>
 </tbody></table>
 <h1 id="指令记录"><a href="#指令记录" class="headerlink" title="指令记录"></a>指令记录</h1><p>本节主要记录一些自已不知道其含义的指令，后续通过查询资料后才弄懂的指令，由于比较容易忘记，故记录下来。</p>
-<h2 id="IT"><a href="#IT" class="headerlink" title="IT"></a>IT</h2><p>分支语句（If-Then），该指令根据特定条件来执行紧随其后的 1~4 条指令，格式为 <code>IT&#123;x&#123;y&#123;z&#125;&#125;&#125; &#123;cond&#125;</code>。其中 x 、y 、z 分别是执行第二、三、四条指令的条件，可取的值为 <code>T(Then)</code>或 <code>E(Else)</code>，对应于条件的成立和不成立。下面来看例子：</p>
+<h2 id="IT"><a href="#IT" class="headerlink" title="IT"></a>IT</h2><p>分支语句（If-Then），该指令根据特定条件来执行紧随其后的 1~4 条指令，格式为 <code>IT&#123;x&#123;y&#123;z&#125;&#125;&#125; &#123;cond&#125;</code>。其中 x 、y 、z 分别是执行第二、三、四条指令的条件，可取的值为 T(<strong>T</strong>hen)或 E(<strong>E</strong>lse)，对应于条件的成立和不成立。cond 指定 <code>IT</code> 块中第一条指令的条件。下面来看例子：</p>
 <figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ITETT</span> EQ</span><br><span class="line"><span class="keyword">MOVEQ</span> <span class="built_in">R0</span>, <span class="number">#1</span><span class="comment">;	//指令1</span></span><br><span class="line"><span class="keyword">MOVNE</span> <span class="built_in">R0</span>, <span class="number">#0</span><span class="comment">;	//指令2</span></span><br><span class="line"><span class="keyword">MOVEQ</span> <span class="built_in">R1</span>, <span class="number">#0</span><span class="comment">;	//指令3</span></span><br><span class="line"><span class="keyword">MOVEQ</span> <span class="built_in">R2</span>, <span class="number">#0</span><span class="comment">;	//指令4</span></span><br></pre></td></tr></table></figure>
-<p>如图，若 <code>EQ</code> 条件符合（根据 <code>CPSR</code> 寄存器 <code>Z</code> 的值判断），执行指令 1 、3 、4 的 <code>mov</code> 操作，否则执行指令 2 的 <code>mov</code> 操作。</p>
+
+<p>若 <code>EQ</code> 条件符合（根据 <code>CPSR</code> 寄存器 <code>Z</code> 的值判断），执行指令 1 、3 、4 的 <code>mov</code> 操作，否则执行指令 2 的 <code>mov</code> 操作。</p>
+<h2 id="TBNZ"><a href="#TBNZ" class="headerlink" title="TBNZ"></a>TBNZ</h2><p>指令格式为：<code>TBNZ Rt, #imm, label</code> 。</p>
+<p>测试位不为 0，则跳转到 label，imm 指定目的寄存器的某一个位， 其值为 0-63 或者 0-31 。</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">TBNZ</span> W0, <span class="number">#31</span>, loc_16B4  # 若 w0 第<span class="number">31</span>位不为<span class="number">0</span>，则跳转到 loc_16B4</span><br></pre></td></tr></table></figure>
+
+<p><code>TBZ</code> 则是测试位为 0，则跳转。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://modexp.wordpress.com/2018/10/30/arm64-assembly/">A Guide to ARM64 &#x2F; AArch64 Assembly on Linux with Shellcodes and Cryptography</a></p>
 <p><a target="_blank" rel="noopener" href="https://static.docs.arm.com/den0024/a/DEN0024A_v8_architecture_PG.pdf">DEN0024A_v8_architecture_PG.pdf</a></p>
 <p><a target="_blank" rel="noopener" href="https://courses.cs.washington.edu/courses/cse469/19wi/arm64.pdf">ARMv8 A64 Quick Reference</a></p>
+<p><a target="_blank" rel="noopener" href="https://cataloc.gitee.io/blog/2021/06/03/Armv8%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B">Armv8 架构简介</a></p>
 
     </div>
 

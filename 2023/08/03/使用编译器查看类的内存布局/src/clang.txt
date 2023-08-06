@@ -1,0 +1,28 @@
+
+*** Dumping AST Record Layout
+         0 | class Base
+         0 |   (Base vtable pointer)
+         8 |   int n
+           | [sizeof=16, dsize=12, align=8,
+           |  nvsize=12, nvalign=8]
+
+*** Dumping AST Record Layout
+         0 | struct Point
+         0 |   double cx
+         8 |   double cy
+           | [sizeof=16, dsize=16, align=8,
+           |  nvsize=16, nvalign=8]
+
+*** Dumping AST Record Layout
+         0 | class Derived
+         0 |   class Base (primary base)
+         0 |     (Base vtable pointer)
+         8 |     int n
+        12 |   int a
+        16 |   int b
+        24 |   struct Point a_point
+        24 |     double cx
+        32 |     double cy
+        40 |   char c
+           | [sizeof=48, dsize=41, align=8,
+           |  nvsize=41, nvalign=8]

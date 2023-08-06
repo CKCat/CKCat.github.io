@@ -27,20 +27,14 @@
 <meta property="og:site_name" content="CKCat的博客">
 <meta property="og:description" content="标准 I&#x2F;O 库由 ISO C 标准说明。 流和 FILE 对象标准 I&#x2F;O 库的操作是围绕流（stream）进行的，当用标准 I&#x2F;O 库打开或创建一个文件时，我们已使一个流与一个文件相关联。 标准 I&#x2F;O 文件流可用于单字节或多字节字符集。流的定向（stream’s orientation）决定了所读、写的字符是单字节还是多字节的。 fwide 函数可用于设置流的定向。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/setbuf%E5%92%8Csetvbuf%E5%87%BD%E6%95%B0.png">
-<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E6%89%93%E5%BC%80%E6%A0%87%E5%87%86IO%E6%B5%81%E7%9A%84type%E5%8F%82%E6%95%B0.png">
-<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E6%89%93%E5%BC%80%E4%B8%80%E4%B8%AA%E6%B5%81%E7%9A%846%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%96%B9%E5%BC%8F.png">
-<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E6%A0%87%E5%BF%97%E9%83%A8%E5%88%86.png">
-<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E9%95%BF%E5%BA%A6%E4%BF%AE%E9%A5%B0%E7%AC%A6.png">
-<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E8%BD%AC%E6%8D%A2%E7%B1%BB%E5%9E%8B.png">
 <meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/scanf%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E8%BD%AC%E6%8D%A2%E7%B1%BB%E5%9E%8B.png">
 <meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E6%89%93%E5%BC%80%E5%86%85%E5%AD%98%E6%B5%81%E7%9A%84type%E5%8F%82%E6%95%B0.png">
 <meta property="article:published_time" content="2023-04-10T17:20:55.000Z">
-<meta property="article:modified_time" content="2023-07-09T10:10:55.934Z">
+<meta property="article:modified_time" content="2023-08-06T04:55:25.357Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="unix">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/setbuf%E5%92%8Csetvbuf%E5%87%BD%E6%95%B0.png">
+<meta name="twitter:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/scanf%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E8%BD%AC%E6%8D%A2%E7%B1%BB%E5%9E%8B.png">
 
 
 <link rel="canonical" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/">
@@ -162,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">111</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -244,7 +238,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -313,15 +307,73 @@
 <li>若成功，返回 0；</li>
 <li>若出错，返回非 0</li>
 </ul>
-<p>可以使用 setbuf 函数打开或关闭缓冲机制。将 buf 设置为 NULL 则关闭缓冲机制。</p>
-<p>使用 setvbuf，我们可以精确地说明所需的缓冲类型。这是用 mode 参数实现的：</p>
+<p>可以使用 <code>setbuf</code> 函数打开或关闭缓冲机制。将 <code>buf</code> 设置为 <code>NULL</code> 则关闭缓冲机制。</p>
+<p>使用 <code>setvbuf</code>，我们可以精确地说明所需的缓冲类型。这是用 <code>mode</code> 参数实现的：</p>
 <ul>
 <li><code>_IOFBF</code> 全缓冲</li>
 <li><code>_IOLBF</code> 行缓冲</li>
 <li><code>_IONBF</code> 不带缓冲</li>
 </ul>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/setbuf%E5%92%8Csetvbuf%E5%87%BD%E6%95%B0.png" class="">
-
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>mode</th>
+<th>buf</th>
+<th>缓冲区及长度</th>
+<th>缓冲类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>setbuf</code></td>
+<td></td>
+<td>非空</td>
+<td>长度为 <code>BUFSIZ</code> 的用户缓冲区 <code>buf</code></td>
+<td>全缓冲或行缓冲</td>
+</tr>
+<tr>
+<td><code>setbuf</code></td>
+<td></td>
+<td><code>NULL</code></td>
+<td>(无缓冲区)</td>
+<td>不带缓冲</td>
+</tr>
+<tr>
+<td><code>setvbuf</code></td>
+<td><code>_IOFBF</code></td>
+<td>非空</td>
+<td>长度为 <code>size</code> 的用户缓冲区 <code>buf</code></td>
+<td>全缓冲</td>
+</tr>
+<tr>
+<td><code>setvbuf</code></td>
+<td><code>_IOFBF</code></td>
+<td><code>NULL</code></td>
+<td>合适长度的系统缓冲区 <code>buf</code></td>
+<td>全缓冲</td>
+</tr>
+<tr>
+<td><code>setvbuf</code></td>
+<td><code>_IOLBF</code></td>
+<td>非空</td>
+<td>长度为 <code>size</code> 的用户缓冲区 <code>buf</code></td>
+<td>行缓冲</td>
+</tr>
+<tr>
+<td><code>setvbuf</code></td>
+<td><code>_IOLBF</code></td>
+<td><code>NULL</code></td>
+<td>合适长度的系统缓冲区 <code>buf</code></td>
+<td>行缓冲</td>
+</tr>
+<tr>
+<td><code>setvbuf</code></td>
+<td><code>_IONBF</code></td>
+<td>(忽略)</td>
+<td>(无缓冲区)</td>
+<td>不带缓冲</td>
+</tr>
+</tbody></table>
 <p>任何时候，我们都可强制冲洗一个流。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fflush</span><span class="params">(FILE *fp)</span>;</span><br></pre></td></tr></table></figure>
 
@@ -341,11 +393,66 @@
 <li><code>fdopen</code> 函数取一个已有的文件描述符并使一个标准的 <code>I/O</code> 流与该描述符相结合。常用于由创建管道和网络通信通道函数返回的描述符。该函数属于 POSIX.1 标准。</li>
 </ul>
 <p>type 参数指定对该 <code>I/O</code> 流的读、写方式：</p>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E6%89%93%E5%BC%80%E6%A0%87%E5%87%86IO%E6%B5%81%E7%9A%84type%E5%8F%82%E6%95%B0.png" class="">
-
+<p>| type            | 说明                                   | open(2)标志 |<br>| ————— | ————————————– | ———– | ——- | ——— |<br>| r 或 rb         | 为读而打开                             | <code>O_RDONLY</code>  |<br>| w 或 wb         | 把文件截断至 0 长，或为写而创建        | <code>O_WRONLY   | O_CREAT | O_TRUNC</code>  |<br>| a 或 ab         | 追加；为在文件尾写而打开，或为写而创建 | <code>O_WRONLY   | O_CREAT | O_APPEND</code> |<br>| r+或 r+b 或 rb+ | 为读和写而打开                         | <code>O_RDWR</code>    |<br>| w+或 w+b 或 wb+ | 把文件截断至 0 长，或为读和写而打开    | <code>O_RDWR     | O_CREAT | O_TRUNC</code>  |<br>| a+或 a+b 或 ab+ | 为在文件尾读和写而打开或创建           | <code>O_RDWR     | O_CREAT | O_APPEND</code> |</p>
 <p>如果有多个进程用标准 <code>I/O</code> 追加写方式打开同一文件，那么来自每个进程的数据都将正确地写到文件中。</p>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E6%89%93%E5%BC%80%E4%B8%80%E4%B8%AA%E6%B5%81%E7%9A%846%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%96%B9%E5%BC%8F.png" class="">
-
+<table>
+<thead>
+<tr>
+<th>限制</th>
+<th>r</th>
+<th>w</th>
+<th>a</th>
+<th>r+</th>
+<th>w+</th>
+<th>a+</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件必须已存在</td>
+<td>x</td>
+<td></td>
+<td></td>
+<td>x</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>放弃文件以前的内容</td>
+<td></td>
+<td>x</td>
+<td></td>
+<td></td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td>流可以读</td>
+<td>x</td>
+<td></td>
+<td></td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td>流可以写</td>
+<td></td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td>流只可在尾端处写</td>
+<td></td>
+<td></td>
+<td>x</td>
+<td></td>
+<td></td>
+<td>x</td>
+</tr>
+</tbody></table>
 <p>POSIX.1 要求实现使用如下的权限位集来创建文件：<br><code>S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH</code></p>
 <p>调用 fclose 关闭一个打开的流。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fclose</span><span class="params">(FILE *fp)</span>;</span><br></pre></td></tr></table></figure>
@@ -459,19 +566,156 @@
 </ul>
 <p>一个转换说明有 4 个可选择的部分，下面将它们都示于方括号中：<br><code>%[flags][fldwidth][precision][lenmodifier]convtype</code></p>
 <ul>
-<li><p>flags</p>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E6%A0%87%E5%BF%97%E9%83%A8%E5%88%86.png" class="">
-</li>
-<li><p>fldwidth 说明最小字段宽度。</p>
-</li>
-<li><p>precision 说明整型转换后最少输出数字位数、浮点数转换后小数点后的最少位数、字符串转换后最大字节数。</p>
-</li>
-<li><p>lenmodifier 说明参数长度。</p>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E9%95%BF%E5%BA%A6%E4%BF%AE%E9%A5%B0%E7%AC%A6.png" class="">
-</li>
-<li><p>convtype 不是可选的。它控制如何解释参数。</p>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E8%BD%AC%E6%8D%A2%E8%AF%B4%E6%98%8E%E4%B8%AD%E7%9A%84%E8%BD%AC%E6%8D%A2%E7%B1%BB%E5%9E%8B.png" class=""></li>
+<li><code>flags</code></li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#39;</code></td>
+<td>(撇号)将整数按千位分组字符</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>在字段内左对齐输出</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>总是显示带符号转换的正负号</td>
+</tr>
+<tr>
+<td>(空格)</td>
+<td>如果第一个字符不是正负号，则在其前面加上一个空格</td>
+</tr>
+<tr>
+<td><code>#</code></td>
+<td>指定另一种转换形式（例如，对于十六进制格式，加 0x 前缀）</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>添加前导 0（而非空格）进行填充</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>fldwidth</code> 说明最小字段宽度。</li>
+<li><code>precision</code> 说明整型转换后最少输出数字位数、浮点数转换后小数点后的最少位数、字符串转换后最大字节数。</li>
+<li><code>lenmodifier</code> 说明参数长度。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>长度修饰符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hh</code></td>
+<td>将相应的参数按 <code>signed</code> 或 <code>unsigned char</code> 类型输出</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>将相应的参数按 <code>signed</code> 或 <code>unsigned short</code> 类型输出</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>将相应的参数按 <code>signed</code> 或 <code>unsigned long</code> 或宽字符类型输出</td>
+</tr>
+<tr>
+<td><code>ll</code></td>
+<td>将相应的参数按 <code>signed</code> 或 <code>unsigned long long</code> 类型输出</td>
+</tr>
+<tr>
+<td><code>j</code></td>
+<td><code>intmax_t</code> 或 <code>uintmax_t</code></td>
+</tr>
+<tr>
+<td><code>z</code></td>
+<td><code>size_t</code></td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td><code>ptrdiff_t</code></td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td><code>long double</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>convtype</code> 不是可选的。它控制如何解释参数。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>转换类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>d</code>、<code>i</code></td>
+<td>有符号十进制</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>无符号八进制</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td>无符号十进制</td>
+</tr>
+<tr>
+<td><code>x</code>、<code>X</code></td>
+<td>无符号十六进制</td>
+</tr>
+<tr>
+<td><code>f</code>、<code>F</code></td>
+<td>双精度浮点数</td>
+</tr>
+<tr>
+<td><code>e</code>、<code>E</code></td>
+<td>指数格式双精度浮点数</td>
+</tr>
+<tr>
+<td><code>g</code>、<code>G</code></td>
+<td>根据转换后的值解释为 <code>f</code>、<code>F</code>、<code>e</code> 或 <code>E</code></td>
+</tr>
+<tr>
+<td><code>a</code>、<code>A</code></td>
+<td>十六进制指数格式双精度浮点数</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>字符（若带长度修饰符 1，为宽字符）</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>字符串（若带长度修饰符 1，为宽字符）</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>指向 void 的指针</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>到目前为止，此 <code>printf</code> 调用输出的字符的数目将被写入到指针所指向的带符号整型中</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>一个 <code>%</code> 字符</td>
+</tr>
+<tr>
+<td><code>C</code></td>
+<td>宽字符(XSI 扩展，等效于 <code>1c</code>)</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>宽字符串(XSI 扩展，等效于 <code>1s</code>)</td>
+</tr>
+</tbody></table>
 <p>下列 5 种 printf 族的变体类似于上面的 5 种，但是可变参数表 <code>...</code> 替换成了 arg。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdarg.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">vprintf</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> format, va_list arg)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">vfprintf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> format, va_list arg)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">vdprintf</span><span class="params">(<span class="type">int</span> fd, <span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> format, va_list arg)</span>;</span><br></pre></td></tr></table></figure>
 
@@ -549,51 +793,55 @@
 <li>mkdtemp 若成功，返回指向目录名的指针；若出错，返回 NULL</li>
 <li>mkstemp 返回值：若成功，返回文件描述符；若出错，返回 −1</li>
 </ul>
-<p>mkdtemp函数创建的目录使用下列访问权限位集：<code>S_IRUSR|S_IWUSR | S_IXUSR</code>。<br>mkstemp创建的文件使用访问权限位 <code>S_IRUSR | S_IWUSR</code>。mkstemp创建的临时文件并不会自动删除。</p>
+<p>mkdtemp 函数创建的目录使用下列访问权限位集：<code>S_IRUSR|S_IWUSR | S_IXUSR</code>。<br>mkstemp 创建的文件使用访问权限位 <code>S_IRUSR | S_IWUSR</code>。mkstemp 创建的临时文件并不会自动删除。</p>
 <p>例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">make_temp</span><span class="params">(<span class="type">char</span> *template)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">char</span> good_template[] = <span class="string">&quot;/tmp/dirXXXXXX&quot;</span>; </span><br><span class="line">    <span class="type">char</span> *bad_template = <span class="string">&quot;/tmp/dirXXXXXX&quot;</span>; <span class="comment">// 只读</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;trying to create first temp file...\n&quot;</span>);</span><br><span class="line">    make_temp(good_template);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;try to create second temp file...\n&quot;</span>);</span><br><span class="line">    make_temp(bad_template);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">make_temp</span><span class="params">(<span class="type">char</span>* template)</span>&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">sbuf</span>;</span></span><br><span class="line">    <span class="keyword">if</span>((fd = mkstemp(template)) &lt; <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;can&#x27;t create temp file&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;temp name = %s\n&quot;</span>, template);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">if</span>(stat(template, &amp;sbuf) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(errno == ENONET)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;file doesn&#x27;t exist\n&quot;</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            err_sys(<span class="string">&quot;stat failed&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;file exists\n&quot;</span>);</span><br><span class="line">        unlink(template);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编译运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 5.13mkstemp.c ../error.c </span><br><span class="line">$ ./a.out </span><br><span class="line">trying to create first temp file...</span><br><span class="line">temp name = /tmp/dirH31nLr</span><br><span class="line">file exists</span><br><span class="line">try to create second temp file...</span><br><span class="line">[1]    6143 segmentation fault (core dumped)  ./a.out</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">make_temp</span><span class="params">(<span class="type">char</span> *template)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">char</span> good_template[] = <span class="string">&quot;/tmp/dirXXXXXX&quot;</span>;</span><br><span class="line">    <span class="type">char</span> *bad_template = <span class="string">&quot;/tmp/dirXXXXXX&quot;</span>; <span class="comment">// 只读</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;trying to create first temp file...\n&quot;</span>);</span><br><span class="line">    make_temp(good_template);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;try to create second temp file...\n&quot;</span>);</span><br><span class="line">    make_temp(bad_template);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">make_temp</span><span class="params">(<span class="type">char</span>* template)</span>&#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">sbuf</span>;</span></span><br><span class="line">    <span class="keyword">if</span>((fd = mkstemp(template)) &lt; <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;can&#x27;t create temp file&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;temp name = %s\n&quot;</span>, template);</span><br><span class="line">    close(fd);</span><br><span class="line">    <span class="keyword">if</span>(stat(template, &amp;sbuf) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(errno == ENONET)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;file doesn&#x27;t exist\n&quot;</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            err_sys(<span class="string">&quot;stat failed&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;file exists\n&quot;</span>);</span><br><span class="line">        unlink(template);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="内存流"><a href="#内存流" class="headerlink" title="内存流"></a>内存流</h2><p>有3个函数可用于内存流的创建</p>
+<p>编译运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 5.13mkstemp.c ../error.c</span><br><span class="line">$ ./a.out</span><br><span class="line">trying to create first temp file...</span><br><span class="line">temp name = /tmp/dirH31nLr</span><br><span class="line">file exists</span><br><span class="line">try to create second temp file...</span><br><span class="line">[1]    6143 segmentation fault (core dumped)  ./a.out</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存流"><a href="#内存流" class="headerlink" title="内存流"></a>内存流</h2><p>有 3 个函数可用于内存流的创建</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">FILE *<span class="title function_">fmemopen</span><span class="params">(<span class="type">void</span> *<span class="keyword">restrict</span> buf, <span class="type">size_t</span> size, <span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> type)</span>;</span><br><span class="line">FILE *<span class="title function_">open_memstream</span><span class="params">(<span class="type">char</span> **bufp, <span class="type">size_t</span> *sizep)</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;wchar.h&gt;</span></span></span><br><span class="line">FILE *<span class="title function_">open_wmemstream</span><span class="params">(<span class="type">wchar_t</span> **bufp, <span class="type">size_t</span> *sizep)</span>;</span><br></pre></td></tr></table></figure>
+
 <p><strong>返回值：</strong></p>
 <ul>
 <li>若成功，返回流指针；</li>
-<li>若出错，返回NULL</li>
+<li>若出错，返回 NULL</li>
 </ul>
-<p>buf 参数指向缓冲区的开始位置，size参数指定了缓冲区大小的字节数。<br>type参数控制如何使用流。</p>
+<p>buf 参数指向缓冲区的开始位置，size 参数指定了缓冲区大小的字节数。<br>type 参数控制如何使用流。</p>
 <img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/%E6%89%93%E5%BC%80%E5%86%85%E5%AD%98%E6%B5%81%E7%9A%84type%E5%8F%82%E6%95%B0.png" class="">
 
 <ul>
-<li>无论何时以追加写方式打开内存流时，当前文件位置设为缓冲区中的第一个null字节。</li>
-<li>如果buf参数是一个null指针，打开流进行读或者写都没有任何意义。</li>
-<li>任何时候需要增加流缓冲区中数据量以及调用fclose、fflush、fseek、fseeko以及fsetpos时都会在当前位置写入一个null字节。</li>
+<li>无论何时以追加写方式打开内存流时，当前文件位置设为缓冲区中的第一个 null 字节。</li>
+<li>如果 buf 参数是一个 null 指针，打开流进行读或者写都没有任何意义。</li>
+<li>任何时候需要增加流缓冲区中数据量以及调用 fclose、fflush、fseek、fseeko 以及 fsetpos 时都会在当前位置写入一个 null 字节。</li>
 </ul>
 <p>例子：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BSZ 48</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span>&#123;</span><br><span class="line">    FILE *fp;</span><br><span class="line">    <span class="type">char</span> buf[BSZ];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="string">&#x27;a&#x27;</span>, BSZ <span class="number">-2</span>);</span><br><span class="line">    buf[BSZ<span class="number">-2</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    buf[BSZ<span class="number">-1</span>] = <span class="string">&#x27;x&#x27;</span>;</span><br><span class="line">    <span class="comment">// fmemopen在缓冲区开始处放置null字节</span></span><br><span class="line">    <span class="keyword">if</span>((fp = fmemopen(buf, BSZ, <span class="string">&quot;w+&quot;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;fmemopen failed&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;initial buffer contents: %s\n&quot;</span>, buf);</span><br><span class="line">    <span class="built_in">fprintf</span>(fp, <span class="string">&quot;hello, world&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;before flush: %s\n&quot;</span>, buf);</span><br><span class="line">    <span class="comment">// 流冲洗后缓冲区才会变化</span></span><br><span class="line">    fflush(fp);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after fflush: %s\n&quot;</span>, buf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;len of string in buf = %ld\n&quot;</span>, (<span class="type">long</span>)<span class="built_in">strlen</span>(buf));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="string">&#x27;b&#x27;</span>, BSZ<span class="number">-2</span>);</span><br><span class="line">    buf[BSZ<span class="number">-2</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    buf[BSZ<span class="number">-1</span>] = <span class="string">&#x27;X&#x27;</span>;</span><br><span class="line">    <span class="built_in">fprintf</span>(fp, <span class="string">&quot;hello, world&quot;</span>);</span><br><span class="line">    <span class="comment">// fseek引起缓冲区冲洗</span></span><br><span class="line">    fseek(fp, <span class="number">0</span>, SEEK_SET);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after fseek: %s\n&quot;</span>, buf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;len of string in buf = %ld\n&quot;</span>, (<span class="type">long</span>)<span class="built_in">strlen</span>(buf));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(buf, <span class="string">&#x27;c&#x27;</span>, BSZ<span class="number">-2</span>);</span><br><span class="line">    buf[BSZ<span class="number">-2</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    buf[BSZ<span class="number">-1</span>] = <span class="string">&#x27;X&#x27;</span>;</span><br><span class="line">    <span class="built_in">fprintf</span>(fp, <span class="string">&quot;hello, world&quot;</span>);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after fclose: %s\n&quot;</span>, buf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;len of string in buf = %ld\n&quot;</span>, (<span class="type">long</span>)<span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编译运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 5.14fmemopen.c ../error.c </span><br><span class="line">$ ./a.out </span><br><span class="line">initial buffer contents:      <span class="comment">#在缓冲区开始处放置 null，所以输出为空</span></span><br><span class="line">before flush: </span><br><span class="line">after fflush: hello, world    <span class="comment"># 流冲洗后缓冲区才会变化</span></span><br><span class="line">len of string <span class="keyword">in</span> buf = 12</span><br><span class="line">after fseek: bbbbbbbbbbbbhello, world    <span class="comment"># fseek引起缓冲区冲洗</span></span><br><span class="line">len of string <span class="keyword">in</span> buf = 24</span><br><span class="line">after fclose: hello, worldcccccccccccccccccccccccccccccccccc    <span class="comment"># 没有追加写null字节</span></span><br><span class="line">len of string <span class="keyword">in</span> buf = 46</span><br></pre></td></tr></table></figure>
 
-<p>用于创建内存流的其他两个函数分别是open_memstream和open_wmemstream。</p>
+<p>编译运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 5.14fmemopen.c ../error.c</span><br><span class="line">$ ./a.out</span><br><span class="line">initial buffer contents:      <span class="comment">#在缓冲区开始处放置 null，所以输出为空</span></span><br><span class="line">before flush:</span><br><span class="line">after fflush: hello, world    <span class="comment"># 流冲洗后缓冲区才会变化</span></span><br><span class="line">len of string <span class="keyword">in</span> buf = 12</span><br><span class="line">after fseek: bbbbbbbbbbbbhello, world    <span class="comment"># fseek引起缓冲区冲洗</span></span><br><span class="line">len of string <span class="keyword">in</span> buf = 24</span><br><span class="line">after fclose: hello, worldcccccccccccccccccccccccccccccccccc    <span class="comment"># 没有追加写null字节</span></span><br><span class="line">len of string <span class="keyword">in</span> buf = 46</span><br></pre></td></tr></table></figure>
+
+<p>用于创建内存流的其他两个函数分别是 open_memstream 和 open_wmemstream。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">FILE *<span class="title function_">open_memstream</span><span class="params">(<span class="type">char</span> **bufp, <span class="type">size_t</span> *sizep)</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;wchar.h&gt;</span></span></span><br><span class="line">FILE *<span class="title function_">open_wmemstream</span><span class="params">(<span class="type">wchar_t</span> **bufp, <span class="type">size_t</span> *sizep)</span>;</span><br></pre></td></tr></table></figure>
+
 <p>返回值：</p>
 <ul>
 <li>若成功，返回流指针；</li>
-<li>若出错，返回NULL</li>
+<li>若出错，返回 NULL</li>
 </ul>
-<p>open_memstream函数创建的流是面向字节的，open_wmemstream函数创建的流是面向宽字节的。</p>
-<p>与fmemopen函数的不同在于：</p>
+<p>open_memstream 函数创建的流是面向字节的，open_wmemstream 函数创建的流是面向宽字节的。</p>
+<p>与 fmemopen 函数的不同在于：</p>
 <ul>
 <li>创建的流只能写打开；</li>
-<li>不能指定自己的缓冲区，但可以分别通过bufp和sizep参数访问缓冲区地址和大小；</li>
+<li>不能指定自己的缓冲区，但可以分别通过 bufp 和 sizep 参数访问缓冲区地址和大小；</li>
 <li>关闭流后需要自行释放缓冲区；</li>
 <li>对流添加字节会增加缓冲区大小。</li>
 </ul>
 <p>缓冲区地址和大小的使用上必须遵循一些原则</p>
 <ul>
-<li>缓冲区地址和长度只有在调用fclose或fflush后才有效；</li>
-<li>这些值只有在下一次流写入或调用fclose前才有效</li>
+<li>缓冲区地址和长度只有在调用 fclose 或 fflush 后才有效；</li>
+<li>这些值只有在下一次流写入或调用 fclose 前才有效</li>
 </ul>
 
     </div>

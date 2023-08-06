@@ -20,16 +20,20 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="article">
+    <meta name="description" content="守护进程守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关闭时才终止。因为它们没有控制终端，所以说它们是在后台运行的。UNIX 系统有很多守护进程，它们执行日常事务活动。 守护进程的特征使用下列命令查看系统中各个进程的状态。 123456789101112$ ps -axj  PPID    PID   PGID    SID TTY       TPGID S">
+<meta property="og:type" content="article">
 <meta property="og:title" content="unix环境高级编程13-守护进程">
 <meta property="og:url" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/index.html">
 <meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="守护进程守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关闭时才终止。因为它们没有控制终端，所以说它们是在后台运行的。UNIX 系统有很多守护进程，它们执行日常事务活动。 守护进程的特征使用下列命令查看系统中各个进程的状态。 123456789101112$ ps -axj  PPID    PID   PGID    SID TTY       TPGID S">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/BSD%E7%9A%84syslog%E8%AE%BE%E6%96%BD.png">
 <meta property="article:published_time" content="2023-04-10T17:22:51.000Z">
-<meta property="article:modified_time" content="2023-07-09T10:10:55.954Z">
+<meta property="article:modified_time" content="2023-08-06T04:55:25.381Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="unix">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/BSD%E7%9A%84syslog%E8%AE%BE%E6%96%BD.png">
 
 
 <link rel="canonical" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/">
@@ -125,7 +129,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -138,6 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">守护进程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.</span> <span class="nav-text">守护进程的特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E8%A7%84%E5%88%99"><span class="nav-number">1.2.</span> <span class="nav-text">编程规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BA%E9%94%99%E8%AE%B0%E5%BD%95"><span class="nav-number">1.3.</span> <span class="nav-text">出错记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%AE%9E%E4%BE%8B%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">单实例守护进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%83%AF%E4%BE%8B"><span class="nav-number">1.5.</span> <span class="nav-text">守护进程的惯例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E8%BF%9B%E7%A8%8B-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.6.</span> <span class="nav-text">客户进程-服务器进程模型</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -150,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">111</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -232,7 +237,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-07-09 10:10:55" itemprop="dateModified" datetime="2023-07-09T10:10:55+00:00">2023-07-09</time>
+      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -261,7 +266,292 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        
+        <h1 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h1><p>守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关闭时才终止。因为它们没有控制终端，所以说它们是在后台运行的。UNIX 系统有很多守护进程，它们执行日常事务活动。</p>
+<h2 id="守护进程的特征"><a href="#守护进程的特征" class="headerlink" title="守护进程的特征"></a>守护进程的特征</h2><p>使用下列命令查看系统中各个进程的状态。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ ps -axj</span><br><span class="line">  PPID    PID   PGID    SID TTY       TPGID STAT   UID   TIME COMMAND</span><br><span class="line">     0      1      1      1 ?            -1 Ss       0   0:06 /sbin/init auto automatic-ubiquity noprompt</span><br><span class="line">     0      2      0      0 ?            -1 S        0   0:00 [kthreadd]</span><br><span class="line">     2      4      0      0 ?            -1 I&lt;       0   0:00 [kworker/0:0H]</span><br><span class="line">     2      6      0      0 ?            -1 I&lt;       0   0:00 [mm_percpu_wq]</span><br><span class="line">     2      7      0      0 ?            -1 S        0   0:00 [ksoftirqd/0]</span><br><span class="line">     2      8      0      0 ?            -1 I        0   3:16 [rcu_sched]</span><br><span class="line">     2      9      0      0 ?            -1 I        0   0:00 [rcu_bh]</span><br><span class="line">     2     10      0      0 ?            -1 S        0   0:00 [migration/0]</span><br><span class="line">     2     11      0      0 ?            -1 S        0   0:00 [watchdog/0]</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>选项 <code>-a</code> 显示由其他用户所拥有的进程的状态,<code>-x</code>显示没有控制终端的进程状态，<code>-j</code>显示与作业有关的信息：会话 ID、进程组 ID、控制终端以及终端进程组 ID。</p>
+<p>系统进程依赖于操作系统实现。父进程ID 为0 的各进程通常是内核进程，它们作为系统引导装入过程的一部分而启动。（init是个例外，它是一个由内核在引导装入时启动的用户层次的命令。）内核进程是特殊的，通常存在于系统的整个生命期中。它们以超级用户特权运行，无控制终端，无命令行。</p>
+<p>在ps 的输出实例中，内核守护进程的名字出现在方括号中。该版本的Linux使用一个名为kthreadd的特殊内核进程来创建其他内核进程，所以kthreadd 表现为其他内核进程的父进程。对于需要在进程上下文执行工作但却不被用户层进程上下文调用的每一个内核组件，通常有它自己的内核守护进程。</p>
+<p>大多数守护进程都以超级用户（root）特权运行。所有的守护进程都没有控制终端，其终端名设置为问号。内核守护进程以无控制终端方式启动。用户层守护进程缺少控制终端可能是守护进程调用了setsid的结果。大多数用户层守护进程都是进程组的组长进程以及会话的首进程，而且是这些进程组和会话中的唯一进程（rsyslogd 是一个例外）。最后，应当引起注意的是用户层守护进程的父进程是init进程。</p>
+<h2 id="编程规则"><a href="#编程规则" class="headerlink" title="编程规则"></a>编程规则</h2><p>在编写守护进程程序时需遵循一些基本规则，以防止产生不必要的交互作用。下面先说明这些规则，然后给出一个按照这些规则编写的函数daemonize。</p>
+<ol>
+<li><p>首先要做的是调用umask将文件模式创建屏蔽字设置为一个已知值（通常是0）。由继承得来的文件模式创建屏蔽字可能会被设置为拒绝某些权限。如果守护进程要创建文件，那么它可能要设置特定的权限。例如，若守护进程要创建组可读、组可写的文件，继承的文件模式创建屏蔽字可能会屏蔽上述两种权限中的一种，而使其无法发挥作用。另一方面，如果守护进程调用的库函数创建了文件，那么将文件模式创建屏蔽字设置为一个限制性更强的值（如 007）可能会更明智，因为库函数可能不允许调用者通过一个显式的函数参数来设置权限。</p>
+</li>
+<li><p>调用fork，然后使父进程exit。这样做实现了下面几点。第一，如果该守护进程是作为一条简单的shell命令启动的，那么父进程终止会让shell认为这条命令已经执行完毕。第二，虽然子进程继承了父进程的进程组 ID，但获得了一个新的进程 ID，这就保证了子进程不是一个进程组的组长进程。这是下面将要进行的setsid调用的先决条件。</p>
+</li>
+<li><p>调用setsid创建一个新会话。然后执行9.5节中列出的3个步骤，使调用进程：（a）成为新会话的首进程，（b）成为一个新进程组的组长进程，（c）没有控制终端。</p>
+</li>
+<li><p>将当前工作目录更改为根目录。从父进程处继承过来的当前工作目录可能在一个挂载的文件系统中。因为守护进程通常在系统再引导之前是一直存在的，所以如果守护进程的当前工作目录在一个挂载文件系统中，那么该文件系统就不能被卸载。</p>
+</li>
+<li><p>关闭不再需要的文件描述符。这使守护进程不再持有从其父进程继承来的任何文件描述符（父进程可能是shell进程，或某个其他进程）。可以使用 open_max 函数或getrlimit函数来判定最高文件描述符值，并关闭直到该值的所有描述符。</p>
+</li>
+<li><p>某些守护进程打开&#x2F;dev&#x2F;null使其具有文件描述符0、1和2，这样，任何一个试图读标准输入、写标准输出或标准错误的库例程都不会产生任何效果。因为守护进程并不与终端设备相关联，所以其输出无处显示，也无处从交互式用户那里接收输入。即使守护进程是从交互式会话启动的，但是守护进程是在后台运行的，所以登录会话的终止并不影响守护进程。如果其他用户在同一终端设备上登录，我们不希望在该终端上见到守护进程的输出，用户也不期望他们在终端上的输入被守护进程读取。</p>
+</li>
+</ol>
+<p>例子，初始化一个守护进程。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;syslog.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/resource.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span></span></span><br><span class="line"><span class="function"><span class="title">daemonize</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *cmd)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span>					i, fd0, fd1, fd2;</span><br><span class="line">	<span class="type">pid_t</span>				pid;</span><br><span class="line">	<span class="keyword">struct</span> <span class="title class_">rlimit</span>		rl;</span><br><span class="line">	<span class="keyword">struct</span> <span class="title class_">sigaction</span>	sa;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Clear file creation mask.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="built_in">umask</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Get maximum number of file descriptors.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">getrlimit</span>(RLIMIT_NOFILE, &amp;rl) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_quit</span>(<span class="string">&quot;%s: can&#x27;t get file limit&quot;</span>, cmd);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Become a session leader to lose controlling TTY.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_quit</span>(<span class="string">&quot;%s: can&#x27;t fork&quot;</span>, cmd);</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (pid != <span class="number">0</span>) <span class="comment">/* parent */</span></span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	<span class="built_in">setsid</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Ensure future opens won&#x27;t allocate controlling TTYs.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	sa.sa_handler = SIG_IGN;</span><br><span class="line">	<span class="built_in">sigemptyset</span>(&amp;sa.sa_mask);</span><br><span class="line">	sa.sa_flags = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">sigaction</span>(SIGHUP, &amp;sa, <span class="literal">NULL</span>) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_quit</span>(<span class="string">&quot;%s: can&#x27;t ignore SIGHUP&quot;</span>, cmd);</span><br><span class="line">	<span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_quit</span>(<span class="string">&quot;%s: can&#x27;t fork&quot;</span>, cmd);</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (pid != <span class="number">0</span>) <span class="comment">/* parent */</span></span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Change the current working directory to the root so</span></span><br><span class="line"><span class="comment">	 * we won&#x27;t prevent file systems from being unmounted.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">chdir</span>(<span class="string">&quot;/&quot;</span>) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_quit</span>(<span class="string">&quot;%s: can&#x27;t change directory to /&quot;</span>, cmd);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Close all open file descriptors.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">if</span> (rl.rlim_max == RLIM_INFINITY)</span><br><span class="line">		rl.rlim_max = <span class="number">1024</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; rl.rlim_max; i++)</span><br><span class="line">		<span class="built_in">close</span>(i);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Attach file descriptors 0, 1, and 2 to /dev/null.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	fd0 = <span class="built_in">open</span>(<span class="string">&quot;/dev/null&quot;</span>, O_RDWR);</span><br><span class="line">	fd1 = <span class="built_in">dup</span>(<span class="number">0</span>);</span><br><span class="line">	fd2 = <span class="built_in">dup</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Initialize the log file.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="built_in">openlog</span>(cmd, LOG_CONS, LOG_DAEMON);</span><br><span class="line">	<span class="keyword">if</span> (fd0 != <span class="number">0</span> || fd1 != <span class="number">1</span> || fd2 != <span class="number">2</span>) &#123;</span><br><span class="line">		<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;unexpected file descriptors %d %d %d&quot;</span>,</span><br><span class="line">		  fd0, fd1, fd2);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若daemonize函数由main程序调用，然后main程序进入休眠状态，那么可以用ps命令检查该守护进程的状态。</p>
+<h2 id="出错记录"><a href="#出错记录" class="headerlink" title="出错记录"></a>出错记录</h2><p>守护进程存在的一个问题是如何处理出错消息。因为它本就不应该有控制终端，所以不能只是简单地写到标准错误上。</p>
+<p>自4.2BSD以来，BSD的syslog设施得到了广泛的应用。大多数守护进程都使用这一设施。下图显示了syslog设施的详细组织结构。</p>
+<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/BSD%E7%9A%84syslog%E8%AE%BE%E6%96%BD.png" class="">
+
+<p>有以下3种产生日志消息的方法。</p>
+<ol>
+<li><p>内核例程可以调用 log 函数。任何一个用户进程都可以通过打开（open）并读取（read）&#x2F;dev&#x2F;klog设备来读取这些消息。因为我们无意编写内核例程，所以不再进一步说明此函数。</p>
+</li>
+<li><p>大多数用户进程（守护进程）调用syslog(3)函数来产生日志消息。我们将在下面说明其调用序列。这使消息被发送至UNIX域数据报套接字&#x2F;dev&#x2F;log。</p>
+</li>
+<li><p>无论一个用户进程是在此主机上，还是在通过TCP&#x2F;IP网络连接到此主机的其他主机上，都可将日志消息发向UDP端口514。注意，syslog函数从不产生这些UDP数据报，它们要求产生此日志消息的进程进行显式的网络编程。</p>
+</li>
+</ol>
+<p>通常，syslogd守护进程读取所有3种格式的日志消息。此守护进程在启动时读一个配置文件，其文件名一般为&#x2F;etc&#x2F;syslog.conf，该文件决定了不同种类的消息应送向何处。</p>
+<p>该设施的接口是syslog函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;syslog.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">openlog</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *ident, <span class="type">int</span> option, <span class="type">int</span> facility)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">syslog</span><span class="params">(<span class="type">int</span> priority, <span class="type">const</span> <span class="type">char</span> *format, ...)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">closelog</span><span class="params">(<span class="type">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">setlogmask</span><span class="params">(<span class="type">int</span> maskpri)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>返回值：前日志记录优先级屏蔽字值</p>
+<p>调用openlog是可选择的。如果不调用openlog，则在第一次调用syslog时，自动调用openlog。调用 closelog也是可选择的，因为它只是关闭被用于与syslogd守护进程进行通信的描述符。</p>
+<p>调用openlog使我们可以指定一个ident，以后，此ident将被加至每则日志消息中。ident一般是程序的名称（如cron、inetd）。option参数是指定各种选项的位屏蔽。</p>
+<p>openlog的option参数</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>XSI</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LOG_CONS</td>
+<td>x</td>
+<td>若日志消息不能通过UNIX域数据报送至 syslogd,则将该消息写至控制台</td>
+</tr>
+<tr>
+<td>LOG_NDELAY</td>
+<td>x</td>
+<td>立即打开至syslogd守护进程的UNIX域数据报套接字，不要等到第一条消息已经被记录时再打开。通常，在记录第一条消息之前，不打开该套接字</td>
+</tr>
+<tr>
+<td>LOG_NOWAIT</td>
+<td>x</td>
+<td>不要等待在将消息记入日志过程中可能已创建的子进程。因为在syslog调用wait时，应用程序可能已获得了子进程的状态，这种处理阻止了与捕捉SIGCHLD信号的应用程序之间产生的冲突</td>
+</tr>
+<tr>
+<td>LOG_ODELAY</td>
+<td>x</td>
+<td>在第一条消息被记录之前延迟打开至syslogd守护进程的连接</td>
+</tr>
+<tr>
+<td>LOG_PERROR</td>
+<td></td>
+<td>除将日志消息发送给syslogd以外，还将它写至标准出错（在Solaris上不可用）</td>
+</tr>
+<tr>
+<td>LOG_PID</td>
+<td>x</td>
+<td>记录每条消息都要包含进程ID。此选项可供对每个不同的请求都fork一个子进程的守护进程使用（与从不调用fork的守护进程相比较，如syslogd)</td>
+</tr>
+</tbody></table>
+<p>设置facility参数的目的是可以让配置文件说明，来自不同设施的消息将以不同的方式进行处理。如果不调用openlog，或者以facility为0来调用它，那么在调用syslog时，可将facility作为priority参数的一个部分进行说明。openlog的facility参数值选取自下表。</p>
+<p>调用syslog产生一个日志消息。其priority参数是facility和level的组合，它们可选取的值分别列于facility和level中。level值按优先级从最高到最低依次排列。</p>
+<p>openlog的facility参数。</p>
+<table>
+<thead>
+<tr>
+<th>facility</th>
+<th>XSI</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LOG_AUDIT</td>
+<td></td>
+<td>审计设施</td>
+</tr>
+<tr>
+<td>LOG_AUTH</td>
+<td></td>
+<td>授权程序：login、su、getty等</td>
+</tr>
+<tr>
+<td>LOG_AUTHPRIV</td>
+<td></td>
+<td>与LOG_AUTH相同，但写日志文件时具有权限限制</td>
+</tr>
+<tr>
+<td>LOG_CONSOLE</td>
+<td></td>
+<td>消息写入&#x2F;dev&#x2F;console</td>
+</tr>
+<tr>
+<td>LOG_CRON</td>
+<td></td>
+<td>cron和at</td>
+</tr>
+<tr>
+<td>LOG_DAEMON</td>
+<td></td>
+<td>系统守护进程：inetd、routed等</td>
+</tr>
+<tr>
+<td>LOG_FTP</td>
+<td></td>
+<td>FTP守程（ftpd）</td>
+</tr>
+<tr>
+<td>LOG_KERN</td>
+<td></td>
+<td>内核产生的消息</td>
+</tr>
+<tr>
+<td>LOG_LOCALO</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LOCAL1</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LOCAL2</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LOCAL3</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LOCAL4</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LOCAL5</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LOCAL6</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LOCAL7</td>
+<td>x</td>
+<td>保留由本地使用</td>
+</tr>
+<tr>
+<td>LOG_LPR</td>
+<td></td>
+<td>行式打印机系统：1pd、1pc等</td>
+</tr>
+<tr>
+<td>LOG_MAIL</td>
+<td></td>
+<td>邮件系统</td>
+</tr>
+<tr>
+<td>LOG_NEWS</td>
+<td></td>
+<td>Usenet网络新闻系统</td>
+</tr>
+<tr>
+<td>LOG_NTP</td>
+<td></td>
+<td>网络时间协议系统</td>
+</tr>
+<tr>
+<td>LOG_SECURITY</td>
+<td></td>
+<td>安全子系统</td>
+</tr>
+<tr>
+<td>LOG_SYSLOG</td>
+<td></td>
+<td>syslogd守护进程本身</td>
+</tr>
+<tr>
+<td>LOG_USER</td>
+<td>x</td>
+<td>来自其他用户进程的消息（默认）</td>
+</tr>
+<tr>
+<td>LOG_UUCP</td>
+<td>UUCP系统</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>syslog中的level（按序排列）</p>
+<table>
+<thead>
+<tr>
+<th>level</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LOG_EMERG</td>
+<td>紧急（系统不可使用）（最高优先级）</td>
+</tr>
+<tr>
+<td>LOG_ALERT</td>
+<td>必须立即修复的情况</td>
+</tr>
+<tr>
+<td>LOG_CRIT</td>
+<td>严重情况（如硬件设备出错）</td>
+</tr>
+<tr>
+<td>LOG_ERR</td>
+<td>出错情况</td>
+</tr>
+<tr>
+<td>LOG_WARNING</td>
+<td>警告情况</td>
+</tr>
+<tr>
+<td>LOG_NOTICE</td>
+<td>正常但重要的情况</td>
+</tr>
+<tr>
+<td>LOG_INFO</td>
+<td>信息性消息</td>
+</tr>
+<tr>
+<td>LOG_DEBUG</td>
+<td>调试消息（最低优先级）</td>
+</tr>
+</tbody></table>
+<p>将format参数以及其他所有参数传至vsprintf函数以便进行格式化。在format中，每个出现的%m字符都先被代换成与errno值对应的出错消息字符串（strerror）。</p>
+<p>setlogmask函数用于设置进程的记录优先级屏蔽字。它返回调用它之前的屏蔽字。当设置了记录优先级屏蔽字时，各条消息除非已在记录优先级屏蔽字中进行了设置，否则将不被记录。注意，试图将记录优先级屏蔽字设置为0并不会有什么作用。</p>
+<p>除了syslog，很多平台还提供它的一种变体来处理可变参数列表。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;syslog.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdarg.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">vsyslog</span><span class="params">(<span class="type">int</span> priority, <span class="type">const</span> <span class="type">char</span> *format, va_list arg)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>大多数syslog实现将使消息短时间处于队列中。如果在此段时间中有重复消息到达，那么syslog 守护进程不会把它写到日志记录中，而是会打印输出一条类似于“上一条消息重复了N次”的消息。</p>
+<h2 id="单实例守护进程"><a href="#单实例守护进程" class="headerlink" title="单实例守护进程"></a>单实例守护进程</h2><p>为了正常运作，某些守护进程会实现为，在任一时刻只运行该守护进<br>程的一个副本。</p>
+<p>例子，保证只运行一个守护进程的一个副本。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;syslog.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LOCKFILE <span class="string">&quot;/var/run/daemon.pid&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">int</span> <span class="title">lockfile</span><span class="params">(<span class="type">int</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span></span></span><br><span class="line"><span class="function"><span class="title">already_running</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span>		fd;</span><br><span class="line">	<span class="type">char</span>	buf[<span class="number">16</span>];</span><br><span class="line"></span><br><span class="line">	fd = <span class="built_in">open</span>(LOCKFILE, O_RDWR|O_CREAT, LOCKMODE);</span><br><span class="line">	<span class="keyword">if</span> (fd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;can&#x27;t open %s: %s&quot;</span>, LOCKFILE, <span class="built_in">strerror</span>(errno));</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">lockfile</span>(fd) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (errno == EACCES || errno == EAGAIN) &#123;</span><br><span class="line">			<span class="built_in">close</span>(fd);</span><br><span class="line">			<span class="keyword">return</span>(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;can&#x27;t lock %s: %s&quot;</span>, LOCKFILE, <span class="built_in">strerror</span>(errno));</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">ftruncate</span>(fd, <span class="number">0</span>);</span><br><span class="line">	<span class="built_in">sprintf</span>(buf, <span class="string">&quot;%ld&quot;</span>, (<span class="type">long</span>)<span class="built_in">getpid</span>());</span><br><span class="line">	<span class="built_in">write</span>(fd, buf, <span class="built_in">strlen</span>(buf)+<span class="number">1</span>);</span><br><span class="line">	<span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>守护进程的每个副本都将试图创建一个文件，并将其进程 ID 写到该文件中。这使管理人员易于标识该进程。如果该文件已经加了锁，那么lockfile函数将失败。</p>
+<h2 id="守护进程的惯例"><a href="#守护进程的惯例" class="headerlink" title="守护进程的惯例"></a>守护进程的惯例</h2><p>在UNIX系统中，守护进程遵循下列通用惯例。</p>
+<ul>
+<li>若守护进程使用锁文件，那么该文件通常存储在&#x2F;var&#x2F;run目录中。然而需要注意的是，守护进程可能需要具有超级用户权限才能在此目录下创建文件。锁文件的名字通常是name.pid，其中，name是该守护进程或服务的名字。例如，cron守护进程锁文件的名字是&#x2F;var&#x2F;run&#x2F;crond.pid。</li>
+<li>若守护进程支持配置选项，那么配置文件通常存放在&#x2F;etc目录中。配置文件的名字通常是name.conf，其中，name是该守护进程或服务的名字。例如，syslogd守护进程的配置文件通常是&#x2F;etc&#x2F;syslog.conf。</li>
+<li>守护进程可用命令行启动，但通常它们是由系统初始化脚本之一（ <code>/etc/rc*</code> 或 <code>/etc/init.d/*</code> ）启动的。如果在守护进程终止时，应当自动地重新启动它，则我们可在&#x2F;etc&#x2F;inittab中为该守护进程包括respawn记录项，这样，init就将重新启动该守护进程。（假定系统使用SystemV风格的init命令。）</li>
+<li>若一个守护进程有一个配置文件，那么当该守护进程启动时会读该文件，但在此之后一般就不会再查看它。若某个管理员更改了配置文件，那么该守护进程可能需要被停止，然后再启动，以使配置文件的更改生效。为避免此种麻烦，某些守护进程将捕捉SIGHUP信号，当它们接收到该信号时，重新读配置文件。因为守护进程并不与终端相结合，它们或者是无控制终端的会话首进程，或者是孤儿进程组的成员，所以守护进程没有理由期望接收SIGHUP。于是，守护进程可以安全地重复使用SIGHUP。</li>
+</ul>
+<p>例子，守护进程重读配置文件。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;syslog.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">sigset_t</span>	mask;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">int</span> <span class="title">already_running</span><span class="params">(<span class="type">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span></span></span><br><span class="line"><span class="function"><span class="title">reread</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> *</span></span><br><span class="line"><span class="function"><span class="title">thr_fn</span><span class="params">(<span class="type">void</span> *arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> err, signo;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (;;) &#123;</span><br><span class="line">		err = <span class="built_in">sigwait</span>(&amp;mask, &amp;signo);</span><br><span class="line">		<span class="keyword">if</span> (err != <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;sigwait failed&quot;</span>);</span><br><span class="line">			<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">switch</span> (signo) &#123;</span><br><span class="line">		<span class="keyword">case</span> SIGHUP:</span><br><span class="line">			<span class="built_in">syslog</span>(LOG_INFO, <span class="string">&quot;Re-reading configuration file&quot;</span>);</span><br><span class="line">			<span class="built_in">reread</span>();</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">case</span> SIGTERM:</span><br><span class="line">			<span class="built_in">syslog</span>(LOG_INFO, <span class="string">&quot;got SIGTERM; exiting&quot;</span>);</span><br><span class="line">			<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="built_in">syslog</span>(LOG_INFO, <span class="string">&quot;unexpected signal %d\n&quot;</span>, signo);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span>					err;</span><br><span class="line">	<span class="type">pthread_t</span>			tid;</span><br><span class="line">	<span class="type">char</span>				*cmd;</span><br><span class="line">	<span class="keyword">struct</span> <span class="title class_">sigaction</span>	sa;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ((cmd = <span class="built_in">strrchr</span>(argv[<span class="number">0</span>], <span class="string">&#x27;/&#x27;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">		cmd = argv[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		cmd++;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Become a daemon.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="built_in">daemonize</span>(cmd);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Make sure only one copy of the daemon is running.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">already_running</span>()) &#123;</span><br><span class="line">		<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;daemon already running&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Restore SIGHUP default and block all signals.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	sa.sa_handler = SIG_DFL;</span><br><span class="line">	<span class="built_in">sigemptyset</span>(&amp;sa.sa_mask);</span><br><span class="line">	sa.sa_flags = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">sigaction</span>(SIGHUP, &amp;sa, <span class="literal">NULL</span>) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_quit</span>(<span class="string">&quot;%s: can&#x27;t restore SIGHUP default&quot;</span>);</span><br><span class="line">	<span class="built_in">sigfillset</span>(&amp;mask);</span><br><span class="line">	<span class="keyword">if</span> ((err = <span class="built_in">pthread_sigmask</span>(SIG_BLOCK, &amp;mask, <span class="literal">NULL</span>)) != <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_exit</span>(err, <span class="string">&quot;SIG_BLOCK error&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Create a thread to handle SIGHUP and SIGTERM.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	err = <span class="built_in">pthread_create</span>(&amp;tid, <span class="literal">NULL</span>, thr_fn, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span> (err != <span class="number">0</span>)</span><br><span class="line">		<span class="built_in">err_exit</span>(err, <span class="string">&quot;can&#x27;t create thread&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Proceed with the rest of the daemon.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该程序调用了图13-1中的daemonize来初始化守护进程。从该函数返回后，调用图13-6中的already_running函数以确保该守护进程只有一个副本在运行。到达这一点时，SIGHUP信号仍被忽略，所以需恢复对该信号的系统默认处理方式；否则调用sigwait的线程决不会见到该信号。</p>
+<p>例子，守护进程重读配置文件的另一种实现。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;syslog.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">int</span> <span class="title">lockfile</span><span class="params">(<span class="type">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">int</span> <span class="title">already_running</span><span class="params">(<span class="type">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span></span></span><br><span class="line"><span class="function"><span class="title">reread</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span></span></span><br><span class="line"><span class="function"><span class="title">sigterm</span><span class="params">(<span class="type">int</span> signo)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">syslog</span>(LOG_INFO, <span class="string">&quot;got SIGTERM; exiting&quot;</span>);</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span></span></span><br><span class="line"><span class="function"><span class="title">sighup</span><span class="params">(<span class="type">int</span> signo)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">syslog</span>(LOG_INFO, <span class="string">&quot;Re-reading configuration file&quot;</span>);</span><br><span class="line">	<span class="built_in">reread</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">char</span>				*cmd;</span><br><span class="line">	<span class="keyword">struct</span> <span class="title class_">sigaction</span>	sa;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ((cmd = <span class="built_in">strrchr</span>(argv[<span class="number">0</span>], <span class="string">&#x27;/&#x27;</span>)) == <span class="literal">NULL</span>)</span><br><span class="line">		cmd = argv[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		cmd++;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Become a daemon.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="built_in">daemonize</span>(cmd);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Make sure only one copy of the daemon is running.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">already_running</span>()) &#123;</span><br><span class="line">		<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;daemon already running&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Handle signals of interest.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	sa.sa_handler = sigterm;</span><br><span class="line">	<span class="built_in">sigemptyset</span>(&amp;sa.sa_mask);</span><br><span class="line">	<span class="built_in">sigaddset</span>(&amp;sa.sa_mask, SIGHUP);</span><br><span class="line">	sa.sa_flags = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">sigaction</span>(SIGTERM, &amp;sa, <span class="literal">NULL</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;can&#x27;t catch SIGTERM: %s&quot;</span>, <span class="built_in">strerror</span>(errno));</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	sa.sa_handler = sighup;</span><br><span class="line">	<span class="built_in">sigemptyset</span>(&amp;sa.sa_mask);</span><br><span class="line">	<span class="built_in">sigaddset</span>(&amp;sa.sa_mask, SIGTERM);</span><br><span class="line">	sa.sa_flags = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">sigaction</span>(SIGHUP, &amp;sa, <span class="literal">NULL</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">syslog</span>(LOG_ERR, <span class="string">&quot;can&#x27;t catch SIGHUP: %s&quot;</span>, <span class="built_in">strerror</span>(errno));</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Proceed with the rest of the daemon.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="comment">/* ... */</span></span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在初始化守护进程后，我们为SIGHUP和SIGTERM配置了信号处理程序。可以将重读逻辑放在信号处理程序中，也可以只在信号处理程序中设置一个标志，并由守护进程的主线程完成所有的工作。</p>
+<h2 id="客户进程-服务器进程模型"><a href="#客户进程-服务器进程模型" class="headerlink" title="客户进程-服务器进程模型"></a>客户进程-服务器进程模型</h2><p>守护进程常常用作服务器进程。确实，我们可以称图13-2中的syslogd进程为服务器进程，用户进程（客户进程）用UNIX域数据报套接字向其发送消息。</p>
+<p>在服务器进程中调用fork然后exec另一个程序来向客户进程提供服务是很常见的。这些服务器进程通常管理着多个文件描述符：通信端点、配置文件、日志文件和类似的文件。最好的情况下，让子进程中的这些文件描述符保持打开状态并无大碍，因为它们很可能不会被在子进程中执行的程序所使用，尤其是那些与服务器端无关的程序。最坏情况下，保持它们的打开状态会导致安全问题——被执行的程序可能有一些恶意行为，如更改服务器端配置文件或欺骗客户端程序使其认为正在与服务器端通信，从而获取未授权的信息。</p>
+<p>解决此问题的一个简单方法是对所有被执行程序不需要的文件描述符设置执行时关闭（close-on-exec）标志。图13-9展示了一个可以用来在服务器端进程中执行上述工作的函数。</p>
+<p>例子，设置执行时关闭标志。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
     </div>
 
     
