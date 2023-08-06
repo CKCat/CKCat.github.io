@@ -22,7 +22,7 @@ AArch64 通用寄存器共 31 个 `X0-X30` , 其中各寄存器的作用如下�
 
 | 寄存器        | 描述                                                               |
 | ------------- | ------------------------------------------------------------------ |
-| `X0` – `X7`   | 参数寄存器，用来传递参数或保存返回值 （`X0`，`X1`）。               |
+| `X0` – `X7`   | 参数寄存器，用来传递参数或保存返回值 （`X0`，`X1`）。              |
 | `X8`          | 间接结果寄存器，一般保存返回值是结构体的地址。                     |
 | `X9` – `X15`  | 易失性寄存器，调用者需要保存的临时寄存器。                         |
 | `X16` – `X17` | 子程序内部调用寄存器（Intra-Procedure-Call Temporary Registers）。 |
@@ -171,16 +171,16 @@ SDIV X0, X1, X2  // X0 = X1 / X2 (signed, 64-bit divide)
 
 ### 移位操作
 
-| Instruction | Description            |
-| ----------- | ---------------------- |
+| Instruction | Description                        |
+| ----------- | ---------------------------------- |
 | **Shift**   |
-| `ASR`       | Arithmetic shift right |
-| `LSL`       | Logical shift left     |
-| `LSR`       | Logical shift right    |
-| `ROR`       | Rotate right           |
+| `ASR`       | **A**rithmetic **S**hift **R**ight |
+| `LSL`       | **L**ogical **S**hift **L**eft     |
+| `LSR`       | **L**ogical **S**hift **R**ight    |
+| `ROR`       | **RO**tate **R**ight               |
 | **Move**    |
-| `MOV`       | Move                   |
-| `MVN`       | Bitwise NOT            |
+| `MOV`       | Move                               |
+| `MVN`       | Bitwise NOT                        |
 
 ```
 // x1 = x0 / 8
@@ -395,6 +395,19 @@ MOVEQ R2, #0;	//指令4
 ```
 
 若 `EQ` 条件符合（根据 `CPSR` 寄存器 `Z` 的值判断），执行指令 1 、3 、4 的 `mov` 操作，否则执行指令 2 的 `mov` 操作。
+
+## TBNZ
+
+指令格式为：`TBNZ Rt, #imm, label` 。
+
+测试位不为 0，则跳转到 label，imm 指定目的寄存器的某一个位， 其值为 0-63 或者 0-31 。
+
+```armasm
+TBNZ W0, #31, loc_16B4  # 若 w0 第31位不为0，则跳转到 loc_16B4
+```
+
+`TBZ` 则是测试位为 0，则跳转。
+
 
 # 参考
 
