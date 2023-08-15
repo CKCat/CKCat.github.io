@@ -21,7 +21,7 @@ public:
 
 int main(int argc, char const *argv[])
 {
-    Point point(1.0, 2.0);
+    Point point(1.1, 2.2);
     printf("cx = %f, cy = %f\n", point.cx, point.cy);
     point.setx(3.14);
     point.sety(6.18);

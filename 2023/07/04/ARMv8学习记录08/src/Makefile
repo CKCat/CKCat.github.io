@@ -6,7 +6,7 @@ else
 	PLATFORM=linux
 endif
 
-FILE_NAME=this
+FILE_NAME=return
 
 CC=$(ANDROID_NDK)/toolchains/llvm/prebuilt/$(PLATFORM)-x86_64/bin/clang
 all:

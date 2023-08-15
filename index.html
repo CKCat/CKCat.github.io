@@ -158,7 +158,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -228,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -327,7 +327,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -349,7 +349,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1>
+          
       
     </div>
 
@@ -411,7 +411,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -433,7 +433,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="虚函数和继承"><a href="#虚函数和继承" class="headerlink" title="虚函数和继承"></a>虚函数和继承</h1>
+          <h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1>
       
     </div>
 
@@ -495,7 +495,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -517,7 +517,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="构造函数和析构函数"><a href="#构造函数和析构函数" class="headerlink" title="构造函数和析构函数"></a>构造函数和析构函数</h1>
+          <h1 id="虚函数和继承"><a href="#虚函数和继承" class="headerlink" title="虚函数和继承"></a>虚函数和继承</h1><h2 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h2><p>例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> cx;</span><br><span class="line">    <span class="type">int</span> cy;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Point</span>(<span class="type">int</span> x):<span class="built_in">cx</span>(x), <span class="built_in">cy</span>(<span class="number">0</span>)&#123;&#125;;</span><br><span class="line">    ~<span class="built_in">Point</span>()&#123;</span><br><span class="line">        cx = <span class="number">0</span>;</span><br><span class="line">        cy = <span class="number">0</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">setx</span><span class="params">(<span class="type">int</span> cx)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;cx = cx;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">sety</span><span class="params">(<span class="type">int</span> cy)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;cy = cy;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">Point <span class="title">point</span><span class="params">(<span class="number">12</span>)</span></span>;</span><br><span class="line">    point.<span class="built_in">sety</span>(<span class="number">34</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;cx = %d, cy = %d\n&quot;</span>, point.cx, point.cy);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ARMv7"><a href="#ARMv7" class="headerlink" title="ARMv7"></a>ARMv7</h4>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9510/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -579,7 +590,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -601,7 +612,22 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="结构体和类"><a href="#结构体和类" class="headerlink" title="结构体和类"></a>结构体和类</h1>
+          <h1 id="构造函数和析构函数"><a href="#构造函数和析构函数" class="headerlink" title="构造函数和析构函数"></a>构造函数和析构函数</h1><h2 id="构造函数和析构函数的出现时机"><a href="#构造函数和析构函数的出现时机" class="headerlink" title="构造函数和析构函数的出现时机"></a>构造函数和析构函数的出现时机</h2><p>在何种情况下,有以下两种情况编译器会提供默认的构造函数。</p>
+<ol>
+<li><p>本类和本类中定义的成员对象或者父类中存在虚函数<br>因为需要初始化虚表，且这个工作理应在构造函数中隐式完成，所以在没有定义构造函数的情况下，编译器会添加默认的构造函数，用于隐式完成虚表的初始化工作。</p>
+</li>
+<li><p>父类或本类中定义的成员对象带有构造函数<br>在对象被定义时，因为对象本身为派生类，所以构造顺序是先构造父类再构造自身。当父类中带有构造函数时，将会调用父类构造函数，而这个调用过程需要在构造函数内完成，因此编译器添加了默认的构造函数来完成这个调用过程。成员对象带有构造函数的情况与此相同。</p>
+</li>
+</ol>
+<p>对象生成时会自动调用构造函数。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9509/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -663,7 +689,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -758,7 +784,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -857,7 +883,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -952,7 +978,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1046,7 +1072,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-06 04:55:25" itemprop="dateModified" datetime="2023-08-06T04:55:25+00:00">2023-08-06</time>
+      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
