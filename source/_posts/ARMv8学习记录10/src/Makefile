@@ -6,11 +6,11 @@ else
 	PLATFORM=linux
 endif
 
-FILE_NAME=return
+FILE_NAME=diamond_inherit
 
 CC=$(ANDROID_NDK)/toolchains/llvm/prebuilt/$(PLATFORM)-x86_64/bin/clang
 all:
-	$(CC) -target $(host)-linux-android21 $(FILE_NAME).cpp -o $(host)_$(FILE_NAME)
+	$(CC) -target $(host)-linux-android21 -lstdc++ $(FILE_NAME).cpp -o $(host)_$(FILE_NAME)
 
 install:
 	adb push $(host)_$(FILE_NAME) /data/local/tmp/$(host)_$(FILE_NAME)
