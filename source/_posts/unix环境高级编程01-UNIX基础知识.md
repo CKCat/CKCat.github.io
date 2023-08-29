@@ -63,34 +63,37 @@ UNIX 文件系统是目录和文件的一种层次结构，所有东西的起点
 例子：列出一个目录中所有文件的名字。
 
 ```c
-#include "../apue.h"
+// 01myls.c
 #include <dirent.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const* argv[]){
     DIR *dp;
     struct dirent *dirp;
-    if(argc != 2)
-        err_quit("usage: ls directory_name");
-    if((dp = opendir(argv[1])) == NULL)
-        err_sys("can't open %s\n", argv[1]);
+    if (argc != 2){
+        printf("usage: ls directory_name");
+        exit(1);
+    }
+    if((dp = opendir(argv[1])) == NULL){
+        printf("can't open %s\n", argv[1]);
+    }
     while ((dirp = readdir(dp)) != NULL){
         printf("%s\n", dirp->d_name);
     }
     closedir(dp);
     return 0;
 }
-
 ```
 
 编译运行：
 
 ```bash
-$ gcc 1.4myls.c ../error.c
+$ gcc 01myls.c
 $ ./a.out
 usage: ls directory_name
 $ ./a.out .
-1.4myls.c
+01myls.c
 ..
 a.out
 .
@@ -134,29 +137,47 @@ UNIX 系统的手册通常分为多个部分，例如：
 例子，从标准输入读，并向标准输出写：
 
 ```c
-#include "../apue.h"
+// 02readwrite.c
+#include <stdio.h>  /* standard input/output library functions */
+#include <errno.h>  /* for definition of errno */
+#include <stdarg.h> /* ISO C variable aruments */
+#include <unistd.h> /* 提供了访问操作系统底层功能的接口 */
+#include <string.h>
+#include <stdlib.h>
 
-#define BUFFSIZE 4096
+#define MAXLINE 4094
 
-int main(int argc, char const *argv[])
-{
-    int n;
-    char buf[BUFFSIZE];
-    // 读标准输入，写标准输出
-    while ((n = read(STDIN_FILENO, buf, BUFFSIZE)) > 0)
-        if(write(STDOUT_FILENO, buf, n) != n)
-            err_sys("write error");
-    if (n < 0)
-        err_sys("read error.");
+void err_sys(const char *fmt, ...){
+	va_list ap;
+	char buf[MAXLINE];
 
-    return 0;
+	va_start(ap, fmt);
+	vsnprintf(buf, MAXLINE-1, fmt, ap);
+	snprintf(buf+strlen(buf), MAXLINE-strlen(buf)-1, ": %s", strerror(errno));
+	strcat(buf, "\n");
+	fflush(stdout);
+	fputs(buf, stderr);
+	fflush(NULL);
+	va_end(ap);
+	exit(1);
+}
+
+int main(int argc, char* argv[]){
+	int n;
+	char buf[MAXLINE];
+	while((n = read(STDIN_FILENO, buf, MAXLINE)) > 0)
+		if(write(STDOUT_FILENO, buf, n) != n)
+			err_sys("write error");
+	if (n < 0)
+		err_sys("read error");
+	return 0;
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 1.5readwrite.c ../error.c
+$ gcc 02readwrite.c
 $ ./a.out >data.txt
 1234567890 # 按下 Ctrl + D
 $ cat data.txt
@@ -174,17 +195,20 @@ abcd
 例子，用标准 `I/O` 将标准输入复制到标准输出:
 
 ```c
-#include "../apue.h"
+// 03stdio.c
+#include <stdio.h>  /* standard input/output library functions */
 
-int main(int argc, char const *argv[]){
-    int c;
-    while ((c = getc(stdin)) != EOF){
-        if( putc(c, stdout) == EOF)
-            err_sys("output error.");
-    }
-    if (ferror(stdin))
-        err_sys("input error.");
-    return 0;
+void err_sys(const char *fmt, ...);
+
+int main(int argc, char* argv[]){
+	int c;
+	while((c = getc(stdin)) != EOF){
+		if(putc(c, stdout) == EOF)
+			err_sys("output error");
+	}
+	if (ferror(stdin))
+		err_sys("inputerror");
+	return 0;
 }
 ```
 
@@ -201,9 +225,13 @@ int main(int argc, char const *argv[]){
 例子，打印进程 ID：
 
 ```c
-#include "../apue.h"
-int main(int argc, char const *argv[]){
-    printf("hello world from process ID %ld\n", (long)getpid());
+// 04getpid.c
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdio.h>
+
+int main(int argc, char* argv[]){
+    printf("pid = %ld\n", (long)getpid());
     return 0;
 }
 ```
@@ -211,61 +239,85 @@ int main(int argc, char const *argv[]){
 编译运行：
 
 ```bash
-$ gcc 1.6getpid.c
+$ gcc 04getpid.c
 $ ./a.out
-hello world from process ID 9306
+pid = 9306
 $ ./a.out
-hello world from process ID 9352
+pid = 9352
 ```
 
-程序每次运行的进程 ID 是不同的。
+可以看到，程序每次运行的进程 ID 是不同的。
 
 ### 进程控制
 
-有 3 个用于进程控制的主要函数：fork、exec 和 waitpid。
+有 3 个用于进程控制的主要函数：`fork`、`exec` 和 `waitpid`。
 
 例子，从标准输入读取命令，然后执行这些命令：
 
 ```c
-#include "../apue.h"
+// 05exec.c
+#include <sys/types.h>
 #include <sys/wait.h>
+#include <stdio.h>  /* standard input/output library functions */
+#include <errno.h>  /* for definition of errno */
+#include <stdarg.h> /* ISO C variable aruments */
+#include <unistd.h> /* 提供了访问操作系统底层功能的接口 */
+#include <string.h>
+#include <stdlib.h>
 
-int main(int argc, char const *argv[]){
-    char buf[MAXLINE];
-    pid_t pid;
-    int status;
-    printf("%%"); // %作为命令提示符
-    while (fgets(buf, MAXLINE, stdin) != NULL){
-        if(buf[strlen(buf) - 1] == '\n')
-            buf[strlen(buf) -1] = 0;
-        if((pid = fork()) < 0)
-            err_sys("fork error.");
-        else if(pid == 0){
-            // 子进程
-            execlp(buf, buf, (char*)0); // 执行命令
-            err_ret("couldn't execute:%s", buf);
-            exit(127);
-        }
-        // 父进程等待子进程终止
-        if((pid = waitpid(pid, &status, 0)) < 0)
-            err_sys("waitpid error.");
-        printf("%%");
-    }
-    return 0;
+#define MAXLINE 4094
+
+void err_sys(const char *fmt, ...);
+
+void err_ret(const char *fmt, ...){
+	va_list ap;
+	char buf[MAXLINE];
+
+	va_start(ap, fmt);
+	vsnprintf(buf, MAXLINE-1, fmt, ap);
+	snprintf(buf+strlen(buf), MAXLINE-strlen(buf)-1, ": %s", strerror(errno));
+	strcat(buf, "\n");
+	fflush(stdout);
+	fputs(buf, stderr);
+	fflush(NULL);
+	va_end(ap);
 }
 
+int main(int argc, char* argv[]){
+	char buf[MAXLINE];
+	pid_t pid;
+	int status;
+	printf("%%"); // 使用 % 作为命令提示符
+	while(fgets(buf, MAXLINE, stdin) != NULL){
+		if(buf[strlen(buf)-1] == '\n')
+			buf[strlen(buf)-1] = 0;
+		if((pid = fork()) < 0)
+			err_sys("fork error.");
+		else if(pid == 0){
+			// 子进程
+			execlp(buf, buf, (char*)0); // 执行命令
+			err_ret("couldn't, execute: %s", buf);
+			exit(127);
+		}
+		// 父进程等待子进程终止
+		if ((pid = waitpid(pid, &status, 0)) < 0)
+			err_sys("waitpid error.");
+        printf("%%");
+	}
+	return 0;
+}
 ```
 
 编译运行：
 
 ```bash
-$ gcc 1.6fork.c ../error.c
+$ gcc 05exec.c
 $ ./a.out
 %date
 Tue Apr 11 01:41:50 UTC 2023
-%abc
+%abc # execlp 执行命令错误
 couldn't execute:abc: No such file or directory
-%%
+% # Ctrl + D 退出
 ```
 
 ### 线程和线程 ID
@@ -274,21 +326,21 @@ couldn't execute:abc: No such file or directory
 
 ## 出错处理
 
-当 UNIX 系统函数出错时，通常会返回一个负值，而且整型变量 errno 通常被设置为具有特定信息的值。
-文件 `<errno.h>` 中定义了 errno 以及可以赋与它的各种常量。这些常量都以字符 E 开头。
-在 Linux 中，出错常量在 errno(3)手册页中列出。
+当 UNIX 系统函数出错时，通常会返回一个负值，而且整型变量 `errno` 通常被设置为具有特定信息的值。
+文件 `<errno.h>` 中定义了 `errno` 以及可以赋与它的各种常量。这些常量都以字符 E 开头。
+在 Linux 中，出错常量在 `errno(3)` 手册页中列出。
 
-在多线程环境中，每个线程都有属于它自己的局部 errno 以避免一个线程干扰另一个线程。Linux 支持多线程存取 errno，将其定义为：
+在多线程环境中，每个线程都有属于它自己的局部 `errno` 以避免一个线程干扰另一个线程。Linux 支持多线程存取 `errno`，将其定义为：
 
 ```c
 extern int *__errno_location(void);
 #define errno (*__errno_location())
 ```
 
-对于 errno 应当注意两条规则。
+对于 `errno` 应当注意两条规则。
 
 - 第一条规则是：如果没有出错，其值不会被例程清除。
-- 第二条规则是：任何函数都不会将 errno 值设置为 0，而且在`<errno.h>`中定义的所有常量都不为 0。
+- 第二条规则是：任何函数都不会将 `errno` 值设置为 0，而且在 `<errno.h>` 中定义的所有常量都不为 0。
 
 C 标准定义了两个函数，它们用于打印出错信息。
 
@@ -300,33 +352,38 @@ char *strerror(int errnum);
 void perror(const char *msg);
 ```
 
-`strerror` 函数将 errnum 映射为一个出错消息字符串，并且返回此字符串的指针。
-`perror` 函数基于 errno 的当前值，在标准错误上产生一条出错消息，然后返回。
+`strerror` 函数将 `errnum` 映射为一个出错消息字符串，并且返回此字符串的指针。
+`perror` 函数基于 `errno` 的当前值，在标准错误上产生一条出错消息，然后返回。
 
 例子：
 
 ```c
-#include "../apue.h"
+// 06errno.c
+#include <stdio.h>
 #include <errno.h>
+#include <string.h>
 
-int main(int argc, char const *argv[]){
-    fprintf(stderr, "EACCES: %s\n", strerror(EACCES));
-    errno = ENOENT;
-    perror("error message");
-    return 0;
+int main(int argc, char* argv[]){
+	fprintf(stderr, "EACCES: %s\n", strerror(EACCES));
+	errno = ENOENT;
+	perror("error meassage");
+	return 0;
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 1.7error.c
+$ gcc 06errno.c
 $ ./a.out
 EACCES: Permission denied
 error message: No such file or directory
 ```
 
-出错分成两类：致命性的和非致命性的。对于致命性的错误，无法执行恢复动作。对于资源相关的非致命性出错的典型恢复操作是延迟一段时间，然后重试。
+出错分成两类：致命性的和非致命性的。
+
+- 对于致命性的错误，无法执行恢复动作。
+- 对于资源相关的非致命性出错的典型恢复操作是延迟一段时间，然后重试。
 
 ## 用户标识
 
@@ -345,18 +402,21 @@ error message: No such file or directory
 例子，返回用户 ID 和组 ID。
 
 ```c
-#include "../apue.h"
+// 07uid.c
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdio.h>
 
-int main(int argc, char const *argv[]){
-    printf("uid = %d, gid = %d\n", getuid(), getgid());
-    return 0;
+int main(int argc, char* argv[]){
+	printf("uid = %d, gid = %d\n", getuid(), getgid());
+	return 0;
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 1.8guid.c
+$ gcc 07uid.c
 $ ./a.out
 uid = 1000, gid = 1000
 ```
@@ -371,56 +431,67 @@ uid = 1000, gid = 1000
 - 按系统默认方式处理。
 - 提供一个函数，信号发生时调用该函数，这被称为捕捉该信号。
 
-例子，提供一个函数处理 SIGINT 信号。
+例子，提供一个函数处理 `SIGINT` 信号。
 
 ```c
-#include "../apue.h"
+// 08sign.c
+#include <sys/types.h>
 #include <sys/wait.h>
+#include <stdio.h>  /* standard input/output library functions */
+#include <errno.h>  /* for definition of errno */
+#include <stdarg.h> /* ISO C variable aruments */
+#include <unistd.h> /* 提供了访问操作系统底层功能的接口 */
+#include <string.h>
+#include <stdlib.h>
+
+#define MAXLINE 4094
+
+void err_sys(const char *fmt, ...);
+void err_ret(const char *fmt, ...);
 
 static void sig_int(int);
 
-int main(int argc, char const *argv[]){
-    char buf[MAXLINE];
-    pid_t pid;
-    int status;
-    // 添加信号处理函数
-    if(signal(SIGINT, sig_int) == SIG_ERR)
-        err_sys("signal error.");
-
-    printf("%%"); // %作为命令提示符
-    while (fgets(buf, MAXLINE, stdin) != NULL){
-        if(buf[strlen(buf) - 1] == '\n')
-            buf[strlen(buf) -1] = 0;
-        if((pid = fork()) < 0)
-            err_sys("fork error.");
-        else if(pid == 0){
-            // 子进程
-            execlp(buf, buf, (char*)0); // 执行命令
-            err_ret("couldn't execute:%s", buf);
-            exit(127);
-        }
-        // 父进程等待子进程终止
-        if((pid = waitpid(pid, &status, 0)) < 0)
-            err_sys("waitpid error.");
-        printf("%%");
-    }
-    return 0;
+int main(int argc, char* argv[]){
+	char buf[MAXLINE];
+	pid_t pid;
+	int status;
+	// 添加 SIGINT 信号处理函数
+	if(signal(SIGINT, sig_int) == SIG_ERR)
+		err_sys("signal error.");
+	printf("%%");
+	while (fgets(buf, MAXLINE, stdin) != NULL){
+		if(buf[strlen(buf)-1] == '\n')
+			buf[strlen(buf)-1] = 0;
+		if((pid = fork()) < 0)
+			err_sys("fork error.");
+		else if(pid == 0){
+			//子进程
+			execlp(buf, buf, (char*)0);
+			err_ret("couldn't execute: %s", buf);
+			exit(127);
+		}
+		// 父进程等待子进程终止
+		if((pid = waitpid(pid, &status, 0)) < 0)
+			err_sys("waitpid error.");
+		printf("%%");
+	}
+	return 0;
 }
 
 void sig_int(int signo){
-    printf("interrupt.\n%% ");
+	printf("interrupt: %d\n%% ",signo);
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 1.9sign.c ../error.c
+$ gcc 08sign.c
 $ ./a.out
 %112
 couldn't execute:112: No such file or directory
-%^Cinterrupt.
-% %
+%^Cinterrupt. # Ctrl + C SIGINT 中断
+% %           # Ctrl + D 退出
 ```
 
 ## 时间值
@@ -450,5 +521,15 @@ sys 0.00
 
 系统调用通常提供一种最小接口，而库函数通常提供比较复杂的功能。
 
-系统调用接口总是在《UNIX 程序员手册》的第 2 部分中说明。
-通用库函数在《UNIX 程序员手册》的第 23 部分中说明。
+在 Linux 系统中，`man` 命令用于查看系统中安装的程序、命令、库函数等的手册页（manual pages）。手册页被分为不同的部分，每个部分都包含了特定类型的文档。以下是一些常见的手册页部分及其对应的数字：
+
+- 1： 用户命令：普通用户可以使用的命令，如 `ls`、`cp`、`mv` 等。
+- 2： 系统调用：内核提供的系统调用，如 `open`、`read`、`write` 等。
+- 3： C 库函数：C 语言库函数，如 `printf`、`malloc`、`strcpy` 等。
+- 4： 设备文件和特殊文件：关于设备文件和特殊文件的信息。
+- 5： 文件格式：配置文件、数据文件等的文件格式描述。
+- 6： 游戏和娱乐：游戏和其他娱乐程序的手册。
+- 7： 杂项：如宏、协议、文件格式等的杂项手册。
+- 8： 系统管理命令：超级用户（root）可以使用的管理命令，如 `mount`、`reboot` 等。
+
+要查看特定部分的手册页，只需在 `man` 命令后面添加相应的数字。例如，要查看第 5 部分的手册页，可以使用 `man 5 passwd`。
