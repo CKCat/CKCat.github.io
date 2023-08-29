@@ -70,20 +70,33 @@ mount -o ro,remount /
 Charles 安装在物理机上。
 
 1. 首先保存证书
-在Charles菜单栏选择 `Help -> SSL proxying -> Save Charles Root Certificate` 保存证书，其中证书格式为 `.cer`。
+   在 Charles 菜单栏选择 `Help -> SSL proxying -> Save Charles Root Certificate` 保存证书，其中证书格式为 `.cer`。
 
 然后将证书拖入虚拟中，直接双击安装，将证书存储改为：受信任的根证书颁发机构。
 
 2. 设置代理
-将虚拟机的代理设置为物理机的IP，并且将代理端口设置为 Charles 的代理端口。其中设置代理的位置在：所有设置 -> 网络和Internet -> 代理 -> 手动设置代理。
+   将虚拟机的代理设置为物理机的 IP，并且将代理端口设置为 Charles 的代理端口。其中设置代理的位置在：所有设置 -> 网络和 Internet -> 代理 -> 手动设置代理。
 
 3. 设置 Charles
-在Charles菜单栏选择 `Proxy -> SSL Proxying Settings -> SSL Proxying` ，选中 Enable SSL Proxying，并且在 Include 选项添加 Location，Host 和 Port都设置为 `*`。
+   在 Charles 菜单栏选择 `Proxy -> SSL Proxying Settings -> SSL Proxying` ，选中 Enable SSL Proxying，并且在 Include 选项添加 Location，Host 和 Port 都设置为 `*`。
 
+# 微信抓包
 
-参考连接：
+1. 首先用数据线把手机连接到电脑。
+2. 手机打开 USB 调试。
+3. 手机进入微信随便打开一个聊天窗口输入并发送： `http://debugxweb.qq.com/?inspector=true` 点击打开这个链接，弹出“执行成功”，即可。
 
-```bash
+4. 手机微信打开想要抓包调试的网页。
+5. 电脑上打开 chrome 内核的浏览器或 edge 浏览器。
+   chrome 内核的浏览器输入 `chrome://inspect/#devices`
+   edge 浏览器输入：`edge://inspect/#devices`
+
+打开后稍等片刻，然后在打开的界面中点击 inspect fallback 。
+
+# 参考连接：
+
 https://mp.weixin.qq.com/s/ahPbBSfkkBsv4oy265rI2Q
+
 https://www.cnblogs.com/lulianqi/p/11380794.html
-```
+
+https://www.52pojie.cn/thread-1826013-1-1.html
