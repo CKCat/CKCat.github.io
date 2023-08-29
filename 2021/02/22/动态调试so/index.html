@@ -20,12 +20,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="如果手机系统是 android 10，那么需要设置一下  12export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib&#x2F;bionic&#x2F;libc.soor export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib64&#x2F;bionic&#x2F;libc.so 参考：https:&#x2F;&#x2F;bbs.pediy.com&#x2F;thread-">
+    <meta name="description" content="动态调试送给最好的 TA 如果手机系统是 android 10，那么需要设置一下  12export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib&#x2F;bionic&#x2F;libc.soor export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib64&#x2F;bionic&#x2F;libc.so  参考：https:&#x2F;&#x2F;bbs.pedi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动态调试so">
 <meta property="og:url" content="https://ckcat.github.io/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="如果手机系统是 android 10，那么需要设置一下  12export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib&#x2F;bionic&#x2F;libc.soor export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib64&#x2F;bionic&#x2F;libc.so 参考：https:&#x2F;&#x2F;bbs.pediy.com&#x2F;thread-">
+<meta property="og:description" content="动态调试送给最好的 TA 如果手机系统是 android 10，那么需要设置一下  12export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib&#x2F;bionic&#x2F;libc.soor export IDA_LIBC_PATH&#x3D;&#x2F;apex&#x2F;com.android.runtime&#x2F;lib64&#x2F;bionic&#x2F;libc.so  参考：https:&#x2F;&#x2F;bbs.pedi">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ckcat.github.io/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-57-11.png">
 <meta property="og:image" content="https://ckcat.github.io/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-58-08.png">
@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://ckcat.github.io/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-24-19-23-12.png">
 <meta property="og:image" content="https://ckcat.github.io/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-24-19-23-20.png">
 <meta property="article:published_time" content="2021-02-22T20:54:30.000Z">
-<meta property="article:modified_time" content="2023-08-15T11:41:46.618Z">
+<meta property="article:modified_time" content="2023-08-29T09:43:03.960Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
@@ -156,7 +156,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84TA"><span class="nav-number">1.</span> <span class="nav-text">动态调试送给最好的TA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%84%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">常规方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8IDA%E6%89%93%E5%BC%80%E9%9C%80%E8%A6%81%E8%B0%83%E8%AF%95%E7%9A%84so%E6%96%87%E4%BB%B6%EF%BC%8C%E6%89%BE%E5%88%B0%E5%85%B3%E9%94%AE%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8C%E8%AE%BE%E7%BD%AE%E6%96%AD%E7%82%B9%E3%80%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%80%89%E6%8B%A9Android%E8%B0%83%E8%AF%95%E5%99%A8%EF%BC%8C%E8%AE%BE%E7%BD%AEhostname%E5%92%8C%E7%AB%AF%E5%8F%A3%E3%80%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 选择Android调试器，设置hostname和端口。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 开始调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-jdb-%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. jdb 连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%86%E6%9E%90%E5%B9%B6-dump-lua-%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 分析并 dump lua 字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%AD%97%E8%8A%82%E7%A0%81%E8%BD%AC%E6%8D%A2%E4%B8%BA-lua-%E4%BB%A3%E7%A0%81"><span class="nav-number">1.1.6.</span> <span class="nav-text">将字节码转换为 lua 代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-so-%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">修改 so 方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">修改字节码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8-init-proc-%E5%92%8C-init-arrary-%E8%B0%83%E7%94%A8%E4%B8%8B%E6%96%AD%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">如何在 .init_proc 和 init_arrary 调用下断点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#init-proc-%E5%87%BD%E6%95%B0%E5%92%8C-init-arrary-%E7%9A%84%E4%BA%A7%E7%94%9F%E6%96%B9%E6%B3%95%E3%80%82"><span class="nav-number">2.1.</span> <span class="nav-text">.init_proc 函数和 init_arrary 的产生方法。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%BA%90%E7%A0%81%E6%89%BE%E5%88%B0%E8%B0%83%E7%94%A8%E7%9A%84%E5%85%B3%E9%94%AE%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">通过源码找到调用的关键位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95"><span class="nav-number">2.3.</span> <span class="nav-text">开始调试</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84-TA"><span class="nav-number">1.</span> <span class="nav-text">动态调试送给最好的 TA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%84%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">常规方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8-IDA-%E6%89%93%E5%BC%80%E9%9C%80%E8%A6%81%E8%B0%83%E8%AF%95%E7%9A%84-so-%E6%96%87%E4%BB%B6%EF%BC%8C%E6%89%BE%E5%88%B0%E5%85%B3%E9%94%AE%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8C%E8%AE%BE%E7%BD%AE%E6%96%AD%E7%82%B9%E3%80%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 使用 IDA 打开需要调试的 so 文件，找到关键的方法，设置断点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%80%89%E6%8B%A9-Android-%E8%B0%83%E8%AF%95%E5%99%A8%EF%BC%8C%E8%AE%BE%E7%BD%AE-hostname-%E5%92%8C%E7%AB%AF%E5%8F%A3%E3%80%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 选择 Android 调试器，设置 hostname 和端口。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 开始调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-jdb-%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. jdb 连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%86%E6%9E%90%E5%B9%B6-dump-lua-%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 分析并 dump lua 字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%AD%97%E8%8A%82%E7%A0%81%E8%BD%AC%E6%8D%A2%E4%B8%BA-lua-%E4%BB%A3%E7%A0%81"><span class="nav-number">1.1.6.</span> <span class="nav-text">将字节码转换为 lua 代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-so-%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">修改 so 方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">修改字节码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8-init-proc-%E5%92%8C-init-arrary-%E8%B0%83%E7%94%A8%E4%B8%8B%E6%96%AD%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">如何在 .init_proc 和 init_arrary 调用下断点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#init-proc-%E5%87%BD%E6%95%B0%E5%92%8C-init-arrary-%E7%9A%84%E4%BA%A7%E7%94%9F%E6%96%B9%E6%B3%95%E3%80%82"><span class="nav-number">2.1.</span> <span class="nav-text">.init_proc 函数和 init_arrary 的产生方法。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%BA%90%E7%A0%81%E6%89%BE%E5%88%B0%E8%B0%83%E7%94%A8%E7%9A%84%E5%85%B3%E9%94%AE%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">通过源码找到调用的关键位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95"><span class="nav-number">2.3.</span> <span class="nav-text">开始调试</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -169,7 +169,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -251,7 +251,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -280,14 +280,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <blockquote>
+        <h1 id="动态调试送给最好的-TA"><a href="#动态调试送给最好的-TA" class="headerlink" title="动态调试送给最好的 TA"></a>动态调试送给最好的 TA</h1><blockquote>
 <p>如果手机系统是 android 10，那么需要设置一下</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so</span><br><span class="line">or <span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so</span><br></pre></td></tr></table></figure>
-<p>参考：<a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-258103.htm">https://bbs.pediy.com/thread-258103.htm</a></p>
-<h1 id="动态调试送给最好的TA"><a href="#动态调试送给最好的TA" class="headerlink" title="动态调试送给最好的TA"></a>动态调试送给最好的TA</h1><h2 id="常规方式"><a href="#常规方式" class="headerlink" title="常规方式"></a>常规方式</h2><h3 id="1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"><a href="#1-使用IDA打开需要调试的so文件，找到关键的方法，设置断点。" class="headerlink" title="1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。"></a>1. 使用IDA打开需要调试的so文件，找到关键的方法，设置断点。</h3><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-57-11.png" class="">
 
-<h3 id="2-选择Android调试器，设置hostname和端口。"><a href="#2-选择Android调试器，设置hostname和端口。" class="headerlink" title="2. 选择Android调试器，设置hostname和端口。"></a>2. 选择Android调试器，设置hostname和端口。</h3><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-58-08.png" class="">
+<p>参考：<a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-258103.htm">https://bbs.pediy.com/thread-258103.htm</a></p>
+<h2 id="常规方式"><a href="#常规方式" class="headerlink" title="常规方式"></a>常规方式</h2><h3 id="1-使用-IDA-打开需要调试的-so-文件，找到关键的方法，设置断点。"><a href="#1-使用-IDA-打开需要调试的-so-文件，找到关键的方法，设置断点。" class="headerlink" title="1. 使用 IDA 打开需要调试的 so 文件，找到关键的方法，设置断点。"></a>1. 使用 IDA 打开需要调试的 so 文件，找到关键的方法，设置断点。</h3><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-57-11.png" class="">
+
+<h3 id="2-选择-Android-调试器，设置-hostname-和端口。"><a href="#2-选择-Android-调试器，设置-hostname-和端口。" class="headerlink" title="2. 选择 Android 调试器，设置 hostname 和端口。"></a>2. 选择 Android 调试器，设置 hostname 和端口。</h3><img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-20-58-08.png" class="">
 
 <h3 id="3-开始调试"><a href="#3-开始调试" class="headerlink" title="3. 开始调试"></a>3. 开始调试</h3><ul>
 <li>启动 <code>android_server</code> 。</li>
@@ -297,9 +298,9 @@
 <p>执行完以上操作完，使用 IDA 附加对应的 APP 。</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-02-38.png" class="">
 
-<h3 id="4-jdb-连接"><a href="#4-jdb-连接" class="headerlink" title="4. jdb 连接"></a>4. jdb 连接</h3><p>打开 monitor ，查看APP的调试端口，使用jdb 命令连接 <code> jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700</code> 。</p>
+<h3 id="4-jdb-连接"><a href="#4-jdb-连接" class="headerlink" title="4. jdb 连接"></a>4. jdb 连接</h3><p>打开 monitor ，查看 APP 的调试端口，使用 jdb 命令连接 <code> jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700</code> 。</p>
 <blockquote>
-<p>通过 <code>adb forward tcp:&lt;hostport&gt; jdwp:&lt;pid&gt;</code> 命令，替代使用DDMS的方式。</p>
+<p>通过 <code>adb forward tcp:&lt;hostport&gt; jdwp:&lt;pid&gt;</code> 命令，替代使用 DDMS 的方式。</p>
 </blockquote>
 <p>此时 APP 将会运行起来，IDA 将会弹出下列界面，点击 same 就可以了。</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-07-35.png" class="">
@@ -307,22 +308,21 @@
 <p>最终将会断在我们之前下断点的地方。</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-08-20.png" class="">
 
-
 <h3 id="5-分析并-dump-lua-字节码"><a href="#5-分析并-dump-lua-字节码" class="headerlink" title="5. 分析并 dump lua 字节码"></a>5. 分析并 dump lua 字节码</h3><p>通过参考其他文章可知 luaL_loadbufferx 是关键解密函数，但是也需要我们要分析解密的具体地方。看到有 malloc 就很可疑。我们就需要重点关注这个地方。通过调试发现其申请的空间就是存放解密后的 lua 字节码。</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-09-05.png" class="">
 
 <p>编写 dump 脚本，下面提供了 IDC 和 Python 脚本。</p>
 <p><code>dump.idc</code></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">auto</span> i,fp;</span><br><span class="line">    fp = fopen(<span class="string">&quot;d:\\init.lua&quot;</span>,<span class="string">&quot;wb&quot;</span>);</span><br><span class="line">    <span class="keyword">auto</span> start = <span class="number">0xF18B7140</span>;</span><br><span class="line">    <span class="keyword">auto</span> size = <span class="number">0x1A6</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">        fputc(Byte(start + i),fp); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>dump.py
-</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> idaapi</span><br><span class="line">start_address = <span class="number">0xF18B7140</span></span><br><span class="line">data_length = <span class="number">0x1A6</span></span><br><span class="line">data = idaapi.dbg_read_memory(start_address , </span><br><span class="line">data_length)</span><br><span class="line">fp = <span class="built_in">open</span>(<span class="string">&#x27;d:\\dump1&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>)</span><br><span class="line">fp.write(data)</span><br><span class="line">fp.close()</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;Dump OK&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">auto</span> i,fp;</span><br><span class="line">    fp = fopen(<span class="string">&quot;d:\\init.lua&quot;</span>,<span class="string">&quot;wb&quot;</span>);</span><br><span class="line">    <span class="keyword">auto</span> start = <span class="number">0xF18B7140</span>;</span><br><span class="line">    <span class="keyword">auto</span> size = <span class="number">0x1A6</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">        fputc(Byte(start + i),fp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>dump.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> idaapi</span><br><span class="line">start_address = <span class="number">0xF18B7140</span></span><br><span class="line">data_length = <span class="number">0x1A6</span></span><br><span class="line">data = idaapi.dbg_read_memory(start_address ,</span><br><span class="line">data_length)</span><br><span class="line">fp = <span class="built_in">open</span>(<span class="string">&#x27;d:\\dump1&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>)</span><br><span class="line">fp.write(data)</span><br><span class="line">fp.close()</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;Dump OK&quot;</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="将字节码转换为-lua-代码"><a href="#将字节码转换为-lua-代码" class="headerlink" title="将字节码转换为 lua 代码"></a>将字节码转换为 lua 代码</h3><p>在网上找到 <code>unluac_2015_06_13.jar</code> ，将 lua 节码转换为 lua 代码。</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-13-27.png" class="">
 
 <h2 id="修改-so-方式"><a href="#修改-so-方式" class="headerlink" title="修改 so 方式"></a>修改 so 方式</h2><p>这种方式主要是探索 IDA 断点的字节码，同样使用于探索其他调试器的断点字节码。</p>
-<h3 id="修改字节码"><a href="#修改字节码" class="headerlink" title="修改字节码"></a>修改字节码</h3><p>使用IDA打开需要调试的so文件，找到关键的方法，修改字节码，并将修改后的内容保存至文件。</p>
+<h3 id="修改字节码"><a href="#修改字节码" class="headerlink" title="修改字节码"></a>修改字节码</h3><p>使用 IDA 打开需要调试的 so 文件，找到关键的方法，修改字节码，并将修改后的内容保存至文件。</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-18-20.png" class="">
 
 <p>为什么将字节码修 03 AF 改为 10 DE 。</p>
@@ -330,9 +330,10 @@
 
 <p>使用的 IDA 插件：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">下载Keypatch.py复制到插件目录：https://github.com/keystone-engine/keypatch</span><br><span class="line">下载安装keystone python模块：https://github.com/keystone-engine/keystone/releases/download/0.9.1/keystone-0.9.1-python-win64.msi</span><br></pre></td></tr></table></figure>
+
 <p><strong>注意</strong></p>
 <blockquote>
-<p>其实这里不一定要使用这种方式获取断点的字节码，也可以通过循环断下来，将指令改为一个死循环，最后暂停就可以断到相应的位置了，最后再将指令改回去就可以了。 </p>
+<p>其实这里不一定要使用这种方式获取断点的字节码，也可以通过循环断下来，将指令改为一个死循环，最后暂停就可以断到相应的位置了，最后再将指令改回去就可以了。</p>
 </blockquote>
 <p>最后重打包，按照之前的方式调试即可。</p>
 <h1 id="如何在-init-proc-和-init-arrary-调用下断点"><a href="#如何在-init-proc-和-init-arrary-调用下断点" class="headerlink" title="如何在 .init_proc 和 init_arrary 调用下断点"></a>如何在 <code>.init_proc</code> 和 <code>init_arrary</code> 调用下断点</h1><h2 id="init-proc-函数和-init-arrary-的产生方法。"><a href="#init-proc-函数和-init-arrary-的产生方法。" class="headerlink" title=".init_proc 函数和 init_arrary 的产生方法。"></a><code>.init_proc</code> 函数和 <code>init_arrary</code> 的产生方法。</h2><p><code>_init</code> 函数经过编译后就是 <code>.init_proc</code> 函数，是目前我所知道的在 so 最早被调用的函数 。<code>_init</code> 函数无参，无返回值，其次必须函数名必须是 <code>_init</code> ，并且不能名称粉碎。</p>
@@ -344,12 +345,13 @@
 <p>执行结果如下：</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-22-21-41-55.png" class="">
 
-<p>可以看到先执行的 <code>.init_proc</code> 函数，然后执行  <code>init_arrary</code> 节里的函数，最后执行 JNI_Onload 。</p>
-<h2 id="通过源码找到调用的关键位置"><a href="#通过源码找到调用的关键位置" class="headerlink" title="通过源码找到调用的关键位置"></a>通过源码找到调用的关键位置</h2><p>由于 <code>.init_proc</code> 和 <code>init_arrary</code> 是在 so 加载完成前调用的，那么就需要知道他们是在何时调用的，这里就需要跟一下dlopen的源码，最终会发现调用他们实现在 <code>linker.cpp </code>中，这一块大家有兴趣可以自己看看。我这里就直接给 android 7.1.2 源码中的关键点了。</p>
+<p>可以看到先执行的 <code>.init_proc</code> 函数，然后执行 <code>init_arrary</code> 节里的函数，最后执行 JNI_Onload 。</p>
+<h2 id="通过源码找到调用的关键位置"><a href="#通过源码找到调用的关键位置" class="headerlink" title="通过源码找到调用的关键位置"></a>通过源码找到调用的关键位置</h2><p>由于 <code>.init_proc</code> 和 <code>init_arrary</code> 是在 so 加载完成前调用的，那么就需要知道他们是在何时调用的，这里就需要跟一下 dlopen 的源码，最终会发现调用他们实现在 <code>linker.cpp </code>中，这一块大家有兴趣可以自己看看。我这里就直接给 android 7.1.2 源码中的关键点了。</p>
 <p><code>http://androidxref.com/7.1.2_r36/xref/bionic/linker/linker.cpp</code></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">soinfo::call_function</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* function_name __unused, </span></span></span><br><span class="line"><span class="params"><span class="function">                           <span class="type">linker_function_t</span> function)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (function == <span class="literal">nullptr</span> </span><br><span class="line">      || <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(function) == <span class="built_in">static_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(<span class="number">-1</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">TRACE</span>(<span class="string">&quot;[ Calling %s @ %p for \&quot;%s\&quot; ]&quot;</span>, function_name, function, <span class="built_in">get_realpath</span>());</span><br><span class="line">  <span class="built_in">function</span>(); <span class="comment">//直接调用函数指针</span></span><br><span class="line">  <span class="built_in">TRACE</span>(<span class="string">&quot;[ Done calling %s @ %p for \&quot;%s\&quot; ]&quot;</span>, function_name, function, <span class="built_in">get_realpath</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">soinfo::call_function</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* function_name __unused,</span></span></span><br><span class="line"><span class="params"><span class="function">                           <span class="type">linker_function_t</span> function)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (function == <span class="literal">nullptr</span></span><br><span class="line">      || <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(function) == <span class="built_in">static_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(<span class="number">-1</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">TRACE</span>(<span class="string">&quot;[ Calling %s @ %p for \&quot;%s\&quot; ]&quot;</span>, function_name, function, <span class="built_in">get_realpath</span>());</span><br><span class="line">  <span class="built_in">function</span>(); <span class="comment">//直接调用函数指针</span></span><br><span class="line">  <span class="built_in">TRACE</span>(<span class="string">&quot;[ Done calling %s @ %p for \&quot;%s\&quot; ]&quot;</span>, function_name, function, <span class="built_in">get_realpath</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>大家看源码时也最好根据自己的手机版本看相对应的源码。其中 <code>funcion()</code> 就是调用 <code>.init_proc</code> 和 <code>init_arrary</code> 的地方，大家看看这个地方有什么特点？我们可以根据其上下两行输出字符串确定其位置。</p>
-<p>我们直接到手机的 <code>system/bin</code> 目录中导出 linker 文件，如果调试 ARMv8 则需要导出 linker64 文件。通过查找字符串<code> [ Calling %s @ %p for \&quot;%s\&quot; ]</code>  找到关键位置，其偏移为 0x6414 ，最后就可以通过基址+偏移得到最终的地址需要下断点的地址。</p>
+<p>我们直接到手机的 <code>system/bin</code> 目录中导出 linker 文件，如果调试 ARMv8 则需要导出 linker64 文件。通过查找字符串<code> [ Calling %s @ %p for \&quot;%s\&quot; ]</code> 找到关键位置，其偏移为 0x6414 ，最后就可以通过基址+偏移得到最终的地址需要下断点的地址。</p>
 <img src="/2021/02/22/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/2021-02-24-19-19-27.png" class="">
 
 <h2 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h2><p>当在 libc 中断下来直接，ctrl+s 找到 linker 的基址，然后加上偏移 0x6414 。可以发现其基址为 0xF44DC000+0x6414 &#x3D; F44E2414 最后跳到此处，下断点直接 F9 运行。然后 jdb 连接，最终会断在此处，F7 单步步入，即为 <code>.init_proc</code> 函数，继续执行就会又断在此处，F7 步入，则 test_construtor 函数。</p>
@@ -359,11 +361,12 @@
 
 <p>其中也可以通过前文讲的修改 so 文件，修改字节码实现断点或无限循环达到相同的效果。</p>
 <p>调试应用和代码：</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/CKCat/Blog/blob/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84TA.apk">送给最好的TA</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/CKCat/Blog/blob/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/unluac_2015_06_13.jar">unluac_2015_06_13.jar</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/CKCat/Blog/tree/master/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/ndkcode">init_proc相关代码</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CKCat/CKCat.github.io/blob/main/source/_posts/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84TA.apk">送给最好的 TA</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CKCat/CKCat.github.io/blob/main/source/_posts/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/unluac_2015_06_13.jar">unluac_2015_06_13.jar</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/CKCat/CKCat.github.io/tree/main/source/_posts/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/ndkcode">init_proc 相关代码</a></p>
 <p>参考：</p>
 <p><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-254770.htm">https://bbs.pediy.com/thread-254770.htm</a></p>
+<p><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-266378.htm">https://bbs.kanxue.com/thread-266378.htm</a></p>
 
     </div>
 

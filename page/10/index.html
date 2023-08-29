@@ -147,7 +147,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,6 +183,204 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/" class="post-title-link" itemprop="url">Django学习-视图</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-27 17:07:47" itemprop="dateCreated datePublished" datetime="2019-12-27T17:07:47+00:00">2019-12-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <!-- TOC -->
+
+<ul>
+<li><a href="#%E8%A7%86%E5%9B%BE">视图</a><ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E7%A4%BA%E4%BE%8B%E9%A1%B9%E7%9B%AE">创建示例项目</a><ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE-test3">创建项目 test3</a></li>
+<li><a href="#%E8%BF%9B%E5%85%A5%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8-booktest">进入项目目录，创建应用 booktest</a></li>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD-installed_apps-%E9%A1%B9%E5%AE%89%E8%A3%85%E5%BA%94%E7%94%A8">在 test3&#x2F;settings.py 中 INSTALLED_APPS 项安装应用</a></li>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD-databases-%E9%A1%B9%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8-mysql-%E6%95%B0%E6%8D%AE%E5%BA%93-test2">在 test3&#x2F;settings.py 中 DATABASES 项配置使用 MySQL 数据库 test2</a></li>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD-templates-%E9%A1%B9%E9%85%8D%E7%BD%AE%E6%A8%A1%E6%9D%BF%E6%9F%A5%E6%89%BE%E8%B7%AF%E5%BE%84">在 test3&#x2F;settings.py 中 TEMPLATES 项配置模板查找路径</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95-test3templatesbooktest-">创建模板目录 test3&#x2F;templates&#x2F;booktest 。</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE">使用视图</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1">启动服务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#urlconf">URLconf</a><ul>
+<li><a href="#%E9%85%8D%E7%BD%AE">配置</a><ul>
+<li><a href="#%E5%9C%A8-test3settingspy-%E4%B8%AD%E9%80%9A%E8%BF%87-root_urlconf-%E6%8C%87%E5%AE%9A-url-%E9%85%8D%E7%BD%AE%E9%BB%98%E8%AE%A4%E5%B7%B2%E7%BB%8F%E6%9C%89%E6%AD%A4%E9%85%8D%E7%BD%AE">在 test3&#x2F;settings.py 中通过 ROOT_URLCONF 指定 url 配置，默认已经有此配置。</a></li>
+<li><a href="#%E6%89%93%E5%BC%80-test3urlspy-%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE">打开 test3&#x2F;urls.py 可以看到默认配置。</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AF%AD%E6%B3%95">语法</a><ul>
+<li><a href="#%E8%AF%AD%E6%B3%95%E4%B8%80">语法一</a></li>
+<li><a href="#%E8%AF%AD%E6%B3%95%E4%BA%8C">语法二</a></li>
+</ul>
+</li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E5%80%BC">获取值</a><ul>
+<li><a href="#%E6%96%B9%E5%BC%8F%E4%B8%80%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0">方式一：位置参数</a></li>
+<li><a href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%82%E6%95%B0">方式二：关键字参数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E8%A7%86%E5%9B%BE">视图</a><ul>
+<li><a href="#%E5%86%85%E7%BD%AE%E9%94%99%E8%AF%AF%E8%A7%86%E5%9B%BE">内置错误视图</a><ul>
+<li><a href="#%E9%94%99%E8%AF%AF%E5%8F%8A%E8%A7%86%E5%9B%BE">错误及视图</a></li>
+<li><a href="#%E9%94%99%E8%AF%AF%E5%8F%8A%E8%A7%86%E5%9B%BE">错误及视图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#httpreqeust-%E5%AF%B9%E8%B1%A1">HttpReqeust 对象</a><ul>
+<li><a href="#%E5%B1%9E%E6%80%A7">属性</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a><ul>
+<li><a href="#pathencoding">path、encoding</a></li>
+<li><a href="#method">method</a></li>
+</ul>
+</li>
+<li><a href="#querydict-%E5%AF%B9%E8%B1%A1">QueryDict 对象</a></li>
+<li><a href="#get-%E5%B1%9E%E6%80%A7">GET 属性</a></li>
+<li><a href="#post-%E5%B1%9E%E6%80%A7">POST 属性</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#httpresponse-%E5%AF%B9%E8%B1%A1">HttpResponse 对象</a><ul>
+<li><a href="#%E5%B1%9E%E6%80%A7">属性</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95">方法</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a><ul>
+<li><a href="#%E7%9B%B4%E6%8E%A5%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE">直接返回数据</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF">调用模板</a></li>
+<li><a href="#%E8%B0%83%E7%94%A8%E6%A8%A1%E6%9D%BF%E7%AE%80%E5%86%99%E5%87%BD%E6%95%B0-render">调用模板简写函数 render</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AD%90%E7%B1%BB-jsonresponse">子类 JsonResponse</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AD%90%E7%B1%BB-httpresponseredirect">子类 HttpResponseRedirect</a><ul>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a></li>
+<li><a href="#%E9%87%8D%E5%AE%9A%E5%90%91%E7%AE%80%E5%86%99%E5%87%BD%E6%95%B0-redirect">重定向简写函数 redirect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81">状态保持</a><ul>
+<li><a href="#cookie">Cookie</a><ul>
+<li><a href="#cookie-%E7%9A%84%E7%89%B9%E7%82%B9">Cookie 的特点</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE-cookie">设置 Cookie</a></li>
+<li><a href="#%E8%AF%BB%E5%8F%96-cookie">读取 Cookie</a></li>
+</ul>
+</li>
+<li><a href="#session">Session</a><ul>
+<li><a href="#%E5%90%AF%E7%94%A8-session">启用 Session</a></li>
+<li><a href="#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F">存储方式</a></li>
+<li><a href="#%E4%BE%9D%E8%B5%96%E4%BA%8E-cookie">依赖于 Cookie</a></li>
+<li><a href="#%E5%AF%B9%E8%B1%A1%E5%8F%8A%E6%96%B9%E6%B3%95">对象及方法</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B">示例</a><ul>
+<li><a href="#%E5%86%99-session">写 session</a></li>
+<li><a href="#%E8%AF%BB-session">读 session</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4">删除</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4-session">删除 session</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>视图的功能</p>
+<p>视图负责接受 Web 请求 HttpRequest，进行逻辑处理，返回 Web 响应 HttpResponse 给请求者。</p>
+<h2 id="创建示例项目"><a href="#创建示例项目" class="headerlink" title="创建示例项目"></a>创建示例项目</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/27/Django%E5%AD%A6%E4%B9%A0-%E8%A7%86%E5%9B%BE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -228,7 +426,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -324,7 +522,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -424,7 +622,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -520,7 +718,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -616,7 +814,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -711,7 +909,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -826,7 +1024,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -921,7 +1119,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1016,7 +1214,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1086,104 +1284,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/17/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-dlopen/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/11/17/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-dlopen/" class="post-title-link" itemprop="url">Android源码阅读-dlopen</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-11-17 14:45:44" itemprop="dateCreated datePublished" datetime="2019-11-17T14:45:44+00:00">2019-11-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>本次阅读源码来自aosp Android 8.1.0_r1，在阅读过程中根据阅读的进度随手记录</p>
-</blockquote>
-<p>有过 <code>linux</code> 编成经验的都应该知道使用 <code>dlopen</code> 需要包含 <code>dlfcn.h</code> 头文件，所以直接去<code>aosp/bionic/libc/include/dlfcn.h</code> 中找到 <code>dlopen</code> 的函数定义。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span>* <span class="title">dlopen</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* filename, <span class="type">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>通过<code>dlopen</code>的定义找到其实现在 <code>aosp/bionic/libdl/libdl.c</code> 中，</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// Proxy calls to bionic loader</span><br><span class="line">void* dlopen(const char* filename, int flag) &#123;</span><br><span class="line">    /*</span><br><span class="line">  __builtin_return_address(0)的含义是，得到当前函数返回地址，即此函数被别的函数调用，然后此函数执行完毕后，返回，所谓返回地址就是那时候的地址。</span><br><span class="line">  __builtin_return_address(1)的含义是，得到当前函数的调用者的返回地址。注意是调用者的返回地址，而不是函数起始地址。 </span><br><span class="line">    */</span><br><span class="line">  const void* caller_addr = __builtin_return_address(0);//可以理解为汇编 MOV R0, LR</span><br><span class="line">  return __loader_dlopen(filename, flag, caller_addr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/17/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-dlopen/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

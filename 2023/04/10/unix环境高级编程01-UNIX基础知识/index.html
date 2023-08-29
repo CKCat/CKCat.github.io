@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B01-UNIX%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/UNIX%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png">
 <meta property="article:published_time" content="2023-04-10T17:19:59.000Z">
-<meta property="article:modified_time" content="2023-08-15T11:41:46.562Z">
+<meta property="article:modified_time" content="2023-08-29T09:43:03.896Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="unix">
 <meta name="twitter:card" content="summary">
@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -237,7 +237,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -291,7 +291,7 @@
 <h3 id="路径名"><a href="#路径名" class="headerlink" title="路径名"></a>路径名</h3><p>由斜线分隔的一个或多个文件名组成的序列构成路径名，以斜线开头的路径名称为绝对路径名（absolute pathname），否则称为相对路径名（relative pathname）。</p>
 <p>文件系统根 <code>/</code> 是一个特殊的绝对路径名，它不包含文件名。</p>
 <p>例子：列出一个目录中所有文件的名字。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;dirent.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    DIR *dp;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">dirp</span>;</span></span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>)</span><br><span class="line">        err_quit(<span class="string">&quot;usage: ls directory_name&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>((dp = opendir(argv[<span class="number">1</span>])) == <span class="literal">NULL</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;can&#x27;t open %s\n&quot;</span>, argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">while</span> ((dirp = readdir(dp)) != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, dirp-&gt;d_name);</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dp);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;dirent.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    DIR *dp;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">dirp</span>;</span></span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>)</span><br><span class="line">        err_quit(<span class="string">&quot;usage: ls directory_name&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>((dp = opendir(argv[<span class="number">1</span>])) == <span class="literal">NULL</span>)</span><br><span class="line">        err_sys(<span class="string">&quot;can&#x27;t open %s\n&quot;</span>, argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">while</span> ((dirp = readdir(dp)) != <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, dirp-&gt;d_name);</span><br><span class="line">    &#125;</span><br><span class="line">    closedir(dp);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>编译运行：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ gcc 1.4myls.c ../error.c</span><br><span class="line">$ ./a.out</span><br><span class="line">usage: <span class="built_in">ls</span> directory_name</span><br><span class="line">$ ./a.out .</span><br><span class="line">1.4myls.c</span><br><span class="line">..</span><br><span class="line">a.out</span><br><span class="line">.</span><br></pre></td></tr></table></figure>
@@ -396,7 +396,10 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /usr/include</span><br><span class="line">$ time -p grep _POSIX_SOURCE */*.h &gt; /dev/null</span><br><span class="line">real 0.01</span><br><span class="line">user 0.00</span><br><span class="line">sys 0.00</span><br></pre></td></tr></table></figure>
 
 <h2 id="系统调用和库函数"><a href="#系统调用和库函数" class="headerlink" title="系统调用和库函数"></a>系统调用和库函数</h2><p>系统调用通常提供一种最小接口，而库函数通常提供比较复杂的功能。</p>
-<p>系统调用接口总是在《UNIX 程序员手册》的第 2 部分中说明。<br>通用库函数在《UNIX 程序员手册》的第 23 部分中说明。</p>
+<ul>
+<li>系统调用接口总是在《UNIX 程序员手册》的第 2 部分中说明。</li>
+<li>通用库函数在《UNIX 程序员手册》的第 23 部分中说明。</li>
+</ul>
 
     </div>
 

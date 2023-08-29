@@ -147,7 +147,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,6 +183,111 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">ART的函数运行机制</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-03 19:25:03" itemprop="dateCreated datePublished" datetime="2020-06-03T19:25:03+00:00">2020-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="ART的函数运行机制"><a href="#ART的函数运行机制" class="headerlink" title="ART的函数运行机制"></a>ART的函数运行机制</h1><h2 id="类的加载"><a href="#类的加载" class="headerlink" title="类的加载"></a>类的加载</h2><p><code>dalvik</code> 的类加载的主要过程如下：</p>
+<ol>
+<li><p><code>app_process</code> 作为 <code>zygote server</code> 通过 <code>local socket</code> 处理进程创建请求，<code>zygote server</code> 是在 <code>ZygoteInit.main</code> 函数里调用 <code>ZygoteInit.runSelectLoop</code> 监听。</p>
+</li>
+<li><p>接收到 <code>zygote client</code> 的 <code>fork</code> 请求之后，调用 <code>ZygoteConnection.runOnce</code> ，调用 <code>Zygote.forkAndSpecialize</code> 创建新进程</p>
+</li>
+<li><p>进程创建之后，由 <code>ZygoteConnection.handleParentProc</code> 来初始化进程，最终会调用 <code>ActivityThread.main</code> 函数</p>
+</li>
+<li><p><code>ActivityThread.main -&gt; ActivityThread.attach -&gt;  ActivityThread.bindApplication -&gt; Activity.handleBindApplication，handleBindApplication</code> 会初始化 <code>BaseDexClassLoader</code> 。</p>
+</li>
+<li><p>类的加载经过了 <code>ClassLoader.loadClass-&gt;BaseDexClassLoader.findClass-&gt;DexPathList.findClass-&gt;DexFile.loadClassBinaryName-&gt;DexFile.defineClassNative-&gt;DexFile_defineClassNative</code> (<code>runtime/native/dalvik_system_DexFile.cc</code>) 。</p>
+</li>
+</ol>
+<p>这个初始化过程， <code>art</code> 和 <code>dalvik</code> 都是一样的。 <code>art</code> 的 <code>DexFile_defineClassNative</code> 由 <code>ClassLinker</code> 的 <code>DefineClass</code> 来加载类。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -228,7 +333,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -371,7 +476,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:04" itemprop="dateModified" datetime="2023-08-29T09:43:04+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -620,7 +725,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -714,7 +819,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -809,7 +914,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -906,7 +1011,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1019,7 +1124,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1138,7 +1243,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1253,7 +1358,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
+      <time title="修改时间：2023-08-29 09:43:03" itemprop="dateModified" datetime="2023-08-29T09:43:03+00:00">2023-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1282,109 +1387,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/02/28/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9501/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/16/dexsim%E6%B5%85%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/" class="post-title-link" itemprop="url">dexsim浅析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-02-16 13:46:57" itemprop="dateCreated datePublished" datetime="2020-02-16T13:46:57+00:00">2020-02-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-15 11:41:46" itemprop="dateModified" datetime="2023-08-15T11:41:46+00:00">2023-08-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <!-- TOC -->
-
-<ul>
-<li><a href="#dexsim%E7%AE%80%E4%BB%8B">dexsim简介</a><ul>
-<li><a href="#dexsim-%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90">dexsim 源码浅析</a></li>
-</ul>
-</li>
-</ul>
-<!-- /TOC -->
-
-<h1 id="dexsim简介"><a href="#dexsim简介" class="headerlink" title="dexsim简介"></a>dexsim简介</h1><p><a target="_blank" rel="noopener" href="https://github.com/mikusjelly/dexsim">dexsim</a> 是利用动态调用实现字符串解密的工具，需要配合 <a target="_blank" rel="noopener" href="https://github.com/mikusjelly/DSS">DSS</a> 使用。作者为 <code>mikusjelly</code> 。</p>
-<h2 id="dexsim-源码浅析"><a href="#dexsim-源码浅析" class="headerlink" title="dexsim 源码浅析"></a>dexsim 源码浅析</h2><p><code>dexsim</code> 源码结构如下图所示，</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
