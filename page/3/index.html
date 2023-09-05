@@ -228,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -324,7 +324,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -419,7 +419,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -443,7 +443,7 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="函数-stat、fstat、fstatat-和-lstat"><a href="#函数-stat、fstat、fstatat-和-lstat" class="headerlink" title="函数 stat、fstat、fstatat 和 lstat"></a>函数 stat、fstat、fstatat 和 lstat</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">stat</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">struct</span> stat *<span class="keyword">restrict</span> buf)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">fstat</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> stat *buf)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">lstat</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">struct</span> stat *<span class="keyword">restrict</span> buf)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">fstatat</span><span class="params">(<span class="type">int</span> fd, <span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">struct</span> stat *<span class="keyword">restrict</span> buf, <span class="type">int</span> flag)</span>;</span><br></pre></td></tr></table></figure>
 
-<p><strong>返回值：</strong></p>
+<p>返回值：</p>
 <ul>
 <li>若成功；返回 0；</li>
 <li>若出错，返回-1</li>
@@ -518,7 +518,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -540,9 +540,9 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>UNIX 系统中的大多数文件 <code>I/O</code> 只需用到 5 个函数：<code>open</code>、<code>read</code>、<code>write</code>、<code>lseek</code> 以及 <code>close</code>。这些函数为不带缓冲的 I&#x2F;O，是是 POSIX.1 和 Single UNIX Specification 的组成部分。</p>
-<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>对于内核而言，所有打开的文件都通过文件描述符引用。文件描述符是一个非负整数。文件描述符的变化范围是 <code>0 ~ OPEN_MAX-1</code>。现代操作系统文件描述符的变化范围几乎是无限的。</p>
-<p>文件描述符 0、1、2 分别表示标准输入、标准输出和标准错误。其对应的符号常量 <code>STDIN_FILENO</code>、<code>STDOUT_FILENO</code> 和<br><code>STDERR_FILENO</code>，需要包含 <code>&lt;unistd.h&gt;</code> 头文件。</p>
+          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>UNIX 系统中的大多数文件 <code>I/O</code> 只需用到 5 个函数：<code>open</code>、<code>read</code>、<code>write</code>、<code>lseek</code> 以及 <code>close</code>。这些函数为不带缓冲的 <code>I/O</code>，是 <code>POSIX.1 </code>和 <code>Single UNIX Specification</code> 的组成部分。</p>
+<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>对于内核而言，所有打开的文件都通过文件描述符引用。<strong>文件描述符是一个非负整数。</strong>文件描述符的变化范围是 <code>0 ~ OPEN_MAX-1</code>。<strong>现代操作系统文件描述符的变化范围几乎是无限的。</strong></p>
+<p>文件描述符 0、1、2 分别表示标准输入、标准输出和标准错误。其对应的符号常量 <code>STDIN_FILENO</code>、<code>STDOUT_FILENO</code> 和 <code>STDERR_FILENO</code>，需要包含 <code>&lt;unistd.h&gt;</code> 头文件。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B03-%E6%96%87%E4%BB%B6IO/#more" rel="contents">
@@ -612,7 +612,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -715,7 +715,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -811,7 +811,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -905,7 +905,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:09" itemprop="dateModified" datetime="2023-09-02T06:32:09+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:27" itemprop="dateModified" datetime="2023-09-05T02:04:27+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1010,7 +1010,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1095,7 +1095,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-02 06:32:10" itemprop="dateModified" datetime="2023-09-02T06:32:10+00:00">2023-09-02</time>
+      <time title="修改时间：2023-09-05 02:04:28" itemprop="dateModified" datetime="2023-09-05T02:04:28+00:00">2023-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
