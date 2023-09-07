@@ -943,4 +943,4 @@ FILE *open_wmemstream(wchar_t **bufp, size_t *sizep);
 - `sfio` 在速度上与 `fio` 相近，也提供了一些其他标准 `I/O` 库所没有的新特征。
 - `ASI`（Alloc Stream Interface）它使用了映射文件—— `mmap` 函数。
 
-许多标准 `I/O` 库实现在 C 函数库中可用，这种 C 函数库是为内存较小的系统，如嵌入式系统设计的。这些实现对于合理内存要求的关注超过对可移植性、速度以及功能性等方面的关注。这种类型函数库的两种实现是：`uClibc C` 库（参阅http://www.uclibc.org）和 `Newlib C` 库（http://www.source.redhat.com/newlib）。
+许多标准 `I/O` 库实现在 C 函数库中可用，这种 C 函数库是为内存较小的系统，如嵌入式系统设计的。这些实现对于合理内存要求的关注超过对可移植性、速度以及功能性等方面的关注。这种类型函数库的两种实现是：`uClibc C` 库（参阅 http://www.uclibc.org ）和 `Newlib C` 库（ http://www.source.redhat.com/newlib ）。
