@@ -228,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -251,10 +251,100 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="口令文件"><a href="#口令文件" class="headerlink" title="口令文件"></a>口令文件</h2><p>UNIX 系统口令文件包含了图中所示的各字段，这些字段包含在 <code>&lt;pwd.h&gt;</code> 中定义的 <code>passwd</code> 结构中。</p>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B06-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/%E5%8F%A3%E4%BB%A4%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%AD%97%E6%AE%B5.png" class>
-
+<p><code>/etc/passwd</code> 文件中的字段：</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>struct passwd 成员</th>
+<th align="center">POSIX.1</th>
+<th align="center">FreeBSD8.0</th>
+<th align="center">Linux3.2.0</th>
+<th align="center">Mac OSX 10.6.8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户名</td>
+<td><code>char *pw_name</code></td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>加密口令</td>
+<td><code>char *pw_passwd</code></td>
+<td align="center"></td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>数值用户 ID</td>
+<td><code>uid_t pw_uid</code></td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>数值组 ID</td>
+<td><code>gid_t pw_gid</code></td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>注释字段</td>
+<td><code>char *pw_gecos</code></td>
+<td align="center"></td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>初始工作目录</td>
+<td><code>char *pw_dir</code></td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>初始 shell (用户程序)</td>
+<td><code>char *pw_shell</code></td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>用户访问类</td>
+<td><code>char *pw_class</code></td>
+<td align="center"></td>
+<td align="center">•</td>
+<td align="center"></td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>下次更改口令时间</td>
+<td><code>time_t pw_change</code></td>
+<td align="center"></td>
+<td align="center">•</td>
+<td align="center"></td>
+<td align="center">•</td>
+</tr>
+<tr>
+<td>账户有效期时间</td>
+<td><code>time_t pw_expire</code></td>
+<td align="center"></td>
+<td align="center">•</td>
+<td align="center"></td>
+<td align="center">•</td>
+</tr>
+</tbody></table>
 <p>由于历史原因，口令文件是 <code>/etc/passwd</code>，而且是一个 ASCII 文件。每一行包含图中所示的各字段，字段之间用冒号分隔。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">ckcat:x:1000:1000:ckcat:/home/ckcat:/usr/bin/zsh</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B06-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/#more" rel="contents">
@@ -324,7 +414,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -419,7 +509,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -518,7 +608,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -612,7 +702,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -715,7 +805,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -811,7 +901,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -905,7 +995,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1010,7 +1100,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1095,7 +1185,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-06 02:09:37" itemprop="dateModified" datetime="2023-09-06T02:09:37+00:00">2023-09-06</time>
+      <time title="修改时间：2023-09-07 01:22:56" itemprop="dateModified" datetime="2023-09-07T01:22:56+00:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
