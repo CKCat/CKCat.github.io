@@ -5,13 +5,13 @@ tags: unix
 category: unix环境高级编程
 ---
 
-### 进程标识
+## 进程标识
 
 每个进程都有一个非负整型表示的唯一进程 ID。因为进程 ID 标识符总是唯一的，常将其用作其他标识符的一部分以保证其唯一性。
 
 ID 为 0 的进程通常是调度进程，常常被称为交换进程（swapper）。该进程是内核的一部分，它并不执行任何磁盘上的程序，因此也被称为系统进程。
 
-ID 为 1 的进程通常是 `init` 进程，在自举过程结束时由内核调用。该进程的程序文件在 UNIX 的早期版本中是 `/etc/init`，在较新版本中是 `/sbin/init`。`init` 进程决不会终止。
+ID 为 1 的进程通常是 `init` 进程，在自举过程结束时由内核调用。该进程的程序文件在 UNIX 的早期版本中是 `/etc/init`，在较新版本中是 `/sbin/init`。`init` 进程不会终止。
 
 除了进程 ID，每个进程还有一些其他标识符。下列函数返回这些标识符。
 
@@ -34,48 +34,20 @@ gid_t getegid(void);
 
 这些函数都没有出错返回。
 
-### fork 函数
-
-一个现有的进程可以调用 fork 函数创建一个新进程。
-
-```c
-#include <unistd.h>
-pid_t fork(void);
-```
-
-返回值：子进程返回 0，父进程返回子进程 ID；若出错，返回 −1 。
-
-由 fork 创建的新进程被称为子进程（childprocess）。fork 函数被调用一次，但返回两次。两次返回的区别是子进程的返回值是 0，而父进程的返回值则是新建子进程的进程 ID。
-
-子进程是父进程的副本（写时复制）。父进程和子进程共享正文段，不共享其他段。
-
 例子：
 
 ```c
-#include "../apue.h"
-
-// 初始化段
-int globvar = 6;
-char buf[] = "a write to stdout.\n";
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 int main(int argc, char const *argv[]){
-    int var;
-    pid_t pid;
-    var = 88;
-    if(write(STDOUT_FILENO, buf, sizeof(buf) - 1) != sizeof(buf) -1)
-        err_sys("write error.");
-    printf("before fork\n");
-
-    if((pid = fork()) < 0){
-        err_sys("fork error.");
-    }else if(pid == 0){// 子进程
-        globvar++;
-        var++;
-    }else{//父进程
-        printf("child process id = %d\n", pid);
-        sleep(1);
-    }
-    printf("pid = %ld, glob = %d, var = %d\n", (long)getpid(), globvar, var);
+	printf("pid = %d\n", getpid());
+	printf("ppid = %d\n", getppid());
+	printf("uid = %d\n", getuid());
+	printf("euid = %d\n", geteuid());
+	printf("gid = %d\n", getgid());
+	printf("egid = %d\n", getegid());
     return 0;
 }
 ```
@@ -83,37 +55,103 @@ int main(int argc, char const *argv[]){
 编译运行：
 
 ```bash
-$ gcc 8.1fork.c ../error.c
+$ gcc 01uid.c
 $ ./a.out
-a write to stdout.
-before fork
-child process id = 11861
-pid = 11861, glob = 7, var = 89
-pid = 11860, glob = 6, var = 88
-$ ./a.out >out.txt
-$ cat out.txt
-a write to stdout.
-before fork
-pid = 12065, glob = 7, var = 89
-before fork
-child process id = 12065
-pid = 12064, glob = 6, var = 88
+pid = 33561
+ppid = 33330
+uid = 1000
+euid = 1000
+gid = 1000
+egid = 1000
 ```
 
-在 fork 之后是父进程先执行还是子进程先执行是不确定的，这取决于内核所使用的调度算法。如果要求父进程和子进程之间相互同步，则要求某种形式的进程间通信。
+## `fork` 函数
+
+一个现有的进程可以调用 `fork` 函数创建一个新进程。
+
+```c
+#include <unistd.h>
+pid_t fork(void);
+```
+
+返回值：
+
+- 子进程返回 0，父进程返回子进程 ID；
+- 若出错，返回 −1 。
+
+由 `fork` 创建的新进程被称为子进程（childprocess）。`fork` 函数被调用一次，但返回两次。两次返回的区别是子进程的返回值是 0，而父进程的返回值则是新建子进程的进程 ID。
+
+子进程是父进程的副本（写时复制）。父进程和子进程共享正文段(指令)，不共享其他段。
+
+例子：
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+// 初始化段
+int globvar = 6;
+char buf[] = "a write to stdout.\n";
+
+int main(){
+	int var;
+	pid_t pid;
+	var = 88;
+	if(write(STDOUT_FILENO, buf, sizeof(buf)-1) != (sizeof(buf)-1)){
+		perror("write error");
+		return 0;
+	}
+	printf("before fork.\n");
+	if((pid = fork()) < 0){ // 子进程
+		perror("fork error");
+		return 0;
+	}else if(pid == 0){
+		globvar++;
+		var++;
+	}else{// 父进程
+		printf("child process id = %d.\n", pid);
+		sleep(1);
+	}
+	printf("pid = %ld, globvar = %d, var = %d.\n", (long)getpid(), globvar, var);
+	return 0;
+}
+```
+
+编译运行：
+
+```bash
+$ gcc 02fork.c
+$ ./a.out
+a write to stdout.
+before fork.
+child process id = 34043.
+pid = 34043, globvar = 7, var = 89.    # 子进程输出
+pid = 34042, globvar = 6, var = 88.    # 父进程输出
+
+$ ./a.out >temp.out
+$ cat temp.out
+a write to stdout.    # write 函数是不带缓冲的。
+before fork.          # 标准 I/O 库是带缓冲的。
+pid = 34102, globvar = 7, var = 89.
+before fork.
+child process id = 34102.
+pid = 34100, globvar = 6, var = 88.
+```
+
+在 `fork` 之后是父进程先执行还是子进程先执行是不确定的，这取决于内核所使用的调度算法。如果要求父进程和子进程之间相互同步，则要求某种形式的进程间通信。
 
 如果标准输出连到终端设备，则它是行缓冲的；否则它是全缓冲的。当以交互方式运行该程序时，只得到该 `printf` 输出的行一次，其原因是标准输出缓冲区由换行符冲洗。但是当将标准输出重定向到一个文件时，却得到 `printf` 输出行两次。其原因是，在 `fork` 之前调用了 `printf` 一次，但当调用 `fork` 时，该行数据仍在缓冲区中，然后在将父进程数据空间复制到子进程中时，该缓冲区数据也被复制到子进程中，此时父进程和子进程各自有了带该行内容的缓冲区。当每个进程终止时，其缓冲区中的内容都被写到相应文件中。
 
-**文件共享**
+### 文件共享
 
-在重定向父进程的标准输出时，子进程的标准输出也被重定向。实际上，`fork` 的一个特性是父进程的所有打开文件描述符都被复制到子进程中。重要的一点是，父进程和子进程共享同一个文件偏移量。在这个例子中，当父进程等待子进程时，子进程写到标准输出；而在子进程终止后，父进程也写到标准输出上，并且知道其输出会追加在子进程所写数据之后。
+在重定向父进程的标准输出时，子进程的标准输出也被重定向。实际上，`fork` 的一个特性是父进程的所有打开文件描述符都被复制到子进程中。 **重要的一点是，父进程和子进程共享同一个文件偏移量。** 在这个例子中，当父进程等待子进程时，子进程写到标准输出；而在子进程终止后，父进程也写到标准输出上，并且知道其输出会追加在子进程所写数据之后。
 
 ![](08-进程控制/fork之后父进程和子进程之间对打开文件的共享.png)
 
-在 fork 之后处理文件描述符有以下两种常见的情况。
+在 `fork` 之后处理文件描述符有以下两种常见的情况。
 
 1. 父进程等待子进程完成。在这种情况下，父进程无需对其描述符做任何处理。当子进程终止后，它曾进行过读、写操作的任一共享描述符的文件偏移量已做了相应更新。
-1. 父进程和子进程各自执行不同的程序段。在这种情况下，在 fork 之后，父进程和子进程各自关闭它们不需使用的文件描述符，这样就不会干扰对方使用的文件描述符。这种方法是网络服务进程经常使用的。
+2. 父进程和子进程各自执行不同的程序段。在这种情况下，在 `fork` 之后，父进程和子进程各自关闭它们不需使用的文件描述符，这样就不会干扰对方使用的文件描述符。这种方法是网络服务进程经常使用的。
 
 除了打开文件之外，父进程的很多其他属性也由子进程继承，包括：
 
@@ -135,36 +173,36 @@ pid = 12064, glob = 6, var = 88
 
 父进程和子进程之间的区别具体如下。
 
-- fork 的返回值不同。
+- `fork` 的返回值不同。
 - 进程 ID 不同。
 - 这两个进程的父进程 ID 不同：子进程的父进程 ID 是创建它的进程的 ID，而父进程的父进程 ID 则不变。
-- 子进程的 tms_utime、tms_stime、tms_cutime 和 tms_ustime 的值设置为 0。
+- 子进程的 `tms_utime`、`tms_stime`、`tms_cutime` 和 `tms_ustime` 的值设置为 0。
 - 子进程不继承父进程设置的文件锁。
 - 子进程的未处理闹钟被清除。
 - 子进程的未处理信号集设置为空集。
 
-使 fork 失败的两个主要原因是：
+使 `fork` 失败的两个主要原因是：
 
 - 系统中已经有了太多的进程。
 - 该实际用户 ID 的进程总数超过了系统限制。
 
-fork 有以下两种用法。
+`fork` 有以下两种用法。
 
-1. 一个父进程希望复制自己，使父进程和子进程同时执行不同的代码段。这在网络服务进程中是常见的—父进程等待客户端的服务请求。当这种请求到达时，父进程调用 fork，使子进程处理此请求。父进程则继续等待下一个服务请求。
-1. 一个进程要执行一个不同的程序。这对 shell 是常见的情况。在这种情况下，子进程从 fork 返回后立即调用 exec。
+1. 一个父进程希望复制自己，使父进程和子进程同时执行不同的代码段。这在网络服务进程中是常见的，父进程等待客户端的服务请求。当这种请求到达时，父进程调用 `fork`，使子进程处理此请求。父进程则继续等待下一个服务请求。
+1. 一个进程要执行一个不同的程序。这对 `shell` 是常见的情况。在这种情况下，子进程从 `fork` 返回后立即调用 `exec`。
 
-某些操作系统将第 2 种用法中的两个操作（fork 之后执行 exec）组合成一个操作，称为 spawn。
+某些操作系统将第 2 种用法中的两个操作（`fork` 之后执行 `exec`）组合成一个操作，称为 `spawn`。
 
-### vfork 函数
+## vfork 函数
 
-vfork 函数的调用序列和返回值与 fork 相同，但两者的语义不同。可移植的应用程序不应该使用这个函数。
+`vfork` 函数的调用序列和返回值与 `fork` 相同，但两者的语义不同。可移植的应用程序不应该使用这个函数。
 
-vfork 函数用于创建一个新进程，而该新进程的目的是 exec 一个新程序。
+`vfork` 函数用于创建一个新进程，而该新进程的目的是 `exec` 一个新程序。
 
-vfork 和 fork 之间的区别：
+`vfork` 和 `fork` 之间的区别：
 
-- vfork 与 fork 一样都创建一个子进程，但是它并不将父进程的地址空间完全复制到子进程中，因为子进程会立即调用 exec 或 exit，于是也就不会引用该地址空间。
-- vfork 保证子进程先运行，在它调用 exec 或 exit 之后父进程才可能被调度运行，当子进程调用这两个函数中的任意一个时，父进程会恢复运行。
+- `vfork` 与 `fork` 一样都创建一个子进程，但是它并不将父进程的地址空间完全复制到子进程中，因为子进程会立即调用 `exec` 或 `exit`，于是也就不会引用该地址空间。
+- `vfork` 保证子进程先运行，在它调用 `exec` 或 `exit` 之后父进程才可能被调度运行，当子进程调用这两个函数中的任意一个时，父进程会恢复运行。
 
 例子：
 
@@ -197,32 +235,32 @@ int main(int argc, char const *argv[]){
 编译运行：
 
 ```bash
-$ gcc 8.4vfork.c ../error.c
+$ gcc 03vfork.c
 $ ./a.out
-before vfork
-child process id = 12402
-pid = 12401, glob = 7, var = 89
+before vfork.
+child process id = 34786
+pid = 34785, globvar = 7, var = 89
 ```
 
 子进程对变量做增 1 的操作，结果改变了父进程中的变量值。因为子进程在父进程的地址空间中运行。
 
-调用了 `_exit` 而不是 exit，是因为 `_exit` 并不执行标准 `I/O` 缓冲区的冲洗操作。
+调用了 `_exit` 而不是 `exit`，是因为 `_exit` 并不执行标准 `I/O` 缓冲区的冲洗操作。
 
-### exit 函数
+## exit 函数
 
 不管进程如何终止，最后都会执行内核中的同一段代码。这段代码为相应进程关闭所有打开描述符，释放它所使用的存储器等。
 
-在任意一种终止情况下，该终止进程的父进程都能用 wait 或 waitpid 函数取得其终止状态。
+在任意一种终止情况下，该终止进程的父进程都能用 `wait` 或 `waitpid` 函数取得其终止状态。
 
-对于父进程已经终止的所有进程，它们的父进程都改变为 init 进程。
+对于父进程已经终止的所有进程，它们的父进程都改变为 `init` 进程。
 
-内核为每个终止子进程保存了一定量的信息，所以当终止进程的父进程调用 wait 或 waitpid 时，可以得到这些信息。这些信息至少包括进程 ID、该进程的终止状态以及该进程使用的 CPU 时间总量。
+内核为每个终止子进程保存了一定量的信息，所以当终止进程的父进程调用 `wait` 或 `waitpid` 时，可以得到这些信息。这些信息至少包括进程 ID、该进程的终止状态以及该进程使用的 CPU 时间总量。
 
 在 UNIX 术语中，一个已经终止、但是其父进程尚未对其进行善后处理（获取终止子进程的有关信息、释放它仍占用的资源）的进程被称为僵死进程（zombie）。
 
-一个由 init 进程收养的进程终止时， init 就会调用一个 wait 函数取得其终止状态。
+一个由 `init` 进程收养的进程终止时， `init` 就会调用一个 `wait` 函数取得其终止状态。
 
-### 函数 wait 和 waitpid
+## 函数 wait 和 waitpid
 
 当一个进程正常或异常终止时，内核就向其父进程发送 `SIGCHLD` 信号。因为子进程终止是个异步事件，所以这种信号也是内核向父进程发的异步通知。
 
@@ -240,18 +278,38 @@ pid_t wait(int *statloc);
 pid_t waitpid(pid_t pid, int *statloc, int options);
 ```
 
-两个函数返回值：若成功，返回进程 ID；若出错，返回 0 或 −1。
+两个函数返回值：
 
-这两个函数的参数 statloc 是一个整型指针。如果 statloc 不是一个空指针，则终止进程的终止状态就存放在它所指向的单元内。如果不关心终止状态，则可将该参数指定为空指针。
+- 若成功，返回进程 ID；
+- 若出错，返回 0 或 −1。
+
+参数：
+
+- `pid`：要等待的子进程的进程 ID。可以指定不同的值：
+
+  - 如果 `pid` 大于 0，表示等待指定 PID 的子进程结束。
+  - 如果 `pid` 等于 0，表示等待与当前进程在同一进程组中的任何子进程。
+  - 如果 `pid` 等于-1，表示等待任何子进程，类似于 `wait` 函数。
+  - 如果 `pid` 小于-1，表示等待进程组 ID 等于 `pid` 绝对值的任何子进程。
+
+- `statloc`：一个指向整数的指针，用于存储子进程的退出状态信息。如果不关心子进程的退出状态，可以传递 `NULL`。
+
+- `options`：一个整数，用于指定等待子进程的选项，可以使用多个选项通过按位或（`|`）操作组合：
+  - `WNOHANG`：非阻塞等待，如果没有子进程退出，立即返回，不阻塞。
+  - `WUNTRACED`：也等待被停止的子进程的状态变化。
+  - `WCONTINUED`：等待已继续执行的子进程的状态变化。
+  - `WSTOPPED`：等待已停止的子进程的状态变化。
+  - `WEXITED`：等待已退出的子进程的状态变化。
+  - `WNOWAIT`：不清除子进程的退出状态，允许稍后再次等待。
 
 这两个函数的区别如下。
 
 - 在一个子进程终止前，`wait` 使其调用者阻塞，而 `waitpid` 有一选项，可使调用者不阻塞。
 - `waitpid` 并不等待在其调用之后的第一个终止子进程，它有若干个选项，可以控制它所等待的进程。
 
-如果子进程已经终止，并且是一个僵死进程，则 wait 立即返回并取得该子进程的状态；否则 wait 使其调用者阻塞，直到一个子进程终止。如调用者阻塞而且它有多个子进程，则在其某一子进程终止时，wait 就立即返回。
+如果子进程已经终止，并且是一个僵死进程，则 `wait` 立即返回并取得该子进程的状态；否则 `wait` 使其调用者阻塞，直到一个子进程终止。如调用者阻塞而且它有多个子进程，则在其某一子进程终止时，`wait` 就立即返回。
 
-有 4 个互斥的宏可用来取得进程终止的原因，它们的名字都以 WIF 开始。
+有 4 个互斥的宏可用来取得进程终止的原因，它们的名字都以 `WIF` 开始。
 
 - `WIFEXITED(status)` 若为正常终止子进程返回的状态，则为真。
 - `WIFSIGNALED(status)` 若为异常终止子进程返回的状态，则为真。
@@ -261,135 +319,155 @@ pid_t waitpid(pid_t pid, int *statloc, int options);
 例子：
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
 #include <sys/wait.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-void pr_exit(int status){
-    if(WIFEXITED(status)) // 若为正常终止子进程返回的状态，则为真。
-        printf("normal termination, exit status = %d\n", WEXITSTATUS(status)); // WEXITSTATUS(status) 获取子进程传送给 exit 参数的低8位。
-    else if(WIFSIGNALED(status)) //若为异常终止子进程返回的状态，则为真。
-        // WTERMSIG(status) 获取子进程终止的信号编号， WCOREDUMP(status) 若已产生终止进程的 core文件，则返回真。
-        printf("abnormal termination, signal number = %d%s\n", WTERMSIG(status),
-#ifdef WCOREDUMP
-    WCOREDUMP(status) ? " (core file generated)": "");
-#else
-    "");
-#endif
-    else if(WIFSTOPPED(status)) // 若当前暂停进程的返回的状态，则为真。
-    // WSTOPSIG(status) 获取子进程暂停的信号编号。
-        printf("child stopped, signal number = %d\n", WSTOPSIG(status));
+void pr_exit(int status);
+
+int main(){
+	pid_t pid;
+	int status;
+	if((pid = fork()) < 0){
+		perror("fork error");
+		return 1;
+	}else if(pid == 0)
+		exit(7); // 子进程正常终止
+	if(wait(&status) != pid){
+		perror("wait error");
+		return 1;
+	}
+	pr_exit(status);
+
+	if((pid = fork()) < 0){
+		perror("fork error");
+		return 1;
+	}else if(pid == 0)
+		abort(); // 子进程异常终止
+	if(wait(&status) != pid){
+		perror("wait error");
+		return 1;
+	}
+	pr_exit(status);
+
+
+	if((pid = fork()) < 0){
+		perror("fork error");
+		return 1;
+	}else if(pid == 0)
+		status /= 0; // 子进程除零异常终止
+	if(wait(&status) != pid){
+		perror("wait error");
+		return 1;
+	}
+	pr_exit(status);
+	return 0;
 }
-
-int main(int argc, char const *argv[])
-{
-    pid_t pid;
-    int status;
-    if((pid = fork()) < 0)
-        err_sys("fork error.");
-    else if(pid == 0)
-        exit(7);// 子进程正常终止
-    if (wait(&status) != pid)
-        err_sys("wait error.");
-    pr_exit(status);
-
-    if ((pid = fork()) < 0)
-        err_sys("fork error.");
-    else if(pid == 0)
-        abort();// 子进程异常终止
-    if (wait(&status) != pid)
-        printf("wait error.");
-    pr_exit(status);
-
-    if ((pid = fork()) < 0)
-        err_sys("fork error.");
-    else if(pid == 0)
-        status /= 0; // 子进程除零异常终止
-    if (wait(&status) != pid)
-        printf("wait error.");
-    pr_exit(status);
-    return 0;
+void pr_exit(int status){
+	if(WIFEXITED(status)) // 若为正常终止子进程返回的状态，则为真。
+        // WEXITSTATUS(status) 获取子进程传送给 exit 参数的低8位。
+		printf("normal termination, exit status = %d\n", WEXITSTATUS(status)); //
+	else if(WIFSIGNALED(status)) //若为异常终止子进程返回的状态，则为真。
+		// WTERMSIG(status) 获取子进程终止的信号编号，
+        // WCOREDUMP(status) 若已产生终止进程的 core文件，则返回真。
+		printf("abnormal termination, signal number = %d%s\n", WTERMSIG(status),
+#ifdef WCOREDUMP
+	WCOREDUMP(status) ? " (core file generated)": "");
+#else
+	"");
+#endif
+	else if(WIFSTOPPED(status)) // 若当前暂停进程的返回的状态，则为真。
+		// WSTOPSIG(status) 获取子进程暂停的信号编号。
+		printf("child stopped, signal number = %d\n", WSTOPSIG(status));
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 8.5wait.c ../error.c
+$ gcc 04wait.c
+04wait.c: In function ‘main’:
+04wait.c:38:10: warning: division by zero [-Wdiv-by-zero]
+   38 |   status /= 0; // 子进程除零异常终止
+      |          ^~
 $ ./a.out
 normal termination, exit status = 7
-abnormal termination, signal number = 6
-abnormal termination, signal number = 8
+abnormal termination, signal number = 6 (core file generated)
+abnormal termination, signal number = 8 (core file generated)
 ```
 
 可以查看 `<signal.h>` 头文件验证 `SIGABRT` 的值为 6，`SIGFPE` 的值为 8。
 
-对于 waitpid 函数中 pid 参数的作用解释如下。
+`waitpid` 函数提供了 `wait` 函数没有提供的 3 个功能。
 
-- `pid ==−1` 等待任一子进程。此种情况下，waitpid 与 wait 等效。
-- `pid > 0` 等待进程 ID 与 pid 相等的子进程。
-- `pid == 0` 等待组 ID 等于调用进程组 ID 的任一子进程。
-- `pid <−1` 等待组 ID 等于 pid 绝对值的任一子进程。
-
-waitpid 函数返回终止子进程的进程 ID，并将该子进程的终止状态存放在由 statloc 指向的存储单元中。
-
-waitpid 函数提供了 wait 函数没有提供的 3 个功能。
-
-1. waitpid 可等待一个特定的进程，而 wait 则返回任一终止子进程的状态。在讨论 popen 函数时会再说明这一功能。
-1. waitpid 提供了一个 wait 的非阻塞版本。有时希望获取一个子进程的状态，但不想阻塞。
-1. waitpid 通过 WUNTRACED 和 WCONTINUED 选项支持作业控制。
+1. `waitpid` 可等待一个特定的进程，而 `wait` 则返回任一终止子进程的状态。在讨论 `popen` 函数时会再说明这一功能。
+2. `waitpid` 提供了一个 `wait` 的非阻塞版本。有时希望获取一个子进程的状态，但不想阻塞。
+3. `waitpid` 通过 `WUNTRACED` 和 `WCONTINUED` 选项支持作业控制。
 
 例子：
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
-int main(int argc, char const *argv[]){
-    pid_t pid;
-    if((pid = fork()) < 0)
-        err_sys("fork error.");
-    else if (pid == 0){ // 第一个子进程
-        if((pid=fork()) < 0)
-            err_sys("fork error.");
-        else if (pid > 0){
-            printf("getpid = %ld\n", (long)getpid());
-            exit(0); // 退出第一个子进程
-        }
+int main(){
+	pid_t pid;
+	if((pid = fork()) < 0){
+		perror("fork error");
+		return 1;
+	}else if(pid == 0){
+		if((pid = fork()) < 0){
+			perror("fork error");
+			return 1;
+		}else if(pid > 0){
+			printf("first child pid = %ld\n", (long)getpid());
+			exit(0); // 退出第一个子进程
+		}
 
-        printf("second child getpid = %ld\n", (long)getpid());
-        // 等待第一个子进程退出，然后第二个子进程的父进程为 init 进程
-        sleep(2);
-        printf("second child, parent pid = %ld\n", (long)getppid());
-        printf("second child getpid = %ld\n", (long)getpid());
-        exit(0);
-    }
-    // 等待第一个子进程
-    printf("pid = %ld\n", (long)pid);
-    if(waitpid(pid, NULL, 0) != pid)
-        err_sys("waitpid error");
-    printf("first child finish.\n");
-    exit(0);
+		printf("second child pid = %ld\n", (long)getpid());
+		// 等待地一个子进程退出，然后第二个子进程的父进程为 init 进程
+		sleep(2);
+		printf("second child parent pid = %ld\n", (long)getppid());
+		printf("second child pid = %ld\n", (long)getpid());
+		exit(0);
+	}
+	// 等待地一个子进程退出
+	printf("child pid = %ld, parent pid = %ld\n", (long)pid, (long)getpid());
+	if(waitpid(pid, NULL, 0) != pid){
+		perror("waitpid error");
+		return 1;
+	}
+	printf("first child finish.\n");
+	exit(0);
 }
-
 ```
 
 编译运行：
 
 ```bash
-$ gcc 8.5waitpid.c ../error.c
+$ gcc 05waitpid.c
 $ ./a.out
-pid = 4174
-getpid = 4174
-second child getpid = 4176
-$ second child, parent pid = 1
-second child getpid = 4176
+child pid = 38944, parent pid = 38943
+first child pid = 38944
+second child pid = 38945
+first child finish.
+$ second child parent pid = 3168
+second child pid = 38945
+
+$ ps aux |grep 3168
+ckcat       3168  0.0  0.1  20880 11496 ?        Ss   Sep05   0:05 /lib/systemd/systemd --user
 ```
 
-第二个子进程调用 `sleep` 以保证在打印父进程 ID 时第一个子进程已终止。
+第二个子进程调用 `sleep` 以保证在打印父进程 ID 时第一个子进程已终止。最终第二个子进程变成孤儿进程，`systemd` 成为其父进程。
+
+> 不同的操作系统可能具有不同的 `init` 进程，如 `init`、`systemd`、`upstart` 等，但它们的作用和功能类似，都是管理孤儿进程和僵尸进程的系统守护进程。
 
 ## 函数 waitid
 
-Single UNIX Specification 包括了另一个取得进程终止状态的函数 waitid，此函数类似于 waitpid，但提供了更多的灵活性。
+Single UNIX Specification 包括了另一个取得进程终止状态的函数 `waitid`，此函数类似于 `waitpid`，但提供了更多的灵活性。
 
 ```c
 #include <sys/wait.h>
@@ -399,21 +477,29 @@ int waitid(idtype_t idtype, id_t id, siginfo_t *infop, int options);
 返回值：
 
 - 若成功，返回 0；
-- 若出错，返回 −1
+- 若出错，返回 −1。
 
-与 waitpid 相似，waitid 允许一个进程指定要等待的子进程。但它使用两个单独的参数表示要等待的子进程所属的类型，而不是将此与进程 ID 或进程组 ID 组合成一个参数。id 参数的作用与 idtype 的值相关。
+参数：
 
-![](unix环境高级编程08-进程控制/waitpid的idtype常量.png)
+- `idtype`：一个枚举类型，表示要等待的子进程的标识类型。可以选择以下值之一：
+  - `P_PID`：使用 `id` 参数指定一个具体的子进程 PID，等待该子进程的状态变化。
+  - `P_PGID`：使用 `id` 参数指定一个进程组 ID（PGID），等待该进程组中的任何一个子进程的状态变化。
+  - `P_ALL`：等待任何子进程的状态变化，则 `id` 不需要指定，可以为 0，等效于 `wait` 函数。
+- `id`：与 `idtype` 关联的标识符。具体取决于 `idtype` 的值。
+- `infop`：一个指向 `siginfo_t` 结构体的指针，用于存储子进程的状态信息。`siginfo_t` 结构体包含了造成子进程状态改变有关信号的详细信息。
+- `options`：一个整数，用于指定等待子进程的选项，可以使用多个选项通过按位或（`|`）操作组合。常用选项包括：
+  - `WEXITED`：等待已退出的子进程。
+  - `WSTOPPED`：等待已停止的子进程。
+  - `WCONTINUED`：等待已继续执行的子进程。
+  - `WNOHANG`：非阻塞等待，如果没有子进程状态变化，立即返回。
 
-![](unix环境高级编程08-进程控制/waitid的options常量.png)
+`WCONTINUED`、`WEXITED` 或 `WSTOPPED` 这 3 个常量之一必须在 `options` 参数中指定。
 
-WCONTINUED、WEXITED 或 WSTOPPED 这 3 个常量之一必须在 options 参数中指定。
-
-infop 参数是指向 siginfo 结构的指针。该结构包含了造成子进程状态改变有关信号的详细信息。
+与 `waitpid` 相似，`waitid` 允许一个进程指定要等待的子进程。但它使用两个单独的参数表示要等待的子进程所属的类型，而不是将此与进程 ID 或进程组 ID 组合成一个参数。
 
 ## 函数 wait3 和 wait4
 
-大多数 UNIX 系统实现提供了另外两个函数 wait3 和 wait4。这两个函数是从 UNIX 系统的 BSD 分支延袭下来的。它们提供的功能比 POSIX.1 函数 wait、waitpid 和 waitid 所提供功能的要多一个，这与附加参数有关。该参数允许内核返回由终止进程及其所有子进程使用的资源概况。
+大多数 UNIX 系统实现提供了另外两个函数 `wait3` 和 `wait4`。这两个函数是从 UNIX 系统的 BSD 分支延袭下来的。它们提供的功能比 `POSIX.1` 函数 `wait`、`waitpid` 和 `waitid` 所提供功能的要多一个，这与附加参数有关。该参数允许内核返回由终止进程及其所有子进程使用的资源概况。
 
 ```c
 #include <sys/types.h>
@@ -427,44 +513,119 @@ pid_t wait4(pid_t pid, int *statloc, int options, struct rusage *rusage);
 返回值：
 
 - 若成功，返回进程 ID；
-- 若出错，返回 −1
+- 若出错，返回 −1。
 
-资源统计信息包括用户 CPU 时间总量、系统 CPU 时间总量、缺页次数、接收到信号的次数等。
+参数：
+
+- `rusage`: 一个指向 `struct rusage` 结构体的指针，用于获取子进程的资源使用情况信息，如 CPU 时间、内存使用、缺页次数、接收到信号的次数等。如果不关心资源使用情况，可以传递 `NULL`。
 
 ## 竞争条件
 
-当多个进程都企图对共享数据进行某种处理，而最后的结果又取决于进程运行的顺序时，我们认为发生了竞争条件（race condition）。如果在 fork 之后的某种逻辑显式或隐式地依赖于在 fork 之后是父进程先运行还是子进程先运行，那么 fork 函数就会是竞争条件活跃的滋生地。
+当多个进程都企图对共享数据进行某种处理，而最后的结果又取决于进程运行的顺序时，我们认为发生了竞争条件（race condition）。如果在 `fork` 之后的某种逻辑显式或隐式地依赖于在 `fork` 之后是父进程先运行还是子进程先运行，那么 `fork` 函数就会是竞争条件活跃的滋生地。
 
-如果一个进程希望等待一个子进程终止，则它必须调用 wait 函数中的一个。如果一个进程要等待其父进程终止，则可使用下列形式的循环：
+如果一个进程希望等待一个子进程终止，则它必须调用 `wait` 函数中的一个。如果一个进程要等待其父进程终止，则可使用下列形式的循环：
 
 ```c
 while(getppid() != 1)
-sleep(1);
+    sleep(1);
 ```
 
-这种形式的循环称为轮询（polling），它的问题是浪费了 CPU 时间，因为调用者每隔 1 s 都被唤醒，然后进行条件测试。
+这种形式的循环称为轮询（polling），它的问题是浪费了 CPU 时间，因为调用者每隔 1s 都被唤醒，然后进行条件测试。
 
 为了避免竞争条件和轮询，在多个进程之间需要有某种形式的信号发送和接收的方法。各种形式的进程间通信（IPC）也可使用。
 
 例子， 带有竞争条件的程序。
 
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
+static void charatatime(char *);
+
+int main(){
+	pid_t pid;
+	if((pid = fork()) < 0){
+		perror("fork error");
+		return 1;
+	}else if(pid == 0)
+		charatatime("output from child\n");
+	else
+		charatatime("output from parent\n");
+	return 0;
+}
+static void charatatime(char *str){
+	char *ptr;
+	int c;
+	setbuf(stdout, NULL); // 设置为不带缓冲
+	for(ptr = str; (c = *ptr++) != 0;)
+		putc(c, stdout);
+}
 ```
 
 编译运行：
 
 ```bash
-$ gcc 8.9raceCondition.c ../error.c
+$ gcc 06race.c
 $ ./a.out
 output from parent
 output from child
+
 $ ./a.out
-ooututput from parent
-put from child
+ououtput tpfrout m child
+from parent
+
+$ ./a.out
+output from parent
+output %                                                                       from child
+
 ```
 
-实际输出说明该程序的运行结果是会改变的。
+因为输出依赖于内核使这两个进程运行的顺序及每个进程运行的时间长度，所以该程序包含了一个竞争条件。实际输出说明该程序的运行结果是会改变的。
+
+例子，修改上面程序以避免竞争条件：
+
+```c
+// 07norace.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "07sig.h"
+
+static void charatatime(char *);
+
+int main(){
+	pid_t pid;
+	TELL_WAIT();
+	if((pid = fork()) < 0){
+		perror("fork error");
+		return 1;
+	}else if(pid == 0){
+		WAIT_PARENT();
+		charatatime("output from child\n");
+	}else{
+		charatatime("output from parent\n");
+		TELL_CHILD(pid);
+	}
+	return 0;
+}
+static void charatatime(char *str){
+	char *ptr;
+	int c;
+	setbuf(stdout, NULL);
+	for(ptr = str; (c = *ptr++) != 0;)
+		putc(c, stdout);
+}
+```
+
+编译运行：
+
+```bash
+$ gcc 07norace.c 07sig.c
+$ ./a.out
+output from parent
+output from child
+```
 
 ## 函数 exec
 
@@ -486,13 +647,39 @@ int fexecve(int fd, char *const argv[], char *const envp[]);
 返回值：
 
 - 若出错，返回 −1；
-- 若成功，不返回
+- 若成功，不返回。
+
+参数：
+
+- `pathname`：是一个指向新程序的可执行文件的路径的字符串。
+- `arg0`：是新程序的名称，通常是第一个参数。该参数将作为 `argv[0]` 传递给新程序。这是一个字符串。
+- `...`：是一系列字符串参数，用于指定新程序的命令行参数，以 `NULL` 结尾。每个参数将成为新程序的 `argv[1]`、`argv[2]` 等。
+- `argv`：是一个字符串指针数组，表示新程序的命令行参数。数组的第一个元素 `argv[0]` 通常是新程序的名称，后续元素是新程序的其他命令行参数，数组以指向 `NULL` 的指针结尾。
+- `envp`：是一个字符串指针数组，表示新程序的环境变量。每个元素都是一个字符串，形式为 "name=value"，并且数组以指向 `NULL` 的指针结尾。
+- `filename`：是一个指向新程序的名称的字符串，不包括路径。
+- `fd`：是一个已打开的文件描述符，它关联了待执行程序的可执行文件。这个文件描述符通常是使用 `open` 函数打开可执行文件得到的。
+
+例子：
+
+```c
+char *args[] = {"ls", "-l", NULL};
+char *envp[] = {"PATH=/bin", "HOME=/home/user", NULL};
+int fd = open("/bin/ls", O_RDONLY);
+
+execl("/bin/ls", "ls", "-l", NULL);
+execv("/bin/ls", args);
+execle("/bin/ls", "ls", "-l", NULL, envp);
+execve("/bin/ls", args, envp);
+execlp("ls", "ls", "-l", NULL);
+execvp("ls", args);
+fexecve(fd, args, envp)
+```
 
 **这些函数之间的第一个区别是前 4 个函数取路径名作为参数，后两个函数则取文件名作为参数，最后一个取文件描述符作为参数。**
 
-当指定 filename 作为参数时：
+当指定 `filename` 作为参数时：
 
-- 如果 filename 中包含`/`，则就将其视为路径名；
+- 如果 `filename` 中包含`/`，则就将其视为路径名；
 - 否则就按 `PATH` 环境变量，在它所指定的各目录中搜寻可执行文件。
 
 `PATH` 变量包含了一张目录表（称为路径前缀），目录之间用冒号`:`分隔。
@@ -501,15 +688,15 @@ int fexecve(int fd, char *const argv[], char *const envp[]);
 PATH=/bin:/usr/bin:/usr/local/bin:.
 ```
 
-最后的路径前缀`.`表示当前目录。零长前缀也表示当前目录。在 `value` 的开始处可用`:`表示，在行中间则要用`::`表示，在行尾以`:`表示。
+最后的路径前缀`.`表示当前目录。零长前缀也表示当前目录（在 `value` 的开始处可用`:`表示，在行中间则要用`::`表示，在行尾以`:`表示）。例如：
 
 ```bash
-PATH=:/bin:/usr/bin:/usr/local/bin
-PATH=/bin::/usr/bin:/usr/local/bin:
-PATH=/bin:/usr/bin:/usr/local/bin:
+PATH=:/bin:/usr/bin:/usr/local/bin: # 在 `value` 的开始处可用`:`表示当前目录
+PATH=/bin:/usr/bin::/usr/local/bin: # 在行中间则要用`::`表示当前目录
+PATH=/bin:/usr/bin:/usr/local/bin:: # 在行尾以`:`表示当前目录
 ```
 
-如果 `execlp` 或 `execvp` 使用路径前缀中的一个找到了一个可执行文件，但是该文件不是由连接编辑器产生的机器可执行文件，则就认为该文件是一个 `shell` 脚本，于是试着调用`/bin/sh`，并以该 filename 作为 `shell` 的输入。
+如果 `execlp` 或 `execvp` 使用路径前缀中的一个找到了一个可执行文件，但是该文件不是由连接编辑器产生的机器可执行文件，则就认为该文件是一个 `shell` 脚本，于是试着调用`/bin/sh`，并以该 `filename` 作为 `shell` 的输入。
 
 `fexecve` 函数避免了寻找正确的可执行文件，而是依赖调用进程来完成这项工作。调用进程可以使用文件描述符验证所需要的文件并且无竞争地执行该文件。
 
@@ -530,7 +717,18 @@ PATH=/bin:/usr/bin:/usr/local/bin:
 - 字母 `v` 表示该函数取一个`argv[]`矢量。
 - 字母 `e` 表示该函数取`envp[]`数组，而不使用当前环境。
 
-![](unix环境高级编程08-进程控制/7个exec函数之间的区别.png)
+7 个 `exec` 函数之间的区别：
+
+| 函数           | pathname | filename | fd  | 参数表 | `angv[]` | `environ` | `enwp[]` |
+| -------------- | :------: | :------: | :-: | :----: | :------: | :-------: | :------: |
+| execl          |    •     |          |     |   •    |          |     •     |          |
+| execlp         |          |    •     |     |   •    |          |     •     |          |
+| execle         |    •     |          |     |   •    |          |           |    •     |
+| execv          |    •     |          |     |        |    •     |     •     |          |
+| execvp         |          |    •     |     |        |    •     |     •     |          |
+| execve         |    •     |          |     |        |    •     |           |    •     |
+| fexecve        |          |          |  •  |        |    •     |           |    •     |
+| (名字中的字母) |          |    p     |  f  |   l    |    v     |           |    e     |
 
 每个系统对参数表和环境表的总长度都有一个限制，这种限制是由 `ARG_MAX` 给出的。为了摆脱对参数表长度的限制，我们可以使用 `xargs(1)` 命令，将长参数表断开成几部分。
 
@@ -550,16 +748,16 @@ PATH=/bin:/usr/bin:/usr/local/bin:
 - 进程信号屏蔽
 - 未处理信号
 - 资源限制
-- nice 值
-- tms_utime、tms_stime、tms_cutime 以及 tms_cstime 值
+- `nice` 值
+- `tms_utime`、`tms_stime`、`tms_cutime` 以及 `tms_cstime` 值
 
-对打开文件的处理与每个描述符的执行时关闭（close-on-exec）标志值有关。若设置了 FD_CLOEXEC 标志，则在执行 exec 时关闭该描述符；否则该描述符仍打开。除非特地用 fcntl 设置了该执行时关闭标志，否则系统的默认操作是在 exec 后仍保持这种描述符打开。
+对打开文件的处理与每个描述符的执行时关闭（close-on-exec）标志值有关。若设置了 `FD_CLOEXEC` 标志，则在执行 `exec` 时关闭该描述符；否则该描述符仍打开。除非特地用 `fcntl` 设置了该执行时关闭标志，否则系统的默认操作是在 `exec` 后仍保持这种描述符打开。
 
-POSIX.1 明确要求在 exec 时关闭打开目录流。这通常是由 opendir 函数实现的，它调用 fcntl 函数为对应于打开目录流的描述符设置执行时关闭标志。
+`POSIX.1` 明确要求在 `exec` 时关闭打开目录流。这通常是由 `opendir` 函数实现的，它调用 `fcntl` 函数为对应于打开目录流的描述符设置执行时关闭标志。
 
-在 exec 前后实际用户 ID 和实际组 ID 保持不变，而有效 ID 是否改变则取决于所执行程序文件的设置用户 ID 位和设置组 ID 位是否设置。
+在 `exec` 前后实际用户 ID 和实际组 ID 保持不变，而有效 ID 是否改变则取决于所执行程序文件的设置用户 ID 位和设置组 ID 位是否设置。
 
-在很多 UNIX 实现中，这 7 个函数中只有 execve 是内核的系统调用。另外 6 个只是库函数，它们最终都要调用该系统调用。
+在很多 UNIX 实现中，这 7 个函数中只有 `execve` 是内核的系统调用。另外 6 个只是库函数，它们最终都要调用该系统调用。
 
 ![](unix环境高级编程08-进程控制/7个exec函数之间的关系.png)
 

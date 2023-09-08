@@ -1,17 +1,17 @@
 ---
-title: 动态调试so
+title: IDA动态调试so
 date: 2021-02-22 20:54:30
-tag: Android
+tag: IDA
 category: Android逆向
 ---
 
 # 动态调试送给最好的 TA
 
-> 如果手机系统是 android 10，那么需要设置一下
+> 如果手机系统是 android 10 以上，那么需要 IDA 的版本大于 7.4，并且需要设置一下 `IDA_LIBC_PATH` 的环境变量。
 
 ```bash
-export IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so
-or export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so
+$ export IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so   # 32 位
+$ export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so # 64 位
 ```
 
 参考：https://bbs.pediy.com/thread-258103.htm
@@ -20,11 +20,11 @@ or export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so
 
 ### 1. 使用 IDA 打开需要调试的 so 文件，找到关键的方法，设置断点。
 
-![](动态调试so/2021-02-22-20-57-11.png)
+![](IDA动态调试so/2021-02-22-20-57-11.png)
 
 ### 2. 选择 Android 调试器，设置 hostname 和端口。
 
-![](动态调试so/2021-02-22-20-58-08.png)
+![](IDA动态调试so/2021-02-22-20-58-08.png)
 
 ### 3. 开始调试
 
@@ -34,27 +34,29 @@ or export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so
 
 执行完以上操作完，使用 IDA 附加对应的 APP 。
 
-![](动态调试so/2021-02-22-21-02-38.png)
+![](IDA动态调试so/2021-02-22-21-02-38.png)
 
 ### 4. jdb 连接
 
-打开 monitor ，查看 APP 的调试端口，使用 jdb 命令连接 ` jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。
+~~打开 monitor ，查看 APP 的调试端口，使用 jdb 命令连接 ` jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。~~
 
-> 通过 `adb forward tcp:<hostport> jdwp:<pid>` 命令，替代使用 DDMS 的方式。
+通过执行 `adb forward tcp:<port> jdwp:<pid>` 命令将 host 机器上的 port 端口转发到 Android 上的调试进程，以便调试器通过这个端口连接到目标进程。
+
+这里将转发的 port 指定为 8700, 然后使用 `jdb` 命令连接 `jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。
 
 此时 APP 将会运行起来，IDA 将会弹出下列界面，点击 same 就可以了。
 
-![](动态调试so/2021-02-22-21-07-35.png)
+![](IDA动态调试so/2021-02-22-21-07-35.png)
 
 最终将会断在我们之前下断点的地方。
 
-![](动态调试so/2021-02-22-21-08-20.png)
+![](IDA动态调试so/2021-02-22-21-08-20.png)
 
 ### 5. 分析并 dump lua 字节码
 
 通过参考其他文章可知 luaL_loadbufferx 是关键解密函数，但是也需要我们要分析解密的具体地方。看到有 malloc 就很可疑。我们就需要重点关注这个地方。通过调试发现其申请的空间就是存放解密后的 lua 字节码。
 
-![](动态调试so/2021-02-22-21-09-05.png)
+![](IDA动态调试so/2021-02-22-21-09-05.png)
 
 编写 dump 脚本，下面提供了 IDC 和 Python 脚本。
 
@@ -90,7 +92,7 @@ print "Dump OK"
 
 在网上找到 `unluac_2015_06_13.jar` ，将 lua 节码转换为 lua 代码。
 
-![](动态调试so/2021-02-22-21-13-27.png)
+![](IDA动态调试so/2021-02-22-21-13-27.png)
 
 ## 修改 so 方式
 
@@ -100,11 +102,11 @@ print "Dump OK"
 
 使用 IDA 打开需要调试的 so 文件，找到关键的方法，修改字节码，并将修改后的内容保存至文件。
 
-![](动态调试so/2021-02-22-21-18-20.png)
+![](IDA动态调试so/2021-02-22-21-18-20.png)
 
 为什么将字节码修 03 AF 改为 10 DE 。
 
-![](动态调试so/2021-02-22-21-19-40.png)
+![](IDA动态调试so/2021-02-22-21-19-40.png)
 
 使用的 IDA 插件：
 
@@ -125,15 +127,15 @@ print "Dump OK"
 
 `_init` 函数经过编译后就是 `.init_proc` 函数，是目前我所知道的在 so 最早被调用的函数 。`_init` 函数无参，无返回值，其次必须函数名必须是 `_init` ，并且不能名称粉碎。
 
-![](动态调试so/2021-02-22-21-36-04.png)
+![](IDA动态调试so/2021-02-22-21-36-04.png)
 
 函数添加 `__attribute__((constructor))` 属性后，就会将对应的函数指针放在 `init_array` 节中，在 JNI_Onload 之前被调用。
 
-![](动态调试so/2021-02-22-21-36-55.png)
+![](IDA动态调试so/2021-02-22-21-36-55.png)
 
 执行结果如下：
 
-![](动态调试so/2021-02-22-21-41-55.png)
+![](IDA动态调试so/2021-02-22-21-41-55.png)
 
 可以看到先执行的 `.init_proc` 函数，然后执行 `init_arrary` 节里的函数，最后执行 JNI_Onload 。
 
@@ -161,25 +163,25 @@ void soinfo::call_function(const char* function_name __unused,
 
 我们直接到手机的 `system/bin` 目录中导出 linker 文件，如果调试 ARMv8 则需要导出 linker64 文件。通过查找字符串` [ Calling %s @ %p for \"%s\" ]` 找到关键位置，其偏移为 0x6414 ，最后就可以通过基址+偏移得到最终的地址需要下断点的地址。
 
-![](动态调试so/2021-02-24-19-19-27.png)
+![](IDA动态调试so/2021-02-24-19-19-27.png)
 
 ## 开始调试
 
 当在 libc 中断下来直接，ctrl+s 找到 linker 的基址，然后加上偏移 0x6414 。可以发现其基址为 0xF44DC000+0x6414 = F44E2414 最后跳到此处，下断点直接 F9 运行。然后 jdb 连接，最终会断在此处，F7 单步步入，即为 `.init_proc` 函数，继续执行就会又断在此处，F7 步入，则 test_construtor 函数。
 
-![](动态调试so/2021-02-24-19-23-12.png)
+![](IDA动态调试so/2021-02-24-19-23-12.png)
 
-![](动态调试so/2021-02-24-19-23-20.png)
+![](IDA动态调试so/2021-02-24-19-23-20.png)
 
 其中也可以通过前文讲的修改 so 文件，修改字节码实现断点或无限循环达到相同的效果。
 
 调试应用和代码：
 
-[送给最好的 TA](https://github.com/CKCat/CKCat.github.io/blob/main/source/_posts/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84TA.apk)
+[送给最好的 TA](https://github.com/CKCat/CKCat.github.io/blob/main/source/_posts/IDA动态调试so/%E9%80%81%E7%BB%99%E6%9C%80%E5%A5%BD%E7%9A%84TA.apk)
 
-[unluac_2015_06_13.jar](https://github.com/CKCat/CKCat.github.io/blob/main/source/_posts/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/unluac_2015_06_13.jar)
+[unluac_2015_06_13.jar](https://github.com/CKCat/CKCat.github.io/blob/main/source/_posts/IDA动态调试so/unluac_2015_06_13.jar)
 
-[init_proc 相关代码](https://github.com/CKCat/CKCat.github.io/tree/main/source/_posts/%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/ndkcode)
+[init_proc 相关代码](https://github.com/CKCat/CKCat.github.io/tree/main/source/_posts/IDA动态调试so/ndkcode)
 
 参考：
 
