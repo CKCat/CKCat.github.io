@@ -11,20 +11,19 @@ category: unix环境高级编程
 
 ### BSD 终端登录
 
-init 进程读取文件 `/etc/ttys`，对每一个允许登录的终端设备，`init` 调用一次 `fork`，它所生成的子进程则 `exec getty` 程序。`getty` 对终端设备调用 `open` 函数，以读、写方式将端打开。一旦设备被打开，则文件描述符 0、1、2 就被设置到该设备。然后 `getty` 输出“login:”之类的信息，并等待用户键入用户名。当用户键入了用户名后，`getty` 的工作就完成了。然后它以类似于下列的方式调用 `login` 程序：
+`init` 进程读取文件 `/etc/ttys`，对每一个允许登录的终端设备，`init` 调用一次 `fork`，它所生成的子进程则 `exec getty` 程序。
+
+`getty` 对终端设备调用 `open` 函数，以读、写方式将端打开。一旦设备被打开，则文件描述符 0、1、2 就被设置到该设备。然后 `getty` 输出“login:”之类的信息，并等待用户键入用户名。
+
+当用户键入了用户名后，`getty` 的工作就完成了。然后它以类似于下列的方式调用 `login` 程序：
 
 ```c
 execle("/bin/login", "login", "-p", username, (char *)0,envp);
 ```
 
-`getty` 以终端名和在 `gettytab` 中说明的环境字符串为 `login` 创建一个环境。
+`init` 以一个空环境调用 `getty`，`getty` 以终端名和在 `gettytab`（`getty` 程序有关数据文件）中说明的环境字符串为 `login` 创建一个环境。`-p` 标志通知 `login` 保留传递给它的环境，也可将其他环境字符串加到该环境中，但是不要替换它。
 
-`login` 能处理多项工作:
-
-- 调用 `getpwnam` 取得相应用户的口令文件登录项。
-- 调用 `getpass(3)`以显示提示“Password: ”，接着读用户键入的口令。
-- 调用 `crypt(3)`将用户键入的口令加密，并与该用户在阴影口令文件中登录项的 `pw_passwd` 字段相比较。
-- 如果用户几次键入的口令都无效，则 `login` 以参数 1 调用 `exit` 表示登录过程失败。
+`login` 能处理多项工作，首先调用 `getpwnam` 取得相应用户的口令文件登录项。然后调用 `getpass(3)`以显示提示“Password: ”，接着读用户键入的口令。继续调用 `crypt(3)`将用户键入的口令加密，并与该用户在阴影口令文件中登录项的 `pw_passwd` 字段相比较。如果用户几次键入的口令都无效，则 `login` 以参数 1 调用 `exit` 表示登录过程失败。
 
 如果用户正确登录，`login` 就将完成如下工作。
 
@@ -39,7 +38,7 @@ execle("/bin/login", "login", "-p", username, (char *)0,envp);
 
 Mac OS X 终端登录与 BSD 终端登录进程的工作步骤基本相同。主要有以下不同：
 
-- init 的工作是由 launchd 完成的。
+- `init` 的工作是由 `launchd` 完成的。
 - 一开始提供的就是图形终端。
 
 ### Linux 终端登录
@@ -48,19 +47,19 @@ Linux 的终端登录过程非常类似于 BSD。BSD 登录过程与 Linux 登�
 
 在一些系统中，`/etc/inittab` 包含配置信息，指定了 `init` 应当为之启动 `getty` 进程的各终端设备。
 
-Ubuntu 发行版，配有称为“Upstart”的 `init` 程序。使用存放在 `/etc/init` 目录的`*.conf` 命名的配置文件。
+Ubuntu 发行版，配有称为 `Upstart` 的 `init` 程序。使用存放在 `/etc/init` 目录的`*.conf` 命名的配置文件。
 
 ## 网络登录
 
-通过串行终端登录至系统和经由网络登录至系统两者之间的主要区别是：网络登录时，在终端和计算机之间的连接不再是点到点的。在网络登录情况下，login 仅仅是一种可用的服务，这与其他网络服务（如 FTP 或 SMTP）的性质相同。
+通过串行终端登录至系统和经由网络登录至系统两者之间的主要区别是：网络登录时，在终端和计算机之间的连接不再是点到点的。在网络登录情况下，`login` 仅仅是一种可用的服务，这与其他网络服务（如 `FTP` 或 `SMTP`）的性质相同。
 
 为使同一个软件既能处理终端登录，又能处理网络登录，系统使用了一种称为伪终端（pseudo terminal）的软件驱动程序，它仿真串行终端的运行行为，并将终端操作映射为网络操作，反之亦然。
 
 ### BSD 网络登录
 
-在 BSD 中，有一个 `inetd` `进程，它等待大多数网络连接。作为系统启动的一部分，init` 调用一个 `shell`，使其执行 `shell` 脚本`/etc/rc`。由此 `shell` 脚本启动一个守护进程 `inetd`。一旦此 `shell` 脚本终止，`inetd` 的父进程就变成 `init`。`inetd` 等待 `TCP/IP` 连接请求到达主机，而当一个连接请求到达时，它执行一次 `fork`，然后生成的子进程 `exec` 适当的程序。
+在 BSD 中，有一个 `inetd` 进程，它等待大多数网络连接。作为系统启动的一部分，`init` 调用一个 `shell`，使其执行 `shell` 脚本`/etc/rc`。由此 `shell` 脚本启动一个守护进程 `inetd`。一旦此 `shell` 脚本终止，`inetd` 的父进程就变成 `init`。`inetd` 等待 `TCP/IP` 连接请求到达主机，而当一个连接请求到达时，它执行一次 `fork`，然后生成的子进程 `exec` 适当的程序。
 
-客户进程的用户现在登录到了服务进程所在的主机后，`telnetd` 进程打开一个伪终端设备，并用 `fork` 分成两个进程。父进程处理通过网络连接的通信，子进程则执行 login 程序。父进程和子进程通过伪终端相连接。如果登录正确，`login` 就执行动作与终端登录中 `login` 的执行动作一致。
+客户进程的用户现在登录到了服务进程所在的主机后，`telnetd` 进程打开一个伪终端设备，并用 `fork` 分成两个进程。父进程处理通过网络连接的通信，子进程则执行 `login` 程序。父进程和子进程通过伪终端相连接。如果登录正确，`login` 就执行动作与终端登录中 `login` 的执行动作一致。
 
 Mac OS X 网络登录与 BSD 网络登录基本相同。但 Mac OS X 上 `telnet` 守护进程是从 `launchd` 运行的。
 
@@ -72,78 +71,145 @@ Mac OS X 网络登录与 BSD 网络登录基本相同。但 Mac OS X 上 `telnet
 
 每个进程除了有一进程 ID 之外，还属于一个进程组，进程组是一个或多个进程的集合。
 
-同一进程组中的各进程接收来自同一终端的各种信号。每个进程组有一个唯一的进程组 ID。进程组 ID 类似于进程 ID——它是一个正整数，并可存放在 `pid_t` 数据类型中。函数 `getpgrp` 返回调用进程的进程组 ID。
+同一进程组中的各进程接收来自同一终端的各种信号。每个进程组有一个唯一的进程组 ID。进程组 ID 类似于进程 ID，它是一个正整数，并可存放在 `pid_t` 数据类型中。
+
+函数 `getpgrp` 返回调用进程的进程组 ID。
 
 ```c
 #include <unistd.h>
 pid_t getpgrp(void);
 ```
 
-返回值：调用进程的进程组 ID
+返回值：
 
-Single UNIX Specification 定义了 getpgid 函数模仿此种运行行为。
+- 调用进程的进程组 ID 。
+
+Single UNIX Specification 定义了 `getpgid` 函数模仿此种运行行为。
 
 ```c
 #include <unistd.h>
 pid_t getpgid(pid_t pid);
 ```
 
-返回值：若成功，返回进程组 ID；若出错，返回 −1
+返回值：
 
-若 pid 是 0，返回调用进程的进程组 ID。
+- 若成功，返回进程组 ID；
+- 若出错，返回 −1。
+
+参数：
+
+- `pid`：一个整数，表示要查询的进程的进程 ID（PID）。通常，你可以传递 0 来获取当前进程的进程组 ID，或者传递负数来获取指定进程的进程组 ID。
 
 每个进程组有一个组长进程。组长进程的进程组 ID 等于其进程 ID。
 
 进程组组长可以创建一个进程组、创建该组中的进程，然后终止。只要在某个进程组中有一个进程存在，则该进程组就存在，这与其组长进程是否终止无关。从进程组创建开始到其中最后一个进程离开为止的时间区间称为进程组的生命期。某个进程组中的最后一个进程可以终止，也可以转移到另一个进程组。
 
-进程调用 setpgid 可以加入一个现有的进程组或者创建一个新进程组。
+进程调用 `setpgid` 可以加入一个现有的进程组或者创建一个新进程组。
 
 ```c
 #include <unistd.h>
 int setpgid(pid_t pid, pid_t pgid);
 ```
 
-返回值：若成功，返回 0；若出错，返回 −1
+返回值：
 
-setpgid 函数将 pid 进程的进程组 ID 设置为 pgid。如果这两个参数相等，则由 pid 指定的进程变成进程组组长。如果 pid 是 0，则使用调用者的进程 ID。另外，如果 pgid 是 0，则由 pid 指定的进程 ID 用作进程组 ID。
+- 若成功，返回 0；
+- 若出错，返回 −1。
 
-一个进程只能为它自己或它的子进程设置进程组 ID。在它的子进程调用了 exec 后，它就不再更改该子进程的进程组 ID。
+`setpgid` 函数将 `pid` 进程的进程组 ID 设置为 `pgid`。
 
-在大多数作业控制 shell 中，在 fork 之后调用此函数，使父进程设置其子进程的进程组 ID，并且也使子进程设置其自己的进程组 ID。
+- 如果这两个参数相等，则由 `pid` 指定的进程变成进程组组长。
+- 如果 `pid` 是 0，则使用调用者的进程 ID。
+- 如果 `pgid` 是 0，则由 `pid` 指定的进程 ID 用作进程组 ID。
 
-waitpid 函数可被用来等待一个进程或者指定进程组中的一个进程终止。
+一个进程只能为它自己或它的子进程设置进程组 ID。在它的子进程调用了 `exec` 后，它就不再更改该子进程的进程组 ID。
+
+在大多数作业控制 shell 中，在 `fork` 之后调用此函数，使父进程设置其子进程的进程组 ID，并且也使子进程设置其自己的进程组 ID。
+
+`waitpid` 函数可被用来等待一个进程或者指定进程组中的一个进程终止。
 
 ## 会话
 
 会话（session）是一个或多个进程组的集合。通常是由 shell 的管道将几个进程编成一组的。
 
-进程调用 setsid 函数建立一个新会话。
+进程调用 `setsid` 函数建立一个新会话。
 
 ```c
 #include <unistd.h>
 pid_t setsid(void);
 ```
 
-返回值：若成功，返回进程组 ID；若出错，返回-1
+返回值：
+
+- 若成功，返回进程组 ID；
+- 若出错，返回-1。
 
 如果调用此函数的进程不是一个进程组的组长，则此函数创建一个新会话。具体会发生以下 3 件事。
 
 1. 该进程变成新会话的会话首进程（session leader，会话首进程是创建该会话的进程）。此时，该进程是新会话中的唯一进程。
 1. 该进程成为一个新进程组的组长进程。新进程组 ID 是该调用进程的进程 ID。
-1. 该进程没有控制终端。如果在调用 setsid 之前该进程有一个控制终端，那么这种联系也被切断。
+1. 该进程没有控制终端。如果在调用 `setsid` 之前该进程有一个控制终端，那么这种联系也被切断。
 
-如果该调用进程已经是一个进程组的组长，则此函数返回出错。为了保证不处于这种情况，通常先调用 fork，然后使其父进程终止，而子进程则继续。因为子进程继承了父进程的进程组 ID，而其进程 ID 则是新分配的，两者不可能相等，这就保证了子进程不是一个进程组的组长。
+如果该调用进程已经是一个进程组的组长，则此函数返回出错。为了保证不处于这种情况，通常先调用 `fork`，然后使其父进程终止，而子进程则继续。因为子进程继承了父进程的进程组 ID，而其进程 ID 则是新分配的，两者不可能相等，这就保证了子进程不是一个进程组的组长。
 
-会话首进程是具有唯一进程 ID 的单个进程，所以可以将会话首进程的进程 ID 视为会话 ID。getsid 函数返回会话首进程的进程组 ID。
+会话首进程是具有唯一进程 ID 的单个进程，所以可以将会话首进程的进程 ID 视为会话 ID。`getsid` 函数返回会话首进程的进程组 ID。
 
 ```c
 #include <unistd.h>
 pid_t getsid(pid_t pid);
 ```
 
-返回值：若成功，返回会话首进程的进程组 ID；若出错，返回-1
+返回值：
 
-如若 pid 是 0，getsid 返回调用进程的会话首进程的进程组 ID。
+- 若成功，返回会话首进程的进程组 ID；
+- 若出错，返回-1。
+
+参数：
+
+- `pid`：一个整数，表示要查询的进程的进程 ID（PID）。通常，你可以传递 0 来表示获取当前进程的会话 ID。
+
+例子：
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t sid;
+    pid_t my_sid;
+    // 获取当前进程所属会话的会话ID
+    if ((my_sid = getsid(0)) == -1) {
+        perror("getsid");
+        return 1;
+    }
+    printf("My session ID (SID): %d\n", (int)my_sid);
+
+    // 创建一个新的会话
+    if ((sid = setsid()) == -1) {
+        perror("setsid");
+        return 1;
+    }
+    printf("New session ID (SID): %d\n", (int)sid);
+
+    // 再次获取当前进程所属会话的会话ID
+    if ((my_sid = getsid(0)) == -1) {
+        perror("getsid");
+        return 1;
+    }
+    printf("My session ID (SID): %d\n", (int)my_sid);
+    return 0;
+}
+```
+
+编译运行：
+
+```bash
+$ gcc 01setsid.c
+$ sudo ./a.out
+My session ID (SID): 20697
+New session ID (SID): 21005
+My session ID (SID): 21005
+```
 
 ## 控制终端
 
@@ -157,11 +223,11 @@ pid_t getsid(pid_t pid);
 - 无论何时键入终端的退出键，都会将退出信号发送至前台进程组的所有进程。
 - 如果终端接口检测到调制解调器（或网络）已经断开连接，则将挂断信号发送至控制进程（会话首进程）。
 
-当会话首进程打开第一个尚未与一个会话相关联的终端设备时，只要在调用 open 时没有指定 O_NOCTTY 标志，System V 派生的系统将此作为控制终端分配给此会话。
+当会话首进程打开第一个尚未与一个会话相关联的终端设备时，只要在调用 `open` 时没有指定 `O_NOCTTY` 标志，`System V` 派生的系统将此作为控制终端分配给此会话。
 
-当会话首进程用 TIOCSCTTY 作为 request 参数（第三个参数是空指针）调用 ioctl 时，基于 BSD 的系统为会话分配控制终端。
+当会话首进程用 `TIOCSCTTY` 作为 `request` 参数（第三个参数是空指针）调用 `ioctl` 时，基于 BSD 的系统为会话分配控制终端。
 
-保证程序能与控制终端对话的方法是 open 文件/dev/tty。在内核中，此特殊文件是控制终端的同义语。
+保证程序能与控制终端对话的方法是 `open` 文件 `/dev/tty`。在内核中，此特殊文件是控制终端的同义语。
 
 ## 函数 tcgetpgrp、tcsetpgrp 和 tcgetsid
 
@@ -173,21 +239,38 @@ pid_t tcgetpgrp(int fd);
 int tcsetpgrp(int fd, pid_t pgrpid);
 ```
 
-tcgetpgrp 返回值：若成功，返回前台进程组 ID；若出错，返回 −1
-tcsetpgrp 返回值：若成功，返回 0；若出错，返回 −1
+`tcgetpgrp` 返回值：
 
-函数 tcgetpgrp 返回前台进程组 ID，它与在 fd 上打开的终端相关联。
+- 若成功，返回前台进程组 ID；
+- 若出错，返回 −1。
 
-如果进程有一个控制终端，则该进程可以调用 tcsetpgrp 将前台进程组 ID 设置为 pgrpid。pgrpid 值应当是在同一会话中的一个进程组的 ID。fd 必须引用该会话的控制终端。
+`tcsetpgrp` 返回值：
 
-给出控制 TTY 的文件描述符，通过 tcgetsid 函数，应用程序就能获得会话首进程的进程组 ID。
+- 若成功，返回 0；
+- 若出错，返回 −1。
+
+参数：
+
+- `fd`：一个整数，表示终端文件描述符。
+- `pgrpid`：一个整数，表示要设置为前台进程组的进程组 ID（PGID）。
+
+`tcgetpgrp` 用于获取与指定终端关联的前台进程组的 ID。这可以用于查询哪个进程组当前正在控制终端。
+
+`tcsetpgrp` 用于设置指定终端的前台进程组，即具有控制终端的进程组。只有前台进程组才能从终端输入中读取数据和向终端输出数据。
+
+如果进程有一个控制终端，则该进程可以调用 `tcsetpgrp` 将前台进程组 ID 设置为 `pgrpid`。p`grpid` 值应当是在同一会话中的一个进程组的 ID。`fd` 必须引用该会话的控制终端。
+
+给出控制 `TTY` 的文件描述符，通过 `tcgetsid` 函数，应用程序就能获得会话首进程的进程组 ID。
 
 ```c
 #include <termios.h>
 pid_t tcgetsid(int fd);
 ```
 
-返回值：若成功，返回会话首进程的进程组 ID；若出错，返回 −1
+返回值：
+
+- 若成功，返回会话首进程的进程组 ID；
+- 若出错，返回 −1。
 
 需要管理控制终端的应用程序可以调用 `tcgetsid` 函数识别出控制终端的会话首进程的会话 ID。
 
@@ -199,7 +282,7 @@ pid_t tcgetsid(int fd);
 2. 内核中的终端驱动程序必须支持作业控制。
 3. 内核必须提供对某些作业控制信号的支持。
 
-从shell使用作业控制功能的角度观察，用户可以在前台或后台启动一个作业。一个作业只是几个进程的集合，通常是一个进程管道。
+从 shell 使用作业控制功能的角度观察，用户可以在前台或后台启动一个作业。一个作业只是几个进程的集合，通常是一个进程管道。
 
 实际上有 3 个特殊字符可使终端驱动程序产生信号，并将它们发送至前台进程组，它们是：
 
@@ -211,14 +294,61 @@ pid_t tcgetsid(int fd);
 
 终端驱动程序必须处理与作业控制有关的另一种情况，只有前台作业接收终端输入。
 
-
 ![](unix环境高级编程09-进程关系/作业控制功能总结.png)
 
-## shell执行程序
-
-
 ## 孤儿进程组
-POSIX.1将孤儿进程组（orphaned process group）定义为：该组中每个成员的父进程要么是该组的一个成员，要么不是该组所属会话的成员。
 
-一个进程组不是孤儿进程组的条件是——该组中有一个进程，其父进程在属于同一会话的另一个组中。
+POSIX.1 将孤儿进程组（orphaned process group）定义为：该组中每个成员的父进程要么是该组的一个成员，要么不是该组所属会话的成员。
 
+一个进程组不是孤儿进程组的条件是该组中有一个进程，其父进程在属于同一会话的另一个组中。
+
+例子，创建一个孤儿进程组：
+
+```c
+#include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
+#include <errno.h>
+
+static void sig_hup(int signo){
+	printf("SIGHUG received, pid = %ld\n", (long)getpid());
+}
+
+static void pr_ids(char *name){
+	printf("%s: pid = %ld, ppid = %ld, pgrp = %ld, tpgrp = %ld\n",
+			name, (long)getpid(), (long)getppid(), (long)getpgrp(),
+			(long)tcgetpgrp(STDIN_FILENO));
+	fflush(stdout);
+}
+
+int main(){
+	char c;
+	pid_t pid;
+	pr_ids("parent");
+	if((pid = fork()) < 0){
+		printf("fork error");
+		return 1;
+	}else if(pid > 0){
+		sleep(5);
+	}else{
+		pr_ids("child");
+		signal(SIGHUP, sig_hup);
+		kill(getpid(), SIGTSTP);
+		pr_ids("child");
+		if(read(STDIN_FILENO, &c, 1) != 1)
+			printf("read error %d on contralling TTY\n", errno);
+	}
+	return 0;
+}
+```
+
+编译运行：
+
+```bash
+$ gcc 02orphaned.c
+$ ./a.out
+parent: pid = 22040, ppid = 20697, pgrp = 22040, tpgrp = 22040
+child: pid = 22041, ppid = 22040, pgrp = 22040, tpgrp = 22040
+SIGHUG received, pid = 22041
+child: pid = 22041, ppid = 1819, pgrp = 22040, tpgrp = 22040
+```

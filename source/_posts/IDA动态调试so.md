@@ -7,7 +7,7 @@ category: Android逆向
 
 # 动态调试送给最好的 TA
 
-> 如果手机系统是 android 10 以上，那么需要 IDA 的版本大于 7.4，并且需要设置一下 `IDA_LIBC_PATH` 的环境变量。
+> 如果手机系统是 android 10 以上，那么需要 IDA 的版本大于 7.3，并且需要设置一下 `IDA_LIBC_PATH` 的环境变量。
 
 ```bash
 $ export IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so   # 32 位
@@ -15,6 +15,16 @@ $ export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so # 64 位
 ```
 
 参考：https://bbs.pediy.com/thread-258103.htm
+
+本文使用以下调试环境测试均未发现问题：
+
+```bash
+IDA 7.7 + android 9 设置 ro.debuggable 为true 。
+IDA 7.7 + android 10 设置 ro.debuggable 为true 。
+```
+设置 `ro.debuggable` 为 `true` 使用了这个插件 [MagiskHidePropsConf](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf)
+
+还有一个 xposed 插件 [XAppDebug](https://github.com/Palatis/XAppDebug)，暂时没有使用过，不知道效果如何。
 
 ## 常规方式
 
@@ -32,17 +42,38 @@ $ export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so # 64 位
 - 端口转发 `adb forward tcp:23946 tcp:23946` 。
 - 以调试模式启动对应的 Activaty ，`adb shell am start -D -n com.sgzh.dt/com.androlua.Welcome` 。
 
+需要注意的是，在安装 APK 时，检查对应 apk 的属性，需要满足以下两个属性均为 `true`，可以通过使用 `apktool` 解包后修改重新打包实现，也可以使用面具模块或 `xposed` 模块实现。
+
+```bash
+android:debuggable="true"
+android:extractNativeLibs="true"
+```
+
+> `android:extractNativeLibs = "true"` 时，gradle 打包时会对工程中的 so 库进行压缩，最终生成 apk 包的体积会减小。但用户在手机端进行 apk 安装时，系统会对压缩后的 so 库进行解压，一般解压到 `/data/app/ `某一目录下，从而造成用户安装 apk 的时间变长。如果为 false 则不会解压到该目录。
+> `minSdkVersion >= 23` 并且 `Android Gradle plugin >= 3.6.0` 情况下，打包时默认`android:extractNativeLibs=false`， 如果该属性为`false`，虽然 IDA 可以正常附加，但是无法加载对应的 so 进行调试，所以如果未开启 so 压缩会直接导致程序执行的时候 ida 不能够识别到响应的 so 加载，导致无法定位到 so 中的代码从而无法停在断点。对于未开启 so 压缩的情况需要通过重打包来修改该字段以便可以定位到 so。
+> 针对性的，也有相应的模块，用于 Hook 安卓的安装器，让其在安装时将该属性的值设为 true，从而能够正确的调试，例如项目[ForceExtractNativeLibs](https://github.com/AlienwareHe/ForceExtractNativeLibs)即通过 Xposed 进行 Hook 在安装时重置该属性。
+
 执行完以上操作完，使用 IDA 附加对应的 APP 。
 
 ![](IDA动态调试so/2021-02-22-21-02-38.png)
 
 ### 4. jdb 连接
 
-~~打开 monitor ，查看 APP 的调试端口，使用 jdb 命令连接 ` jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。~~
-
 通过执行 `adb forward tcp:<port> jdwp:<pid>` 命令将 host 机器上的 port 端口转发到 Android 上的调试进程，以便调试器通过这个端口连接到目标进程。
 
-这里将转发的 port 指定为 8700, 然后使用 `jdb` 命令连接 `jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。
+> 打开 monitor 应用，使用 DDMS 查看 APP 的调试端口可以达到同样的目的。
+
+这里将转发的 port 指定为 8700，假设进程 ID 为 12345，对应的命令为：
+
+```bash
+adb forward tcp:8700 jdwp:12345
+```
+
+然后使用 `jdb` 命令连接：
+
+```bash
+jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。
+```
 
 此时 APP 将会运行起来，IDA 将会弹出下列界面，点击 same 就可以了。
 
@@ -188,3 +219,5 @@ void soinfo::call_function(const char* function_name __unused,
 https://bbs.pediy.com/thread-254770.htm
 
 https://bbs.kanxue.com/thread-266378.htm
+
+https://blog.lleavesg.top/article/IDA-Androidso
