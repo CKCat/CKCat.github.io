@@ -228,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -312,7 +312,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -409,7 +409,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -506,7 +506,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -600,7 +600,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -761,7 +761,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -855,7 +855,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -881,11 +881,11 @@
 <li>信号是软件中断。</li>
 <li>很多比较重要的应用程序都需处理信号。</li>
 <li>信号提供了一种处理异步事件的方法。</li>
-<li>POSIX.1 对可靠信号例程进行了标准化。</li>
+<li><code>POSIX.1</code> 对可靠信号例程进行了标准化。</li>
 </ul>
-<p>每个信号都有一个名字，这些名字都以 3 个字符 <code>SIG</code> 开头。在头文件 <code>&lt;signal.h&gt;</code> 中，信号名都被定义为正整数常量。<br>信号的实现定义在另一个头文件中，内核包括对用户级应用程序有意义的头文件，这被认为是一种不好的形式，所以如若应用程序和内核两者都需使用同一定义，那么就将有关信息放置在内核头文件中，然后用户级头文件再包括该内核头文件。</p>
-<p>不存在编号为 0 的信号，POSIX.1 将此种信号编号值称为空信号，<code>kill</code> 函数对信号编号 0 有特殊的应用。</p>
-<p>很多条件可以产生信号：</p>
+<p>每个信号都有一个名字，这些名字都以 3 个字符 <code>SIG</code> 开头。在头文件 <code>&lt;signal.h&gt;</code> 中，<strong>信号名都被定义为正整数常量。</strong></p>
+<p>信号的实现定义在另一个头文件中，内核包括对用户级应用程序有意义的头文件，这被认为是一种不好的形式，所以如若应用程序和内核两者都需使用同一定义，那么就将有关信息放置在内核头文件中，然后用户级头文件再包括该内核头文件。</p>
+<p>不存在编号为 0 的信号，<code>POSIX.1</code> 将此种信号编号值称为空信号，<code>kill</code> 函数对信号编号 0 有特殊的应用。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/#more" rel="contents">
@@ -955,7 +955,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1049,7 +1049,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1144,7 +1144,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-11 11:53:22" itemprop="dateModified" datetime="2023-09-11T11:53:22+00:00">2023-09-11</time>
+      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
