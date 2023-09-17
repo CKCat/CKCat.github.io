@@ -12,7 +12,7 @@ category: Android源码
 
 # 配置安装平台工具
 
-##  安装 `adb` 和 `fastboot` ， 可以从[谷歌下载](https://dl.google.com/android/repository/platform-tools-latest-linux.zip)它们。提取运行：
+##  安装 `adb` 和 `fastboot` ， 可以从谷歌[下载](https://dl.google.com/android/repository/platform-tools-latest-linux.zip)它们。提取运行：
 
 ```
 unzip platform-tools-latest-linux.zip -d ~

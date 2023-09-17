@@ -7,11 +7,11 @@ category: unix环境高级编程
 
 ## 线程概念
 
-每个线程都包含有表示执行环境所必需的信息，其中包括进程中标识线程的线程 ID、一组寄存器值、栈、调度优先级和策略、信号屏蔽字、`errno` 变量以及线程私有数据。一个进程的所有信息对该进程的所有线程都是共享的，包括可执行程序的代码、程序的全局内存和堆内存、栈以及文件描述符。
+每个线程都包含有表示执行环境所必需的信息，其中包括进程中标识线程的线程 ID、一组寄存器值、栈、调度优先级和策略、信号屏蔽字、`errno` 变量以及线程私有数据。**一个进程的所有信息对该进程的所有线程都是共享的，包括可执行程序的代码、程序的全局内存和堆内存、栈以及文件描述符。**
 
 ## 线程标识
 
-就像每个进程有一个进程 ID 一样，每个线程也有一个线程 ID。线程 ID 是用 `pthread_t` 数据类型来表示的，实现的时候可以用一个结构来代表 `pthread_t` 数据类型，所以可移植的操作系统实现不能把它作为整数处理。因此必须使用一个函数来对两个线程 ID 进行比较。
+就像每个进程有一个进程 ID 一样，每个线程也有一个线程 ID。线程 ID 是用 `pthread_t` 数据类型来表示的，实现的时候可以用一个结构来代表 `pthread_t` 数据类型，所以可移植的操作系统实现不能把它作为整数处理。因此必须使用一个函数 `pthread_equal` 来对两个线程 ID 进行比较。
 
 ```c
 #include <pthread.h>
@@ -21,7 +21,7 @@ int pthread_equal(pthread_t tid1, pthread_t tid2);
 返回值：
 
 - 若相等，返回非 0 数值；
-- 否则，返回 0
+- 否则，返回 0。
 
 Linux 3.2.0 使用无符号长整型表示 `pthread_t` 数据类型。
 
@@ -34,11 +34,11 @@ pthread_t pthread_self(void);
 
 返回值：
 
-- 调用线程的线程 ID
+- 调用线程的线程 ID。
 
 ## 线程创建
 
-在传统 UNIX 进程模型中，每个进程只有一个控制线程。从概念上讲，这与基于线程的模型中每个进程只包含一个线程是相同的。在 POSIX 线程（pthread）的情况下，程序开始运行时，它也是以单进程中的单个控制线程启动的。在创建多个控制线程以前，程序的行为与传统的进程并没有什么区别。新增的线程可以通过调用 `pthread_create` 函数创建。
+在传统 UNIX 进程模型中，每个进程只有一个控制线程。从概念上讲，这与基于线程的模型中每个进程只包含一个线程是相同的。在 `POSIX` 线程（`pthread`）的情况下，程序开始运行时，它也是以单进程中的单个控制线程启动的。在创建多个控制线程以前，程序的行为与传统的进程并没有什么区别。新增的线程可以通过调用 `pthread_create` 函数创建。
 
 ```c
 #include <pthread.h>
@@ -49,7 +49,14 @@ int pthread_create(pthread_t *restrict tidp, const pthread_attr_t *restrict attr
 返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
+
+参数：
+
+- `tidp`：指向 `pthread_t` 类型的指针，用于存储新线程的标识符。
+- `attr`：指向 `pthread_attr_t` 类型的指针，用于指定新线程的属性，通常可以设置为 `NULL` 以使用默认属性。
+- `start_rtn`：是一个指向线程主函数的指针，该函数在新线程中运行。它接受一个 `void*` 类型的参数，并返回一个 `void*` 类型的值。
+- `arg`：是传递给 `start_rtn` 函数的参数。
 
 当 `pthread_create` 成功返回时，新创建线程的线程 `ID` 会被设置成 `tidp` 指向的内存单元。`attr` 参数用于定制各种不同的线程属性，置为 `NULL`，创建一个具有默认属性的线程。新创建的线程从 `start_rtn` 函数的地址开始运行，该函数只有一个无类型指针参数 `arg`。
 
@@ -58,48 +65,51 @@ int pthread_create(pthread_t *restrict tidp, const pthread_attr_t *restrict attr
 例子，打印线程 ID。
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
 #include <pthread.h>
+#include <unistd.h>
 
 pthread_t ntid;
 
 void printids(const char *s){
-    pid_t pid;
-    pthread_t tid;
-
-    pid = getpid();
-    tid = pthread_self();
-    printf("%s pid %lu tid %lu (0x%lx)\n", s, (unsigned long)pid,
-           (unsigned long)tid, (unsigned long)tid);
+	pid_t pid;
+	pthread_t tid;
+	pid = getpid();
+	tid = pthread_self();
+	printf("%s pid %lu tid %lu (0x%lx)\n", s, (unsigned long)pid,
+			(unsigned long)tid, (unsigned long)tid);
 }
 
-void *thr_fn(void *arg){
-    printids("new thread: ");
-    return ((void *)0);
+void *thr_fn(void* arg){
+	printids("new thread: ");
+	return (void*)0;
 }
 
-int main(void){
-    int err;
-    // 创建线程
-    err = pthread_create(&ntid, NULL, thr_fn, NULL);
-    if (err != 0)
-        err_exit(err, "can't create thread");
-    printids("main thread:");
-    sleep(1);
-    exit(0);
+int main(){
+	int err;
+	err = pthread_create(&ntid, NULL, thr_fn, NULL);
+	if(err != 0){
+		perror("pthread_create");
+		return 1;
+	}
+	printids("main thread: ");
+	sleep(1);
+	return 0;
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 11.4pthread_create.c ../error.c -lpthread
+$ gcc 01pthread_create.c -lpthread
 $ ./a.out
-new thread:  pid 8820 tid 140368275613440 (0x7faa0934a700)
-main thread: pid 8820 tid 140368284186432 (0x7faa09b77740)
+main thread:  pid 6391 tid 140047663408960 (0x7f5f633aa740)
+new thread:  pid 6391 tid 140047663404800 (0x7f5f633a9700)
 ```
 
 ## 线程终止
+
+如果进程中的任意线程调用了 `exit`、`_Exit` 或者 `_exit`，那么整个进程就会终止。与此相类似，如果默认的动作是终止进程，那么，发送到线程的信号就会终止整个进程
 
 单个线程可以通过 3 种方式退出，因此可以在不终止整个进程的情况下，停止它的控制流。
 
@@ -107,13 +117,17 @@ main thread: pid 8820 tid 140368284186432 (0x7faa09b77740)
 1. 线程可以被同一进程中的其他线程取消。
 1. 线程调用 `pthread_exit`。
 
+`pthread_exit` 是 `POSIX` 线程库中的一个函数，它用于终止当前线程的执行，并可以传递一个退出状态给等待它的其他线程或进程。
+
 ```c
 #include <pthread.h>
 void pthread_exit(void *rval_ptr);
 ```
 
-`rval_ptr` 参数是一个无类型指针，与传给启动例程的单个参数类似。
-进程中的其他线程也可以通过调用 `pthread_join` 函数访问到这个指针。
+参数：
+`rval_ptr` 参数是一个无类型指针，与传给启动例程的单个参数类似。进程中的其他线程也可以通过调用 `pthread_join` 函数访问到这个指针。
+
+`pthread_join` 是 `POSIX` 线程库中的一个函数，它用于等待指定线程的终止，并且可以获取该线程的返回值。
 
 ```c
 #include <pthread.h>
@@ -125,58 +139,74 @@ int pthread_join(pthread_t thread, void **rval_ptr);
 - 若成功，返回 0；
 - 否则，返回错误编号
 
-调用线程将一直阻塞，直到指定的线程调用 `pthread_exit`、从启动例程中返回或者被取消。
-如果线程简单地从它的启动例程返回，`rval_ptr` 就包含返回码。如果线程被取消，由 `rval_ptr` 指定的内存单元就设置为 `PTHREAD_CANCELED`。
+参数：
 
-可以通过调用 `pthread_join` 自动把线程置于分离状态，这样资源就可以恢复。如果对线程的返回值并不感兴趣，那么可以把 `rval_ptr` 设置为 `NULL`。
+- `thread`：要等待的线程的标识符，通常由 `pthread_create` 返回。
+- `rval_ptr`：一个指向指针的指针，用于存储目标线程的返回值。
+
+调用线程在调用 `pthread_join` 函数后将一直阻塞，直到指定的线程调用 `pthread_exit`、从启动例程中返回或者被取消。如果线程简单地从它的启动例程返回，`rval_ptr` 就包含返回码。如果线程被取消，由 `rval_ptr` 指定的内存单元就设置为 `PTHREAD_CANCELED`。
+
+默认情况下，通过 `pthread_create` 创建的线程是非分离状态的。这意味着在线程终止后，它的资源（如线程描述符和内存）不会被自动释放，直到另一个线程通过调用 `pthread_join` 来等待并获取该线程的终止状态和返回值。这种情况下，线程的资源会一直被保留，直到其他线程明确地要求回收它们。
+
+通过调用 `pthread_join` 并将 `rval_ptr` 参数设置为 `NULL`，或者使用 `pthread_detach` 函数，可以将线程置于分离状态。在分离状态下，线程的资源会在它终止时自动释放，而无需其他线程显式等待和获取线程的状态和返回值。如果对线程的返回值并不感兴趣，那么可以把 `rval_ptr` 设置为 `NULL`。
 
 例子，获得线程退出状态。
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
 #include <pthread.h>
 
 void *thr_fn1(void *arg){
-    printf("thread 1 returning\n");
-    return ((void *)1);
+	printf("thread 1 returning.\n");
+	return (void*)1;
 }
 
 void *thr_fn2(void *arg){
-    printf("thread 2 exiting\n");
-    pthread_exit((void *)2);
+	printf("thread 2 returning.\n");
+	return (void*)2;
 }
 
-int main(void){
-    int err;
-    pthread_t tid1, tid2;
-    void *tret;
+int main(){
+	int err;
+	pthread_t tid1, tid2;
+	void *tret;
 
-    err = pthread_create(&tid1, NULL, thr_fn1, NULL);
-    if (err != 0)
-        err_exit(err, "can't create thread 1");
-    err = pthread_create(&tid2, NULL, thr_fn2, NULL);
-    if (err != 0)
-        err_exit(err, "can't create thread 2");
-    err = pthread_join(tid1, &tret);
-    if (err != 0)
-        err_exit(err, "can't join with thread 1");
-    printf("thread 1 exit code %ld\n", (long)tret);
-    err = pthread_join(tid2, &tret);
-    if (err != 0)
-        err_exit(err, "can't join with thread 2");
-    printf("thread 2 exit code %ld\n", (long)tret);
-    exit(0);
+	err = pthread_create(&tid1, NULL, thr_fn1, NULL);
+	if (err != 0){
+		perror("can't create thread 1");
+		return 1;
+	}
+	err = pthread_create(&tid2, NULL, thr_fn2, NULL);
+	if (err != 0){
+		perror("can't create thread 2");
+		return 1;
+	}
+	// 这里将阻塞，等待线程退出
+	err = pthread_join(tid1, &tret);
+	if(err != 0){
+		perror("can't join thread 1");
+		return 1;
+	}
+	printf("thread 1 exit code %ld\n", (long)tret);
+
+	err = pthread_join(tid2, &tret);
+	if(err != 0){
+		perror("can't join thread 2");
+		return 1;
+	}
+	printf("thread 2 exit code %ld\n", (long)tret);
+	return 0;
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 11.5pthread_join.c ../error.c -lpthread
+$ gcc 02pthread_join.c -lpthread
 $ ./a.out
-thread 1 returning
+thread 1 returning.
 thread 1 exit code 1
-thread 2 exiting
+thread 2 returning.
 thread 2 exit code 2
 ```
 
@@ -187,76 +217,64 @@ thread 2 exit code 2
 例子，`pthread_exit` 参数的不正确使用。
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
 #include <pthread.h>
 
 struct foo{
-    int a, b, c, d;
+	int a, b, c, d;
 };
 
 void printfoo(const char *s, const struct foo *fp){
-    printf("%s", s);
-    printf("  structure at 0x%lx\n", (unsigned long)fp);
-    printf("  foo.a = %d\n", fp->a);
-    printf("  foo.b = %d\n", fp->b);
-    printf("  foo.c = %d\n", fp->c);
-    printf("  foo.d = %d\n", fp->d);
+	printf("%s", s);
+	printf("  structure at 0x%lx\n", (unsigned long)fp);
+	printf("  foo.a = %d\n", fp->a);
+	printf("  foo.b = %d\n", fp->b);
+	printf("  foo.c = %d\n", fp->c);
+	printf("  foo.d = %d\n", fp->d);
 }
 
-void *thr_fn1(void *arg){
-    // 使用栈分配的空间
-    struct foo foo = {1, 2, 3, 4};
-
-    printfoo("thread 1:\n", &foo);
-    pthread_exit((void *)&foo);
+void *thr_fn(void *arg){
+	struct foo fo = {1, 2, 3, 4};
+	printfoo("in thread 1:\n", &fo);
+	pthread_exit((void*)&fo);
 }
 
-void *thr_fn2(void *arg){
-    printf("thread 2: ID is %lu\n", (unsigned long)pthread_self());
-    pthread_exit((void *)0);
-}
-
-int main(void){
-    int err;
-    pthread_t tid1, tid2;
-    struct foo *fp;
-
-    err = pthread_create(&tid1, NULL, thr_fn1, NULL);
-    if (err != 0)
-        err_exit(err, "can't create thread 1");
-    err = pthread_join(tid1, (void *)&fp);
-    if (err != 0)
-        err_exit(err, "can't join with thread 1");
-    sleep(1);
-    printf("parent starting second thread\n");
-    err = pthread_create(&tid2, NULL, thr_fn2, NULL);
-    if (err != 0)
-        err_exit(err, "can't create thread 2");
-    sleep(1);
-    printfoo("parent:\n", fp);
-    exit(0);
+int main(){
+	int err;
+	pthread_t tid;
+	struct foo *fp;
+	err = pthread_create(&tid, NULL, thr_fn, NULL);
+	if(err != 0){
+		perror("can't create thread");
+		return 1;
+	}
+	err = pthread_join(tid, (void *)&fp);
+	if(err != 0){
+		perror(" can't join thread");
+		return 1;
+	}
+	printfoo("in parent:\n", fp);
+	return 0;
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 11.5pthread_exit.c ../error.c -lpthread
+$ gcc 03pthread_exit.c -lpthread
 $ ./a.out
-thread 1:
-  structure at 0x7f1f7051eed0
+in thread 1:
+  structure at 0x7f18f8c79ed0
   foo.a = 1
   foo.b = 2
   foo.c = 3
   foo.d = 4
-parent starting second thread
-thread 2: ID is 139773005133568
-parent:
-  structure at 0x7f1f7051eed0
-  foo.a = 1888515936
-  foo.b = 32543
-  foo.c = 1886111074
-  foo.d = 32543
+in parent:
+  structure at 0x7f18f8c79ed0
+  foo.a = 0
+  foo.b = 0
+  foo.c = -1743576962
+  foo.d = 32767
 ```
 
 运行结果根据内存体系结构、编译器以及线程库的实现会有所不同。可以看到，当主线程访问这个结构时，结构的内容已经改变了。
@@ -271,11 +289,11 @@ int pthread_cancel(pthread_t tid);
 返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 在默认情况下，`pthread_cancel` 函数会使得由 `tid` 标识的线程的行为表现为如同调用了参数为 `PTHREAD_CANCELED` 的 `pthread_exit` 函数，但是，线程可以选择忽略取消或者控制如何被取消。
 
-注意 `pthread_cancel` 并不等待线程终止，它仅仅提出请求。
+**注意 `pthread_cancel` 并不等待线程终止，它仅仅提出请求。**
 
 线程可以安排它退出时需要调用的函数，这与进程在退出时可以用 `atexit` 函数安排退出是类似的。这样的函数称为线程清理处理程序（thread cleanup handler）。一个线程可以建立多个清理处理程序。处理程序记录在栈中，也就是说，它们的执行顺序与它们注册时相反。
 
@@ -297,73 +315,82 @@ void pthread_cleanup_pop(int execute);
 例子，线程清理处理程序。
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
 #include <pthread.h>
+#include <stdlib.h>
 
 void cleanup(void *arg){
-    printf("cleanup: %s\n", (char *)arg);
+	printf("cleanup: %s\n", (char *)arg);
 }
 
 void *thr_fn1(void *arg){
-    printf("thread 1 start\n");
-    pthread_cleanup_push(cleanup, "thread 1 first handler");
-    pthread_cleanup_push(cleanup, "thread 1 second handler");
-    printf("thread 1 push complete\n");
-    if (arg)
-        return ((void *)1);
-    pthread_cleanup_pop(0);
-    pthread_cleanup_pop(0);
-    return ((void *)1);
+	printf("thread 1 start.\n");
+	pthread_cleanup_push(cleanup, "thread 1 first handler.");
+	pthread_cleanup_push(cleanup, "thread 1 second handler.");
+	printf("thread 1 push complete.\n");
+	if (arg)
+		return (void *)1;
+	pthread_cleanup_pop(0);
+	pthread_cleanup_pop(0);
+	return ((void *)1);
 }
 
 void *thr_fn2(void *arg){
-    printf("thread 2 start\n");
-    pthread_cleanup_push(cleanup, "thread 2 first handler");
-    pthread_cleanup_push(cleanup, "thread 2 second handler");
-    printf("thread 2 push complete\n");
-    if (arg)
-        pthread_exit((void *)2);
-    pthread_cleanup_pop(0);
-    pthread_cleanup_pop(0);
-    pthread_exit((void *)2);
+	printf("thread 2 start.\n");
+	pthread_cleanup_push(cleanup, "thread 2 first handler.");
+	pthread_cleanup_push(cleanup, "thread 2 second handler.");
+	printf("thread 2 push complete.\n");
+	if (arg)
+		pthread_exit((void *)2);
+	pthread_cleanup_pop(0);
+	pthread_cleanup_pop(0);
+	pthread_exit((void *)2);
 }
 
 int main(void){
-    int err;
-    pthread_t tid1, tid2;
-    void *tret;
+	int err;
+	pthread_t tid1, tid2;
+	void *tret;
 
-    err = pthread_create(&tid1, NULL, thr_fn1, (void *)1);
-    if (err != 0)
-        err_exit(err, "can't create thread 1");
-    err = pthread_create(&tid2, NULL, thr_fn2, (void *)1);
-    if (err != 0)
-        err_exit(err, "can't create thread 2");
-    err = pthread_join(tid1, &tret);
-    if (err != 0)
-        err_exit(err, "can't join with thread 1");
-    printf("thread 1 exit code %ld\n", (long)tret);
-    err = pthread_join(tid2, &tret);
-    if (err != 0)
-        err_exit(err, "can't join with thread 2");
-    printf("thread 2 exit code %ld\n", (long)tret);
-    exit(0);
+	err = pthread_create(&tid1, NULL, thr_fn1, (void *)1);
+	if (err != 0){
+		perror("can't create thread 1");
+		return 1;
+	}
+	err = pthread_create(&tid2, NULL, thr_fn2, (void *)1);
+	if (err != 0){
+		perror("can't create thread 2");
+		return 1;
+	}
+	err = pthread_join(tid1, &tret);
+	if (err != 0){
+		perror("can't join with thread 1");
+		return 1;
+	}
+	printf("thread 1 exit code %ld.\n", (long)tret);
+	err = pthread_join(tid2, &tret);
+	if (err != 0){
+		perror("can't join with thread 2");
+		return 1;
+	}
+	printf("thread 2 exit code %ld.\n", (long)tret);
+	exit(0);
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 11.5pthread_cleanup.c ../error.c -lpthread
+$ gcc 04pthread_cleanup.c -lpthread
 $ ./a.out
-thread 1 start
-thread 1 push complete
-thread 1 exit code 1
-thread 2 start
-thread 2 push complete
-cleanup: thread 2 second handler
-cleanup: thread 2 first handler
-thread 2 exit code 2
+thread 1 start.
+thread 1 push complete.
+thread 2 start.
+thread 2 push complete.
+thread 1 exit code 1.
+cleanup: thread 2 second handler.
+cleanup: thread 2 first handler.
+thread 2 exit code 2.
 ```
 
 从输出结果可以看出，两个线程都正确地启动和退出了，但是只有第二个线程的清理处理程序被调用了。因此，如果线程是通过从它的启动例程中返回而终止的话，它的清理处理程序就不会被调用。
@@ -379,7 +406,9 @@ thread 2 exit code 2
 | `getpid`  | `pthread_self`        | 获取控制流的 ID              |
 | `abort`   | `pthread_cancel`      | 请求控制流的非正常退出       |
 
-在默认情况下，线程的终止状态会保存直到对该线程调用 `pthread_join`。如果线程已经被分离，线程的底层存储资源可以在线程终止时立即被收回。可以调用 `pthread_detach` 分离线程。
+在默认情况下，线程的终止状态会保存直到对该线程调用 `pthread_join`。如果线程已经被分离，线程的底层存储资源可以在线程终止时立即被收回。
+
+可以调用 `pthread_detach` 分离线程。
 
 ```c
 #include <pthread.h>
@@ -389,7 +418,7 @@ int pthread_detach(pthread_t tid);
 返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 ## 线程同步
 
@@ -413,7 +442,7 @@ int pthread_mutex_destroy(pthread_mutex_t *mutex);
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 要用默认的属性初始化互斥量，只需把 `attr` 设为 `NULL`。
 
@@ -429,7 +458,7 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex);
 所有函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 如果线程不希望被阻塞，它可以使用 `pthread_mutex_trylock` 尝试对互斥量进行加锁。如果调用 `pthread_mutex_trylock` 时互斥量处于未锁住状态，那么 `pthread_mutex_trylock` 将锁住互斥量，不会出现阻塞直接返回 0，否则 `pthread_mutex_trylock` 就会失败，不能锁住互斥量，返回 `EBUSY`。
 
@@ -462,13 +491,13 @@ struct foo *foo_alloc(int id) {
     return (fp);
 }
 
-// 使用该对象时，线程需要调用foo_hold对这个对象的引用计数加1。
+// 使用该对象时，线程需要调用 foo_hold 对这个对象的引用计数加 1。
 void foo_hold(struct foo *fp) {
     pthread_mutex_lock(&fp->f_lock);
     fp->f_count++;
     pthread_mutex_unlock(&fp->f_lock);
 }
-// 当对象使用完毕时，必须调用foo_rele释放引用。最后一个引用被释放时，
+// 当对象使用完毕时，必须调用 foo_rele 释放引用。最后一个引用被释放时，
 // 对象所占的内存空间就被释放。
 void foo_rele(struct foo *fp) {
     pthread_mutex_lock(&fp->f_lock);
@@ -487,9 +516,9 @@ void foo_rele(struct foo *fp) {
 
 当一个以上的线程需要访问动态分配的对象时，我们可以在对象中嵌入引用计数，确保在所有使用该对象的线程完成数据访问之前，该对象内存空间不会被释放。
 
-在 foo_alloc 函数中将引用计数初始化为 1 时没必要加锁，因为在这个操作之前分配线程是唯一引用该对象的线程。
+在 `foo_alloc` 函数中将引用计数初始化为 1 时没必要加锁，因为在这个操作之前分配线程是唯一引用该对象的线程。
 
-在使用该对象前，线程需要调用 foo_hold 对这个对象的引用计数加 1。当对象使用完毕时，必须调用 foo_rele 释放引用。最后一个引用被释放时，对象所占的内存空间就被释放。
+在使用该对象前，线程需要调用 `foo_hold` 对这个对象的引用计数加 1。当对象使用完毕时，必须调用 `foo_rele` 释放引用。最后一个引用被释放时，对象所占的内存空间就被释放。
 
 ### 避免死锁
 
@@ -510,8 +539,7 @@ struct foo *fh[NHASH];
 
 pthread_mutex_t hashlock = PTHREAD_MUTEX_INITIALIZER;
 
-struct foo
-{
+struct foo{
     int f_count;
     pthread_mutex_t f_lock;
     int f_id;
@@ -519,13 +547,11 @@ struct foo
                         /* ... more stuff here ... */
 };
 
-struct foo *foo_alloc(int id) /* allocate the object */
-{
+struct foo *foo_alloc(int id){ /* allocate the object */
     struct foo *fp;
     int idx;
 
-    if ((fp = malloc(sizeof(struct foo))) != NULL)
-    {
+    if ((fp = malloc(sizeof(struct foo))) != NULL){
         fp->f_count = 1;
         fp->f_id = id;
         if (pthread_mutex_init(&fp->f_lock, NULL) != 0)
@@ -570,8 +596,7 @@ struct foo *foo_find(int id) /* find an existing object */
     return (fp);
 }
 
-void foo_rele(struct foo *fp) /* release a reference to the object */
-{
+void foo_rele(struct foo *fp){ /* release a reference to the object */
     struct foo *tfp;
     int idx;
 
@@ -616,7 +641,7 @@ void foo_rele(struct foo *fp) /* release a reference to the object */
 }
 ```
 
-我们也可以使用散列列表锁来保护结构引用计数，使事情大大简化。结构互斥量可以用于保护 foo 结构中的其他任何东西。
+我们也可以使用散列列表锁来保护结构引用计数，使事情大大简化。结构互斥量可以用于保护 `foo` 结构中的其他任何东西。
 
 例子，简化的锁。
 
@@ -630,8 +655,7 @@ void foo_rele(struct foo *fp) /* release a reference to the object */
 struct foo *fh[NHASH];
 pthread_mutex_t hashlock = PTHREAD_MUTEX_INITIALIZER;
 
-struct foo
-{
+struct foo{
 	int f_count; /* protected by hashlock */
 	pthread_mutex_t f_lock;
 	int f_id;
@@ -639,8 +663,7 @@ struct foo
 						/* ... more stuff here ... */
 };
 
-struct foo *foo_alloc(int id) /* allocate the object */
-{
+struct foo *foo_alloc(int id){ /* allocate the object */
 	struct foo *fp;
 	int idx;
 
@@ -743,41 +766,45 @@ int pthread_mutex_timedlock(pthread_mutex_t *restrict mutex,
 例子，使用 `pthread_mutex_timedlock` 。
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
 #include <pthread.h>
+#include <time.h>
+#include <string.h>
 
-int main(void){
-    int err;
-    struct timespec tout;
-    struct tm *tmp;
-    char buf[64];
-    pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+int main(){
+	int err;
+	struct timespec tout;
+	struct tm *tmp;
+	char buf[64];
+	pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
-    pthread_mutex_lock(&lock);
-    printf("mutex is locked\n");
-    clock_gettime(CLOCK_REALTIME, &tout);
-    tmp = localtime(&tout.tv_sec);
-    strftime(buf, sizeof(buf), "%r", tmp);
-    printf("current time is %s\n", buf);
-    tout.tv_sec += 10; /* 10 seconds from now */
-    /* caution: this could lead to deadlock */
-    err = pthread_mutex_timedlock(&lock, &tout);
-    clock_gettime(CLOCK_REALTIME, &tout);
-    tmp = localtime(&tout.tv_sec);
-    strftime(buf, sizeof(buf), "%r", tmp);
-    printf("the time is now %s\n", buf);
-    if (err == 0)
-        printf("mutex locked again!\n");
-    else
-        printf("can't lock mutex again: %s\n", strerror(err));
-    exit(0);
+	pthread_mutex_lock(&lock);
+
+	printf("mutex is locked.\n");
+	clock_gettime(CLOCK_REALTIME, &tout);
+	tmp = localtime(&tout.tv_sec);
+	strftime(buf, sizeof(buf), "%r", tmp);
+	printf("current time is %s.\n", buf);
+	tout.tv_sec += 10;
+
+	err = pthread_mutex_timedlock(&lock, &tout);
+
+	clock_gettime(CLOCK_REALTIME, &tout);
+	tmp = localtime(&tout.tv_sec);
+	strftime(buf, sizeof(buf), "%r", tmp);
+	printf("the time is now %s.\n", buf);
+	if(err == 0)
+		printf("mutex locked again!\n");
+	else
+		printf("can't lock mutex again: %s.\n", strerror(err));
+	return 0;
 }
 ```
 
 编译运行：
 
 ```bash
-$ gcc 11.6.3ptread_mutex_timedlock.c ../error.c -lpthread
+$ gcc 05pthread_mutex_timedlock.c -lpthread
 $ ./a.out
 mutex is locked
 current time is 09:44:09 AM
@@ -809,7 +836,7 @@ int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 读写锁通过调用 `pthread_rwlock_init` 进行初始化。如果希望读写锁有默认的属性，可以传一个 `NULL` 指针给 `attr` 。
 
@@ -844,7 +871,7 @@ int pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock);
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 可以获取锁时，这两个函数返回 0。否则，它们返回错误 `EBUSY`。
 
@@ -981,7 +1008,7 @@ int pthread_rwlock_timedwrlock(pthread_rwlock_t *restrict rwlock,
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 这两个函数的行为与它们“不计时的”版本类似。`tsptr` 参数指向 `timespec` 结构，指定线程应该停止阻塞的时间。如果它们不能获取锁，那么超时到期时，这两个函数将返回 `ETIMEDOUT` 错误。与 `pthread_mutex_timedlock` 函数类似，超时指定的是绝对时间，而不是相对时间。
 
@@ -1005,9 +1032,9 @@ int pthread_cond_destroy(pthread_cond_t *cond);
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
-除非需要创建一个具有非默认属性的条件变量，否则 `pthread_cond_init` 函数的 `attr` 参数可以设置为 `NULL`。
+创建一个具有默认属性的条件变量，`pthread_cond_init` 函数的 `attr` 参数可以设置为 `NULL`。
 
 我们使用 `pthread_cond_wait` 等待条件变量变为真。如果在给定的时间内条件不能满足，那么会生成一个返回错误码的变量。
 
@@ -1023,7 +1050,7 @@ int pthread_cond_timedwait(pthread_cond_t *restrict cond,
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 传递给 `pthread_cond_wait` 的互斥量对条件进行保护。调用者把锁住的互斥量传给函数，函数然后自动把调用线程放到等待条件的线程列表上，对互斥量解锁。这就关闭了条件检查和线程进入休眠状态等待条件改变这两个操作之间的时间通道，这样线程就不会错过条件的任何变化。`pthread_cond_wait` 返回时，互斥量再次被锁住。
 
@@ -1042,7 +1069,7 @@ int pthread_cond_broadcast(pthread_cond_t *cond);
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 在调用 `pthread_cond_signal` 或者 `pthread_cond_broadcast` 时，我们说这是在给线程或者条件发信号。必须注意，一定要在改变条件状态以后再给线程发信号。
 
@@ -1107,7 +1134,7 @@ int pthread_spin_destroy(pthread_spinlock_t *lock);
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 只有一个属性是自旋锁特有的，这个属性只在支持线程进程共享同步（Thread Process-Shared Synchronization）选项的平台上才用得到。`pshared` 参数表示进程共享属性，表明自旋锁是如何获取的。如果它设为 `PTHREAD_PROCESS_SHARED`，则自旋锁能被可以访问锁底层内存的线程所获取，即便那些线程属于不同的进程，情况也是如此。否则 `pshared` 参数设为 `PTHREAD_PROCESS_PRIVATE`，自旋锁就只能被初始化该锁的进程内部的线程所访问。
 
@@ -1123,7 +1150,7 @@ int pthread_spin_unlock(pthread_spinlock_t *lock);
 所有函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 注意，如果自旋锁当前在解锁状态的话，`pthread_spin_lock` 函数不要自旋就可以对它加锁。如果线程已经对它加锁了，结果就是未定义的。调用 `pthread_spin_lock` 会返回 `EDEADLK` 错误（或其他错误），或者调用可能会永久自旋。具体行为依赖于实际的实现。试图对没有加锁的自旋锁进行解锁，结果也是未定义的。
 
@@ -1147,7 +1174,7 @@ int pthread_barrier_destroy(pthread_barrier_t *barrier);
 两个函数的返回值：
 
 - 若成功，返回 0；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 初始化屏障时，可以使用 `count` 参数指定，在允许所有线程继续运行之前，必须到达屏障的线程数目。使用 `attr` 参数指定屏障对象的属性，设置 `attr` 为 `NULL`，用默认属性初始化屏障。如果使用 `pthread_barrier_init` 函数为屏障分配资源，那么在反初始化屏障时可以调用 `pthread_barrier_destroy` 函数释放相应的资源。
 
@@ -1161,7 +1188,7 @@ int pthread_barrier_wait(pthread_barrier_t *barrier);
 返回值：
 
 - 若成功，返回 0 或者 `PTHREAD_BARRIER_SERIAL_THREAD`；
-- 否则，返回错误编号
+- 否则，返回错误编号。
 
 调用 `pthread_barrier_wait` 的线程在屏障计数未满足条件时，会进入休眠状态。如果该线程是最后一个调用 `pthread_barrier_wait` 的线程，就满足了屏障计数，所有的线程都被唤醒。
 
@@ -1172,130 +1199,113 @@ int pthread_barrier_wait(pthread_barrier_t *barrier);
 例子，使用屏障。
 
 ```c
-#include "../apue.h"
+#include <stdio.h>
 #include <pthread.h>
 #include <limits.h>
 #include <sys/time.h>
+#include <stdlib.h>
 
-#define NTHR 8               /* number of threads */
-#define NUMNUM 8000000L      /* number of numbers to sort */
-#define TNUM (NUMNUM / NTHR) /* number to sort per thread */
+#define NTHR 8			// 线程数量
+#define NUMNUM 8000000L	// 需要排序的数据数量
+#define TNUM (NUMNUM / NTHR)
 
-long nums[NUMNUM];
-long snums[NUMNUM];
+long random_nums[NUMNUM];
+long sorted_nums[NUMNUM];
 
 pthread_barrier_t b;
 
-#ifdef SOLARIS
-#define heapsort qsort
-#else
-extern int heapsort(void *, size_t, size_t,
-                    int (*)(const void *, const void *));
-#endif
-
-/*
- * Compare two long integers (helper function for heapsort)
- */
-int complong(const void *arg1, const void *arg2)
-{
-    long l1 = *(long *)arg1;
-    long l2 = *(long *)arg2;
-
-    if (l1 == l2)
-        return 0;
-    else if (l1 < l2)
-        return -1;
-    else
-        return 1;
+int complong(const void *arg1, const void *arg2){
+	long l1 = *(long *)arg1;
+	long l2 = *(long *)arg2;
+	if(l1 == l2)
+		return 1;
+	else if(l1 < l2)
+		return -1;
+	else
+		return 1;
 }
 
-/*
- * Worker thread to sort a portion of the set of numbers.
- */
-void * thr_fn(void *arg)
-{
-    long idx = (long)arg;
-
-    heapsort(&nums[idx], TNUM, sizeof(long), complong);
-    pthread_barrier_wait(&b);
-
-    /*
-     * Go off and perform more work ...
-     */
-    return ((void *)0);
+void *thr_fn(void *arg){
+	long idx = (long)arg;
+	qsort(&random_nums[idx], TNUM, sizeof(long), complong);
+	pthread_barrier_wait(&b);
+	return (void*)0;
 }
 
-/*
- * Merge the results of the individual sorted ranges.
- */
-void merge()
-{
-    long idx[NTHR];
-    long i, minidx, sidx, num;
-
-    for (i = 0; i < NTHR; i++)
-        idx[i] = i * TNUM;
-    for (sidx = 0; sidx < NUMNUM; sidx++)
-    {
-        num = LONG_MAX;
-        for (i = 0; i < NTHR; i++)
-        {
-            if ((idx[i] < (i + 1) * TNUM) && (nums[idx[i]] < num))
-            {
-                num = nums[idx[i]];
-                minidx = i;
-            }
-        }
-        snums[sidx] = nums[idx[minidx]];
-        idx[minidx]++;
-    }
+void merge(){
+	long idx[NTHR];
+	long i, minidx, sidx, num;
+	for(i = 0; i < NTHR; i++)
+		idx[i] = i * TNUM;
+	for(sidx = 0; sidx < NUMNUM; sidx++){
+		num = LONG_MAX;
+		for(i = 0; i < NTHR; i++){
+			if((idx[i] < ((i+1) * TNUM)) && (random_nums[idx[i]] < num)){
+				num = random_nums[idx[i]];
+				minidx = i;
+			}
+		}
+		sorted_nums[sidx] = random_nums[idx[minidx]];
+		idx[minidx]++;
+	}
 }
 
-int main()
-{
-    unsigned long i;
-    struct timeval start, end;
-    long long startusec, endusec;
-    double elapsed;
-    int err;
-    pthread_t tid;
+int main(){
+	unsigned long i;
+	struct timeval start, end;
+	long long startusec, endusec;
+	double elapsed;
+	int err;
+	pthread_t tid;
 
-    /*
-     * Create the initial set of numbers to sort.
-     */
-    srandom(1);
-    for (i = 0; i < NUMNUM; i++)
-        nums[i] = random();
+	srandom(1);
+	for (i = 0; i < NUMNUM; i++)
+		random_nums[i] = random();
+	gettimeofday(&start, NULL);
+	pthread_barrier_init(&b, NULL, NTHR + 1);
+	for (i = 0; i < NTHR; i++){
+		// 使用8个线程分解了800万个数的排序工作。每个线程用堆排序算法对100万个数进行排序
+		err = pthread_create(&tid, NULL, thr_fn, (void *)(i * TNUM));
+		if(err != 0){
+			perror(" can't create thread");
+			return 1;
+		}
+	}
+	pthread_barrier_wait(&b);
+	// 主线程调用一个函数对这些结果进行合并。
+	merge();
+	gettimeofday(&end, NULL);
 
-    /*
-     * Create 8 threads to sort the numbers.
-     */
-    gettimeofday(&start, NULL);
-    pthread_barrier_init(&b, NULL, NTHR + 1);
-    for (i = 0; i < NTHR; i++){
-        // 使用8个线程分解了800万个数的排序工作。每个线程用堆排序算法对100万个数进行排序
-        err = pthread_create(&tid, NULL, thr_fn, (void *)(i * TNUM));
-        if (err != 0)
-            err_exit(err, "can't create thread");
-    }
-    pthread_barrier_wait(&b);
-    // 然后主线程调用一个函数对这些结果进行合并。
-    merge();
-    gettimeofday(&end, NULL);
+	startusec = start.tv_sec * 1000000 + start.tv_usec;
+	endusec = end.tv_sec * 1000000 + end.tv_usec;
+	elapsed = (double)(endusec - startusec) / 1000000.0;
+	printf("%d thread sort took %.4f seconds\n", NTHR, elapsed);
+	// for (i = 0; i < NUMNUM; i++)
+	// 	printf("%ld\n", sorted_nums[i]);
 
-    /*
-     * Print the sorted list.
-     */
-    startusec = start.tv_sec * 1000000 + start.tv_usec;
-    endusec = end.tv_sec * 1000000 + end.tv_usec;
-    elapsed = (double)(endusec - startusec) / 1000000.0;
-    printf("sort took %.4f seconds\n", elapsed);
-    for (i = 0; i < NUMNUM; i++)
-        printf("%ld\n", snums[i]);
-    exit(0);
+	gettimeofday(&start, NULL);
+
+	// 主线程调用 qsort 进行排序
+	qsort(&random_nums, NUMNUM, sizeof(long), complong);
+
+	gettimeofday(&end, NULL);
+	startusec = start.tv_sec * 1000000 + start.tv_usec;
+	endusec = end.tv_sec * 1000000 + end.tv_usec;
+	elapsed = (double)(endusec - startusec) / 1000000.0;
+	printf("1 thread sort took %.4f seconds\n", elapsed);
+	return 0;
 }
 ```
 
-在这个实例中，使用 8 个线程分解了 800 万个数的排序工作。每个线程用堆排序算法对 100 万个数进行排序（详细算法请参阅 Knuth[1998]）。然后主线程调用一个函数对这些结果进行合并。
+编译运行：
 
-并不需要使用 pthread_barrier_wait 函数中的返回值 PTHREAD_BARRIER_SERIAL_THREAD 来决定哪个线程执行结果合并操作，因为我们使用了主线程来完成这个任务。这也是把屏障计数值设为工作线程数加 1 的原因，主线程也作为其中的一个候选线程。
+```bash
+ gcc 06pthread_barrier.c -lpthread
+ ./a.out
+8 thread sort took 0.6863 seconds
+1 thread sort took 0.5769 seconds
+```
+
+在这个实例中，使用 8 个线程分解了 800 万个数的排序工作。每个线程用堆排序算法对 100 万个数进行排序。然后主线程调用一个函数对这些结果进行合并。根据运行结果，可以发现使用一个线程进行排序的速度反而更快，多线程并不一定会加快运行速度，还是要根据实际情况使用。
+
+并不需要使用 `pthread_barrier_wait` 函数中的返回值 `PTHREAD_BARRIER_SERIAL_THREAD` 来决定哪个线程执行结果合并操作，因为我们使用了主线程来完成这个任务。这也是把屏障计数值设为工作线程数加 1 的原因，主线程也作为其中的一个候选线程。
