@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">113</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,106 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2022/04/06/%E5%BC%80%E5%8F%91shellcode%E7%9A%84%E8%89%BA%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/04/06/%E5%BC%80%E5%8F%91shellcode%E7%9A%84%E8%89%BA%E6%9C%AF/" class="post-title-link" itemprop="url">开发shellcode的艺术</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-04-06 20:50:20" itemprop="dateCreated datePublished" datetime="2022-04-06T20:50:20+00:00">2022-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">漏洞分析</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="shellcode-概述"><a href="#shellcode-概述" class="headerlink" title="shellcode 概述"></a>shellcode 概述</h1><p>shellcode 攻击中植入进程的代码。</p>
+<p>exploit 漏洞利用就是代码植入的过程。</p>
+<p>在 shellcode 的开发中，一般需要解决下面几个问题。</p>
+<ol>
+<li>让程序能够自动定位到 shellcode 的起始地址。</li>
+<li>写出比较通用版的 shellcode 。</li>
+<li>shellcode 编码。</li>
+<li>shellcode 需要短小精悍。</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/06/%E5%BC%80%E5%8F%91shellcode%E7%9A%84%E8%89%BA%E6%9C%AF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -228,7 +328,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -312,7 +412,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -396,7 +496,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -493,7 +593,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -589,7 +689,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -685,7 +785,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -779,7 +879,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -880,7 +980,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -975,7 +1075,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
+      <time title="修改时间：2023-09-18 11:34:12" itemprop="dateModified" datetime="2023-09-18T11:34:12+00:00">2023-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1003,99 +1103,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9803-CPU%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9803-CPU%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">操作系统实战03-CPU工作模式</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-11-08 17:43:40" itemprop="dateCreated datePublished" datetime="2021-11-08T17:43:40+00:00">2021-11-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 12:58:33" itemprop="dateModified" datetime="2023-09-15T12:58:33+00:00">2023-09-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="CPU工作模式"><a href="#CPU工作模式" class="headerlink" title="CPU工作模式"></a>CPU工作模式</h1><h2 id="实模式"><a href="#实模式" class="headerlink" title="实模式"></a>实模式</h2><p>实模式又称实地址模式，在该模式下可以执行所有的指令，并且可以直接访问物理内存。计算机每次通电或重置都会进入到实模式。</p>
-<h3 id="实模式寄存器"><a href="#实模式寄存器" class="headerlink" title="实模式寄存器"></a>实模式寄存器</h3><p>x86 CPU 在实模式下的寄存器如下表所示，表中所有的寄存器都是 16 位的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9803-CPU%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

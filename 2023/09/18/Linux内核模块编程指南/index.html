@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简介The Linux Kernel Module Programming Guide is a free book; you may reproduce and&#x2F;or modify it under the terms of the Open Software License, version 3.0.《Linux 内核模块编程指南》是一本免费书籍；您可以根据开放软件许可证 3.0 版">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux内核模块编程指南">
+<meta property="og:url" content="https://ckcat.github.io/2023/09/18/Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="简介The Linux Kernel Module Programming Guide is a free book; you may reproduce and&#x2F;or modify it under the terms of the Open Software License, version 3.0.《Linux 内核模块编程指南》是一本免费书籍；您可以根据开放软件许可证 3.0 版">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-18T18:04:17.000Z">
+<meta property="article:modified_time" content="2023-09-18T11:34:12.223Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="linux 内核">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2023/09/18/Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2023/09/18/Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/","path":"2023/09/18/Linux内核模块编程指南/","title":"Linux内核模块编程指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux内核模块编程指南 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Authorship-%E4%BD%9C%E8%80%85%E8%BA%AB%E4%BB%BD"><span class="nav-number">1.1.</span> <span class="nav-text">Authorship 作者身份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Acknowledgements-%E8%87%B4%E8%B0%A2"><span class="nav-number">1.2.</span> <span class="nav-text">Acknowledgements 致谢</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-Is-A-Kernel-Module-%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">What Is A Kernel Module? 什么是内核模块？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kernel-module-package"><span class="nav-number">1.4.</span> <span class="nav-text">Kernel module package</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-Modules-are-in-my-Kernel-%E6%88%91%E7%9A%84%E5%86%85%E6%A0%B8%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E6%A8%A1%E5%9D%97%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">What Modules are in my Kernel? 我的内核中有哪些模块？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Is-there-a-need-to-download-and-compile-the-kernel-%E6%98%AF%E5%90%A6%E9%9C%80%E8%A6%81%E4%B8%8B%E8%BD%BD%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%EF%BC%9F"><span class="nav-number">1.6.</span> <span class="nav-text">Is there a need to download and compile the kernel? 是否需要下载编译内核？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Before-We-Begin-%E5%BC%80%E5%A7%8B%E4%B9%8B%E5%89%8D"><span class="nav-number">1.7.</span> <span class="nav-text">Before We Begin 开始之前</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Headers-%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">Headers 头文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Examples-%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">Examples 示例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hello-World-4-%E4%BD%A0%E5%A5%BD%E4%B8%96%E7%95%8C"><span class="nav-number">4.</span> <span class="nav-text">Hello World 4 你好世界</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Simplest-Module-%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E6%A8%A1%E5%9D%97"><span class="nav-number">4.1.</span> <span class="nav-text">The Simplest Module 最简单的模块</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/09/18/Linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux内核模块编程指南 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux内核模块编程指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-09-18 18:04:17 / 修改时间：11:34:12" itemprop="dateCreated datePublished" datetime="2023-09-18T18:04:17+00:00">2023-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>The Linux Kernel Module Programming Guide is a free book; you may reproduce and&#x2F;or modify it under the terms of the <a target="_blank" rel="noopener" href="https://opensource.org/licenses/OSL-3.0">Open Software License</a>, version 3.0.<br>《Linux 内核模块编程指南》是一本免费书籍；您可以根据<a target="_blank" rel="noopener" href="https://opensource.org/licenses/OSL-3.0">开放软件许可证</a> 3.0 版的条款复制和&#x2F;或修改它。</p>
+<p>This book is distributed in the hope that it would be useful, but without any warranty, without even the implied warranty of merchantability or fitness for a particular purpose.<br>分发本书的目的是希望它有用，但没有任何保证，甚至没有对适销性或针对特定用途的适用性的默示保证。</p>
+<p>The author encourages wide distribution of this book for personal or commercial use, provided the above copyright notice remains intact and the method adheres to the provisions of the <a target="_blank" rel="noopener" href="https://opensource.org/licenses/OSL-3.0">Open Software License</a>. In summary, you may copy and distribute this book free of charge or for a profit. No explicit permission is required from the author for reproduction of this book in any medium, physical or electronic.<br>作者鼓励将本书广泛分发用于个人或商业用途，前提是上述版权声明保持完整并且方法遵守<a target="_blank" rel="noopener" href="https://opensource.org/licenses/OSL-3.0">开放软件许可证</a>的规定。总之，您可以免费或以营利为目的复制和分发本书。以任何物理或电子媒介复制本书无需获得作者的明确许可。</p>
+<p>Derivative works and translations of this document must be placed under the <a target="_blank" rel="noopener" href="https://opensource.org/licenses/OSL-3.0">Open Software License</a>, and the original copyright notice must remain intact. If you have contributed new material to this book, you must make the material and source code available for your revisions. Please make revisions and updates available directly to the document maintainer, Jim Huang <a href="mailto:&#106;&#x73;&#x65;&#x72;&#118;&#64;&#99;&#99;&#110;&#115;&#46;&#x6e;&#99;&#107;&#x75;&#x2e;&#101;&#x64;&#x75;&#x2e;&#x74;&#119;">&#106;&#x73;&#x65;&#x72;&#118;&#64;&#99;&#99;&#110;&#115;&#46;&#x6e;&#99;&#107;&#x75;&#x2e;&#101;&#x64;&#x75;&#x2e;&#x74;&#119;</a>. This will allow for the merging of updates and provide consistent revisions to the Linux community.<br>本文档的衍生作品和翻译必须置于<a target="_blank" rel="noopener" href="https://opensource.org/licenses/OSL-3.0">开放软件许可证</a>之下，并且原始版权声明必须保持完整。如果您为本书贡献了新材料，则必须提供这些材料和源代码以供修订。请直接向文档维护者 Jim Huang 提供修订和更新。这将允许合并更新并为 Linux 社区提供一致的修订。</p>
+<p>If you publish or distribute this book commercially, donations, royalties, and&#x2F;or printed copies are greatly appreciated by the author and the <a target="_blank" rel="noopener" href="https://tldp.org/">Linux Documentation Project</a> (LDP). Contributing in this way shows your support for free software and the LDP. If you have questions or comments, please contact the address above.<br>如果您以商业方式出版或分发本书，作者和 <a target="_blank" rel="noopener" href="https://tldp.org/">Linux 文档项目</a> (LDP) 将非常感谢您的捐赠、版税和&#x2F;或印刷版。以这种方式做出贡献表明您对自由软件和自民党的支持。如果您有疑问或意见，请联系上述地址。</p>
+<h2 id="Authorship-作者身份"><a href="#Authorship-作者身份" class="headerlink" title="Authorship 作者身份"></a>Authorship 作者身份</h2><p>The Linux Kernel Module Programming Guide was initially authored by Ori Pomerantz for Linux v2.2. As the Linux kernel evolved, Ori’s availability to maintain the document diminished. Consequently, Peter Jay Salzman assumed the role of maintainer and updated the guide for Linux v2.4. Similar constraints arose for Peter when tracking developments in Linux v2.6, leading to Michael Burian joining as a co-maintainer to bring the guide up to speed with Linux v2.6. Bob Mottram contributed to the guide by updating examples for Linux v3.8 and later. Jim Huang then undertook the task of updating the guide for recent Linux versions (v5.0 and beyond), along with revising the LaTeX document.<br>Linux 内核模块编程指南最初由 Ori Pomerantz 针对 Linux v2.2 编写。随着 Linux 内核的发展，Ori 维护文档的可用性逐渐减弱。因此，Peter Jay Salzman 承担了维护者的角色并更新了 Linux v2.4 的指南。 Peter 在跟踪 Linux v2.6 的开发时也遇到了类似的限制，导致 Michael Burian 作为共同维护者加入，以加快该指南与 Linux v2.6 的速度。 Bob Mottram 通过更新 Linux v3.8 及更高版本的示例为本指南做出了贡献。 Jim Huang 随后承担了更新最新 Linux 版本（v5.0 及更高版本）指南以及修订 LaTeX 文档的任务。</p>
+<h2 id="Acknowledgements-致谢"><a href="#Acknowledgements-致谢" class="headerlink" title="Acknowledgements 致谢"></a>Acknowledgements 致谢</h2><p>The following people have contributed corrections or good suggestions:<br>以下人员提供了更正或好的建议：</p>
+<p>Andy Shevchenko, Arush Sharma, Benno Bielmeier, Bob Lee, Brad Baker, Che-Chia Chang, Chih-En Lin, Chih-Hsuan Yang, Chih-Yu Chen, Ching-Hua (Vivian) Lin, Chin Yik Ming, Cyril Brulebois, Daniele Paolo Scarpazza, David Porter, demonsome, Dimo Velev, Ekang Monyet, Ethan Chan, fennecJ, Francois Audeon, Gilad Reti, Horst Schirmeier, Hsin-Hsiang Peng, Ignacio Martin, Iûnn Kiàn-îng, Jian-Xing Wu, Johan Calle, keytouch, Kohei Otsuka, manbing, Marconi Jiang, mengxinayan, Peter Lin, Roman Lakeev, Sam Erickson, Shao-Tse Hung, Stacy Prowell, Steven Lung, Tristan Lelong, Tse-Wei Lin, Tucker Polomik, Tyler Fanelli, VxTeemo, Wei-Lun Tsai, Xatierlike Lee, Yin-Chiuan Chen, Yi-Wei Lin, Ylowy, Yu-Hsiang Tseng.</p>
+<h2 id="What-Is-A-Kernel-Module-什么是内核模块？"><a href="#What-Is-A-Kernel-Module-什么是内核模块？" class="headerlink" title="What Is A Kernel Module? 什么是内核模块？"></a>What Is A Kernel Module? 什么是内核模块？</h2><p>Involvement in the development of Linux kernel modules requires a foundation in the C programming language and a track record of creating conventional programs intended for process execution. This pursuit delves into a domain where an unregulated pointer, if disregarded, may potentially trigger the total elimination of an entire file system, resulting in a scenario that necessitates a complete system reboot.<br>参与 Linux 内核模块的开发需要具备 C 编程语言基础以及创建用于进程执行的传统程序的记录。这种追求深入研究了一个领域，其中不受监管的指针如果被忽视，可能会触发整个文件系统的彻底消除，从而导致需要完全重新启动系统的情况。</p>
+<p>A Linux kernel module is precisely defined as a code segment capable of dynamic loading and unloading within the kernel as needed. These modules enhance kernel capabilities without necessitating a system reboot. A notable example is seen in the device driver module, which facilitates kernel interaction with hardware components linked to the system. In the absence of modules, the prevailing approach leans toward monolithic kernels, requiring direct integration of new functionalities into the kernel image. This approach leads to larger kernels and necessitates kernel rebuilding and subsequent system rebooting when new functionalities are desired.<br>Linux 内核模块被精确地定义为能够根据需要在内核内动态加载和卸载的代码段。这些模块增强了内核功能，而无需重新启动系统。一个值得注意的例子是设备驱动程序模块，它促进内核与链接到系统的硬件组件的交互。在没有模块的情况下，流行的方法倾向于整体内核，需要将新功能直接集成到内核映像中。这种方法会导致内核更大，并且在需要新功能时需要重建内核并随后重新启动系统。</p>
+<h2 id="Kernel-module-package"><a href="#Kernel-module-package" class="headerlink" title="Kernel module package"></a>Kernel module package</h2><p>1.4 内核模块包</p>
+<p>Linux distributions provide the commands modprobe , insmod and depmod within a package.<br>Linux 发行版在包中提供了命令 modprobe 、 insmod 和 depmod 。</p>
+<p>On Ubuntu&#x2F;Debian GNU&#x2F;Linux:<br>在 Ubuntu&#x2F;Debian GNU&#x2F;Linux 上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential kmod</span><br></pre></td></tr></table></figure>
+
+<p>On Arch Linux:<br>在 Arch Linux 上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S gcc kmod</span><br></pre></td></tr></table></figure>
+
+<h2 id="What-Modules-are-in-my-Kernel-我的内核中有哪些模块？"><a href="#What-Modules-are-in-my-Kernel-我的内核中有哪些模块？" class="headerlink" title="What Modules are in my Kernel? 我的内核中有哪些模块？"></a>What Modules are in my Kernel? 我的内核中有哪些模块？</h2><p>To discover what modules are already loaded within your current kernel use the command lsmod .<br>要发现当前内核中已加载哪些模块，请使用命令 lsmod 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lsmod</span><br></pre></td></tr></table></figure>
+
+<p>Modules are stored within the file <code>/proc/modules</code>, so you can also see them with:<br>模块存储在文件 <code>/proc/modules</code> 中，因此您还可以使用以下命令查看它们：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /proc/modules</span><br></pre></td></tr></table></figure>
+
+<p>This can be a long list, and you might prefer to search for something particular. To search for the fat module:<br>这可能是一个很长的列表，您可能更喜欢搜索特定的内容。搜索 fat 模块：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lsmod | grep fat</span><br></pre></td></tr></table></figure>
+
+<h2 id="Is-there-a-need-to-download-and-compile-the-kernel-是否需要下载编译内核？"><a href="#Is-there-a-need-to-download-and-compile-the-kernel-是否需要下载编译内核？" class="headerlink" title="Is there a need to download and compile the kernel? 是否需要下载编译内核？"></a>Is there a need to download and compile the kernel? 是否需要下载编译内核？</h2><p>To effectively follow this guide, there is no obligatory requirement for performing such actions. Nonetheless, a prudent approach involves executing the examples within a test distribution on a virtual machine, thus mitigating any potential risk of disrupting the system.<br>为了有效遵循本指南，执行此类操作没有强制性要求。尽管如此，谨慎的方法是在虚拟机上执行测试发行版中的示例，从而减轻破坏系统的任何潜在风险。</p>
+<h2 id="Before-We-Begin-开始之前"><a href="#Before-We-Begin-开始之前" class="headerlink" title="Before We Begin 开始之前"></a>Before We Begin 开始之前</h2><p>Before delving into code, certain matters require attention. Variances exist among individuals’ systems, and distinct personal approaches are evident. The achievement of successful compilation and loading of the inaugural “hello world” program may, at times, present challenges. It is reassuring to note that overcoming the initial obstacle in the first attempt paves the way for subsequent endeavors to proceed seamlessly.<br>在深入研究代码之前，需要注意某些事项。个体系统之间存在差异，并且明显存在不同的个人方法。成功编译和加载首个“hello world”程序有时可能会带来挑战。令人欣慰的是，克服第一次尝试中最初的障碍将为后续努力的顺利进行铺平道路。</p>
+<ol>
+<li><p>Modversioning. A module compiled for one kernel will not load if a different kernel is booted, unless CONFIG_MODVERSIONS is enabled in the kernel. Module versioning will be discussed later in this guide. Until module versioning is covered, the examples in this guide may not work correctly if running a kernel with modversioning turned on. However, most stock Linux distribution kernels come with modversioning enabled. If difficulties arise when loading the modules due to versioning errors, consider compiling a kernel with modversioning turned off.<br>改装。如果启动不同的内核，则不会加载为一个内核编译的模块，除非在内核中启用了 CONFIG_MODVERSIONS 。本指南稍后将讨论模块版本控制。在介绍模块版本控制之前，如果在打开 modversioning 的情况下运行内核，本指南中的示例可能无法正常工作。然而，大多数现有的 Linux 发行版内核都启用了 modversioning。如果由于版本控制错误而在加载模块时出现困难，请考虑在关闭 modversioning 的情况下编译内核。</p>
+</li>
+<li><p>Using X Window System. It is highly recommended to extract, compile, and load all the examples discussed in this guide from a console. Working on these tasks within the X Window System is discouraged.<br>使用 X 窗口系统。强烈建议从控制台提取、编译和加载本指南中讨论的所有示例。不鼓励在 X Window 系统内执行这些任务。<br>Modules cannot directly print to the screen like printf() can, but they can log information and warnings that are eventually displayed on the screen, specifically within a console. If a module is loaded from an xterm , the information and warnings will be logged, but solely within the systemd journal. These logs will not be visible unless consulting the journalctl . Refer to 4 for more information. For instant access to this information, it is advisable to perform all tasks from the console.<br>模块无法像 printf() 那样直接打印到屏幕，但它们可以记录最终显示在屏幕上的信息和警告，特别是在控制台中。如果从 xterm 加载模块，则会记录信息和警告，但仅记录在 systemd 日志中。除非查阅 journalctl ，否则这些日志将不可见。请参阅 4 了解更多信息。为了即时访问此信息，建议从控制台执行所有任务。</p>
+</li>
+<li><p>SecureBoot. Numerous modern computers arrive pre-configured with UEFI SecureBoot enabled—an essential security standard ensuring booting exclusively through trusted software endorsed by the original equipment manufacturer. Certain Linux distributions even ship with the default Linux kernel configured to support SecureBoot. In these cases, the kernel module necessitates a signed security key.<br>安全启动。许多现代计算机都预先配置了 UEFI SecureBoot，这是一项重要的安全标准，可确保仅通过原始设备制造商认可的可信软件进行启动。某些 Linux 发行版甚至附带配置为支持 SecureBoot 的默认 Linux 内核。在这些情况下，内核模块需要一个签名的安全密钥。<br>Failing this, an attempt to insert your first “hello world” module would result in the message: “ERROR: could not insert module”. If this message Lockdown: insmod: unsigned module loading is restricted; see man kernel lockdown.7 appears in the dmesg output, the simplest approach involves disabling UEFI SecureBoot from the boot menu of your PC or laptop, allowing the successful insertion of ‘hello world” module. Naturally, an alternative involves undergoing intricate procedures such as generating keys, system key installation, and module signing to achieve functionality. However, this intricate process is less appropriate for beginners. If interested, more detailed steps for <a target="_blank" rel="noopener" href="https://wiki.debian.org/SecureBoot">SecureBoot</a> can be explored and followed.<br>如果失败，尝试插入第一个“hello world”模块将导致消息：“错误：无法插入模块”。如果出现此消息 Lockdown：insmod：未签名的模块加载受到限制；看到 man kernellockdown.7 出现在 dmesg 输出中，最简单的方法是从 PC 或笔记本电脑的启动菜单中禁用 UEFI SecureBoot，从而允许成功插入“hello world”模块。当然，替代方案涉及经历复杂的过程，例如生成密钥、系统密钥安装和模块签名以实现功能。然而，这个复杂的过程不太适合初学者。如果有兴趣，可以探索并遵循更详细的 <a target="_blank" rel="noopener" href="https://wiki.debian.org/SecureBoot">SecureBoot</a> 步骤。</p>
+</li>
+</ol>
+<h1 id="Headers-头文件"><a href="#Headers-头文件" class="headerlink" title="Headers 头文件"></a>Headers 头文件</h1><p>Before you can build anything you’ll need to install the header files for your kernel.<br>在构建任何东西之前，您需要安装内核的头文件。</p>
+<p>On Ubuntu&#x2F;Debian GNU&#x2F;Linux:<br>在 Ubuntu&#x2F;Debian GNU&#x2F;Linux 上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">apt-cache search linux-headers-`<span class="built_in">uname</span> -r`</span><br></pre></td></tr></table></figure>
+
+<p>This will tell you what kernel header files are available. Then for example:<br>这将告诉您哪些内核头文件可用。那么例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install kmod linux-headers-5.4.0-80-generic</span><br></pre></td></tr></table></figure>
+
+<p>On Arch Linux:<br>在 Arch Linux 上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S linux-headers</span><br></pre></td></tr></table></figure>
+
+<p>On Fedora:<br>在 Fedora 上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dnf install kernel-devel kernel-headers</span><br></pre></td></tr></table></figure>
+
+<h1 id="Examples-示例"><a href="#Examples-示例" class="headerlink" title="Examples 示例"></a>Examples 示例</h1><p>All the examples from this document are available within the examples subdirectory.<br>本文档中的所有示例都可以在示例子目录中找到。</p>
+<p>If there are any compile errors then you might have a more recent kernel version or need to install the corresponding kernel header files.<br>如果存在任何编译错误，则您可能拥有更新的内核版本或需要安装相应的内核头文件。</p>
+<h1 id="Hello-World-4-你好世界"><a href="#Hello-World-4-你好世界" class="headerlink" title="Hello World 4 你好世界"></a>Hello World 4 你好世界</h1><h2 id="The-Simplest-Module-最简单的模块"><a href="#The-Simplest-Module-最简单的模块" class="headerlink" title="The Simplest Module 最简单的模块"></a>The Simplest Module 最简单的模块</h2><p>Most people learning programming start out with some sort of “hello world” example. I don’t know what happens to people who break with this tradition, but I think it is safer not to find out. We will start with a series of hello world programs that demonstrate the different aspects of the basics of writing a kernel module.<br>大多数学习编程的人都是从某种“hello world”示例开始的。我不知道打破这一传统的人会发生什么，但我认为不去发现更安全。我们将从一系列 hello world 程序开始，这些程序演示了编写内核模块的基础知识的不同方面。</p>
+<p>Here is the simplest module possible.<br>这是最简单的模块。</p>
+<p>Make a test directory:<br>建立一个测试目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/develop/kernel/hello-1</span><br><span class="line"><span class="built_in">cd</span> ~/develop/kernel/hello-1</span><br></pre></td></tr></table></figure>
+
+<p>Paste this into your favorite editor and save it as hello-1.c:<br>将其粘贴到您最喜欢的编辑器中并将其另存为 <code>hello-1.c</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * hello-1.c - The simplest kernel module.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/module.h&gt;</span> <span class="comment">/* Needed by all modules */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/printk.h&gt;</span> <span class="comment">/* Needed for pr_info() */</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">init_module</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    pr_info(<span class="string">&quot;Hello world 1.\n&quot;</span>);</span><br><span class="line">    <span class="comment">/* A non 0 return means init_module failed; module can&#x27;t be loaded. */</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">cleanup_module</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    pr_info(<span class="string">&quot;Goodbye world 1.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Now you will need a Makefile. If you copy and paste this, change the indentation to use tabs, not spaces.<br>现在您需要一个 Makefile。如果复制并粘贴此内容，请将缩进更改为使用制表符，而不是空格。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">obj-m += hello-1.o</span><br><span class="line"></span><br><span class="line">PWD := <span class="variable">$(CURDIR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    make -C /lib/modules/<span class="variable">$(<span class="built_in">shell</span> uname -r)</span>/build M=<span class="variable">$(PWD)</span> modules</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    make -C /lib/modules/<span class="variable">$(<span class="built_in">shell</span> uname -r)</span>/build M=<span class="variable">$(PWD)</span> clean</span><br></pre></td></tr></table></figure>
+
+<p>In Makefile, <code>$(CURDIR)</code> can set to the absolute pathname of the current working directory(after all -C options are processed, if any). See more about CURDIR in GNU make manual.<br>在 Makefile 中，<code>$(CURDIR)</code>可以设置为当前工作目录的绝对路径名（在处理所有-C 选项之后，如果有的话）。有关 CURDIR 的更多信息，请参阅 GNU make 手册。</p>
+<p> And finally, just run make directly.<br>最后，直接运行 make 即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+
+
+<p>If there is no <code>PWD := $(CURDIR)</code> statement in Makefile, then it may not compile correctly with sudo make. Because some environment variables are specified by the security policy, they can’t be inherited. The default security policy is sudoers. In the sudoers security policy, env_reset is enabled by default, which restricts environment variables. Specifically, path variables are not retained from the user environment, they are set to default values (For more information see: sudoers manual). You can see the environment variable settings by:<br>如果 Makefile 中没有 <code>PWD := $(CURDIR)</code> 语句，则可能无法使用 <code>sudo make</code> 正确编译。由于某些环境变量是由安全策略指定的，因此无法继承。默认安全策略是 sudoers。在sudoers安全策略中，env_reset默认是开启的，它限制了环境变量。具体来说，路径变量不会从用户环境中保留，而是设置为默认值（有关更多信息，请参阅：sudoers 手册）。您可以通过以下方式查看环境变量设置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo -s</span><br><span class="line"><span class="comment"># sudo -V</span></span><br></pre></td></tr></table></figure>
+
+<p> Here is a simple Makefile as an example to demonstrate the problem mentioned above.<br>这里以一个简单的Makefile为例来演示上述问题。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: </span></span><br><span class="line">    echo <span class="variable">$(PWD)</span></span><br></pre></td></tr></table></figure>
+
+<p>Then, we can use -p flag to print out the environment variable values from the Makefile.<br>然后，我们可以使用 -p 标志从 Makefile 中打印出环境变量值。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ make -p | grep PWD</span><br><span class="line">PWD = /home/ubuntu/temp</span><br><span class="line">OLDPWD = /home/ubuntu</span><br><span class="line">    <span class="built_in">echo</span> $(PWD)</span><br></pre></td></tr></table></figure>
+
+<p>The PWD variable won’t be inherited with sudo.<br>PWD 变量不会被 sudo 继承。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo make -p | grep PWD</span><br><span class="line">    <span class="built_in">echo</span> $(PWD)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<p><a target="_blank" rel="noopener" href="https://sysprog21.github.io/lkmpg/">https://sysprog21.github.io/lkmpg/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux-%E5%86%85%E6%A0%B8/" rel="tag"># linux 内核</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/03/%E4%BD%BF%E7%94%A8%E7%BC%96%E8%AF%91%E5%99%A8%E6%9F%A5%E7%9C%8B%E7%B1%BB%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/" rel="prev" title="使用编译器查看类的内存布局">
+                  <i class="fa fa-chevron-left"></i> 使用编译器查看类的内存布局
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
