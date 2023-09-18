@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程11-线程
 date: 2023-04-10 17:22:18
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

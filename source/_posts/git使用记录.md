@@ -2,7 +2,7 @@
 title: git使用记录
 date: 2021-02-22 20:30:08
 tags: git
-category: 其他
+category: git
 ---
 
 本文主要记录 git 使用过程中需要搜索的一些命令。
@@ -206,10 +206,10 @@ branch 'main' set up to track 'origin/main'.
   - `url` : 远程数据库的 `URL`
 
 - `git push <repository> <refspec>`
-  `- `repository` : 目标地址
-- `refspec` : 推送的分支。如果指定了 `-u` 选项，那么下一次推送时就可以省略分支名称了。`
+  - `repository` : 目标地址
+  - `refspec` : 推送的分支。如果指定了 `-u` 选项，那么下一次推送时就可以省略分支名称了。`
 
-通过 github 网站上修改 `sample.txt` 文件内容如下， 在 `commit` 消息中输入 `添加 add 的说明` 。
+通过 github.com 网站上修改 `sample.txt` 文件内容如下， 在 `commit` 消息中输入 `添加 add 的说明` 。
 
 ```bash
 连猴子都懂的Git命令

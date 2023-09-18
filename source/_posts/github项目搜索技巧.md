@@ -2,7 +2,7 @@
 title: github项目搜索技巧
 date: 2020-03-05 21:44:32
 tags: git
-category: 其他
+category: git
 ---
 
 <!-- TOC -->

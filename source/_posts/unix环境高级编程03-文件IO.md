@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程03-文件IO
 date: 2023-04-10 17:20:28
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

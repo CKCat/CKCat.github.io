@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程08-进程控制
 date: 2023-04-10 17:21:38
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程07-进程环境
 date: 2023-04-10 17:21:23
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

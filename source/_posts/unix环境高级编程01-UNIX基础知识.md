@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程01-UNIX基础知识
 date: 2023-04-10 17:19:59
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

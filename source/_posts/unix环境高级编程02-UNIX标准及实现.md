@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程02-UNIX标准及实现
 date: 2023-04-10 17:20:15
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

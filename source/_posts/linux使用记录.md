@@ -1,7 +1,7 @@
 ---
 title: linux使用记录
 date: 2019-11-03 14:12:52
-tags: Ubuntu
+tags: linux 使用
 category: linux
 ---
 

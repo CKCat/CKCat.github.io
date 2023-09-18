@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程06-系统数据文件和信息
 date: 2023-04-10 17:21:08
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

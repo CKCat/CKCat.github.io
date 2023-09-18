@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程05-标准IO库
 date: 2023-04-10 17:20:55
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: unix环境高级编程10-信号
 date: 2023-04-10 17:22:08
-tags: unix
+tags: linux 编程
 category: unix环境高级编程
 ---
 
