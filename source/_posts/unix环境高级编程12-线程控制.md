@@ -288,12 +288,11 @@ int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
 例子，使用递归互斥量。
 
 ```cpp
-#include "apue.h"
+#include <stdio.h>
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
-
-extern int makethread(void *(*)(void *), void *);
+#include <malloc.h>
 
 struct to_info {
 	void	      (*to_fn)(void *);	/* function */
@@ -303,64 +302,61 @@ struct to_info {
 
 #define SECTONSEC  1000000000	/* seconds to nanoseconds */
 
-#if !defined(CLOCK_REALTIME) || defined(BSD)
-#define clock_nanosleep(ID, FL, REQ, REM)	nanosleep((REQ), (REM))
-#endif
+int makethread(void *(*fn)(void *), void *arg){
+	int err;
+	pthread_t tid;
+	pthread_attr_t attr;
 
-#ifndef CLOCK_REALTIME
-#define CLOCK_REALTIME 0
-#define USECTONSEC 1000		/* microseconds to nanoseconds */
-
-void clock_gettime(int id, struct timespec *tsp){
-	struct timeval tv;
-
-	gettimeofday(&tv, NULL);
-	tsp->tv_sec = tv.tv_sec;
-	tsp->tv_nsec = tv.tv_usec * USECTONSEC;
+	err = pthread_attr_init(&attr);
+	if(err != 0)
+		return err;
+	err = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	if(err == 0)
+		err = pthread_create(&tid, &attr, fn, arg);
+	pthread_attr_destroy(&attr);
+	return err;
 }
-#endif
 
 void *timeout_helper(void *arg){
-	struct to_info	*tip;
-
+	struct to_info *tip;
 	tip = (struct to_info *)arg;
 	clock_nanosleep(CLOCK_REALTIME, 0, &tip->to_wait, NULL);
 	(*tip->to_fn)(tip->to_arg);
 	free(arg);
-	return(0);
+	return 0;
 }
 
-void timeout(const struct timespec *when, void (*func)(void *), void *arg){
-	struct timespec	now;
-	struct to_info	*tip;
-	int				err;
+void timeout(const struct timespec *when, void (*func)(void*), void *arg){
+	struct timespec now;
+	struct to_info *tip;
+	int err;
 
 	clock_gettime(CLOCK_REALTIME, &now);
-	if ((when->tv_sec > now.tv_sec) ||
-	  (when->tv_sec == now.tv_sec && when->tv_nsec > now.tv_nsec)) {
+	if((when->tv_sec > now.tv_sec) ||
+		(when->tv_sec == now.tv_sec && when->tv_nsec > now.tv_nsec)){
 		tip = malloc(sizeof(struct to_info));
-		if (tip != NULL) {
+		if(tip != NULL){
 			tip->to_fn = func;
 			tip->to_arg = arg;
-			tip->to_wait.tv_sec = when->tv_sec - now.tv_sec;
-			if (when->tv_nsec >= now.tv_nsec) {
+			tip->to_wait.tv_nsec = when->tv_sec - now.tv_sec;
+			if(when->tv_nsec >= now.tv_nsec){
 				tip->to_wait.tv_nsec = when->tv_nsec - now.tv_nsec;
-			} else {
+			}else{
 				tip->to_wait.tv_sec--;
-				tip->to_wait.tv_nsec = SECTONSEC - now.tv_nsec +
-				  when->tv_nsec;
+				tip->to_wait.tv_nsec = SECTONSEC - now.tv_nsec + when->tv_nsec;
 			}
 			err = makethread(timeout_helper, (void *)tip);
-			if (err == 0)
+			if(err == 0)
 				return;
 			else
 				free(tip);
 		}
 	}
-
-	/*
-	 * We get here if (a) when <= now, or (b) malloc fails, or
-	 * (c) we can't make a thread, so we just call the function now.
+	/**
+	 * 发生下面几种情况才会执行到这里
+	 * 1. when <= now；
+	 * 2. malloc 失败；
+	 * 3. 无法创建一个线程。
 	 */
 	(*func)(arg);
 }
@@ -371,50 +367,46 @@ pthread_mutex_t mutex;
 void retry(void *arg){
 	pthread_mutex_lock(&mutex);
 
-	/* perform retry steps ... */
+	// 执行重试步骤......
 
 	pthread_mutex_unlock(&mutex);
 }
 
-int main(void){
-	int				err, condition, arg;
-	struct timespec	when;
-
-	if ((err = pthread_mutexattr_init(&attr)) != 0)
-		err_exit(err, "pthread_mutexattr_init failed");
-	if ((err = pthread_mutexattr_settype(&attr,
-	  PTHREAD_MUTEX_RECURSIVE)) != 0)
-		err_exit(err, "can't set recursive type");
-	if ((err = pthread_mutex_init(&mutex, &attr)) != 0)
-		err_exit(err, "can't create recursive mutex");
-
-	/* continue processing ... */
+int main(){
+	int err, condition, arg;
+	struct timespec when;
+	if((err = pthread_mutexattr_init(&attr)) != 0){
+		perror("pthread_mutexattr_init failed");
+		return 1;
+	}
+	if((err = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE)) != 0){
+		perror("can't set recursive type");
+		return 1;
+	}
+	if((err = pthread_mutex_init(&mutex, &attr)) != 0){
+		perror("can't create recursive mutex");
+		return 1;
+	}
+	// 继续处理......
 
 	pthread_mutex_lock(&mutex);
-
-	/*
-	 * Check the condition under the protection of a lock to
-	 * make the check and the call to timeout atomic.
-	 */
-	if (condition) {
-		/*
-		 * Calculate the absolute time when we want to retry.
-		 */
+	// 将条件检查和超时调用放在锁的保护下，以使检查和超时调用是原子操作。
+	if(condition){
+		// 计算我们希望重试的绝对时间。
 		clock_gettime(CLOCK_REALTIME, &when);
-		when.tv_sec += 10;	/* 10 seconds from now */
+		when.tv_sec += 10;
 		timeout(&when, retry, (void *)((unsigned long)arg));
 	}
 	pthread_mutex_unlock(&mutex);
+	// 继续处理......
 
-	/* continue processing ... */
-
-	exit(0);
+	return 0;
 }
 ```
 
 ### 读写锁属性
 
-读写锁与互斥量类似，也是有属性的。可以用 pthread_rwlockattr_init 初始化 pthread_rwlockattr_t 结构，用 pthread_rwlockattr_destroy 反初始化该结构。
+读写锁与互斥量类似，也是有属性的。可以用 `pthread_rwlockattr_init` 初始化 `pthread_rwlockattr_t` 结构，用 `pthread_rwlockattr_destroy` 反初始化该结构。
 
 ```cpp
 #include <pthread.h>
@@ -422,9 +414,14 @@ int pthread_rwlockattr_init(pthread_rwlockattr_t *attr);
 int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr);
 ```
 
-两个函数的返回值：若成功，返回 0；否则，返回错误编号
+两个函数的返回值：
 
-读写锁支持的唯一属性是进程共享属性。它与互斥量的进程共享属性是相同的。就像互斥量的进程共享属性一样，有一对函数用于读取和设置读写锁的进程共享属性。
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+读写锁支持的唯一属性是进程共享属性。它与互斥量的进程共享属性是相同的。
+
+就像互斥量的进程共享属性一样，有一对函数用于读取和设置读写锁的进程共享属性。
 
 ```cpp
 #include <pthread.h>
@@ -432,7 +429,17 @@ int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t *restrict attr, int
 int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *attr, int pshared);
 ```
 
-两个函数的返回值：若成功，返回 0；否则，返回错误编号
+两个函数的返回值：
+
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+`pthread_rwlockattr_setpshared` 参数：
+
+- `attr`：指向读写锁属性对象（`pthread_rwlockattr_t`）的指针，可以在此对象中设置属性。
+- `pshared`：一个整数值，用于指定共享属性。通常有两个可能的取值：
+  - `PTHREAD_PROCESS_PRIVATE`：锁是进程内私有的，只能在同一进程的不同线程之间共享。
+  - `PTHREAD_PROCESS_SHARED`：锁可以在不同进程之间共享。
 
 ### 条件变量属性
 
@@ -444,9 +451,14 @@ int pthread_condattr_init(pthread_condattr_t *attr);
 int pthread_condattr_destroy(pthread_condattr_t *attr);
 ```
 
-两个函数的返回值：若成功，返回 0；否则，返回错误编号
+两个函数的返回值：
 
-与其他的同步属性一样，条件变量支持进程共享属性。它控制着条件变量是可以被单进程的多个线程使用，还是可以被多进程的线程使用。要获取进程共享属性的当前值，可以用 pthread_condattr_getpshared 函数。设置该值可以用 pthread_condattr_setpshared 函数。
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+与其他的同步属性一样，条件变量支持进程共享属性。它控制着条件变量是可以被单进程的多个线程使用，还是可以被多进程的线程使用。
+
+要获取进程共享属性的当前值，可以用 `pthread_condattr_getpshared` 函数。设置该值可以用 `pthread_condattr_setpshared` 函数。
 
 ```cpp
 #include <pthread.h>
@@ -454,10 +466,12 @@ int pthread_condattr_getpshared(const pthread_condattr_t *restrict attr, int *re
 int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared);
 ```
 
-两个函数的返回值：若成功，返回 0；否则，返回错误编号
+两个函数的返回值：
 
-时钟属性控制计算 pthread_cond_timedwait 函数的超时参数（tsptr）时采用的是哪个时钟。
-可以使用 pthread_condattr_getclock 函数获取可被用于 pthread_cond_timedwait 函数的时钟 ID，在使用 pthread_cond_timedwait 函数前需要用 pthread_condattr_t 对象对条件变量进行初始化。可以用 pthread_condattr_setclock 函数对时钟 ID 进行修改。
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+时钟属性控制计算 `pthread_cond_timedwait` 函数的超时参数（`tsptr`）时采用的是哪个时钟，其时钟 ID 可以使用 `pthread_condattr_getclock` 函数获取；`pthread_condattr_setclock` 函数用于对时钟 ID 进行修改。
 
 ```cpp
 #include <pthread.h>
@@ -465,34 +479,51 @@ int pthread_condattr_getclock(const pthread_condattr_t *restrict attr, clockid_t
 int pthread_condattr_setclock(pthread_condattr_t *attr, clockid_t clock_id);
 ```
 
-两个函数的返回值:若成功，返回 0；否则，返回错误编号
+两个函数的返回值:
+
+- 若成功，返回 0；
+- 否则，返回错误编号
+
+在使用 `pthread_cond_timedwait` 函数前需要用 `pthread_condattr_t` 对象对条件变量进行初始化。
+
+合法的时钟 ID 值：
+
+| 标识符                     | 选项                    | 说明                     |
+| -------------------------- | ----------------------- | ------------------------ |
+| `CLOCK_REALTIME`           |                         | 实时系统时间             |
+| `CLOCK_MONOTONIC`          | `POSIX_MONOTONIC_CLOCK` | 不带负跳数的实时系统时间 |
+| `CLOCK_PROCESS_CPUTIME_ID` | `POSIX_CPUTIME`         | 调用进程的 CPU 时间      |
+| `CLOCK_THREAD_CPUTIME_ID`  | `POSIX_THREAD_CPUTIME`  | 调用线程的 CPU 时间      |
 
 ### 屏障属性
 
-屏障也有属性。可以使用 pthread_barrierattr_init 函数对屏障属性对象进行初始化，用 pthread_barrierattr_destroy 函数对屏障属性对象进行反初始化。
+屏障也有属性。可以使用 `pthread_barrierattr_init` 函数对屏障属性对象进行初始化，用 `pthread_barrierattr_destroy` 函数对屏障属性对象进行反初始化。
 
 ```cpp
 #include <pthread.h>
 int pthread_barrierattr_init(pthread_barrierattr_t *attr);
-int
-pthread_barrierattr_destroy(pthread_barrierattr_t
-*attr);
+int pthread_barrierattr_destroy(pthread_barrierattr_t *attr);
 ```
 
-两个函数的返回值：若成功，返回 0；否则，返回错误编号
+两个函数的返回值：
 
-目前定义的屏障属性只有进程共享属性，它控制着屏障是可以被多进程的线程使用，还是只能被初始化屏障的进程内的多线程使用。与其他属性对象一样，有一个获取属性值的函数 pthread*barrierattr_getpshared 和一个设置属性值的函数 pthread_barrierattr* setpshared。
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+目前定义的屏障属性只有进程共享属性，它控制着屏障是可以被多进程的线程使用，还是只能被初始化屏障的进程内的多线程使用。与其他属性对象一样，有一个获取属性值的函数 `pthread_barrierattr_getpshared` 和一个设置属性值的函数 `pthread_barrierattr_setpshared`。
 
 ```cpp
 #include <pthread.h>
-int
-pthread_barrierattr_getpshared(const pthread_barrierattr_t *restrict attr, int *restrict pshared);
+int pthread_barrierattr_getpshared(const pthread_barrierattr_t *restrict attr, int *restrict pshared);
 int pthread_barrierattr_setpshared(pthread_barrierattr_t *attr, int pshared);
 ```
 
-两个函数的返回值：若成功，返回 0；否则，返回错误编号
+两个函数的返回值：
 
-进程共享属性的值可以是 PTHREAD_PROCESS_SHARED（多进程中的多个线程可用），也可以是 PTHREAD_PROCESS_PRIVATE（只有初始化屏障的那个进程内的多个线程可用）。
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+进程共享属性的值可以是 `PTHREAD_PROCESS_SHARED`（多进程中的多个线程可用），也可以是 `PTHREAD_PROCESS_PRIVATE`（只有初始化屏障的那个进程内的多个线程可用）。
 
 ## 重入
 
@@ -500,45 +531,45 @@ int pthread_barrierattr_setpshared(pthread_barrierattr_t *attr, int pshared);
 
 如果一个函数在相同的时间点可以被多个线程安全地调用，就称该函数是线程安全的。
 
-POSIX.1 中不能保证线程安全的函数
+`POSIX.1` 中不能保证线程安全的函数：
 
-| basename      | getchar_unlocked | getservent  | putc_unlocked    |
-| ------------- | ---------------- | ----------- | ---------------- |
-| catgets       | getdate          | getutxent   | putchar_unlocked |
-| crypt         | getenv           | getutxid    | putenv           |
-| dbm_clearerr  | getgrent         | getutxline  | pututxline       |
-| dbm_close     | getgrgid         | gmtime      | rand             |
-| dbm_delete    | getgrnam         | hcreate     | readdir          |
-| dbm_error     | gethostent       | hdestroy    | setenv           |
-| dbm_fetch     | getlogin         | hsearch     | setgrent         |
-| dbm_firstkey  | getnetbyaddr     | inet_ntoa   | setkey           |
-| dbm_nextkey   | getnetbyname     | l64a        | setpwent         |
-| dbm_open      | getnetent        | lgamma      | setutxent        |
-| dbm_store     | getopt           | lgammaf     | strerror         |
-| dirname       | getprotobyname   | lgammal     | strsignal        |
-| dlerror       | getprotobynumber | localeconv  | strtok           |
-| drand48       | getprotoent      | localtime   | system           |
-| encrypt       | getpwent         | lrand48     | ttyname          |
-| endgrent      | getpwnam         | mrand48     | unsetenv         |
-| endpwent      | getpwuid         | nftw        | wcstombs         |
-| endutxent     | getservbyname    | nl_langinfo | wctomb           |
-| getc_unlocked | getservbyport    | ptsname     |                  |
+| `basename`      | `getchar_unlocked` | `getservent`  | `putc_unlocked`    |
+| --------------- | ------------------ | ------------- | ------------------ |
+| `catgets`       | `getdate`          | `getutxent`   | `putchar_unlocked` |
+| `crypt`         | `getenv`           | `getutxid`    | `putenv`           |
+| `dbm_clearerr`  | `getgrent`         | `getutxline`  | `pututxline`       |
+| `dbm_close`     | `getgrgid`         | `gmtime`      | `rand`             |
+| `dbm_delete`    | `getgrnam`         | `hcreate`     | `readdir`          |
+| `dbm_error`     | `gethostent`       | `hdestroy`    | `setenv`           |
+| `dbm_fetch`     | `getlogin`         | `hsearch`     | `setgrent`         |
+| `dbm_firstkey`  | `getnetbyaddr`     | `inet_ntoa`   | `setkey`           |
+| `dbm_nextkey`   | `getnetbyname`     | `l64a`        | `setpwent`         |
+| `dbm_open`      | `getnetent`        | `lgamma`      | `setutxent`        |
+| `dbm_store`     | `getopt`           | `lgammaf`     | `strerror`         |
+| `dirname`       | `getprotobyname`   | `lgammal`     | `strsignal`        |
+| `dlerror`       | `getprotobynumber` | `localeconv`  | `strtok`           |
+| `drand48`       | `getprotoent`      | `localtime`   | `system`           |
+| `encrypt`       | `getpwent`         | `lrand48`     | `ttyname`          |
+| `endgrent`      | `getpwnam`         | `mrand48`     | `unsetenv`         |
+| `endpwent`      | `getpwuid`         | `nftw`        | `wcstombs`         |
+| `endutxent`     | `getservbyname`    | `nl_langinfo` | `wctomb`           |
+| `getc_unlocked` | `getservbyport`    | `ptsname`     |                    |
 
-除了上面的列出的函数，其他函数都保证是线程安全的。支持线程安全函数的操作系统实现会在 `<unistd.h>` 中定义符号 `_POSIX_THREAD_SAFE_FUNCTIONS`。应用程序也可以在 `sysconf` 函数中传入 `_SC_THREAD_SAFE_FUNCTIONS` 参数在运行时检查是否支持线程安全函数。
+**除了上面的列出的函数，其他函数都保证是线程安全的。** 支持线程安全函数的操作系统实现会在 `<unistd.h>` 中定义符号 `_POSIX_THREAD_SAFE_FUNCTIONS`。应用程序也可以在 `sysconf` 函数中传入 `_SC_THREAD_SAFE_FUNCTIONS` 参数在运行时检查是否支持线程安全函数。
 
-操作系统实现支持线程安全函数这个特性时，对 POSIX.1 中的一些非线程安全函数，它会提供可替代的线程安全版本。下面列出了这些函数的线程安全版本。
+操作系统实现支持线程安全函数这个特性时，对 `POSIX.1` 中的一些非线程安全函数，它会提供可替代的线程安全版本。下面列出了这些函数的线程安全版本。
 
-| getgrgid_r | localtime_r |
-| ---------- | ----------- |
-| getgrnam_r | readdir_r   |
-| getlogin_r | strerror_r  |
-| getpwnam_r | strtok_r    |
-| getpwuid_r | ttyname_r   |
-| gmtime_r   |             |
+| `getgrgid_r` | `localtime_r` |
+| ------------ | ------------- |
+| `getgrnam_r` | `readdir_r`   |
+| `getlogin_r` | `strerror_r`  |
+| `getpwnam_r` | `strtok_r`    |
+| `getpwuid_r` | `ttyname_r`   |
+| `gmtime_r`   |               |
 
 如果一个函数对多个线程来说是可重入的，就说这个函数就是线程安全的。但这并不能说明对信号处理程序来说该函数也是可重入的。如果函数对异步信号处理程序的重入是安全的，那么就可以说函数是异步信号安全的。
 
-POSIX.1 还提供了以线程安全的方式管理 FILE 对象的方法。可以使用 flockfile 和 ftrylockfile 获取给定 FILE 对象关联的锁。这个锁是递归的：当你占有这把锁的时候，还是可以再次获取该锁，而且不会导致死锁。虽然这种锁的具体实现并无规定，但要求所有操作 FILE 对象的标准 I/O 例程的动作行为必须看起来就像它们内部调用了 flockfile 和 funlockfile。
+`POSIX.1` 还提供了以线程安全的方式管理 `FILE` 对象的方法。可以使用 `flockfile` 和 `ftrylockfile` 获取给定 `FILE` 对象关联的锁。这个锁是递归的：当你占有这把锁的时候，还是可以再次获取该锁，而且不会导致死锁。虽然这种锁的具体实现并无规定，但要求所有操作 `FILE` 对象的标准 `I/O` 例程的动作行为必须看起来就像它们内部调用了 `flockfile` 和 `funlockfile`。
 
 ```cpp
 #include <stdio.h>
@@ -547,9 +578,12 @@ void flockfile(FILE *fp);
 void funlockfile(FILE *fp);
 ```
 
-返回值：若成功，返回 0；若不能获取锁，返回非 0 数值
+`ftrylockfile` 返回值：
 
-为了避免锁的开销，出现了不加锁版本的基于字符的标准 I/O 例程。
+- 若成功，返回 0；
+- 若不能获取锁，返回非 0 数值。
+
+为了避免对每一个字符的读写操作进行获取锁和释放锁的开销，出现了不加锁版本的基于字符的标准 `I/O` 例程。
 
 ```cpp
 #include <stdio.h>
@@ -557,49 +591,54 @@ int getchar_unlocked(void);
 int getc_unlocked(FILE *fp);
 ```
 
-两个函数的返回值: 若成功，返回下一个字符；若遇到文件尾或者出错，返回 EOF
+两个函数的返回值:
+
+- 若成功，返回下一个字符；
+- 若遇到文件尾或者出错，返回 `EOF`。
 
 ```cpp
 int putchar_unlocked(int c);
 int putc_unlocked(int c, FILE *fp);
 ```
 
-两个函数的返回值：若成功，返回 c；若出错，返回 EOF
+两个函数的返回值：
 
-除非被 flockfile（或 ftrylockfile）和 funlockfile 的调用包围，否则尽量不要调用这 4 个函数，因为它们会导致不可预期的结果。
+- 若成功，返回 c；
+- 若出错，返回 EOF。
 
-一旦对 FILE 对象进行加锁，就可以在释放锁之前对这些函数进行多次调用。这样就可以在多次的数据读写上分摊总的加解锁的开销。
+除非被 `flockfile`（或 `ftrylockfile`）和 `funlockfile` 的调用包围，否则尽量不要调用这 4 个函数，因为它们会导致不可预期的结果。
 
-例子，getenv 的一个可能实现，这个版本不是可重入的。
+一旦对 `FILE` 对象进行加锁，就可以在释放锁之前对这些函数进行多次调用。这样就可以在多次的数据读写上分摊总的加解锁的开销。
+
+例子，`getenv` 的一个可能实现，这个版本不是可重入的。
 
 ```cpp
 #include <limits.h>
 #include <string.h>
 
-#define MAXSTRINGSZ	4096
+#define MAXSTRINGSZ 4096
 
 static char envbuf[MAXSTRINGSZ];
 
 extern char **environ;
 
-char *
-getenv(const char *name)
-{
+char * getenv(const char *name){
 	int i, len;
-
 	len = strlen(name);
-	for (i = 0; environ[i] != NULL; i++) {
-		if ((strncmp(name, environ[i], len) == 0) &&
-		  (environ[i][len] == '=')) {
+	for(i = 0; environ[i] != NULL; i++){
+		if((strncmp(name, environ[i], len) == 0) &&
+			(environ[i][len] == '=')){
 			strncpy(envbuf, &environ[i][len+1], MAXSTRINGSZ-1);
-			return(envbuf);
+			return envbuf;
 		}
 	}
-	return(NULL);
+	return NULL;
 }
 ```
 
-例子，getenv 的可重入（线程安全）版本。
+这个版本不是可重入的。如果两个线程同时调用这个函数，就会看到不一致的结果，因为所有调用 `getenv` 的线程返回的字符串都存储在同一个静态缓冲区中。
+
+例子，`getenv` 的可重入（线程安全）版本。
 
 ```cpp
 #include <string.h>
@@ -613,9 +652,7 @@ pthread_mutex_t env_mutex;
 
 static pthread_once_t init_done = PTHREAD_ONCE_INIT;
 
-static void
-thread_init(void)
-{
+static void thread_init(void){
 	pthread_mutexattr_t attr;
 
 	pthread_mutexattr_init(&attr);
@@ -624,33 +661,32 @@ thread_init(void)
 	pthread_mutexattr_destroy(&attr);
 }
 
-int
-getenv_r(const char *name, char *buf, int buflen)
-{
+int getenv_r(const char *name, char *buf, int buflen){
 	int i, len, olen;
 
+	// 不管多少线程同时竞争调用g etenv_r，每个进程只调用thread_init函数一次
 	pthread_once(&init_done, thread_init);
 	len = strlen(name);
 	pthread_mutex_lock(&env_mutex);
-	for (i = 0; environ[i] != NULL; i++) {
-		if ((strncmp(name, environ[i], len) == 0) &&
-		  (environ[i][len] == '=')) {
+	for(i = 0; environ[i] != NULL; i++){
+		if((strncmp(name, environ[i], len) == 0) &&
+			(environ[i][len] == '=')){
 			olen = strlen(&environ[i][len+1]);
-			if (olen >= buflen) {
+			if(olen >= buflen){
 				pthread_mutex_unlock(&env_mutex);
-				return(ENOSPC);
+				return ENOSPC;
 			}
 			strcpy(buf, &environ[i][len+1]);
 			pthread_mutex_unlock(&env_mutex);
-			return(0);
+			return 0;
 		}
 	}
 	pthread_mutex_unlock(&env_mutex);
-	return(ENOENT);
+	return ENOENT;
 }
 ```
 
-要使 getenv_r 可重入，需要改变接口，调用者必须提供它自己的缓冲区，这样每个线程可以使用各自不同的缓冲区避免其他线程的干扰。还需要在搜索请求的字符时保护环境不被修改。
+要使 `getenv_r` 可重入，需要改变接口，调用者必须提供它自己的缓冲区，这样每个线程可以使用各自不同的缓冲区避免其他线程的干扰。还需要在搜索请求的字符时保护环境不被修改。
 
 ## 线程特定数据
 
@@ -661,35 +697,50 @@ getenv_r(const char *name, char *buf, int buflen)
 1. 有时候需要维护基于每线程（per-thread）的数据。
 2. 它提供了让基于进程的接口适应多线程环境的机制。
 
-在分配线程特定数据之前，需要创建与该数据关联的键。这个键将用于获取对线程特定数据的访问。使用 pthread_key_create 创建一个键。
+`pthread_key_create` 用于创建线程特定数据键（Thread-Specific Data Key，简称 TSD 键）。TSD 键允许您为每个线程关联一个特定的数据，以便在线程之间共享数据而不会出现竞争条件。
 
 ```cpp
 #include <pthread.h>
 int pthread_key_create(pthread_key_t *keyp, void (*destructor)(void *));
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-创建的键存储在 keyp 指向的内存单元中，这个键可以被进程中的所有线程使用，但每个线程把这个键与不同的线程特定数据地址进行关联。创建新键时，每个线程的数据地址设为空值。
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-除了创建键以外，`pthread_key_create` 可以为该键关联一个可选择的析构函数。当这个线程退出时，如果数据地址已经被置为非空值，那么析构函数就会被调用，它唯一的参数就是该数据地址。如果传入的析构函数为空，就表明没有析构函数与这个键关联。当线程调用 `pthread_exit` 或者线程执行返回，正常退出时，析构函数就会被调用。同样，线程取消时，只有在最后的清理处理程序返回之后，析构函数才会被调用。如果线程调用了 `exit` 、 `_exit` 、 `_Exit` 或 `abort` ，或者出现其他非正常的退出时，就不会调用析构函数。
+参数：
+
+- `keyp` 是一个指向 `pthread_key_t` 类型的指针，创建的键存储在 `keyp` 指向的内存单元中，这个键可以被进程中的所有线程使用，但每个线程把这个键与不同的线程特定数据地址进行关联。创建新键时，每个线程的数据地址设为空值。
+- `destructor` 是一个函数指针，用于指定在线程退出时如何销毁 TSD 数据。这个函数会在线程退出时自动被调用，它的原型应该是 `void destructor(void *)`。您可以传递一个自定义的析构函数，或者使用 `NULL` 表示不需要析构函数。
+
+当线程调用 `pthread_exit` 或者线程执行返回，正常退出时，析构函数就会被调用。同样，线程取消时，只有在最后的清理处理程序返回之后，析构函数才会被调用。如果线程调用了 `exit` 、 `_exit` 、 `_Exit` 或 `abort` ，或者出现其他非正常的退出时，就不会调用析构函数。
 
 线程可以为线程特定数据分配多个键，每个键都可以有一个析构函数与它关联。每个键的析构函数可以互不相同，当然所有键也可以使用相同的析构函数。
 
 线程退出时，线程特定数据的析构函数将按照操作系统实现中定义的顺序被调用。析构函数可能会调用另一个函数，该函数可能会创建新的线程特定数据，并且把这个数据与当前的键关联起来。当所有的析构函数都调用完成以后，系统会检查是否还有非空的线程特定数据值与键关联，如果有的话，再次调用析构函数。
 
-对所有的线程，我们都可以通过调用 pthread_key_delete 来取消键与线程特定数据值之间的关联关系。
+对所有的线程，我们都可以通过调用 `pthread_key_delete` 来取消键与线程特定数据值之间的关联关系。
 
 ```cpp
 #include <pthread.h>
 int pthread_key_delete(pthread_key_t key);
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-**调用 pthread_key_delete 并不会激活与键关联的析构函数。**
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-有些线程可能看到一个键值，而其他的线程看到的可能是另一个不同的键值，这取决于系统是如何调度线程的，解决这种竞争的办法是使用 pthread_once。
+参数：
+
+- `key` 是要删除的 TSD 键的标识符，它是在调用 `pthread_key_create` 函数时分配的。
+
+**调用 `pthread_key_delete` 并不会激活与键关联的析构函数。**
+
+有些线程可能看到一个键值，而其他的线程看到的可能是另一个不同的键值，这取决于系统是如何调度线程的，解决这种竞争的办法是使用 `pthread_once`。
+
+`pthread_once` 用于确保在多线程环境下某个初始化函数只被执行一次。它通常用于在程序启动时执行全局初始化操作，以确保只有一个线程执行初始化，并且其他线程等待初始化完成。
 
 ```cpp
 #include <pthread.h>
@@ -697,28 +748,37 @@ pthread_once_t initflag = PTHREAD_ONCE_INIT;
 int pthread_once(pthread_once_t *initflag, void (*initfn)(void));
 ```
 
-回值：若成功，返回 0；否则，返回错误编号
+回值：
 
-initflag 必须是一个非本地变量（如全局变量或静态变量），而且必须初始化为 PTHREAD_ONCE_INIT。
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-键一旦创建以后，就可以通过调用 pthread_setspecific 函数把键和线程特定数据关联起来。可以通过 pthread_getspecific 函数获得线程特定数据的地址。
+`initflag` 必须是一个非本地变量（如全局变量或静态变量），而且必须初始化为 `PTHREAD_ONCE_INIT`。
+
+键一旦创建以后，就可以通过调用 `pthread_setspecific` 函数把键和线程特定数据关联起来。可以通过 `pthread_getspecific` 函数获得线程特定数据的地址。
 
 ```cpp
 #include <pthread.h>
 void *pthread_getspecific(pthread_key_t key);
 ```
 
-返回值：线程特定数据值；若没有值与该键关联，返回 NULL
+返回值：
+
+- 线程特定数据值；
+- 若没有值与该键关联，返回 `NULL`。
 
 ```cpp
 int pthread_setspecific(pthread_key_t key, const void *value);
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-如果没有线程特定数据值与键关联，pthread_getspecific 将返回一个空指针，我们可以用这个返回值来确定是否需要调用 pthread_setspecific。
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-例子，线程安全的 getenv 的兼容版本
+如果没有线程特定数据值与键关联，`pthread_getspecific` 将返回一个空指针，我们可以用这个返回值来确定是否需要调用 `pthread_setspecific`。
+
+例子，线程安全的 `getenv` 的兼容版本
 
 ```cpp
 #include <limits.h>
@@ -734,152 +794,156 @@ pthread_mutex_t env_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 extern char **environ;
 
-static void
-thread_init(void)
-{
+static void thread_init(){
 	pthread_key_create(&key, free);
 }
 
-char *
-getenv(const char *name)
-{
-	int		i, len;
-	char	*envbuf;
+char * getenv_r(const char *name){
+	int i, len;
+	char *envbuf;
 
 	pthread_once(&init_done, thread_init);
 	pthread_mutex_lock(&env_mutex);
 	envbuf = (char *)pthread_getspecific(key);
-	if (envbuf == NULL) {
+	if(envbuf == NULL){
 		envbuf = malloc(MAXSTRINGSZ);
-		if (envbuf == NULL) {
+		if(envbuf == NULL){
 			pthread_mutex_unlock(&env_mutex);
-			return(NULL);
+			return NULL;
 		}
 		pthread_setspecific(key, envbuf);
 	}
 	len = strlen(name);
-	for (i = 0; environ[i] != NULL; i++) {
-		if ((strncmp(name, environ[i], len) == 0) &&
-		  (environ[i][len] == '=')) {
+	for(i = 0; environ[i] != NULL; i++){
+		if((strncmp(name, environ[i], len) == 0) &&
+			(environ[i][len] == '=')){
 			strncpy(envbuf, &environ[i][len+1], MAXSTRINGSZ-1);
 			pthread_mutex_unlock(&env_mutex);
-			return(envbuf);
+			return envbuf;
 		}
 	}
 	pthread_mutex_unlock(&env_mutex);
-	return(NULL);
+	return NULL;
 }
 ```
 
-我们使用 pthread_once 来确保只为我们将使用的线程特定数据创建一个键。如果 pthread_getspecific 返回的是空指针，就需要先分配内存缓冲区，然后再把键与该内存缓冲区关联。否则，如果返回的不是空指针，就使用 pthread_getspecific 返回的内存缓冲区。对析构函数，使用 free 来释放之前由 malloc 分配的内存。只有当线程特定数据值为非空时，析构函数才会被调用。
+我们使用 `pthread_once` 来确保只为我们将使用的线程特定数据创建一个键。如果 `pthread_getspecific` 返回的是空指针，就需要先分配内存缓冲区，然后再把键与该内存缓冲区关联。否则就使用 `pthread_getspecific` 返回的内存缓冲区。对析构函数，使用 `free` 来释放之前由 `malloc` 分配的内存。只有当线程特定数据值为非空时，析构函数才会被调用。
 
 ## 取消选项
 
-有两个线程属性并没有包含在 pthread_attr_t 结构中，它们是可取消状态和可取消类型。这两个属性影响着线程在响应 pthread_cancel 函数调用时所呈现的行为。
+有两个线程属性并没有包含在 `pthread_attr_t` 结构中，它们是可取消状态和可取消类型。这两个属性影响着线程在响应 `pthread_cancel` 函数调用时所呈现的行为。
 
-可取消状态属性可以是 PTHREAD_CANCEL_ENABLE，也可以是 PTHREAD_CANCEL_DISABLE。线程可以通过调用 pthread_setcancelstate 修改它的可取消状态。
+可取消状态属性可以是 `PTHREAD_CANCEL_ENABLE`，也可以是 `PTHREAD_CANCEL_DISABLE`。线程可以通过调用 `pthread_setcancelstate` 修改它的可取消状态。
 
 ```cpp
 #include <pthread.h>
 int pthread_setcancelstate(int state, int *oldstate);
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-pthread_setcancelstate 把当前的可取消状态设置为 state，把原来的可取消状态存储在由 oldstate 指向的内存单元，这两步是一个原子操作。
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-pthread_cancel 调用并不等待线程终止。在默认情况下，线程在取消请求发出以后还是继续运行，直到线程到达某个取消点。取消点是线程检查它是否被取消的一个位置，如果取消了，则按照请求行事。
-POSIX.1 保证在线程调用下列的任何函数时，取消点都会出现。
+`pthread_setcancelstate` 把当前的可取消状态设置为 `state`，把原来的可取消状态存储在由 `oldstate` 指向的内存单元，这两步是一个原子操作。
 
-| accept          | mg_timedsend           | pthread_join       | sendto       |
-| --------------- | ---------------------- | ------------------ | ------------ |
-| aio_suspend     | msgrcv                 | pthread_testcancel | sigsuspend   |
-| clock_nanosleep | msgsnd                 | pwrite             | sigtimedwait |
-| close           | msync                  | read               | sigwait      |
-| connect         | nanosleep              | readv              | sigwaitinfo  |
-| creat           | open                   | recv               | sleep        |
-| fcntl           | openat                 | recvfrom           | system       |
-| fdatasync       | pause                  | recvmsg            | tcdrain      |
-| fsync           | poll                   | select             | wait         |
-| lockf           | pread                  | sem_timedwait      | waitid       |
-| mq_receive      | pselect                | sem_wait           | waitpid      |
-| mg_send         | pthread_cond_timedwait | send               | write        |
-| mg_timedreceive | pthread_cond_wait      | sendmsg            | writev       |
+`pthread_cancel` 调用并不等待线程终止。在默认情况下，线程在取消请求发出以后还是继续运行，直到线程到达某个取消点。取消点是线程检查它是否被取消的一个位置，如果取消了，则按照请求行事。
 
-线程启动时默认的可取消状态是 PTHREAD_CANCEL_ENABLE。当状态设为 PTHREAD_CANCEL_DISABLE 时，对 pthread_cancel 的调用并不会杀死线程。相反，取消请求对这个线程来说还处于挂起状态，当取消状态再次变为 PTHREAD_CANCEL_ENABLE 时，线程将在下一个取消点上对所有挂起的取消请求进行处理。
+`POSIX.1` 保证在线程调用下列的任何函数时，取消点都会出现。
 
-POSIX.1 还指定了下列的函数作为可选的取消点。
-| access | fseeko | getwchar | putwc |
-| ----------- | ---------------- | -------------------------- | ----------- |
-| catclose | fsetpos | glob | putwchar |
-| catgets | fstat | iconv_close | readdir |
-| catopen | fstatat | iconv_open | readdir_r |
-| chmod | ftell | ioctl | readlink |
-| chown | ftello | link | readlinkat |
-| closedir | futimens | linkat | remove |
-| closelog | fwprintf | lio_listio | rename |
-| ctermid | fwrite | localtime | renameat |
-| dbm_close | fwscanf | localtime_r | rewind |
-| dbm_delete | getaddrinfo | lockf | rewinddir |
-| dbm_fetch | getc | lseek | scandir |
-| dbm_nextkey | getc_unlocked | lstat | scanf |
-| dbm_open | getchar | mkdir | seekdir |
-| dbm_store | getchar_unlocked | mkdirat | semop |
-| dl_close | getcwd | mkdtemp | setgrent |
-| dl_open | getdate | mkfifo | sethostent |
-| dprintf | getdelim | mkfifoat | setnetent |
-| endgrent | getgrent | mknod | setprotoent |
-| endhostent | getgrgid | mknodat | setpwent |
-| endnetent | getgrgid_r | mkstemp | setservent |
-| endprotoent | getgrnam | mktime | setutxent |
-| endpwent | getgrnam_r | nftw | stat |
-| endservent | gethostent | opendir | strerror |
-| endutxent | gethostid | openlog | strerror_r |
-| faccessat | gethostname | pathconf | strftime |
-| fchmod | getline | pclose | symlink |
-| fchmodat | getlogin | perror | symlinkat |
-| fchown | getlogin_r | popen | sync |
-| fchownat | getnameinfo | posix_fadvise | syslog |
-| fclose | getnetbyaddr | posix_fallocate | tmpfile |
-| fcntl | getnetbyname | posix_madvise | ttyname |
-| fflush | getnetent | posix_openpt | ttyname_r |
-| fgetc | getopt | posix_spawn | tzset |
-| fgetpos | getprotobyname | posix_spawnp | ungetc |
-| fgets | getprotobynumber | posix_typed_mem_open | ungetwc |
-| fgetwc | getprotoent | printf | unlink |
-| fgetws | getpwent | psiginfo | unlinkat |
-| fmtmsg | getpwnam | psignal | utimensat |
-| fopen | getpwnam_r | pthread_rwlock_rdlock | utimes |
-| fpathconf | getpwuid | pthread_rwlock_timedrdlock | vdprintf |
-| fprintf | getpwuid_r | pthread_rwlock_timedwrlock | vfprintf |
-| fputc | getservbyname | pthread_rwlock_wrlock | vfwprintf |
-| fputs | getservbyport | putc | vprintf |
-| fputwc | getservent | putc_unlocked | wwprintf |
-| fputws | getutxent | putchar | wcsftime |
-| fread | getutxid | putchar_unlocked | wordexp |
-| freopen | getutxline | puts | wprintf |
-| fscanf | getwc | pututxline | wscanf |
-| fseek | | | |
+| `accept`          | `mg_timedsend`           | `pthread_join`       | `sendto`       |
+| ----------------- | ------------------------ | -------------------- | -------------- |
+| `aio_suspend`     | `msgrcv`                 | `pthread_testcancel` | `sigsuspend`   |
+| `clock_nanosleep` | `msgsnd`                 | `pwrite`             | `sigtimedwait` |
+| `close`           | `msync`                  | `read`               | `sigwait`      |
+| `connect`         | `nanosleep`              | `readv`              | `sigwaitinfo`  |
+| `creat`           | `open`                   | `recv`               | `sleep`        |
+| `fcntl`           | `openat`                 | `recvfrom`           | `system`       |
+| `fdatasync`       | `pause`                  | `recvmsg`            | `tcdrain`      |
+| `fsync`           | `poll`                   | `select`             | `wait`         |
+| `lockf`           | `pread`                  | `sem_timedwait`      | `waitid`       |
+| `mq_receive`      | `pselect`                | `sem_wait`           | `waitpid`      |
+| `mg_send`         | `pthread_cond_timedwait` | `send`               | `write`        |
+| `mg_timedreceive` | `pthread_cond_wait`      | `sendmsg`            | `writev`       |
 
-如果应用程序在很长的一段时间内都不会调用上面两个表中的函数，那么你可以调用 pthread_testcancel 函数在程序中添加自己的取消点。
+线程启动时默认的可取消状态是 `PTHREAD_CANCEL_ENABLE`。当状态设为 `PTHREAD_CANCEL_DISABLE` 时，对 `pthread_cancel` 的调用并不会杀死线程。相反，取消请求对这个线程来说还处于挂起状态，当取消状态再次变为 `PTHREAD_CANCEL_ENABLE` 时，线程将在下一个取消点上对所有挂起的取消请求进行处理。
+
+`POSIX.1` 还指定了下列的函数作为可选的取消点。
+
+| `access`      | `fseeko`           | `getwchar`                   | `putwc`       |
+| ------------- | ------------------ | ---------------------------- | ------------- |
+| `catclose`    | `fsetpos`          | `glob`                       | `putwchar`    |
+| `catgets`     | `fstat`            | `iconv_close`                | `readdir`     |
+| `catopen`     | `fstatat`          | `iconv_open`                 | `readdir_r`   |
+| `chmod`       | `ftell`            | `ioctl`                      | `readlink`    |
+| `chown`       | `ftello`           | `link`                       | `readlinkat`  |
+| `closedir`    | `futimens`         | `linkat`                     | `remove`      |
+| `closelog`    | `fwprintf`         | `lio_listio`                 | `rename`      |
+| `ctermid`     | `fwrite`           | `localtime`                  | `renameat`    |
+| `dbm_close`   | `fwscanf`          | `localtime_r`                | `rewind`      |
+| `dbm_delete`  | `getaddrinfo`      | `lockf`                      | `rewinddir`   |
+| `dbm_fetch`   | `getc`             | `lseek`                      | `scandir`     |
+| `dbm_nextkey` | `getc_unlocked`    | `lstat`                      | `scanf`       |
+| `dbm_open`    | `getchar`          | `mkdir`                      | `seekdir`     |
+| `dbm_store`   | `getchar_unlocked` | `mkdirat`                    | `semop`       |
+| `dl_close`    | `getcwd`           | `mkdtemp`                    | `setgrent`    |
+| `dl_open`     | `getdate`          | `mkfifo`                     | `sethostent`  |
+| `dprintf`     | `getdelim`         | `mkfifoat`                   | `setnetent`   |
+| `endgrent`    | `getgrent`         | `mknod`                      | `setprotoent` |
+| `endhostent`  | `getgrgid`         | `mknodat`                    | `setpwent`    |
+| `endnetent`   | `getgrgid_r`       | `mkstemp`                    | `setservent`  |
+| `endprotoent` | `getgrnam`         | `mktime`                     | `setutxent`   |
+| `endpwent`    | `getgrnam_r`       | `nftw`                       | `stat`        |
+| `endservent`  | `gethostent`       | `opendir`                    | `strerror`    |
+| `endutxent`   | `gethostid`        | `openlog`                    | `strerror_r`  |
+| `faccessat`   | `gethostname`      | `pathconf`                   | `strftime`    |
+| `fchmod`      | `getline`          | `pclose`                     | `symlink`     |
+| `fchmodat`    | `getlogin`         | `perror`                     | `symlinkat`   |
+| `fchown`      | `getlogin_r`       | `popen`                      | `sync`        |
+| `fchownat`    | `getnameinfo`      | `posix_fadvise`              | `syslog`      |
+| `fclose`      | `getnetbyaddr`     | `posix_fallocate`            | `tmpfile`     |
+| `fcntl`       | `getnetbyname`     | `posix_madvise`              | `ttyname`     |
+| `fflush`      | `getnetent`        | `posix_openpt`               | `ttyname_r`   |
+| `fgetc`       | `getopt`           | `posix_spawn`                | `tzset`       |
+| `fgetpos`     | `getprotobyname`   | `posix_spawnp`               | `ungetc`      |
+| `fgets`       | `getprotobynumber` | `posix_typed_mem_open`       | `ungetwc`     |
+| `fgetwc`      | `getprotoent`      | `printf`                     | `unlink`      |
+| `fgetws`      | `getpwent`         | `psiginfo`                   | `unlinkat`    |
+| `fmtmsg`      | `getpwnam`         | `psignal`                    | `utimensat`   |
+| `fopen`       | `getpwnam_r`       | `pthread_rwlock_rdlock`      | `utimes`      |
+| `fpathconf`   | `getpwuid`         | `pthread_rwlock_timedrdlock` | `vdprintf`    |
+| `fprintf`     | `getpwuid_r`       | `pthread_rwlock_timedwrlock` | `vfprintf`    |
+| `fputc`       | `getservbyname`    | `pthread_rwlock_wrlock`      | `vfwprintf`   |
+| `fputs`       | `getservbyport`    | `putc`                       | `vprintf`     |
+| `fputwc`      | `getservent`       | `putc_unlocked`              | `wwprintf`    |
+| `fputws`      | `getutxent`        | `putchar`                    | `wcsftime`    |
+| `fread`       | `getutxid`         | `putchar_unlocked`           | `wordexp`     |
+| `freopen`     | `getutxline`       | `puts`                       | `wprintf`     |
+| `fscanf`      | `getwc`            | `pututxline`                 | `wscanf`      |
+| `fseek`       |                    |                              |               |
+
+如果应用程序在很长的一段时间内都不会调用上面两个表中的函数，那么你可以调用 `pthread_testcancel` 函数在程序中添加自己的取消点。
 
 ```cpp
 #include <pthread.h>
 void pthread_testcancel(void);
 ```
 
-调用 pthread_testcancel 时，如果有某个取消请求正处于挂起状态，而且取消并没有置为无效，那么线程就会被取消。但是，如果取消被置为无效，pthread_testcancel 调用就没有任何效果了。
+调用 `pthread_testcancel` `时，如果有某个取消请求正处于挂起状态，而且取消并没有置为无效，那么线程就会被取消。但是，如果取消被置为无效，pthread_testcancel` 调用就没有任何效果了。
 
-我们所描述的默认的取消类型也称为推迟取消。调用 pthread_cancel 以后，在线程到达取消点之前，并不会出现真正的取消。可以通过调用 pthread_setcanceltype 来修改取消类型。
+我们所描述的默认的取消类型也称为推迟取消。调用 `pthread_cancel` 以后，在线程到达取消点之前，并不会出现真正的取消。可以通过调用 `pthread_setcanceltype` 来修改取消类型。
 
 ```cpp
 #include <pthread.h>
 int pthread_setcanceltype(int type, int *oldtype);
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-pthread_setcanceltype 函数把取消类型设置为 type（类型参数可以是 PTHREADCANCEL_DEFERRED，也可以是 PTHREAD_CANCEL_ASYNCHRONOUS），把原来的取消类型返回到 oldtype 指向的整型单元。
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+`pthread_setcanceltype` 函数把取消类型设置为 `type`（类型参数可以是 `PTHREADCANCEL_DEFERRED`，也可以是 `PTHREAD_CANCEL_ASYNCHRONOUS`），把原来的取消类型返回到 `oldtype` 指向的整型单元。
 
 异步取消与推迟取消不同，因为使用异步取消时，线程可以在任意时间撤消，不是非得遇到取消点才能被取消。
 
@@ -889,76 +953,91 @@ pthread_setcanceltype 函数把取消类型设置为 type（类型参数可以�
 
 进程中的信号是递送到单个线程的。如果一个信号与硬件故障相关，那么该信号一般会被发送到引起该事件的线程中去，而其他的信号则被发送到任意一个线程。
 
-sigprocmask 的行为在多线程的进程中并没有定义，线程必须使用 pthread_sigmask。
+`sigprocmask` 的行为在多线程的进程中并没有定义，线程必须使用 `pthread_sigmask`。
 
 ```cpp
 #include <signal.h>
 int pthread_sigmask(int how, const sigset_t *restrict set, sigset_t *restrict oset);
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-pthread_sigmask 函数与 sigprocmask 函数基本相同，不过 pthread_sigmask 工作在线程中，而且失败时返回错误码，不再像 sigprocmask 中那样设置 errno 并返回 −1。
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-set 参数包含线程用于修改信号屏蔽字的信号集。how 参数可以取下列 3 个值之一：SIG_BLOCK，把信号集添加到线程信号屏蔽字中，SIG_SETMASK，用信号集替换线程的信号屏蔽字；SIG_UNBLOCK，从线程信号屏蔽字中移除信号集。如果 oset 参数不为空，线程之前的信号屏蔽字就存储在它指向的 sigset_t 结构中。线程可以通过把 set 参数设置为 NULL，并把 oset 参数设置为 sigset_t 结构的地址，来获取当前的信号屏蔽字。这种情况中的 how 参数会被忽略。
+参数：
 
-线程可以通过调用 sigwait 等待一个或多个信号的出现。
+- `set` 参数包含线程用于修改信号屏蔽字的信号集。
+- `how` 参数可以取下列 3 个值之一：
+  - `SIG_BLOCK`，把信号集添加到线程信号屏蔽字中，
+  - `SIG_SETMASK`，用信号集替换线程的信号屏蔽字；
+  - `SIG_UNBLOCK`，从线程信号屏蔽字中移除信号集。
+- `oset` 参数为线程之前的信号屏蔽字就存储在它指向的 `sigset_t` 结构中。线程可以通过把 `set` 参数设置为 `NULL`，并把 `oset` 参数设置为 `sigset_t` 结构的地址，来获取当前的信号屏蔽字。这种情况中的 `how` 参数会被忽略。
+
+`pthread_sigmask` 函数与 `sigprocmask` 函数基本相同，不过 `pthread_sigmask` 工作在线程中，而且失败时返回错误码，不再像 `sigprocmask` 中那样设置 `errno` 并返回 −1。
+
+线程可以通过调用 `sigwait` 等待一个或多个信号的出现。
 
 ```cpp
 #include <signal.h>
 int sigwait(const sigset_t *restrict set, int *restrict signop);
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-set 参数指定了线程等待的信号集。返回时，signop 指向的整数将包含发送信号的数量。
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-如果信号集中的某个信号在 sigwait 调用的时候处于挂起状态，那么 sigwait 将无阻塞地返回。在返回之前，sigwait 将从进程中移除那些处于挂起等待状态的信号。如果具体实现支持排队信号，并且信号的多个实例被挂起，那么 sigwait 将会移除该信号的一个实例，其他的实例还要继续排队。
+`set` 参数指定了线程等待的信号集。返回时，`signop` 指向的整数将包含发送信号的数量。
 
-要把信号发送给进程，可以调用 kill。要把信号发送给线程，可以调用 pthread_kill。
+如果信号集中的某个信号在 `sigwait` 调用的时候处于挂起状态，那么 `sigwait` 将无阻塞地返回。在返回之前，`sigwait` 将从进程中移除那些处于挂起等待状态的信号。如果具体实现支持排队信号，并且信号的多个实例被挂起，那么 `sigwait` 将会移除该信号的一个实例，其他的实例还要继续排队。
+
+要把信号发送给进程，可以调用 `kill`。要把信号发送给线程，可以调用 `pthread_kill`。
 
 ```cpp
 #include <signal.h>
 int pthread_kill(pthread_t thread, int signo);
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-可以传一个 0 值的 signo 来检查线程是否存在。如果信号的默认处理动作是终止该进程，那么把信号传递给某个线程仍然会杀死整个进程。
+- 若成功，返回 0；
+- 否则，返回错误编号。
+
+可以传一个 0 值的 `signo` 来检查线程是否存在。如果信号的默认处理动作是终止该进程，那么把信号传递给某个线程仍然会杀死整个进程。
 
 例子，同步信号处理。
 
 ```cpp
-#include "apue.h"
+#include <stdio.h>
 #include <pthread.h>
+#include <signal.h>
+#include <stdlib.h>
 
-int			quitflag;	/* set nonzero by thread */
-sigset_t	mask;
+int quitflag;
+sigset_t mask;
 
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t waitloc = PTHREAD_COND_INITIALIZER;
 
-void *
-thr_fn(void *arg)
-{
+void *thr_fn(void *arg){
 	int err, signo;
-
-	for (;;) {
+	for(;;){
 		err = sigwait(&mask, &signo);
-		if (err != 0)
-			err_exit(err, "sigwait failed");
-		switch (signo) {
+		if(err != 0){
+			perror("sigwait failed");
+			exit(1);
+		}
+		switch(signo){
 		case SIGINT:
 			printf("\ninterrupt\n");
 			break;
-
 		case SIGQUIT:
 			pthread_mutex_lock(&lock);
 			quitflag = 1;
 			pthread_mutex_unlock(&lock);
 			pthread_cond_signal(&waitloc);
-			return(0);
-
+			return 0;
 		default:
 			printf("unexpected signal %d\n", signo);
 			exit(1);
@@ -966,152 +1045,177 @@ thr_fn(void *arg)
 	}
 }
 
-int
-main(void)
-{
-	int			err;
-	sigset_t	oldmask;
-	pthread_t	tid;
+int main(){
+	int err;
+	sigset_t oldmask;
+	pthread_t tid;
 
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGINT);
 	sigaddset(&mask, SIGQUIT);
-	if ((err = pthread_sigmask(SIG_BLOCK, &mask, &oldmask)) != 0)
-		err_exit(err, "SIG_BLOCK error");
+	if((err = pthread_sigmask(SIG_BLOCK, &mask, &oldmask)) != 0){
+		perror("SIG_BLOCK error");
+		return 1;
+	}
 
 	err = pthread_create(&tid, NULL, thr_fn, 0);
-	if (err != 0)
-		err_exit(err, "can't create thread");
+	if(err != 0){
+		perror("can't create thread");
+		return 1;
+	}
 
 	pthread_mutex_lock(&lock);
-	while (quitflag == 0)
+	while(quitflag == 0)
 		pthread_cond_wait(&waitloc, &lock);
 	pthread_mutex_unlock(&lock);
 
-	/* SIGQUIT has been caught and is now blocked; do whatever */
 	quitflag = 0;
 
-	/* reset signal mask which unblocks SIGQUIT */
-	if (sigprocmask(SIG_SETMASK, &oldmask, NULL) < 0)
-		err_sys("SIG_SETMASK error");
-	exit(0);
+	if(sigprocmask(SIG_SETMASK, &oldmask, NULL) < 0){
+		perror("SIG_SETMASK error");
+		return 1;
+	}
+	return 0;
 }
 ```
 
-我们不用依赖信号处理程序中断主控线程，有专门的独立控制线程进行信号处理。在互斥量的保护下改动 quitflag 的值，这样主控线程不会在调用 pthread_cond_signal 时错失唤醒调用。在主控线程中使用相同的互斥量来检查标志的值，并且原子地释放互斥量，等待条件的发生。
+编译运行：
+
+```bash
+$ gcc 04pthread_sig.c -lpthread
+$ ./a.out
+^C            # Ctrl + C
+interrupt
+^\%           # Ctrl + \
+```
+
+我们不用依赖信号处理程序中断主控线程，有专门的独立控制线程进行信号处理。在互斥量的保护下改动 `quitflag` 的值，这样主控线程不会在调用 `pthread_cond_signal` 时错失唤醒调用。在主控线程中使用相同的互斥量来检查标志的值，并且原子地释放互斥量，等待条件的发生。
 
 ## 线程和 fork
 
-当线程调用 fork 时，就为子进程创建了整个进程地址空间的副本。子进程通过继承整个地址空间的副本，还从父进程那儿继承了每个互斥量、读写锁和条件变量的状态。如果父进程包含一个以上的线程，子进程在 fork 返回以后，如果紧接着不是马上调用 exec 的话，就需要清理锁状态。
+当线程调用 `fork` 时，就为子进程创建了整个进程地址空间的副本。子进程通过继承整个地址空间的副本，还从父进程那儿继承了每个互斥量、读写锁和条件变量的状态。如果父进程包含一个以上的线程，子进程在 `fork` 返回以后，如果紧接着不是马上调用 `exec` 的话，就需要清理锁状态。
 
-在子进程内部，只存在一个线程，它是由父进程中调用 fork 的线程的副本构成的。如果父进程中的线程占有锁，子进程将同样占有这些锁。
+在子进程内部，只存在一个线程，它是由父进程中调用 `fork` 的线程的副本构成的。如果父进程中的线程占有锁，子进程将同样占有这些锁。
 
-如果子进程从 fork 返回以后马上调用其中一个 exec 函数，就可以避免这样的问题。这种情况下，旧的地址空间就被丢弃，所以锁的状态无关紧要。
+如果子进程从 `fork` 返回以后马上调用其中一个 `exec` 函数，就可以避免这样的问题。这种情况下，旧的地址空间就被丢弃，所以锁的状态无关紧要。
 
-在多线程的进程中，为了避免不一致状态的问题，POSIX.1 声明，在 fork 返回和子进程调用其中一个 exec 函数之间，子进程只能调用异步信号安全的函数。
+在多线程的进程中，为了避免不一致状态的问题，`POSIX.1` 声明，在 `fork` 返回和子进程调用其中一个 `exec` 函数之间，子进程只能调用异步信号安全的函数。
 
-要清除锁状态，可以通过调用 pthread_atfork 函数建立 fork 处理程序。
+要清除锁状态，可以通过调用 `pthread_atfork` 函数建立 `fork` 处理程序。
 
 ```cpp
 #include <pthread.h>
 int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void));
 ```
 
-返回值：若成功，返回 0；否则，返回错误编号
+返回值：
 
-用 pthread_atfork 函数最多可以安装 3 个帮助清理锁的函数。prepare fork 处理程序由父进程在 fork 创建子进程前调用。这个 fork 处理程序的任务是获取父进程定义的所有锁。parent fork 处理程序是在 fork
-创建子进程以后、返回之前在父进程上下文中调用的。这个 fork 处理程序的任务是对 prepare fork 处理程序获取的所有锁进行解锁。child fork 处理程序在 fork 返回之前在子进程上下文中调用。与 parent fork 处理程序一样，child fork 处理程序也必须释放 prepare fork 处理程序获取的所有锁。
+- 若成功，返回 0；
+- 否则，返回错误编号。
 
-可以多次调用 pthread_atfork 函数从而设置多套 fork 处理程序。如果不需要使用其中某个处理程序，可以给特定的处理程序参数传入空指针，它就不会起任何作用了。使用多个 fork 处理程序时，处理程序的调用顺序并不相同。parent 和 child fork 处理程序是以它们注册时的顺序进行调用的，而 prepare fork 处理程序的调用顺序与它们注册时的顺序相反。这样可以允许多个模块注册它们自己的 fork 处理程序，而且可以保持锁的层次。
+参数：
 
-例子，pthread_atfork 实例。
+- `prepare` 函数是一个回调函数，它在 `fork` 操作之前（即在父进程中）执行。这个函数通常用于准备线程和资源，以确保它们在子进程中正确复制。
+- `parent` 函数是一个回调函数，它在 `fork` 操作成功后的父进程中执行。这个函数通常用于父进程在 `fork` 后继续执行前恢复任何线程或资源。
+- `child` 函数是一个回调函数，它在 `fork` 操作成功后的子进程中执行。这个函数通常用于在子进程中清理任何不需要的线程或资源。
+
+可以多次调用 `pthread_atfork` 函数从而设置多套处理程序。如果不需要使用其中某个处理程序，可以给特定的处理程序参数传入空指针，它就不会起任何作用了。使用多个处理程序时，处理程序的调用顺序并不相同。`parent` 和 `child` 处理程序是以它们注册时的顺序进行调用的，而 `prepare` 处理程序的调用顺序与它们注册时的顺序相反。这样可以允许多个模块注册它们自己的处理程序，而且可以保持锁的层次。
+
+例子，`pthread_atfork` 实例。
 
 ```cpp
-#include "apue.h"
+#include <stdio.h>
 #include <pthread.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 pthread_mutex_t lock1 = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t lock2 = PTHREAD_MUTEX_INITIALIZER;
 
-void
-prepare(void)
-{
+void prepare(){
 	int err;
-
 	printf("preparing locks...\n");
-	if ((err = pthread_mutex_lock(&lock1)) != 0)
-		err_cont(err, "can't lock lock1 in prepare handler");
-	if ((err = pthread_mutex_lock(&lock2)) != 0)
-		err_cont(err, "can't lock lock2 in prepare handler");
+	if((err = pthread_mutex_lock(&lock1)) != 0)
+		perror("can't lock lock1 in prepare handler");
+	if((err = pthread_mutex_lock(&lock2)) != 0)
+		perror("can't lock lock2 in prepare handler");
 }
 
-void
-parent(void)
-{
+void parent(){
 	int err;
-
 	printf("parent unlocking locks...\n");
-	if ((err = pthread_mutex_unlock(&lock1)) != 0)
-		err_cont(err, "can't unlock lock1 in parent handler");
-	if ((err = pthread_mutex_unlock(&lock2)) != 0)
-		err_cont(err, "can't unlock lock2 in parent handler");
+	if((err = pthread_mutex_unlock(&lock1)) != 0)
+		perror("can't unlock lock1 in parent handler");
+	if((err = pthread_mutex_unlock(&lock2)) != 0)
+		perror("can't unlock lock2 in parent handler");
 }
 
-void
-child(void)
-{
+void child(){
 	int err;
-
 	printf("child unlocking locks...\n");
-	if ((err = pthread_mutex_unlock(&lock1)) != 0)
-		err_cont(err, "can't unlock lock1 in child handler");
-	if ((err = pthread_mutex_unlock(&lock2)) != 0)
-		err_cont(err, "can't unlock lock2 in child handler");
+	if((err = pthread_mutex_unlock(&lock1)) != 0)
+		perror("can't unlock lock1 in child handler");
+	if((err = pthread_mutex_unlock(&lock2)) != 0)
+		perror("can't unlock lock2 in child handler");
 }
 
-void *
-thr_fn(void *arg)
-{
+void *thr_fn(void *arg){
 	printf("thread started...\n");
 	pause();
-	return(0);
+	return 0;
 }
 
-int
-main(void)
-{
-	int			err;
-	pid_t		pid;
-	pthread_t	tid;
+int main(){
+	int err;
+	pid_t pid;
+	pthread_t tid;
 
-	if ((err = pthread_atfork(prepare, parent, child)) != 0)
-		err_exit(err, "can't install fork handlers");
-	if ((err = pthread_create(&tid, NULL, thr_fn, 0)) != 0)
-		err_exit(err, "can't create thread");
+	if((err = pthread_atfork(prepare, parent,child)) != 0){
+		perror("can't install fork handlers");
+		exit(1);
+	}
+	if((err = pthread_create(&tid, NULL, thr_fn, 0)) != 0){
+		perror("can't create thread");
+		exit(1);
+	}
 
 	sleep(2);
 	printf("parent about to fork...\n");
 
-	if ((pid = fork()) < 0)
-		err_quit("fork failed");
-	else if (pid == 0)	/* child */
-		printf("child returned from fork\n");
-	else		/* parent */
-		printf("parent returned from fork\n");
-	exit(0);
+	if((pid = fork()) < 0){
+		perror("fork failed");
+		exit(1);
+	}else if(pid == 0)
+		printf("child returned from fork.\n");
+	else
+		printf("parent returned from fork.\n");
+	return 0;
 }
 ```
+编译运行：
+```bash
+$ gcc 05pthread_atfork.c -lpthread
+$ ./a.out 
+thread started...
+parent about to fork...
+preparing locks...
+parent unlocking locks...
+parent returned from fork.
+child unlocking locks...
+child returned from fork.
+```
 
-定义了两个互斥量，lock1 和 lock2，prepare fork 处理程序获取这两把锁，child fork 处理程序在子进程上下文中释放它们，parent fork 处理程序在父进程上下文中释放它们。
+定义了两个互斥量，`lock1` 和 `lock2`，`prepare` 处理程序获取这两把锁，`child` 处理程序在子进程上下文中释放它们，`parent` 处理程序在父进程上下文中释放它们。
 
-虽然 pthread_atfork 机制的意图是使 fork 之后的锁状态保持一致，但它还是存在一些不足之处，只能在有限情况下可用。
+虽然 `pthread_atfork` 机制的意图是使 `fork` 之后的锁状态保持一致，但它还是存在一些不足之处，只能在有限情况下可用。
 
 - 没有很好的办法对较复杂的同步对象（如条件变量或者屏障）进行状态的重新初始化。
-- 某些错误检查的互斥量实现在 child fork 处理程序试图对被父进程加锁的互斥量进行解锁时会产生错误。
-- 递归互斥量不能在 child fork 处理程序中清理，因为没有办法确定该互斥量被加锁的次数。
-- 如果子进程只允许调用异步信号安全的函数，child fork 处理程序就不可能清理同步对象，因为用于操作清理的所有函数都不是异步信号安全的。实际的问题是同步对象在某个线程调用 fork 时可能处于中间状态，除非同步对象处于一致状态，否则无法被清理。
-- 如果应用程序在信号处理程序中调用了 fork（这是合法的，因为 fork 本身是异步信号安全的），pthread_atfork 注册的 fork 处理程序只能调用异步信号安全的函数，否则结果将是未定义的。
+- 某些错误检查的互斥量实现在 `child` 处理程序试图对被父进程加锁的互斥量进行解锁时会产生错误。
+- 递归互斥量不能在 `child` 处理程序中清理，因为没有办法确定该互斥量被加锁的次数。
+- 如果子进程只允许调用异步信号安全的函数，`child` 处理程序就不可能清理同步对象，因为用于操作清理的所有函数都不是异步信号安全的。实际的问题是同步对象在某个线程调用 `fork` 时可能处于中间状态，除非同步对象处于一致状态，否则无法被清理。
+- 如果应用程序在信号处理程序中调用了 `fork`（这是合法的，因为 `fork` 本身是异步信号安全的），`pthread_atfork` 注册的处理程序只能调用异步信号安全的函数，否则结果将是未定义的。
 
 ## 线程和 I/O
 
-pread 和 pwrite 函数在多线程环境下是非常有用的，因为进程中的所有线程共享相同的文件描述符。
+进程中的所有线程共享相同的文件描述符。`pread` 和 `pwrite` 函数的读写是原子操作，在多线程环境下是非常有用的，可以使用它们来解决并发线程对同一文件进行写操作的问题。
