@@ -5,9 +5,9 @@ tags: frida
 category: frida
 ---
 
-> 源码地址：https://github.com/frida/frida
+Frida 源码地址：https://github.com/frida/frida
 
-> 官网：https://frida.re/
+Frida 官网：https://frida.re/
 
 # 环境配置
 
@@ -15,45 +15,47 @@ category: frida
 
 在安装 `Frida` 之前最好创建一个 `python` 虚拟环境，这样可以避免与其他环境产生干扰
 
-```
-$ mkvirtualenv -p python3 frida_12.8.7
-```
-
-> 这里使用 `pyenv` 创建虚拟环境更方便。目前我使用 `miniconda` 。
-
-**安装最新版**
-
-进入虚拟环境，直接运行下来命令即可安装完成
-
-```
-pip install frida-tools # CLI tools
-pip install frida       # Python bindings
-```
-
-安装完成后，运行 `frida --version` 查看 frida 的版本
-
-![](frida使用/2020-01-19-16-20-36.png)
-
-**安装特定版 Frida**
-
-通过 [Frida Releases](https://github.com/frida/frida/releases) 页面找到需要安装的 `frida-tools` 版本，使用 `pip` 指定版本安装，这里以 `Frida 12.11.18` 为例。
-
-首先找到 `frida-tools` 版本。
-
-![](Frida使用/2021-09-02-16-47-25.png)
-
-然后使用 `pip` 安装对应的版本，下面为完整安装命令。
-
 ```bash
-pip install frida==12.11.18
-pip install frida-tools==8.2.0
+$ mkvirtualenv -p python3 frida_12.8.7    # pyenv 创建虚拟环境
+$ conda create -n frida_12.8.7 python=3.9 # miniconda 创建虚拟环境
 ```
+
+上面有两种方式创建虚拟环境，推荐使用 miniconda，接下来就可以安装 [Frida](https://github.com/frida/frida) 了。
+
+1. 安装最新版 Frida
+
+   进入虚拟环境，直接运行下来命令即可安装完成
+
+   ```bash
+   $ conda activate frida_12.8.7
+   $ pip install frida-tools # CLI tools
+   $ pip install frida       # Python bindings
+   ```
+
+   安装完成后，运行 `frida --version` 查看 frida 的版本
+
+   ![](frida使用记录/2020-01-19-16-20-36.png)
+
+2. 安装特定版本的 Frida
+
+   通过 [Frida Releases](https://github.com/frida/frida/releases) 页面找到需要安装的 `frida-tools` 版本，使用 `pip` 指定版本安装，这里以 `Frida 12.11.18` 为例。
+
+   首先找到 `frida-tools` 版本。
+
+   ![](frida使用记录/2021-09-02-16-47-25.png)
+
+   然后使用 `pip` 安装对应的版本，下面为完整安装命令。
+
+   ```bash
+   $ pip install frida==12.11.18
+   $ pip install frida-tools==8.2.0
+   ```
 
 安装完成后，根据 `Frida` 的版本去[下载](https://github.com/frida/frida/releases)对应的 `frida-server`。
 
 最后将 `frida-server push` 进 `data/local/tmp` 目录，并给予其运行权限，使用 `root` 用户启动。
 
-```
+```bash
 $ adb push frida-server data/local/tmp/
 $ adb shell
 sailfish:/ $ su
@@ -63,49 +65,53 @@ sailfish:/ # data/local/tmp//frida-server &
 
 执行 `frida-ps -U` ,出现以下信息则表明安装成功。
 
-![](frida使用/2020-01-19-16-31-30.png)
+![](frida使用记录/2020-01-19-16-31-30.png)
+
+如果遇到分析的样本有反调试，可以试试下面的 frida-server 版本：
+
+https://github.com/Ylarod/Florida/releases
 
 ## 配置开发环境
 
 为了在开发 Frida 脚本时有代码补全提示，我们可以使用下面两种方式进行环境配置。
 
-### 引用 `frida-gum.d.ts`
+1. 使用 `TypeScript`（推荐）
 
-在 `Frida` 源码中获取 [frida-gum.d.ts](https://github.com/frida/frida-gum/tree/6e36eebe1aad51c37329242cf07ac169fc4a62c4/bindings/gumjs/types/frida-gum) 文件，该文件包含了所有的 API 。
+   使用 `Frida` 作者提供的开发环境 [frida-agent-example](https://github.com/oleavr/frida-agent-example) ，该环境需要使用 `TypeScript` 开发。
 
-在我们开发的 `js` 脚本首行中引用 `frida-gum.d.ts` 文件，即可实现代码补全提示。
+   构建开发环境
 
-```
-`///<reference path='./frida-gum.d.ts'/>`
-```
+   ```bash
+   $ git clone https://github.com/oleavr/frida-agent-example.git
+   $ cd frida-agent-example/
+   $ npm install
+   ```
 
-![](frida使用/2020-01-19-16-50-57.png)
+   启用实时编译
 
-其他方式获取 `frida-gum.d.ts` 文件：
+   ```bash
+   $ npm run watch
+   # 或者
+   $ frida-compile agent/index.ts -o _agent.js -w
+   ```
 
-> https://www.npmjs.com/package/@types/frida-gum
+   后续直接使用 `index.ts` 开发即可实现代码补全提示。
 
-### 使用 `TypeScript`
+2. 引用 `frida-gum.d.ts`
 
-使用 `Frida` 作者提供的开发环境 [frida-agent-example](https://github.com/oleavr/frida-agent-example) ，该环境需要使用 `TypeScript` 开发。
+   在 `Frida` 源码中获取 [frida-gum.d.ts](https://github.com/frida/frida-gum/tree/6e36eebe1aad51c37329242cf07ac169fc4a62c4/bindings/gumjs/types/frida-gum) 文件，该文件包含了所有的 API 。
 
-构建开发环境
+   在我们开发的 `js` 脚本首行中引用 `frida-gum.d.ts` 文件，即可实现代码补全提示。
 
-```bash
-$ git clone git://github.com/oleavr/frida-agent-example.git
-$ cd frida-agent-example/
-$ npm install
-```
+   ```js
+   `///<reference path='./frida-gum.d.ts'/>`;
+   ```
 
-启用实时编译
+   ![](frida使用记录/2020-01-19-16-50-57.png)
 
-```bash
-$ npm run watch
-# 或者
-$ frida-compile agent/index.ts -o _agent.js -w
-```
+   其他方式获取 `frida-gum.d.ts` 文件：
 
-后续直接使用 `index.ts` 开发即可实现代码补全提示。
+   > https://www.npmjs.com/package/@types/frida-gum
 
 ## 配置调试环境
 
@@ -113,53 +119,132 @@ $ frida-compile agent/index.ts -o _agent.js -w
 
 首先使用 `Frida` 命令或者 `python` 脚本以调试模式加载 `js` 脚本。
 
-Frida 命令:
+1. Frida 命令:
 
-```bash
-frida -U com.example.android -l _agent.js --debug --runtime=v8 <port/name>
-```
+   ```bash
+   $ frida -U com.example.android -l _agent.js --debug --runtime=v8 <port/name>
+   ```
 
-python 脚本:
+2. python 脚本:
 
-```python
-session = dev.attach(app.pid)
-script = session.create_script(jscode, runtime="v8")
-session.enable_debugger()
-```
+   ```python
+   session = dev.attach(app.pid)
+   script = session.create_script(jscode, runtime="v8")
+   session.enable_debugger()
+   ```
 
-启动后会回显 `Inspector` 正在监听 `9229` 默认端口 。
+启动后会回显 `Inspector` 正在监听 `9229` 默认端口，下面就可以使用 chome 或 pycharm 进行调试了。
 
-### chome
+1. chome
+   打开 `chrome://inspect` 页面, 点击 `Open dedicated DevTools for Node` 。
 
-打开 `chrome://inspect` 页面, 点击 `Open dedicated DevTools for Node` 。
+   ![](frida使用记录/2021-09-07-17-53-36.png)
 
-![](frida使用/2021-09-07-17-53-36.png)
+   此时 `debug` 已经连接，切换至 `Sources` ，按 `Command + P` 加载要调试的脚本，即可下断调试了。
 
-此时 `debug` 已经连接，切换至 `Sources` ，按 `Command + P` 加载要调试的脚本，即可下断调试了。
+   ![](frida使用记录/2021-09-07-17-56-47.png)
 
-![](frida使用/2021-09-07-17-56-47.png)
+2. pycharm
+   首先安装 `Node.js` 插件，重启。然后添加调试器 `Attaching to Node.js/Chrome`，端口默认即可。
 
-### pycharm
+   ![](frida使用记录/2021-09-08-14-51-43.png)
 
-首先安装 `Node.js` 插件，重启。然后添加调试器 `Attaching to Node.js/Chrome`，端口默认即可。
+   > 我这里使用的 `node` 版本为 12.21.0 。
 
-![](frida使用/2021-09-08-14-51-43.png)
+   在 `ts` 文件中设置好断点，执行 pycharm 调试功能即可。
 
-> 我这里使用的 `node` 版本为 12.21.0 。
+   ![](frida使用记录/2021-09-08-14-56-07.png)
 
-在 `ts` 文件中设置好断点，执行 pycharm 调试功能即可。
+   > 如果调试 `js` 脚本， 触发断点需要在 `debug` 窗口切换到 `script` 选项卡，右键要调试的脚本，选择 `Open Actual Source`，在新打开的 `Actual Source` 窗口设置好断点后，需要再取消/启用一次所有断点作为激活，发现断点上打上对勾才真正可用了。（未测试）
 
-![](frida使用/2021-09-08-14-56-07.png)
-
-> 如果调试 `js` 脚本， 触发断点需要在 `debug` 窗口切换到 `script` 选项卡，右键要调试的脚本，选择 `Open Actual Source`，在新打开的 `Actual Source` 窗口设置好断点后，需要再取消/启用一次所有断点作为激活，发现断点上打上对勾才真正可用了。（未测试）
-
-> 参考：https://bbs.pediy.com/thread-265160-1.htm
+参考：https://bbs.pediy.com/thread-265160-1.htm
 
 # Frida 使用
 
 ## Frida 启动
 
-### attach 启动
+通过运行 `frida -h` 可以查看 frida 支持的命令。可以发现有两种
+```bash
+$ frida -h
+usage: frida [options] target
+
+positional arguments:
+  args                  extra arguments and/or target
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -D ID, --device ID    connect to device with the given ID
+  -U, --usb             connect to USB device
+  -R, --remote          connect to remote frida-server
+  -H HOST, --host HOST  connect to remote frida-server on HOST
+  --certificate CERTIFICATE
+                        speak TLS with HOST, expecting CERTIFICATE
+  --origin ORIGIN       connect to remote server with “Origin” header set to
+                        ORIGIN
+  --token TOKEN         authenticate with HOST using TOKEN
+  --keepalive-interval INTERVAL
+                        set keepalive interval in seconds, or 0 to disable
+                        (defaults to -1 to auto-select based on transport)
+  --p2p                 establish a peer-to-peer connection with target
+  --stun-server ADDRESS
+                        set STUN server ADDRESS to use with --p2p
+  --relay address,username,password,turn-{udp,tcp,tls}
+                        add relay to use with --p2p
+  -f TARGET, --file TARGET
+                        spawn FILE
+  -F, --attach-frontmost
+                        attach to frontmost application
+  -n NAME, --attach-name NAME
+                        attach to NAME
+  -N IDENTIFIER, --attach-identifier IDENTIFIER
+                        attach to IDENTIFIER
+  -p PID, --attach-pid PID
+                        attach to PID
+  -W PATTERN, --await PATTERN
+                        await spawn matching PATTERN
+  --stdio {inherit,pipe}
+                        stdio behavior when spawning (defaults to “inherit”)
+  --aux option          set aux option when spawning, such as “uid=(int)42”
+                        (supported types are: string, bool, int)
+  --realm {native,emulated}
+                        realm to attach in
+  --runtime {qjs,v8}    script runtime to use
+  --debug               enable the Node.js compatible script debugger
+  --squelch-crash       if enabled, will not dump crash report to console
+  -O FILE, --options-file FILE
+                        text file containing additional command line options
+  --version             show program's version number and exit
+  -l SCRIPT, --load SCRIPT
+                        load SCRIPT
+  -P PARAMETERS_JSON, --parameters PARAMETERS_JSON
+                        parameters as JSON, same as Gadget
+  -C USER_CMODULE, --cmodule USER_CMODULE
+                        load CMODULE
+  --toolchain {any,internal,external}
+                        CModule toolchain to use when compiling from source
+                        code
+  -c CODESHARE_URI, --codeshare CODESHARE_URI
+                        load CODESHARE_URI
+  -e CODE, --eval CODE  evaluate CODE
+  -q                    quiet mode (no prompt) and quit after -l and -e
+  -t TIMEOUT, --timeout TIMEOUT
+                        seconds to wait before terminating in quiet mode
+  --pause               leave main thread paused after spawning program
+  -o LOGFILE, --output LOGFILE
+                        output to log file
+  --eternalize          eternalize the script before exit
+  --exit-on-error       exit with code 1 after encountering any exception in
+                        the SCRIPT
+  --kill-on-exit        kill the spawned program when Frida exits
+  --auto-perform        wrap entered code with Java.perform
+  --auto-reload         Enable auto reload of provided scripts and c module
+                        (on by default, will be required in the future)
+  --no-auto-reload      Disable auto reload of provided scripts and c module
+```
+
+
+
+1. attach 启动
 
 `attach` 到已经存在的进程，核心原理是 `ptrace` 修改进程内存，如果进程处于调试状态（ `traceid` 不等于 `0` ），则 `attach` 失败。启动命令如下：
 
@@ -172,7 +257,7 @@ $ frida -UF --no-pause -l _agent.js
 - `-U` : 连接 USB 设备。
 - `-l` : 加载脚本。
 - `--no-pause` : 启动后自动启动主线程。
-- `-F` : 附加最前面的应用。
+- `-F` : 附加当前运行的应用。
 
 以上命令对应的 `python` 脚本如下：
 
@@ -196,7 +281,7 @@ script.load()
 sys.stdin.read()
 ```
 
-### spawn 启动
+2. spawn 启动
 
 启动一个新的进程并挂起，在启动的同时注入 `frida` 代码，适用于在进程启动前的一些 `hook` ，如 `hook RegisterNative` 等，注入完成后调用 `resume` 恢复进程。启动命令如下：
 

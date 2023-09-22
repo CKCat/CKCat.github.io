@@ -1193,10 +1193,12 @@ int main(){
 	return 0;
 }
 ```
+
 编译运行：
+
 ```bash
 $ gcc 05pthread_atfork.c -lpthread
-$ ./a.out 
+$ ./a.out
 thread started...
 parent about to fork...
 preparing locks...
