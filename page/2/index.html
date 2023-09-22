@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,583 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9510/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9510/" class="post-title-link" itemprop="url">ARMv8学习记录10</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-04 13:23:00" itemprop="dateCreated datePublished" datetime="2023-07-04T13:23:00+00:00">2023-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="虚函数和继承"><a href="#虚函数和继承" class="headerlink" title="虚函数和继承"></a>虚函数和继承</h1><h2 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h2><p>例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> cx;</span><br><span class="line">    <span class="type">int</span> cy;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Point</span>(<span class="type">int</span> x):<span class="built_in">cx</span>(x), <span class="built_in">cy</span>(<span class="number">0</span>)&#123;&#125;;</span><br><span class="line">    ~<span class="built_in">Point</span>()&#123;</span><br><span class="line">        cx = <span class="number">0</span>;</span><br><span class="line">        cy = <span class="number">0</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">setx</span><span class="params">(<span class="type">int</span> cx)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;cx = cx;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">sety</span><span class="params">(<span class="type">int</span> cy)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;cy = cy;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">Point <span class="title">point</span><span class="params">(<span class="number">12</span>)</span></span>;</span><br><span class="line">    point.<span class="built_in">sety</span>(<span class="number">34</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;cx = %d, cy = %d\n&quot;</span>, point.cx, point.cy);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ARMv7"><a href="#ARMv7" class="headerlink" title="ARMv7"></a>ARMv7</h4>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9510/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9509/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9509/" class="post-title-link" itemprop="url">ARMv8学习记录09</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-04 13:22:10" itemprop="dateCreated datePublished" datetime="2023-07-04T13:22:10+00:00">2023-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="构造函数和析构函数"><a href="#构造函数和析构函数" class="headerlink" title="构造函数和析构函数"></a>构造函数和析构函数</h1><h2 id="构造函数和析构函数的出现时机"><a href="#构造函数和析构函数的出现时机" class="headerlink" title="构造函数和析构函数的出现时机"></a>构造函数和析构函数的出现时机</h2><p>在何种情况下,有以下两种情况编译器会提供默认的构造函数。</p>
+<ol>
+<li><p>本类和本类中定义的成员对象或者父类中存在虚函数<br>因为需要初始化虚表，且这个工作理应在构造函数中隐式完成，所以在没有定义构造函数的情况下，编译器会添加默认的构造函数，用于隐式完成虚表的初始化工作。</p>
+</li>
+<li><p>父类或本类中定义的成员对象带有构造函数<br>在对象被定义时，因为对象本身为派生类，所以构造顺序是先构造父类再构造自身。当父类中带有构造函数时，将会调用父类构造函数，而这个调用过程需要在构造函数内完成，因此编译器添加了默认的构造函数来完成这个调用过程。成员对象带有构造函数的情况与此相同。</p>
+</li>
+</ol>
+<p>对象生成时会自动调用构造函数。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9509/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9508/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9508/" class="post-title-link" itemprop="url">ARMv8学习记录08</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-04 13:19:32" itemprop="dateCreated datePublished" datetime="2023-07-04T13:19:32+00:00">2023-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="结构体和类"><a href="#结构体和类" class="headerlink" title="结构体和类"></a>结构体和类</h1><p>在 C++中，结构体和类都具有构造函数、析构函数和成员函数，两者只有一个区别：结构体的访问控制默认为 public，而类的默认访问控制是 private。</p>
+<p>空类：空类中没有任何数据成员，其长度为 1 字节。</p>
+<p>内存对齐：一般情况下，内存对齐的规则是结构体大小可以整除数据成员类型最大值，当类型的最大值大于 8 字节时，对齐值为 8 字节。可以使用预编译指令 <code>#pragma pack(N)</code> 调整对齐大小。</p>
+<p>静态数据成员：虽然静态数据成员是在类中被定义的，但它与局部静态变量类似，存放的位置和全局变量一致。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9508/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9507/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9507/" class="post-title-link" itemprop="url">ARMv8学习记录07</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-04 13:15:30" itemprop="dateCreated datePublished" datetime="2023-07-04T13:15:30+00:00">2023-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>在 windows 上，C++环境下的调用约定有 3 种：<code>__cdecl </code>、<code>__stdcall</code>、<code>__fastcall</code>。这 3 种调用约定的解释如下。</p>
+<ul>
+<li><code>__cdecl</code>：C&#x2F;C++默认的调用方式，调用方平衡栈，不定参数的函数可以使用这种方式。</li>
+<li><code>__stdcall</code>：被调方平衡栈，不定参数的函数无法使用这种方式。</li>
+<li><code>__fastcall</code>：寄存器方式传参，被调方平衡栈，不定参数的函数无法使用这种方式。</li>
+</ul>
+<p>而在 ARM 平台上，使用的是 <a target="_blank" rel="noopener" href="https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst">ARM Procedure Call Standard</a> 或 <a target="_blank" rel="noopener" href="https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst">ARM Procedure Call standard for aarch64</a>，分别规定了 ARM 平台 32 位和 64 位的调用标准。</p>
+<h2 id="ARMv7"><a href="#ARMv7" class="headerlink" title="ARMv7"></a>ARMv7</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9507/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9506/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9506/" class="post-title-link" itemprop="url">ARMv8学习记录06</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-04 13:08:09" itemprop="dateCreated datePublished" datetime="2023-07-04T13:08:09+00:00">2023-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><h2 id="if…else-if…else"><a href="#if…else-if…else" class="headerlink" title="if…else if…else"></a>if…else if…else</h2><p>例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// if.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc &gt; <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argc &gt; 1, argc=%d\n&quot;</span>, argc);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(argc == <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argc == 1, argc=%d\n&quot;</span>, argc);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;argc &lt; 1, argc=%d\n&quot;</span>, argc);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ARMv7"><a href="#ARMv7" class="headerlink" title="ARMv7"></a>ARMv7</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/04/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9506/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/13/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E7%9A%84%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86-%E4%BB%8E%E9%93%9C%E7%BA%BF%E5%88%B0HTTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/04/13/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E7%9A%84%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86-%E4%BB%8E%E9%93%9C%E7%BA%BF%E5%88%B0HTTP/" class="post-title-link" itemprop="url">软件工程师需要了解的网络知识-从铜线到HTTP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-13 17:41:33" itemprop="dateCreated datePublished" datetime="2023-04-13T17:41:33+00:00">2023-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">网络知识</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本文转自 <a target="_blank" rel="noopener" href="https://lvwenhan.com/sort/tech-epic">https://lvwenhan.com/sort/tech-epic</a> 中“软件工程师需要了解的网络知识：从铜线到 HTTP”的一系列文章。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="写作目标"><a href="#写作目标" class="headerlink" title="写作目标"></a>写作目标</h2><p>本文面向中国互联网界众多的“应用软件工程师”，确切地说，面向 web 后端工程师（Java、PHP），web 前端工程师，移动开发工程师（iOS、Android）。本文将从铜线讲起，一路讲到 HTTP，为大家剖析出一个真实的“网络”。</p>
+<h2 id="写作由来"><a href="#写作由来" class="headerlink" title="写作由来"></a>写作由来</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/13/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E7%9A%84%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86-%E4%BB%8E%E9%93%9C%E7%BA%BF%E5%88%B0HTTP/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -228,7 +805,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -312,7 +889,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -396,7 +973,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -493,7 +1070,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -515,653 +1092,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="高级-I-x2F-O"><a href="#高级-I-x2F-O" class="headerlink" title="高级 I&#x2F;O"></a>高级 I&#x2F;O</h1><h2 id="非阻塞-I-x2F-O"><a href="#非阻塞-I-x2F-O" class="headerlink" title="非阻塞 I&#x2F;O"></a>非阻塞 I&#x2F;O</h2><p>非阻塞 I&#x2F;O 使我们可以发出 open、read 和 write 这样的 I&#x2F;O 操作，并使这些操作不会永远阻塞。如果这种操作不能完成，则调用立即出错返回，表示该操作如继续执行将阻塞。</p>
-<p>对于一个给定的描述符，有两种为其指定非阻塞 I&#x2F;O 的方法。</p>
+          <h2 id="非阻塞-I-O"><a href="#非阻塞-I-O" class="headerlink" title="非阻塞 I/O"></a>非阻塞 <code>I/O</code></h2><p>非阻塞 <code>I/O</code> 使我们可以发出 <code>open</code>、<code>read</code> 和 <code>write</code> 这样的 <code>I/O</code> 操作，并使这些操作不会永远阻塞。如果这种操作不能完成，则调用立即出错返回，表示该操作如继续执行将阻塞。</p>
+<p>对于一个给定的描述符，有两种为其指定非阻塞 <code>I/O</code> 的方法。</p>
 <ol>
-<li>如果调用 open 获得描述符，则可指定 O_NONBLOCK 标志。</li>
-<li>对于已经打开的一个描述符，则可调用 fcntl，由该函数打开 O_NONBLOCK 文件状态标志。</li>
+<li>如果调用 <code>open</code> 获得描述符，则可指定 <code>O_NONBLOCK</code> 标志。</li>
+<li>对于已经打开的一个描述符，则可调用 <code>fcntl</code>，由该函数打开 <code>O_NONBLOCK</code> 文件状态标志。</li>
 </ol>
+<p><code>POSIX.1</code> 要求，对于一个非阻塞的描述符如果无数据可读，则 <code>read</code> 返回 −1，<code>errno</code> 被设置为 <code>EAGAIN</code>。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B14-%E9%AB%98%E7%BA%A7IO/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" class="post-title-link" itemprop="url">unix环境高级编程13-守护进程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:22:51" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:51+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h1><p>守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关闭时才终止。因为它们没有控制终端，所以说它们是在后台运行的。UNIX 系统有很多守护进程，它们执行日常事务活动。</p>
-<h2 id="守护进程的特征"><a href="#守护进程的特征" class="headerlink" title="守护进程的特征"></a>守护进程的特征</h2><p>使用下列命令查看系统中各个进程的状态。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ ps -axj</span><br><span class="line">  PPID    PID   PGID    SID TTY       TPGID STAT   UID   TIME COMMAND</span><br><span class="line">     0      1      1      1 ?            -1 Ss       0   0:06 /sbin/init auto automatic-ubiquity noprompt</span><br><span class="line">     0      2      0      0 ?            -1 S        0   0:00 [kthreadd]</span><br><span class="line">     2      4      0      0 ?            -1 I&lt;       0   0:00 [kworker/0:0H]</span><br><span class="line">     2      6      0      0 ?            -1 I&lt;       0   0:00 [mm_percpu_wq]</span><br><span class="line">     2      7      0      0 ?            -1 S        0   0:00 [ksoftirqd/0]</span><br><span class="line">     2      8      0      0 ?            -1 I        0   3:16 [rcu_sched]</span><br><span class="line">     2      9      0      0 ?            -1 I        0   0:00 [rcu_bh]</span><br><span class="line">     2     10      0      0 ?            -1 S        0   0:00 [migration/0]</span><br><span class="line">     2     11      0      0 ?            -1 S        0   0:00 [watchdog/0]</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B12-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B12-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">unix环境高级编程12-线程控制</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:22:37" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:37+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="线程限制"><a href="#线程限制" class="headerlink" title="线程限制"></a>线程限制</h2><p>线程限制和 <code>sysconf</code> 的 name 参数</p>
-<table>
-<thead>
-<tr>
-<th>限制名称</th>
-<th>描述</th>
-<th>name 参数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>PTHREAD_DESTRUCTOR_ITERATIONS</code></td>
-<td>线程退出时操作系统实现试图销毁线程特定数据的最大次数</td>
-<td><code>_SC_THREAD_DESTRUCTOR_ITERATIONS</code></td>
-</tr>
-<tr>
-<td><code>PTHREAD_KEYS_MAX</code></td>
-<td>进程可以创建的键的最大数目</td>
-<td><code>_SC_THREAD_KEYS_MAX</code></td>
-</tr>
-<tr>
-<td><code>PTHREAD_STACK_MIN</code></td>
-<td>一个线程的栈可用的最小字节数</td>
-<td><code>_SC_THREAD_STACK_MIN</code></td>
-</tr>
-<tr>
-<td><code>PTHREAD_THREADS_MAX</code></td>
-<td>进程可以创建的最大线程数</td>
-<td><code>_SC_THREAD_THREADS_MAX</code></td>
-</tr>
-</tbody></table>
-<p>线程配置限制的实例</p>
-<table>
-<thead>
-<tr>
-<th>限制名称</th>
-<th>FreeBSD 8.0</th>
-<th>Linux 3.2.0</th>
-<th>Mac OS X 10.6.8</th>
-<th>Solaris 10</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>PTHREAD_DESTRUCTOR_ITERATIONS</code></td>
-<td>4</td>
-<td>4</td>
-<td>4</td>
-<td>没有确定的限制</td>
-</tr>
-<tr>
-<td><code>PTHREAD_KEYS_MAX</code></td>
-<td>256</td>
-<td>1024</td>
-<td>512</td>
-<td>没有确定的限制</td>
-</tr>
-<tr>
-<td><code>PTHREAD_STACK_MIN</code></td>
-<td>2048</td>
-<td>16384</td>
-<td>8192</td>
-<td>8192</td>
-</tr>
-<tr>
-<td><code>PTHREAD_THREADS_MAX</code></td>
-<td>没有确定的限制</td>
-<td>没有确定的限制</td>
-<td>没有确定的限制</td>
-<td>没有确定的限制</td>
-</tr>
-</tbody></table>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B12-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B11-%E7%BA%BF%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B11-%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">unix环境高级编程11-线程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:22:18" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:18+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h2><p>每个线程都包含有表示执行环境所必需的信息，其中包括进程中标识线程的线程 ID、一组寄存器值、栈、调度优先级和策略、信号屏蔽字、<code>errno</code> 变量以及线程私有数据。<strong>一个进程的所有信息对该进程的所有线程都是共享的，包括可执行程序的代码、程序的全局内存和堆内存、栈以及文件描述符。</strong></p>
-<h2 id="线程标识"><a href="#线程标识" class="headerlink" title="线程标识"></a>线程标识</h2><p>就像每个进程有一个进程 ID 一样，每个线程也有一个线程 ID。线程 ID 是用 <code>pthread_t</code> 数据类型来表示的，实现的时候可以用一个结构来代表 <code>pthread_t</code> 数据类型，所以可移植的操作系统实现不能把它作为整数处理。因此必须使用一个函数 <code>pthread_equal</code> 来对两个线程 ID 进行比较。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_equal</span><span class="params">(<span class="type">pthread_t</span> tid1, <span class="type">pthread_t</span> tid2)</span>;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B11-%E7%BA%BF%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/" class="post-title-link" itemprop="url">unix环境高级编程10-信号</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:22:08" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:08+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="信号概念"><a href="#信号概念" class="headerlink" title="信号概念"></a>信号概念</h2><ul>
-<li>信号是软件中断。</li>
-<li>很多比较重要的应用程序都需处理信号。</li>
-<li>信号提供了一种处理异步事件的方法。</li>
-<li><code>POSIX.1</code> 对可靠信号例程进行了标准化。</li>
-</ul>
-<p>每个信号都有一个名字，这些名字都以 3 个字符 <code>SIG</code> 开头。在头文件 <code>&lt;signal.h&gt;</code> 中，<strong>信号名都被定义为正整数常量。</strong></p>
-<p>信号的实现定义在另一个头文件中，内核包括对用户级应用程序有意义的头文件，这被认为是一种不好的形式，所以如若应用程序和内核两者都需使用同一定义，那么就将有关信息放置在内核头文件中，然后用户级头文件再包括该内核头文件。</p>
-<p>不存在编号为 0 的信号，<code>POSIX.1</code> 将此种信号编号值称为空信号，<code>kill</code> 函数对信号编号 0 有特殊的应用。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">unix环境高级编程09-进程关系</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:21:51" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:51+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="终端登录"><a href="#终端登录" class="headerlink" title="终端登录"></a>终端登录</h2><p>在早期的 UNIX 系统中，用户用哑终端（用硬连接连到主机）进行登录。终端或者是本地的或者是远程的。在这两种情况下，登录都经由内核中的终端设备驱动程序。</p>
-<h3 id="BSD-终端登录"><a href="#BSD-终端登录" class="headerlink" title="BSD 终端登录"></a>BSD 终端登录</h3><p><code>init</code> 进程读取文件 <code>/etc/ttys</code>，对每一个允许登录的终端设备，<code>init</code> 调用一次 <code>fork</code>，它所生成的子进程则 <code>exec getty</code> 程序。</p>
-<p><code>getty</code> 对终端设备调用 <code>open</code> 函数，以读、写方式将端打开。一旦设备被打开，则文件描述符 0、1、2 就被设置到该设备。然后 <code>getty</code> 输出“login:”之类的信息，并等待用户键入用户名。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">unix环境高级编程08-进程控制</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:21:38" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:38+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="进程标识"><a href="#进程标识" class="headerlink" title="进程标识"></a>进程标识</h2><p>每个进程都有一个非负整型表示的唯一进程 ID。因为进程 ID 标识符总是唯一的，常将其用作其他标识符的一部分以保证其唯一性。</p>
-<p>ID 为 0 的进程通常是调度进程，常常被称为交换进程（swapper）。该进程是内核的一部分，它并不执行任何磁盘上的程序，因此也被称为系统进程。</p>
-<p>ID 为 1 的进程通常是 <code>init</code> 进程，在自举过程结束时由内核调用。该进程的程序文件在 UNIX 的早期版本中是 <code>/etc/init</code>，在较新版本中是 <code>/sbin/init</code>。<code>init</code> 进程不会终止。</p>
-<p>除了进程 ID，每个进程还有一些其他标识符。下列函数返回这些标识符。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

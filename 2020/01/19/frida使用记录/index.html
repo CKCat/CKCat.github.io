@@ -20,34 +20,34 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida   官网：https:&#x2F;&#x2F;frida.re&#x2F;  环境配置安装 Frida在安装 Frida 之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰">
+    <meta name="description" content="Frida 源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida Frida 官网：https:&#x2F;&#x2F;frida.re&#x2F; 环境配置安装 Frida在安装 Frida 之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰">
 <meta property="og:type" content="article">
 <meta property="og:title" content="frida环境配置">
-<meta property="og:url" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:url" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida   官网：https:&#x2F;&#x2F;frida.re&#x2F;  环境配置安装 Frida在安装 Frida 之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰">
+<meta property="og:description" content="Frida 源码地址：https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida Frida 官网：https:&#x2F;&#x2F;frida.re&#x2F; 环境配置安装 Frida在安装 Frida 之前最好创建一个 python 虚拟环境，这样可以避免与其他环境产生干扰">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2020-01-19-16-20-36.png">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-02-16-47-25.png">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2020-01-19-16-31-30.png">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2020-01-19-16-50-57.png">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-07-17-53-36.png">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-07-17-56-47.png">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-08-14-51-43.png">
-<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-08-14-56-07.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-19-16-20-36.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-02-16-47-25.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-19-16-31-30.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-19-16-50-57.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-07-17-53-36.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-07-17-56-47.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-08-14-51-43.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-08-14-56-07.png">
 <meta property="article:published_time" content="2020-01-19T16:10:09.000Z">
-<meta property="article:modified_time" content="2023-09-19T14:03:10.425Z">
+<meta property="article:modified_time" content="2023-09-22T12:30:02.359Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="frida">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/2020-01-19-16-20-36.png">
+<meta name="twitter:image" content="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-19-16-20-36.png">
 
 
-<link rel="canonical" href="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/">
+<link rel="canonical" href="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/","path":"2020/01/19/frida使用/","title":"frida环境配置"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/","path":"2020/01/19/frida使用记录/","title":"frida环境配置"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>frida环境配置 | CKCat的博客</title>
@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Frida"><span class="nav-number">1.1.</span> <span class="nav-text">安装 Frida</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="nav-number">1.2.</span> <span class="nav-text">配置开发环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8-frida-gum-d-ts"><span class="nav-number">1.2.1.</span> <span class="nav-text">引用 frida-gum.d.ts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-TypeScript"><span class="nav-number">1.2.2.</span> <span class="nav-text">使用 TypeScript</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="nav-number">1.3.</span> <span class="nav-text">配置调试环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#chome"><span class="nav-number">1.3.1.</span> <span class="nav-text">chome</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pycharm"><span class="nav-number">1.3.2.</span> <span class="nav-text">pycharm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Frida 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-%E5%90%AF%E5%8A%A8"><span class="nav-number">2.1.</span> <span class="nav-text">Frida 启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#attach-%E5%90%AF%E5%8A%A8"><span class="nav-number">2.1.1.</span> <span class="nav-text">attach 启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#spawn-%E5%90%AF%E5%8A%A8"><span class="nav-number">2.1.2.</span> <span class="nav-text">spawn 启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AB%AF%E5%8F%A3"><span class="nav-number">2.2.</span> <span class="nav-text">Frida 自定义端口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-Hook-Java"><span class="nav-number">3.</span> <span class="nav-text">Frida Hook Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-perform"><span class="nav-number">3.1.1.</span> <span class="nav-text">Java.perform</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-choose"><span class="nav-number">3.1.2.</span> <span class="nav-text">Java.choose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-available"><span class="nav-number">3.1.3.</span> <span class="nav-text">Java.available</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-enumerateLoadedClasses"><span class="nav-number">3.1.4.</span> <span class="nav-text">Java.enumerateLoadedClasses</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-enumerateClassLoaders"><span class="nav-number">3.1.5.</span> <span class="nav-text">Java.enumerateClassLoaders</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-registerClass"><span class="nav-number">3.1.6.</span> <span class="nav-text">Java.registerClass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-use"><span class="nav-number">3.1.7.</span> <span class="nav-text">Java.use</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-array"><span class="nav-number">3.1.8.</span> <span class="nav-text">Java.array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-cast"><span class="nav-number">3.1.9.</span> <span class="nav-text">Java.cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-%E4%B8%AD%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="nav-number">3.1.10.</span> <span class="nav-text">Frida 中数据类型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E8%B0%83%E7%94%A8"><span class="nav-number">3.1.11.</span> <span class="nav-text">反射调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.1.12.</span> <span class="nav-text">实例化对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hook-%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">Hook 操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hook-%E6%99%AE%E9%80%9A%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.1.</span> <span class="nav-text">hook 普通方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E9%87%8D%E8%BD%BD%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.2.</span> <span class="nav-text">Hook 重载方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.3.</span> <span class="nav-text">Hook 构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F"><span class="nav-number">3.2.4.</span> <span class="nav-text">Hook 成员变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">3.2.5.</span> <span class="nav-text">Hook 内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%8C%BF%E5%90%8D%E7%B1%BB"><span class="nav-number">3.2.6.</span> <span class="nav-text">Hook 匿名类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%8F%82%E6%95%B0%E4%B8%BA%E6%95%B0%E7%BB%84%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.7.</span> <span class="nav-text">Hook 参数为数组的方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E8%B0%83%E7%94%A8%E6%A0%88"><span class="nav-number">3.3.1.</span> <span class="nav-text">打印调用栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%8C%87%E5%AE%9A%E7%B1%BB%E7%9A%84%E6%89%80%E6%9C%89%E6%96%B9%E6%B3%95"><span class="nav-number">3.3.2.</span> <span class="nav-text">Hook 指定类的所有方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E7%9A%84-dex"><span class="nav-number">3.3.3.</span> <span class="nav-text">Hook 动态加载的 dex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%89%93%E5%8D%B0-non-ascii-%E5%92%8C%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="nav-number">3.3.4.</span> <span class="nav-text">Hook 打印 non-ascii 和特殊字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-ups-2015"><span class="nav-number">3.3.5.</span> <span class="nav-text">write-ups-2015</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-Hook-so"><span class="nav-number">4.</span> <span class="nav-text">Frida Hook so</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-1"><span class="nav-number">4.1.</span> <span class="nav-text">常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Process-enumerateModules"><span class="nav-number">4.1.1.</span> <span class="nav-text">Process.enumerateModules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Module-findBaseAddress"><span class="nav-number">4.1.2.</span> <span class="nav-text">Module.findBaseAddress</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Module-findExportByName"><span class="nav-number">4.1.3.</span> <span class="nav-text">Module.findExportByName</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">4.1.4.</span> <span class="nav-text"></span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5"><span class="nav-number">5.</span> <span class="nav-text">Frida 代码片段</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Frida"><span class="nav-number">1.1.</span> <span class="nav-text">安装 Frida</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="nav-number">1.2.</span> <span class="nav-text">配置开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="nav-number">1.3.</span> <span class="nav-text">配置调试环境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Frida 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-%E5%90%AF%E5%8A%A8"><span class="nav-number">2.1.</span> <span class="nav-text">Frida 启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AB%AF%E5%8F%A3"><span class="nav-number">2.2.</span> <span class="nav-text">Frida 自定义端口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-Hook-Java"><span class="nav-number">3.</span> <span class="nav-text">Frida Hook Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-perform"><span class="nav-number">3.1.1.</span> <span class="nav-text">Java.perform</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-choose"><span class="nav-number">3.1.2.</span> <span class="nav-text">Java.choose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-available"><span class="nav-number">3.1.3.</span> <span class="nav-text">Java.available</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-enumerateLoadedClasses"><span class="nav-number">3.1.4.</span> <span class="nav-text">Java.enumerateLoadedClasses</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-enumerateClassLoaders"><span class="nav-number">3.1.5.</span> <span class="nav-text">Java.enumerateClassLoaders</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-registerClass"><span class="nav-number">3.1.6.</span> <span class="nav-text">Java.registerClass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-use"><span class="nav-number">3.1.7.</span> <span class="nav-text">Java.use</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-array"><span class="nav-number">3.1.8.</span> <span class="nav-text">Java.array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-cast"><span class="nav-number">3.1.9.</span> <span class="nav-text">Java.cast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida-%E4%B8%AD%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="nav-number">3.1.10.</span> <span class="nav-text">Frida 中数据类型定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E8%B0%83%E7%94%A8"><span class="nav-number">3.1.11.</span> <span class="nav-text">反射调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.1.12.</span> <span class="nav-text">实例化对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hook-%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">Hook 操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hook-%E6%99%AE%E9%80%9A%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.1.</span> <span class="nav-text">hook 普通方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E9%87%8D%E8%BD%BD%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.2.</span> <span class="nav-text">Hook 重载方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.3.</span> <span class="nav-text">Hook 构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F"><span class="nav-number">3.2.4.</span> <span class="nav-text">Hook 成员变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">3.2.5.</span> <span class="nav-text">Hook 内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%8C%BF%E5%90%8D%E7%B1%BB"><span class="nav-number">3.2.6.</span> <span class="nav-text">Hook 匿名类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%8F%82%E6%95%B0%E4%B8%BA%E6%95%B0%E7%BB%84%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.7.</span> <span class="nav-text">Hook 参数为数组的方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E8%B0%83%E7%94%A8%E6%A0%88"><span class="nav-number">3.3.1.</span> <span class="nav-text">打印调用栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%8C%87%E5%AE%9A%E7%B1%BB%E7%9A%84%E6%89%80%E6%9C%89%E6%96%B9%E6%B3%95"><span class="nav-number">3.3.2.</span> <span class="nav-text">Hook 指定类的所有方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E7%9A%84-dex"><span class="nav-number">3.3.3.</span> <span class="nav-text">Hook 动态加载的 dex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook-%E6%89%93%E5%8D%B0-non-ascii-%E5%92%8C%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6"><span class="nav-number">3.3.4.</span> <span class="nav-text">Hook 打印 non-ascii 和特殊字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write-ups-2015"><span class="nav-number">3.3.5.</span> <span class="nav-text">write-ups-2015</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-Hook-so"><span class="nav-number">4.</span> <span class="nav-text">Frida Hook so</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-1"><span class="nav-number">4.1.</span> <span class="nav-text">常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Process-enumerateModules"><span class="nav-number">4.1.1.</span> <span class="nav-text">Process.enumerateModules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Module-findBaseAddress"><span class="nav-number">4.1.2.</span> <span class="nav-text">Module.findBaseAddress</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Module-findExportByName"><span class="nav-number">4.1.3.</span> <span class="nav-text">Module.findExportByName</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">4.1.4.</span> <span class="nav-text"></span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Frida-%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5"><span class="nav-number">5.</span> <span class="nav-text">Frida 代码片段</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -162,18 +162,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,7 +208,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -244,7 +244,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -273,102 +273,118 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <blockquote>
-<p>源码地址：<a target="_blank" rel="noopener" href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
-</blockquote>
-<blockquote>
-<p>官网：<a target="_blank" rel="noopener" href="https://frida.re/">https://frida.re/</a></p>
-</blockquote>
+        <p>Frida 源码地址：<a target="_blank" rel="noopener" href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
+<p>Frida 官网：<a target="_blank" rel="noopener" href="https://frida.re/">https://frida.re/</a></p>
 <h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><h2 id="安装-Frida"><a href="#安装-Frida" class="headerlink" title="安装 Frida"></a>安装 Frida</h2><p>在安装 <code>Frida</code> 之前最好创建一个 <code>python</code> 虚拟环境，这样可以避免与其他环境产生干扰</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkvirtualenv -p python3 frida_12.8.7</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkvirtualenv -p python3 frida_12.8.7    <span class="comment"># pyenv 创建虚拟环境</span></span><br><span class="line">$ conda create -n frida_12.8.7 python=3.9 <span class="comment"># miniconda 创建虚拟环境</span></span><br></pre></td></tr></table></figure>
 
-<blockquote>
-<p>这里使用 <code>pyenv</code> 创建虚拟环境更方便。目前我使用 <code>miniconda</code> 。</p>
-</blockquote>
-<p><strong>安装最新版</strong></p>
+<p>上面有两种方式创建虚拟环境，推荐使用 miniconda，接下来就可以安装 <a target="_blank" rel="noopener" href="https://github.com/frida/frida">Frida</a> 了。</p>
+<ol>
+<li><p>安装最新版 Frida</p>
 <p>进入虚拟环境，直接运行下来命令即可安装完成</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install frida-tools # CLI tools</span><br><span class="line">pip install frida       # Python bindings</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda activate frida_12.8.7</span><br><span class="line">$ pip install frida-tools <span class="comment"># CLI tools</span></span><br><span class="line">$ pip install frida       <span class="comment"># Python bindings</span></span><br></pre></td></tr></table></figure>
 
 <p>安装完成后，运行 <code>frida --version</code> 查看 frida 的版本</p>
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2020-01-19-16-20-36.png" class="">
-
-<p><strong>安装特定版 Frida</strong></p>
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-19-16-20-36.png" class="">
+</li>
+<li><p>安装特定版本的 Frida</p>
 <p>通过 <a target="_blank" rel="noopener" href="https://github.com/frida/frida/releases">Frida Releases</a> 页面找到需要安装的 <code>frida-tools</code> 版本，使用 <code>pip</code> 指定版本安装，这里以 <code>Frida 12.11.18</code> 为例。</p>
 <p>首先找到 <code>frida-tools</code> 版本。</p>
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-02-16-47-25.png" class="">
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-02-16-47-25.png" class="">
 
 <p>然后使用 <code>pip</code> 安装对应的版本，下面为完整安装命令。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install frida==12.11.18</span><br><span class="line">pip install frida-tools==8.2.0</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pip install frida==12.11.18</span><br><span class="line">$ pip install frida-tools==8.2.0</span><br></pre></td></tr></table></figure></li>
+</ol>
 <p>安装完成后，根据 <code>Frida</code> 的版本去<a target="_blank" rel="noopener" href="https://github.com/frida/frida/releases">下载</a>对应的 <code>frida-server</code>。</p>
 <p>最后将 <code>frida-server push</code> 进 <code>data/local/tmp</code> 目录，并给予其运行权限，使用 <code>root</code> 用户启动。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ adb push frida-server data/local/tmp/</span><br><span class="line">$ adb shell</span><br><span class="line">sailfish:/ $ su</span><br><span class="line">sailfish:/ # chmod +x data/local/tmp/frida-server</span><br><span class="line">sailfish:/ # data/local/tmp//frida-server &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ adb push frida-server data/local/tmp/</span><br><span class="line">$ adb shell</span><br><span class="line">sailfish:/ $ su</span><br><span class="line">sailfish:/ <span class="comment"># chmod +x data/local/tmp/frida-server</span></span><br><span class="line">sailfish:/ <span class="comment"># data/local/tmp//frida-server &amp;</span></span><br></pre></td></tr></table></figure>
 
 <p>执行 <code>frida-ps -U</code> ,出现以下信息则表明安装成功。</p>
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2020-01-19-16-31-30.png" class="">
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-19-16-31-30.png" class="">
 
+<p>如果遇到分析的样本有反调试，可以试试下面的 frida-server 版本：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Ylarod/Florida/releases">https://github.com/Ylarod/Florida/releases</a></p>
 <h2 id="配置开发环境"><a href="#配置开发环境" class="headerlink" title="配置开发环境"></a>配置开发环境</h2><p>为了在开发 Frida 脚本时有代码补全提示，我们可以使用下面两种方式进行环境配置。</p>
-<h3 id="引用-frida-gum-d-ts"><a href="#引用-frida-gum-d-ts" class="headerlink" title="引用 frida-gum.d.ts"></a>引用 <code>frida-gum.d.ts</code></h3><p>在 <code>Frida</code> 源码中获取 <a target="_blank" rel="noopener" href="https://github.com/frida/frida-gum/tree/6e36eebe1aad51c37329242cf07ac169fc4a62c4/bindings/gumjs/types/frida-gum">frida-gum.d.ts</a> 文件，该文件包含了所有的 API 。</p>
-<p>在我们开发的 <code>js</code> 脚本首行中引用 <code>frida-gum.d.ts</code> 文件，即可实现代码补全提示。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`///&lt;reference path=&#x27;./frida-gum.d.ts&#x27;/&gt;`</span><br></pre></td></tr></table></figure>
-
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2020-01-19-16-50-57.png" class="">
-
-<p>其他方式获取 <code>frida-gum.d.ts</code> 文件：</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/@types/frida-gum">https://www.npmjs.com/package/@types/frida-gum</a></p>
-</blockquote>
-<h3 id="使用-TypeScript"><a href="#使用-TypeScript" class="headerlink" title="使用 TypeScript"></a>使用 <code>TypeScript</code></h3><p>使用 <code>Frida</code> 作者提供的开发环境 <a target="_blank" rel="noopener" href="https://github.com/oleavr/frida-agent-example">frida-agent-example</a> ，该环境需要使用 <code>TypeScript</code> 开发。</p>
+<ol>
+<li><p>使用 <code>TypeScript</code>（推荐）</p>
+<p>使用 <code>Frida</code> 作者提供的开发环境 <a target="_blank" rel="noopener" href="https://github.com/oleavr/frida-agent-example">frida-agent-example</a> ，该环境需要使用 <code>TypeScript</code> 开发。</p>
 <p>构建开发环境</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git://github.com/oleavr/frida-agent-example.git</span><br><span class="line">$ <span class="built_in">cd</span> frida-agent-example/</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/oleavr/frida-agent-example.git</span><br><span class="line">$ <span class="built_in">cd</span> frida-agent-example/</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
 
 <p>启用实时编译</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm run watch</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">$ frida-compile agent/index.ts -o _agent.js -w</span><br></pre></td></tr></table></figure>
 
 <p>后续直接使用 <code>index.ts</code> 开发即可实现代码补全提示。</p>
+</li>
+<li><p>引用 <code>frida-gum.d.ts</code></p>
+<p>在 <code>Frida</code> 源码中获取 <a target="_blank" rel="noopener" href="https://github.com/frida/frida-gum/tree/6e36eebe1aad51c37329242cf07ac169fc4a62c4/bindings/gumjs/types/frida-gum">frida-gum.d.ts</a> 文件，该文件包含了所有的 API 。</p>
+<p>在我们开发的 <code>js</code> 脚本首行中引用 <code>frida-gum.d.ts</code> 文件，即可实现代码补全提示。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">`///&lt;reference path=&#x27;./frida-gum.d.ts&#x27;/&gt;`</span>;</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-19-16-50-57.png" class="">
+
+<p>其他方式获取 <code>frida-gum.d.ts</code> 文件：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/@types/frida-gum">https://www.npmjs.com/package/@types/frida-gum</a></p>
+</blockquote>
+</li>
+</ol>
 <h2 id="配置调试环境"><a href="#配置调试环境" class="headerlink" title="配置调试环境"></a>配置调试环境</h2><p>这里主要使用 <code>chrome</code> 和 <code>pycharm</code> 两种方式进行调试。</p>
 <p>首先使用 <code>Frida</code> 命令或者 <code>python</code> 脚本以调试模式加载 <code>js</code> 脚本。</p>
-<p>Frida 命令:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frida -U com.example.android -l _agent.js --debug --runtime=v8 &lt;port/name&gt;</span><br></pre></td></tr></table></figure>
-
-<p>python 脚本:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">session = dev.attach(app.pid)</span><br><span class="line">script = session.create_script(jscode, runtime=<span class="string">&quot;v8&quot;</span>)</span><br><span class="line">session.enable_debugger()</span><br></pre></td></tr></table></figure>
-
-<p>启动后会回显 <code>Inspector</code> 正在监听 <code>9229</code> 默认端口 。</p>
-<h3 id="chome"><a href="#chome" class="headerlink" title="chome"></a>chome</h3><p>打开 <code>chrome://inspect</code> 页面, 点击 <code>Open dedicated DevTools for Node</code> 。</p>
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-07-17-53-36.png" class="">
+<ol>
+<li><p>Frida 命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ frida -U com.example.android -l _agent.js --debug --runtime=v8 &lt;port/name&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>python 脚本:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">session = dev.attach(app.pid)</span><br><span class="line">script = session.create_script(jscode, runtime=<span class="string">&quot;v8&quot;</span>)</span><br><span class="line">session.enable_debugger()</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>启动后会回显 <code>Inspector</code> 正在监听 <code>9229</code> 默认端口，下面就可以使用 chome 或 pycharm 进行调试了。</p>
+<ol>
+<li><p>chome<br>打开 <code>chrome://inspect</code> 页面, 点击 <code>Open dedicated DevTools for Node</code> 。</p>
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-07-17-53-36.png" class="">
 
 <p>此时 <code>debug</code> 已经连接，切换至 <code>Sources</code> ，按 <code>Command + P</code> 加载要调试的脚本，即可下断调试了。</p>
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-07-17-56-47.png" class="">
-
-<h3 id="pycharm"><a href="#pycharm" class="headerlink" title="pycharm"></a>pycharm</h3><p>首先安装 <code>Node.js</code> 插件，重启。然后添加调试器 <code>Attaching to Node.js/Chrome</code>，端口默认即可。</p>
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-08-14-51-43.png" class="">
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-07-17-56-47.png" class="">
+</li>
+<li><p>pycharm<br>首先安装 <code>Node.js</code> 插件，重启。然后添加调试器 <code>Attaching to Node.js/Chrome</code>，端口默认即可。</p>
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-08-14-51-43.png" class="">
 
 <blockquote>
 <p>我这里使用的 <code>node</code> 版本为 12.21.0 。</p>
 </blockquote>
 <p>在 <code>ts</code> 文件中设置好断点，执行 pycharm 调试功能即可。</p>
-<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8/2021-09-08-14-56-07.png" class="">
+<img src="/2020/01/19/frida%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2021-09-08-14-56-07.png" class="">
 
 <blockquote>
 <p>如果调试 <code>js</code> 脚本， 触发断点需要在 <code>debug</code> 窗口切换到 <code>script</code> 选项卡，右键要调试的脚本，选择 <code>Open Actual Source</code>，在新打开的 <code>Actual Source</code> 窗口设置好断点后，需要再取消&#x2F;启用一次所有断点作为激活，发现断点上打上对勾才真正可用了。（未测试）</p>
 </blockquote>
-<blockquote>
+</li>
+</ol>
 <p>参考：<a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-265160-1.htm">https://bbs.pediy.com/thread-265160-1.htm</a></p>
-</blockquote>
-<h1 id="Frida-使用"><a href="#Frida-使用" class="headerlink" title="Frida 使用"></a>Frida 使用</h1><h2 id="Frida-启动"><a href="#Frida-启动" class="headerlink" title="Frida 启动"></a>Frida 启动</h2><h3 id="attach-启动"><a href="#attach-启动" class="headerlink" title="attach 启动"></a>attach 启动</h3><p><code>attach</code> 到已经存在的进程，核心原理是 <code>ptrace</code> 修改进程内存，如果进程处于调试状态（ <code>traceid</code> 不等于 <code>0</code> ），则 <code>attach</code> 失败。启动命令如下：</p>
+<h1 id="Frida-使用"><a href="#Frida-使用" class="headerlink" title="Frida 使用"></a>Frida 使用</h1><h2 id="Frida-启动"><a href="#Frida-启动" class="headerlink" title="Frida 启动"></a>Frida 启动</h2><p>通过运行 <code>frida -h</code> 可以查看 frida 支持的命令。可以发现有两种</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">$ frida -h</span><br><span class="line">usage: frida [options] target</span><br><span class="line"></span><br><span class="line">positional arguments:</span><br><span class="line">  args                  extra arguments and/or target</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --<span class="built_in">help</span>            show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">  -D ID, --device ID    connect to device with the given ID</span><br><span class="line">  -U, --usb             connect to USB device</span><br><span class="line">  -R, --remote          connect to remote frida-server</span><br><span class="line">  -H HOST, --host HOST  connect to remote frida-server on HOST</span><br><span class="line">  --certificate CERTIFICATE</span><br><span class="line">                        speak TLS with HOST, expecting CERTIFICATE</span><br><span class="line">  --origin ORIGIN       connect to remote server with “Origin” header <span class="built_in">set</span> to</span><br><span class="line">                        ORIGIN</span><br><span class="line">  --token TOKEN         authenticate with HOST using TOKEN</span><br><span class="line">  --keepalive-interval INTERVAL</span><br><span class="line">                        <span class="built_in">set</span> keepalive interval <span class="keyword">in</span> seconds, or 0 to <span class="built_in">disable</span></span><br><span class="line">                        (defaults to -1 to auto-select based on transport)</span><br><span class="line">  --p2p                 establish a peer-to-peer connection with target</span><br><span class="line">  --stun-server ADDRESS</span><br><span class="line">                        <span class="built_in">set</span> STUN server ADDRESS to use with --p2p</span><br><span class="line">  --relay address,username,password,turn-&#123;udp,tcp,tls&#125;</span><br><span class="line">                        add relay to use with --p2p</span><br><span class="line">  -f TARGET, --file TARGET</span><br><span class="line">                        spawn FILE</span><br><span class="line">  -F, --attach-frontmost</span><br><span class="line">                        attach to frontmost application</span><br><span class="line">  -n NAME, --attach-name NAME</span><br><span class="line">                        attach to NAME</span><br><span class="line">  -N IDENTIFIER, --attach-identifier IDENTIFIER</span><br><span class="line">                        attach to IDENTIFIER</span><br><span class="line">  -p PID, --attach-pid PID</span><br><span class="line">                        attach to PID</span><br><span class="line">  -W PATTERN, --await PATTERN</span><br><span class="line">                        await spawn matching PATTERN</span><br><span class="line">  --stdio &#123;inherit,pipe&#125;</span><br><span class="line">                        stdio behavior when spawning (defaults to “inherit”)</span><br><span class="line">  --aux option          <span class="built_in">set</span> aux option when spawning, such as “uid=(int)42”</span><br><span class="line">                        (supported types are: string, bool, int)</span><br><span class="line">  --realm &#123;native,emulated&#125;</span><br><span class="line">                        realm to attach <span class="keyword">in</span></span><br><span class="line">  --runtime &#123;qjs,v8&#125;    script runtime to use</span><br><span class="line">  --debug               <span class="built_in">enable</span> the Node.js compatible script debugger</span><br><span class="line">  --squelch-crash       <span class="keyword">if</span> enabled, will not dump crash report to console</span><br><span class="line">  -O FILE, --options-file FILE</span><br><span class="line">                        text file containing additional <span class="built_in">command</span> line options</span><br><span class="line">  --version             show program<span class="string">&#x27;s version number and exit</span></span><br><span class="line"><span class="string">  -l SCRIPT, --load SCRIPT</span></span><br><span class="line"><span class="string">                        load SCRIPT</span></span><br><span class="line"><span class="string">  -P PARAMETERS_JSON, --parameters PARAMETERS_JSON</span></span><br><span class="line"><span class="string">                        parameters as JSON, same as Gadget</span></span><br><span class="line"><span class="string">  -C USER_CMODULE, --cmodule USER_CMODULE</span></span><br><span class="line"><span class="string">                        load CMODULE</span></span><br><span class="line"><span class="string">  --toolchain &#123;any,internal,external&#125;</span></span><br><span class="line"><span class="string">                        CModule toolchain to use when compiling from source</span></span><br><span class="line"><span class="string">                        code</span></span><br><span class="line"><span class="string">  -c CODESHARE_URI, --codeshare CODESHARE_URI</span></span><br><span class="line"><span class="string">                        load CODESHARE_URI</span></span><br><span class="line"><span class="string">  -e CODE, --eval CODE  evaluate CODE</span></span><br><span class="line"><span class="string">  -q                    quiet mode (no prompt) and quit after -l and -e</span></span><br><span class="line"><span class="string">  -t TIMEOUT, --timeout TIMEOUT</span></span><br><span class="line"><span class="string">                        seconds to wait before terminating in quiet mode</span></span><br><span class="line"><span class="string">  --pause               leave main thread paused after spawning program</span></span><br><span class="line"><span class="string">  -o LOGFILE, --output LOGFILE</span></span><br><span class="line"><span class="string">                        output to log file</span></span><br><span class="line"><span class="string">  --eternalize          eternalize the script before exit</span></span><br><span class="line"><span class="string">  --exit-on-error       exit with code 1 after encountering any exception in</span></span><br><span class="line"><span class="string">                        the SCRIPT</span></span><br><span class="line"><span class="string">  --kill-on-exit        kill the spawned program when Frida exits</span></span><br><span class="line"><span class="string">  --auto-perform        wrap entered code with Java.perform</span></span><br><span class="line"><span class="string">  --auto-reload         Enable auto reload of provided scripts and c module</span></span><br><span class="line"><span class="string">                        (on by default, will be required in the future)</span></span><br><span class="line"><span class="string">  --no-auto-reload      Disable auto reload of provided scripts and c module</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li>attach 启动</li>
+</ol>
+<p><code>attach</code> 到已经存在的进程，核心原理是 <code>ptrace</code> 修改进程内存，如果进程处于调试状态（ <code>traceid</code> 不等于 <code>0</code> ），则 <code>attach</code> 失败。启动命令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ frida -U com.example.android --no-pause -l _agent.js</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">$ frida -UF --no-pause -l _agent.js</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>-U</code> : 连接 USB 设备。</li>
 <li><code>-l</code> : 加载脚本。</li>
 <li><code>--no-pause</code> : 启动后自动启动主线程。</li>
-<li><code>-F</code> : 附加最前面的应用。</li>
+<li><code>-F</code> : 附加当前运行的应用。</li>
 </ul>
 <p>以上命令对应的 <code>python</code> 脚本如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">on_message</span>(<span class="params">message,data</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;message&quot;</span>,message)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;data&quot;</span>,data)</span><br><span class="line"></span><br><span class="line">device = frida.get_usb_device()</span><br><span class="line">session = device.attach(<span class="string">&quot;com.example.android&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;_agent.js&quot;</span>,<span class="string">&quot;r&quot;</span>, encoding = <span class="string">&quot;utf8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    script = session.create_script(f.read())</span><br><span class="line"></span><br><span class="line">script.on(<span class="string">&quot;message&quot;</span>,on_message)</span><br><span class="line">script.load()</span><br><span class="line">sys.stdin.read()</span><br></pre></td></tr></table></figure>
 
-<h3 id="spawn-启动"><a href="#spawn-启动" class="headerlink" title="spawn 启动"></a>spawn 启动</h3><p>启动一个新的进程并挂起，在启动的同时注入 <code>frida</code> 代码，适用于在进程启动前的一些 <code>hook</code> ，如 <code>hook RegisterNative</code> 等，注入完成后调用 <code>resume</code> 恢复进程。启动命令如下：</p>
+<ol start="2">
+<li>spawn 启动</li>
+</ol>
+<p>启动一个新的进程并挂起，在启动的同时注入 <code>frida</code> 代码，适用于在进程启动前的一些 <code>hook</code> ，如 <code>hook RegisterNative</code> 等，注入完成后调用 <code>resume</code> 恢复进程。启动命令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frida -U -f com.example.android --no-pause  -l _agent.js</span><br></pre></td></tr></table></figure>
 
 <p>对应的 <code>python</code> 脚本如下：</p>

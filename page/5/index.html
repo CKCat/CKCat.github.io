@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,582 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9809-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9809-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="post-title-link" itemprop="url">操作系统实战09-虚拟内存</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-19 23:00:21" itemprop="dateCreated datePublished" datetime="2021-11-19T23:00:21+00:00">2021-11-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><p>虚拟地址区间</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 虚拟地址空间</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">KMVARSDSC</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">spinlock_t</span> kva_lock;	<span class="comment">// 保护自身自旋锁</span></span><br><span class="line">	<span class="type">u32_t</span>  kva_maptype;		<span class="comment">// 映射类型</span></span><br><span class="line">	<span class="type">list_h_t</span> kva_list;		<span class="comment">// 链表</span></span><br><span class="line">	<span class="type">u64_t</span>  kva_flgs;		<span class="comment">// 相关标志</span></span><br><span class="line">	<span class="type">u64_t</span>  kva_limits;</span><br><span class="line">	<span class="type">vaslknode_t</span> kva_lknode;</span><br><span class="line">	<span class="type">void</span>*  kva_mcstruct;	<span class="comment">// 指向它的上层结构</span></span><br><span class="line">	<span class="type">adr_t</span>  kva_start;		<span class="comment">// 虚拟地址的开始</span></span><br><span class="line">	<span class="type">adr_t</span>  kva_end;			<span class="comment">// 虚拟地址的结束</span></span><br><span class="line">	<span class="type">kvmemcbox_t</span>* kva_kvmbox;<span class="comment">// 管理这个结构映射的物理页面</span></span><br><span class="line">	<span class="type">void</span>*  kva_kvmcobj;</span><br><span class="line">&#125;<span class="type">kmvarsdsc_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>虚拟地址空间描述结构</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 虚拟地址空间描述结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_VIRMEMADRS</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">spinlock_t</span> vs_lock;			<span class="comment">// 保护自身的自旋锁</span></span><br><span class="line">	<span class="type">u32_t</span>  vs_resalin;</span><br><span class="line">	<span class="type">list_h_t</span> vs_list;			<span class="comment">// 链表，链接虚拟地址区间</span></span><br><span class="line">	<span class="type">uint_t</span> vs_flgs;				<span class="comment">// 标志</span></span><br><span class="line">	<span class="type">uint_t</span> vs_kmvdscnr;			<span class="comment">// 多少个虚拟地址区间</span></span><br><span class="line">	<span class="type">mmadrsdsc_t</span>* vs_mm;			<span class="comment">// 指向它的上层的数据结构</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_startkmvdsc;<span class="comment">// 开始的虚拟地址区间</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_endkmvdsc;	<span class="comment">// 结束的虚拟地址区间</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_currkmvdsc;	<span class="comment">// 当前的虚拟地址区间</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_krlmapdsc;	<span class="comment">// 能分配的开始虚拟地址</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_krlhwmdsc;	<span class="comment">// 能分配的结束虚拟地址</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_krlolddsc;	</span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_heapkmvdsc;</span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_stackkmvdsc;</span><br><span class="line">	<span class="type">adr_t</span> vs_isalcstart;</span><br><span class="line">	<span class="type">adr_t</span> vs_isalcend;</span><br><span class="line">	<span class="type">void</span>* vs_privte;			<span class="comment">// 私有数据指针</span></span><br><span class="line">	<span class="type">void</span>* vs_ext;				<span class="comment">// 扩展数据指针</span></span><br><span class="line">&#125;<span class="type">virmemadrs_t</span>;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9809-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">操作系统实战08-内存对象管理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-18 17:38:24" itemprop="dateCreated datePublished" datetime="2021-11-18T17:38:24+00:00">2021-11-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="内存对象管理数据结构"><a href="#内存对象管理数据结构" class="headerlink" title="内存对象管理数据结构"></a>内存对象管理数据结构</h1><p>用 freobjh_t 结构表示一个对象了，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_FREOBJH</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> oh_list;     <span class="comment">// 内存对象链表</span></span><br><span class="line">    <span class="type">uint_t</span> oh_stus;       <span class="comment">// 内存对象状态</span></span><br><span class="line">    <span class="type">void</span>* oh_stat;        <span class="comment">// 内存对象的开始地址</span></span><br><span class="line">&#125;<span class="type">freobjh_t</span>;</span><br></pre></td></tr></table></figure>
+
+<p>kmsob_t 用于表示内存对象容器，kmbext_t 用于表示内存对象容器的扩展内存，msomdc_t 和 msclst_t 用于管理内存对象容器占用的物理内存页面。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//管理内存对象容器占用的内存页面所对应的msadsc_t结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSCLST</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint_t</span> ml_msanr;  <span class="comment">//多少个msadsc_t</span></span><br><span class="line">    <span class="type">uint_t</span> ml_ompnr;  <span class="comment">//一个msadsc_t对应的连续的物理内存页面数</span></span><br><span class="line">    <span class="type">list_h_t</span> ml_list; <span class="comment">//挂载msadsc_t的链表</span></span><br><span class="line">&#125;<span class="type">msclst_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//管理内存对象容器占用的内存</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSOMDC</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//msclst_t结构数组mc_lst[0]=1个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[1]=2个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[2]=4个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[3]=8个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[4]=16个连续页面的msadsc_t</span></span><br><span class="line">    <span class="type">msclst_t</span> mc_lst[MSCLST_MAX];</span><br><span class="line">    <span class="type">uint_t</span> mc_msanr;   <span class="comment">//总共多个msadsc_t结构</span></span><br><span class="line">    <span class="type">list_h_t</span> mc_list;</span><br><span class="line">    <span class="comment">//内存对象容器第一个占用msadsc_t</span></span><br><span class="line">    <span class="type">list_h_t</span> mc_kmobinlst;</span><br><span class="line">    <span class="comment">//内存对象容器第一个占用msadsc_t对应的连续的物理内存页面数</span></span><br><span class="line">    <span class="type">uint_t</span> mc_kmobinpnr;</span><br><span class="line">&#125;<span class="type">msomdc_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//管理内存对象容器扩展容量</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KMBEXT</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> mt_list;        <span class="comment">//链表</span></span><br><span class="line">    <span class="type">adr_t</span> mt_vstat;          <span class="comment">//内存对象容器扩展容量开始地址</span></span><br><span class="line">    <span class="type">adr_t</span> mt_vend;           <span class="comment">//内存对象容器扩展容量结束地址</span></span><br><span class="line">    <span class="type">kmsob_t</span>* mt_kmsb;        <span class="comment">//指向内存对象容器结构</span></span><br><span class="line">    <span class="type">uint_t</span> mt_mobjnr;        <span class="comment">//内存对象容器扩展容量的内存中有多少对象</span></span><br><span class="line">&#125;<span class="type">kmbext_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 内存对象容器</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KMSOB</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> so_list;        <span class="comment">//链表</span></span><br><span class="line">    <span class="type">spinlock_t</span> so_lock;      <span class="comment">//保护结构自身的自旋锁</span></span><br><span class="line">    <span class="type">uint_t</span> so_stus;          <span class="comment">//状态与标志</span></span><br><span class="line">    <span class="type">uint_t</span> so_flgs;</span><br><span class="line">    <span class="type">adr_t</span> so_vstat;          <span class="comment">//内存对象容器的开始地址</span></span><br><span class="line">    <span class="type">adr_t</span> so_vend;           <span class="comment">//内存对象容器的结束地址</span></span><br><span class="line">    <span class="type">size_t</span> so_objsz;         <span class="comment">//内存对象大小</span></span><br><span class="line">    <span class="type">size_t</span> so_objrelsz;      <span class="comment">//内存对象实际大小</span></span><br><span class="line">    <span class="type">uint_t</span> so_mobjnr;        <span class="comment">//内存对象容器中总共的对象个数</span></span><br><span class="line">    <span class="type">uint_t</span> so_fobjnr;        <span class="comment">//内存对象容器中空闲的对象个数</span></span><br><span class="line">    <span class="type">list_h_t</span> so_frelst;      <span class="comment">//内存对象容器中空闲的对象链表头</span></span><br><span class="line">    <span class="type">list_h_t</span> so_alclst;      <span class="comment">//内存对象容器中分配的对象链表头</span></span><br><span class="line">    <span class="type">list_h_t</span> so_mextlst;     <span class="comment">//内存对象容器扩展kmbext_t结构链表头</span></span><br><span class="line">    <span class="type">uint_t</span> so_mextnr;        <span class="comment">//内存对象容器扩展kmbext_t结构个数</span></span><br><span class="line">    <span class="type">msomdc_t</span> so_mc;          <span class="comment">//内存对象容器占用内存页面管理结构</span></span><br><span class="line">    <span class="type">void</span>* so_privp;          <span class="comment">//本结构私有数据指针</span></span><br><span class="line">    <span class="type">void</span>* so_extdp;          <span class="comment">//本结构扩展数据指针</span></span><br><span class="line">&#125;<span class="type">kmsob_t</span>;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">操作系统实战07-内存管理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-15 09:41:17" itemprop="dateCreated datePublished" datetime="2021-11-15T09:41:17+00:00">2021-11-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="内存页"><a href="#内存页" class="headerlink" title="内存页"></a>内存页</h2><p>我们使用分页模式来管理内存，把物理内存空间分成 4KB 大小页，称为内存页。</p>
+<p>由于使用 4KB 进行分页，因此每一个页的起始地址都应该是 0x1000 的倍数，即地址的低 12 位可以可以另作它用。</p>
+<p>为了使内存管理高效，我们需要一个结构存放页的状态、页的地址、页的分配记数、页的类型、页的链表，如下所示。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/" class="post-title-link" itemprop="url">编译x64dbg</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-09 22:01:34" itemprop="dateCreated datePublished" datetime="2021-11-09T22:01:34+00:00">2021-11-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>编译环境：VS2019 + QT5.15.2</p>
+<p>参考： <a target="_blank" rel="noopener" href="https://github.com/x64dbg/x64dbg/wiki/Compiling-the-whole-project">https://github.com/x64dbg/x64dbg/wiki/Compiling-the-whole-project</a></p>
+<h1 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h1><ol>
+<li><p>下载源码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recurse-submodules -b development https://github.com/x64dbg/x64dbg.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置好 VS2019 + QT5.15.2 的环境。</p>
+</li>
+</ol>
+<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/" class="post-title-link" itemprop="url">操作系统实战06-实现hal层初始化</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-09 14:48:33" itemprop="dateCreated datePublished" datetime="2021-11-09T14:48:33+00:00">2021-11-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="第一个-C-函数总体概述"><a href="#第一个-C-函数总体概述" class="headerlink" title="第一个 C 函数总体概述"></a>第一个 C 函数总体概述</h1><p>第一个 C 函数 hal_start 首先初始化 hal 层，其中执行了平台初始化，hal层的内存初始化、中断初始化，最后进入到内核初始化。下面展示了整个执行时序图，先有一个宏观的感官。</p>
+<img src="http://www.plantuml.com/plantuml/svg/dPNDJjj04CVlFCM-G7j0RTNsK56fKjLxxv4JEuc5dKIEG-cDKd0215m-aWP2gYP298W6p8V0E2OyJ3Dh-zHNwDhhO0USblQsCvx_RsRsOpoLbnb9BeZ2H9eHOfxnE84UlK9XysLW8TXRiBuehWF1oJoOSz1UWU8rhcW_v-PH18NFy9JXBcAUhjHmHUNga4AK4q4abUK4Havc9N54Ifo2vmqOS7K6gkOJGg9n5959fEF3LbQXT34mofRH1hC2noPiT_3MXLDNh9q5l6iGSt3Jn9-EhTuc_hOmkDwCp1DdPtYMomOvV4Ueo7eVhbkurhVs3EVW19OxBYZGHK7Of9oIc5pw7gMYuTKZMj4li-mKoqwZXRVwU7V93-WqmLJ99oWfThzZhHNTjVU9vgR7XSj5PwFqzphYASOl0NdBOIkmsYIxz6-icJWtP7dB_sGbUK68qSt1-g9rOC292bULWMuulNLxwVIFuZmdnn9fHigpin-IGY6VHkDZtTiSPnBJAIbRoB287g3zkOotZqdjrb8nwkRUNdWnEyF5U34rAJApEOQL46WA8ZQosZtt64gQSrY3NGqQSsxtoY9qQwGPv-kvUwwrKznjsQr3Ur-nwjMeHEBeun33hyA3-I9HZ9JaqXz5aP5It5qPN5tWjGqmrEZkv49kz45JLq0Pw5rSxTwA_VXeESlb4nAVaxDIQ2oyVVCUOLMrRpJhnpwQVVOabc9bz30Wpuw1lhi79Q68xBJLMuUZdO6XqBejimhg9QZBrAJpxdR2FQI2Z9mKP3QVkBiZOCw3hjlD3dA740rp2y0hb_Pv8oYWhiFY6Hqy4HdvvvDFNuIokMQeJTTyZIW9hxN9W2DJpCUCd-yUQbeIHgu2_gxxmtcAox3a7_4R">
+<p>下面在从微观角度看一下每一个功能的实现。</p>
+<h1 id="hal-层初始化"><a href="#hal-层初始化" class="headerlink" title="hal 层初始化"></a>hal 层初始化</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">操作系统实战04-程序中的地址如何转换</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-11-08 17:49:59" itemprop="dateCreated datePublished" datetime="2021-11-08T17:49:59+00:00">2021-11-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="虚拟地址和物理地址"><a href="#虚拟地址和物理地址" class="headerlink" title="虚拟地址和物理地址"></a>虚拟地址和物理地址</h2><h3 id="虚拟地址"><a href="#虚拟地址" class="headerlink" title="虚拟地址"></a>虚拟地址</h3><p>正如其名，这个地址是虚拟的，自然而然地和具体环境进行了解耦，这个环境包括系统软件环境和硬件环境。</p>
+<p>虚拟地址是逻辑上存在的一个数据值，比如 0<del>100 就有 101 个整数值，这个 0</del>100 的区间就可以说是一个虚拟地址空间，该虚拟地址空间有 101 个地址。</p>
+<h3 id="物理地址"><a href="#物理地址" class="headerlink" title="物理地址"></a>物理地址</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -228,7 +804,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,7 +897,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -416,7 +992,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -513,7 +1089,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
+      <time title="修改时间：2023-09-22 12:30:02" itemprop="dateModified" datetime="2023-09-22T12:30:02+00:00">2023-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -541,583 +1117,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/10/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9801-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%86%85%E6%A0%B8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/" class="post-title-link" itemprop="url">window下编译Frida</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-08-17 22:01:45" itemprop="dateCreated datePublished" datetime="2021-08-17T22:01:45+00:00">2021-08-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/frida/" itemprop="url" rel="index"><span itemprop="name">frida</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><p>安装 <code>VS2019</code> 选择 使用 <code>C++</code> 的桌面开发 ，并选择 对 <code>VS2017</code>（v141） 工具的 C++ Window XP 支持[已弃用] 组件，如下图所示。</p>
-<img src="/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/2021-08-17-22-08-29.png" class>
-
-<p>安装 <code>git</code> 和 <code>nodejs</code> , 并加入环境变量。</p>
-<p>安装 <code>python3.8</code> ，安装目录为 <code>C:\Program Files (x86)\Python 3.8\</code> ，安装选项如下图所示。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/06/14/GCC%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/06/14/GCC%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96/" class="post-title-link" itemprop="url">GCC内联汇编</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-06-14 17:49:29" itemprop="dateCreated datePublished" datetime="2021-06-14T17:49:29+00:00">2021-06-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>本文主要参考 <a target="_blank" rel="noopener" href="https://www.linuxprobe.com/gcc-how-to.html">https://www.linuxprobe.com/gcc-how-to.html</a></p>
-</blockquote>
-<h1 id="GCC-汇编语法"><a href="#GCC-汇编语法" class="headerlink" title="GCC 汇编语法"></a>GCC 汇编语法</h1><p><code>Linux</code> 上的 <code>GNU C</code> 编译器 <code>GCC</code> ，使用 <code>AT&amp;T/UNIX</code> 汇编语法。在这里，我们将使用 <code>AT&amp;T</code> 语法 进行汇编编码。<code>AT&amp;T</code> 语法和 <code>Intel</code> 语法的差别很大。</p>
-<h2 id="源操作数和目的操作数顺序"><a href="#源操作数和目的操作数顺序" class="headerlink" title="源操作数和目的操作数顺序"></a>源操作数和目的操作数顺序</h2><p><code>AT&amp;T</code> 语法的操作数方向和 <code>Intel</code> 语法的刚好相反。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/06/14/GCC%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/05/13/gnu-linux-proc-pid-intro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/13/gnu-linux-proc-pid-intro/" class="post-title-link" itemprop="url">gnu-linux-proc-pid-intro</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-05-13 09:35:17" itemprop="dateCreated datePublished" datetime="2021-05-13T09:35:17+00:00">2021-05-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>转载：<a target="_blank" rel="noopener" href="https://github.com/NanXiao/gnu-linux-proc-pid-intro">https://github.com/NanXiao/gnu-linux-proc-pid-intro</a></p>
-</blockquote>
-<p><a href="#auxv">&#x2F;proc&#x2F;[pid]&#x2F;auxv</a><br><a href="#cmdline">&#x2F;proc&#x2F;[pid]&#x2F;cmdline</a><br><a href="#comm">&#x2F;proc&#x2F;[pid]&#x2F;comm</a><br><a href="#cwd">&#x2F;proc&#x2F;[pid]&#x2F;cwd</a><br><a href="#environ">&#x2F;proc&#x2F;[pid]&#x2F;environ</a><br><a href="#exe">&#x2F;proc&#x2F;[pid]&#x2F;exe</a><br><a href="#fd">&#x2F;proc&#x2F;[pid]&#x2F;fd</a><br><a href="#latency">&#x2F;proc&#x2F;[pid]&#x2F;latency</a><br><a href="#limits">&#x2F;proc&#x2F;[pid]&#x2F;limits</a><br><a href="#maps">&#x2F;proc&#x2F;[pid]&#x2F;maps</a><br><a href="#root">&#x2F;proc&#x2F;[pid]&#x2F;root</a><br><a href="#stack">&#x2F;proc&#x2F;[pid]&#x2F;stack</a><br><a href="#statm">&#x2F;proc&#x2F;[pid]&#x2F;statm</a><br><a href="#status">&#x2F;proc&#x2F;[pid]&#x2F;status</a><br><a href="#syscall">&#x2F;proc&#x2F;[pid]&#x2F;syscall</a><br><a href="#wchan">&#x2F;proc&#x2F;[pid]&#x2F;wchan</a>  </p>
-<h2 id="auxv"><a href="#auxv" class="headerlink" title="auxv"></a>auxv</h2><p><code>/proc/[pid]/auxv</code>包含传递给进程的<code>ELF</code>解释器信息，格式是每一项都是一个<code>unsigned long</code>长度的<code>ID</code>加上一个<code>unsigned long</code>长度的值。最后一项以连续的两个<code>0x00</code>开头。举例如下：  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexdump -x /proc/2948/auxv</span></span><br><span class="line">0000000    0021    0000    0000    0000    0000    1a82    7ffd    0000</span><br><span class="line">0000010    0010    0000    0000    0000    dbf5    1fc9    0000    0000</span><br><span class="line">0000020    0006    0000    0000    0000    1000    0000    0000    0000</span><br><span class="line">0000030    0011    0000    0000    0000    0064    0000    0000    0000</span><br><span class="line">0000040    0003    0000    0000    0000    2040    4326    7f4a    0000</span><br><span class="line">0000050    0004    0000    0000    0000    0038    0000    0000    0000</span><br><span class="line">0000060    0005    0000    0000    0000    0009    0000    0000    0000</span><br><span class="line">0000070    0007    0000    0000    0000    f000    4303    7f4a    0000</span><br><span class="line">0000080    0008    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">0000090    0009    0000    0000    0000    8e67    4327    7f4a    0000</span><br><span class="line">00000a0    000b    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000b0    000c    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000c0    000d    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000d0    000e    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000e0    0017    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000f0    0019    0000    0000    0000    3de9    1a80    7ffd    0000</span><br><span class="line">0000100    001f    0000    0000    0000    4fe5    1a80    7ffd    0000</span><br><span class="line">0000110    000f    0000    0000    0000    3df9    1a80    7ffd    0000</span><br><span class="line">0000120    0000    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">0000130</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/05/13/gnu-linux-proc-pid-intro/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9505/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9505/" class="post-title-link" itemprop="url">ARMv8学习记录05</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-04-10 13:23:52" itemprop="dateCreated datePublished" datetime="2021-04-10T13:23:52+00:00">2021-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h1><h2 id="加法和减法"><a href="#加法和减法" class="headerlink" title="加法和减法"></a>加法和减法</h2><p>例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add_sub.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> n = <span class="number">123</span>;</span><br><span class="line">    <span class="comment">// 使用 argc 防止编译器优化</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;n + argc = %d\n&quot;</span>, n + argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;n + (argc++) = %d\n&quot;</span>, n + (argc++));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;n + (++argc) = %d\n&quot;</span>, n + (++argc));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(argc--) = %d\n&quot;</span>, (argc--));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(--argc) = %d\n&quot;</span>, (--argc));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> pi = <span class="number">3.14</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pi + argc = %f\n&quot;</span>, pi + argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pi - argc = %f\n&quot;</span>, pi - argc);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="ARMv7"><a href="#ARMv7" class="headerlink" title="ARMv7"></a>ARMv7</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9505/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/" class="post-title-link" itemprop="url">ARMv8学习记录04</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-03-18 09:46:39" itemprop="dateCreated datePublished" datetime="2021-03-18T09:46:39+00:00">2021-03-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><h2 id="main-函数"><a href="#main-函数" class="headerlink" title="main 函数"></a>main 函数</h2><p>一般情况下，IDA 会自动将 main 函数标记出来，但是还是有部分应用 IDA 无法自动标记，需要我们手动确认 main 函数。首先找到 start 函数，然后查找 <code>__libc_init</code> 的第 3 个参数 R2，该参数即为 main 函数的地址。</p>
-<img src="/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/2021-04-18-16-23-38.png" class>
-
-<p>可以通过 Android 源码进行验证，在 <a target="_blank" rel="noopener" href="http://androidxref.com/">http://androidxref.com/</a> 网站上搜索 <code>__libc_init</code> 调用位置，可以发现其第三个参数为 main 函数的地址。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/02/22/IDA%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/22/IDA%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/" class="post-title-link" itemprop="url">IDA动态调试so</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-02-22 20:54:30" itemprop="dateCreated datePublished" datetime="2021-02-22T20:54:30+00:00">2021-02-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-19 14:03:10" itemprop="dateModified" datetime="2023-09-19T14:03:10+00:00">2023-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="动态调试送给最好的-TA"><a href="#动态调试送给最好的-TA" class="headerlink" title="动态调试送给最好的 TA"></a>动态调试送给最好的 TA</h1><blockquote>
-<p>如果手机系统是 android 10 以上，那么需要 IDA 的版本大于 7.3，并且需要设置一下 <code>IDA_LIBC_PATH</code> 的环境变量。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so   <span class="comment"># 32 位</span></span><br><span class="line">$ <span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so <span class="comment"># 64 位</span></span><br></pre></td></tr></table></figure>
-
-<p>参考：<a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-258103.htm">https://bbs.pediy.com/thread-258103.htm</a></p>
-<p>本文使用以下调试环境测试均未发现问题：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/22/IDA%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
