@@ -7,7 +7,7 @@ extern void TELL_PARENT(pid_t);
 extern void TELL_CHILD(pid_t);
 extern void WAIT_PARENT(void);
 extern void WAIT_CHILD(void);
-extern void	TELL_WAIT(void);
+extern void TELL_WAIT(void);
 
 int lock_reg(int fd, int cmd, int type, off_t offset, int whence, off_t len){
 	struct flock lock;
