@@ -1,5 +1,5 @@
 ---
-title: c++使用记录
+title: learn-cpp
 date: 2019-12-20 16:19:10
 tags: C++
 category: C++
@@ -503,15 +503,15 @@ int main () {
 
 ### 运算符重载
 
-| 表达式      | 操作符                                   | 成员函数                                       | 非成员函数         |
-| ----------- | ---------------------------------------- | ---------------------------------------------- | ------------------ | ----- | ----------------- | ---------------- |
-| `@a`        | `+` `-` `*` `&` `!` `~` `++` `--`        | `A::operator@()`                               | `operator@(A)`     |
-| `a@`        | `++` `--`                                | `A::operator@(int)`                            | `operator@(A,int)` |
-| `a@b`       | `+` `-` `*` `/` `%` `^` `&` `            | ` `<` `>` `==` `!=` `<=` `>=` `<<` `>>` `&&` ` |                    | ` `,` | `A::operator@(B)` | `operator@(A,B)` |
-| `a@b`       | `=` `+=` `-=` `*=` `/=` `%=` `^=` `&=` ` | =` `<<=` `>>=` `[]`                            | `A::operator@(B)`  | -     |
-| `a(b,c...)` | `()`                                     | `A::operator()(B,C...)`                        | -                  |
-| `a->b`      | `->`                                     | `A::operator->()`                              | -                  |
-| `(TYPE) a`  | `TYPE`                                   | `A::operator TYPE()`                           | -                  |
+| 表达式      | 操作符                                                                                 | 成员函数                | 非成员函数         |
+| ----------- | -------------------------------------------------------------------------------------- | ----------------------- | ------------------ |
+| `@a`        | `+` `-` `*` `&` `!` `~` `++` `--`                                                      | `A::operator@()`        | `operator@(A)`     |
+| `a@`        | `++` `--`                                                                              | `A::operator@(int)`     | `operator@(A,int)` |
+| `a@b`       | `+` `-` `*` `/` `%` `^` `&` `\|` `<` `>` `==` `!=` `<=` `>=` `<<` `>>` `&&` `\|\|` `,` | `A::operator@(B)`       | `operator@(A,B)`   |
+| `a@b`       | `=` `+=` `-=` `*=` `/=` `%=` `^=` `&=` `\| =` `<<=` `>>=` `[]`                         | `A::operator@(B)`       | -                  |
+| `a(b,c...)` | `()`                                                                                   | `A::operator()(B,C...)` | -                  |
+| `a->b`      | `->`                                                                                   | `A::operator->()`       | -                  |
+| `(TYPE) a`  | `TYPE`                                                                                 | `A::operator TYPE()`    | -                  |
 
 ## 继承和虚函数
 
@@ -1559,9 +1559,9 @@ minmax_element：返回容器内最大元素和最小元素位置
 intmain(){
 std::vector<int> v = {3, 9, 1, 4, 2, 5, 9};
 
-auto result = std::minmax_element(v.begin(), v.end());
-std::cout << "min element at: " << _(result.first) << '\n';
-std::cout << "max element at: " << _(result.second) << '\n';
+auto result = std::minmax*element(v.begin(), v.end());
+std::cout << "min element at: " << *(result.first) << '\n';
+std::cout << "max element at: " << \_(result.second) << '\n';
 return0;
 }
 // min element at: 1
@@ -1592,7 +1592,7 @@ https://zh.cppreference.com/w/cpp/algorithm/all_any_none_of
 
 例如：
 
-```
+```bash
 $ c++filt _Z3addii
 add(int, int)
 
