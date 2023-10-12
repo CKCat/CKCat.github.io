@@ -20,27 +20,25 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="本文章记录使用 pytho 过程中易忘的知识，方便自己查阅。 设置 pypi 镜像临时使用1pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple some-package  注意，simple 不能少, 是 https 而不是 http">
+    <meta name="description" content="本文章记录使用 python 过程中易忘的知识，方便自己查阅。 设置 pypi 镜像临时使用1pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple some-package  注意，simple 不能少, 是 https 而不是 http">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python使用记录">
-<meta property="og:url" content="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:url" content="https://ckcat.github.io/2019/12/11/learn-python/index.html">
 <meta property="og:site_name" content="CKCat的博客">
-<meta property="og:description" content="本文章记录使用 pytho 过程中易忘的知识，方便自己查阅。 设置 pypi 镜像临时使用1pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple some-package  注意，simple 不能少, 是 https 而不是 http">
+<meta property="og:description" content="本文章记录使用 python 过程中易忘的知识，方便自己查阅。 设置 pypi 镜像临时使用1pip install -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple some-package  注意，simple 不能少, 是 https 而不是 http">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-27-13-31-34.png">
 <meta property="article:published_time" content="2019-12-11T17:22:25.000Z">
-<meta property="article:modified_time" content="2023-09-26T09:26:42.611Z">
+<meta property="article:modified_time" content="2023-10-12T11:47:49.879Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="Python使用">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-27-13-31-34.png">
 
 
-<link rel="canonical" href="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+<link rel="canonical" href="https://ckcat.github.io/2019/12/11/learn-python/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/","path":"2019/12/11/python使用记录/","title":"python使用记录"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2019/12/11/learn-python/","path":"2019/12/11/learn-python/","title":"python使用记录"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>python使用记录 | CKCat的博客</title>
@@ -142,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE-pypi-%E9%95%9C%E5%83%8F"><span class="nav-number">1.</span> <span class="nav-text">设置 pypi 镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%B4%E6%97%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">临时使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E4%B8%BA%E9%BB%98%E8%AE%A4"><span class="nav-number">1.2.</span> <span class="nav-text">设为默认</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-%E4%B8%AD-join-%E5%87%BD%E6%95%B0%E5%92%8C-os-path-join-%E7%94%A8%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">Python 中 join 函数和 os.path.join 用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-%E8%AE%BE%E7%BD%AE%E5%BF%BD%E7%95%A5%E5%A4%A7%E5%B0%8F%E5%86%99%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%8A%A8%E8%A1%A5%E9%BD%90"><span class="nav-number">3.</span> <span class="nav-text">pycharm 设置忽略大小写进行自动补齐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-%E8%AE%BE%E7%BD%AE-python-%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF"><span class="nav-number">4.</span> <span class="nav-text">pycharm 设置 python 代码模板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pycharm-%E6%89%93%E5%BC%80%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%97%B6%EF%BC%8C%E4%BB%A3%E7%A0%81%E6%97%A0%E6%B3%95%E8%A1%A5%E5%85%A8"><span class="nav-number">5.</span> <span class="nav-text">pycharm 打开虚拟环境时，代码无法补全</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PYTHONPATH-%E4%BD%9C%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">PYTHONPATH 作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Django-%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC"><span class="nav-number">7.</span> <span class="nav-text">Django 测试脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#locals-%E5%92%8C-globals-%E4%BB%A5%E5%8F%8A%E5%8F%8D%E5%B0%84"><span class="nav-number">8.</span> <span class="nav-text">locals 和 globals 以及反射</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE-pypi-%E9%95%9C%E5%83%8F"><span class="nav-number">1.</span> <span class="nav-text">设置 pypi 镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B4%E6%97%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">临时使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E4%B8%BA%E9%BB%98%E8%AE%A4"><span class="nav-number">1.2.</span> <span class="nav-text">设为默认</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pycharm"><span class="nav-number">2.</span> <span class="nav-text">pycharm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pycharm-%E8%AE%BE%E7%BD%AE%E5%BF%BD%E7%95%A5%E5%A4%A7%E5%B0%8F%E5%86%99%E8%BF%9B%E8%A1%8C%E8%87%AA%E5%8A%A8%E8%A1%A5%E9%BD%90"><span class="nav-number">2.1.</span> <span class="nav-text">pycharm 设置忽略大小写进行自动补齐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pycharm-%E8%AE%BE%E7%BD%AE-python-%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF"><span class="nav-number">2.2.</span> <span class="nav-text">pycharm 设置 python 代码模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">python知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python-%E4%B8%AD-join-%E5%87%BD%E6%95%B0%E5%92%8C-os-path-join-%E7%94%A8%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">Python 中 join 函数和 os.path.join 用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PYTHONPATH-%E4%BD%9C%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">PYTHONPATH 作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#locals-%E5%92%8C-globals-%E4%BB%A5%E5%8F%8A%E5%8F%8D%E5%B0%84"><span class="nav-number">3.3.</span> <span class="nav-text">locals 和 globals 以及反射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93"><span class="nav-number">4.</span> <span class="nav-text">python 第三方库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Django"><span class="nav-number">4.1.</span> <span class="nav-text">Django</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Django-%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC"><span class="nav-number">4.1.1.</span> <span class="nav-text">Django 测试脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#celery"><span class="nav-number">4.2.</span> <span class="nav-text">celery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mypy"><span class="nav-number">4.3.</span> <span class="nav-text">mypy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#json-%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="nav-number">4.3.1.</span> <span class="nav-text">json 类型定义</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -201,7 +199,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/11/learn-python/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -237,7 +235,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -266,14 +264,25 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>本文章记录使用 pytho 过程中易忘的知识，方便自己查阅。</p>
-<h1 id="设置-pypi-镜像"><a href="#设置-pypi-镜像" class="headerlink" title="设置 pypi 镜像"></a>设置 pypi 镜像</h1><h2 id="临时使用"><a href="#临时使用" class="headerlink" title="临时使用"></a>临时使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package</span><br></pre></td></tr></table></figure>
+        <p>本文章记录使用 python 过程中易忘的知识，方便自己查阅。</p>
+<h2 id="设置-pypi-镜像"><a href="#设置-pypi-镜像" class="headerlink" title="设置 pypi 镜像"></a>设置 pypi 镜像</h2><h3 id="临时使用"><a href="#临时使用" class="headerlink" title="临时使用"></a>临时使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package</span><br></pre></td></tr></table></figure>
 
 <p>注意，simple 不能少, 是 https 而不是 http</p>
-<h2 id="设为默认"><a href="#设为默认" class="headerlink" title="设为默认"></a>设为默认</h2><p>升级 pip 到最新的版本 (&gt;&#x3D;10.0.0) 后进行配置：</p>
+<h3 id="设为默认"><a href="#设为默认" class="headerlink" title="设为默认"></a>设为默认</h3><p>升级 pip 到最新的版本 (&gt;&#x3D;10.0.0) 后进行配置：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pip install pip -U</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或：</span></span><br><span class="line"><span class="comment"># 阿里源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"><span class="comment"># 腾讯源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url http://mirrors.cloud.tencent.com/pypi/simple</span><br><span class="line"><span class="comment"># 豆瓣源</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url http://pypi.douban.com/simple/</span><br></pre></td></tr></table></figure>
 
-<h1 id="Python-中-join-函数和-os-path-join-用法"><a href="#Python-中-join-函数和-os-path-join-用法" class="headerlink" title="Python 中 join 函数和 os.path.join 用法"></a>Python 中 join 函数和 os.path.join 用法</h1><blockquote>
+<h2 id="pycharm"><a href="#pycharm" class="headerlink" title="pycharm"></a>pycharm</h2><h3 id="pycharm-设置忽略大小写进行自动补齐"><a href="#pycharm-设置忽略大小写进行自动补齐" class="headerlink" title="pycharm 设置忽略大小写进行自动补齐"></a>pycharm 设置忽略大小写进行自动补齐</h3><p>进入下列设置</p>
+<blockquote>
+<p>settings -&gt; Editor -&gt; General -&gt; Code Completion</p>
+</blockquote>
+<p>将 <code>Match case</code> 不勾选就可以忽略大小写进行自动补齐了。</p>
+<h3 id="pycharm-设置-python-代码模板"><a href="#pycharm-设置-python-代码模板" class="headerlink" title="pycharm 设置 python 代码模板"></a>pycharm 设置 python 代码模板</h3><p>设置 File &gt; Settings &gt; File and Code Template &gt; Python Script</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># File Name : $&#123;NAME&#125;</span></span><br><span class="line"><span class="comment"># Created by $&#123;USER&#125; on $DATE</span></span><br><span class="line"></span><br><span class="line">__author__ = <span class="string">&#x27;$&#123;USER&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>一些模板变量含义</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$&#123;PROJECT_NAME&#125; - 当前Project名称;</span><br><span class="line"> $&#123;NAME&#125; - 在创建文件的对话框中指定的文件名;</span><br><span class="line"> $&#123;USER&#125; - 当前用户名;</span><br><span class="line"> $&#123;DATE&#125; - 当前系统日期;</span><br><span class="line"> $&#123;TIME&#125; - 当前系统时间;</span><br><span class="line"> $&#123;YEAR&#125; - 年;</span><br><span class="line"> $&#123;MONTH&#125; - 月;</span><br><span class="line"> $&#123;DAY&#125; - 日;</span><br><span class="line"> $&#123;HOUR&#125; - 小时;</span><br><span class="line"> $&#123;MINUTE&#125; - 分钟；</span><br><span class="line"> $&#123;PRODUCT_NAME&#125; - 创建文件的IDE名称;</span><br><span class="line"> $&#123;MONTH_NAME_SHORT&#125; - 英文月份缩写, 如: Jan, Feb, etc;</span><br><span class="line"> $&#123;MONTH_NAME_FULL&#125; - 英文月份全称, 如: January, February, etc；</span><br></pre></td></tr></table></figure>
+
+<h2 id="python知识点"><a href="#python知识点" class="headerlink" title="python知识点"></a>python知识点</h2><h3 id="Python-中-join-函数和-os-path-join-用法"><a href="#Python-中-join-函数和-os-path-join-用法" class="headerlink" title="Python 中 join 函数和 os.path.join 用法"></a>Python 中 join 函数和 os.path.join 用法</h3><blockquote>
 <p>join ： 连接字符串数组。将字符串、元组、列表中的元素以指定的字符(分隔符)连接生成一个新的字符串</p>
 </blockquote>
 <blockquote>
@@ -287,21 +296,9 @@
 <p>输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello world 世界 你好</span><br><span class="line">home/me/mypath</span><br></pre></td></tr></table></figure>
 
-<h1 id="pycharm-设置忽略大小写进行自动补齐"><a href="#pycharm-设置忽略大小写进行自动补齐" class="headerlink" title="pycharm 设置忽略大小写进行自动补齐"></a>pycharm 设置忽略大小写进行自动补齐</h1><p>进入下列设置</p>
-<blockquote>
-<p>settings -&gt; Editor -&gt; General -&gt; Code Completion</p>
-</blockquote>
-<p>将 <code>Match case</code> 不勾选就可以忽略大小写进行自动补齐了。</p>
-<h1 id="pycharm-设置-python-代码模板"><a href="#pycharm-设置-python-代码模板" class="headerlink" title="pycharm 设置 python 代码模板"></a>pycharm 设置 python 代码模板</h1><p>设置 File &gt; Settings &gt; File and Code Template &gt; Python Script</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python3</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># File Name : $&#123;NAME&#125;</span><br><span class="line"># Created by $&#123;USER&#125; on $DATE</span><br><span class="line"></span><br><span class="line">__author__ = &#x27;$&#123;USER&#125;&#x27;</span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
 
-<p>一些模板变量含义</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$&#123;PROJECT_NAME&#125; - 当前Project名称;</span><br><span class="line"> $&#123;NAME&#125; - 在创建文件的对话框中指定的文件名;</span><br><span class="line"> $&#123;USER&#125; - 当前用户名;</span><br><span class="line"> $&#123;DATE&#125; - 当前系统日期;</span><br><span class="line"> $&#123;TIME&#125; - 当前系统时间;</span><br><span class="line"> $&#123;YEAR&#125; - 年;</span><br><span class="line"> $&#123;MONTH&#125; - 月;</span><br><span class="line"> $&#123;DAY&#125; - 日;</span><br><span class="line"> $&#123;HOUR&#125; - 小时;</span><br><span class="line"> $&#123;MINUTE&#125; - 分钟；</span><br><span class="line"> $&#123;PRODUCT_NAME&#125; - 创建文件的IDE名称;</span><br><span class="line"> $&#123;MONTH_NAME_SHORT&#125; - 英文月份缩写, 如: Jan, Feb, etc;</span><br><span class="line"> $&#123;MONTH_NAME_FULL&#125; - 英文月份全称, 如: January, February, etc；</span><br></pre></td></tr></table></figure>
 
-<h1 id="pycharm-打开虚拟环境时，代码无法补全"><a href="#pycharm-打开虚拟环境时，代码无法补全" class="headerlink" title="pycharm 打开虚拟环境时，代码无法补全"></a>pycharm 打开虚拟环境时，代码无法补全</h1><p>打开设置，按如下图所示添加对应的 python 虚拟环境</p>
-<img src="/2019/12/11/python%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/2020-01-27-13-31-34.png" class="">
-
-<h1 id="PYTHONPATH-作用"><a href="#PYTHONPATH-作用" class="headerlink" title="PYTHONPATH 作用"></a>PYTHONPATH 作用</h1><p><code>PYTHONPATH</code> 是 Python 搜索路径，默认我们 <code>import</code> 的模块都会从 <code>PYTHONPATH</code> 里面寻找。</p>
+<h3 id="PYTHONPATH-作用"><a href="#PYTHONPATH-作用" class="headerlink" title="PYTHONPATH 作用"></a>PYTHONPATH 作用</h3><p><code>PYTHONPATH</code> 是 Python 搜索路径，默认我们 <code>import</code> 的模块都会从 <code>PYTHONPATH</code> 里面寻找。</p>
 <p>默认情况下，<code>PYTHONPATH</code> 是个空值，可以通过命令设置临时环境变量 <code>PYTHONPATH</code> 。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># windows</span></span><br><span class="line"><span class="built_in">set</span> PYTHONPATH=path1;path2</span><br><span class="line"></span><br><span class="line"><span class="comment"># linux</span></span><br><span class="line"><span class="built_in">export</span>  PYTHONPATH=path1:path2</span><br></pre></td></tr></table></figure>
 
@@ -310,7 +307,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line"></span><br><span class="line">os.environ[<span class="string">&#x27;PYTHONPATH&#x27;</span>]</span><br></pre></td></tr></table></figure>
 
 <p>使用 <code>python -m</code> 执行python命令时， Python 将会在 <code>PYTHONPATH</code> 中添加当前目录。</p>
-<h1 id="Django-测试脚本"><a href="#Django-测试脚本" class="headerlink" title="Django 测试脚本"></a>Django 测试脚本</h1><p>当你只是想测试 django 中的某一个 py 文件内容 那么你可以不用书写前后端交互的形式，而是直接写一个测试脚本即可</p>
+<h3 id="locals-和-globals-以及反射"><a href="#locals-和-globals-以及反射" class="headerlink" title="locals 和 globals 以及反射"></a>locals 和 globals 以及反射</h3><h2 id="python-第三方库"><a href="#python-第三方库" class="headerlink" title="python 第三方库"></a>python 第三方库</h2><h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><h4 id="Django-测试脚本"><a href="#Django-测试脚本" class="headerlink" title="Django 测试脚本"></a>Django 测试脚本</h4><p>当你只是想测试 django 中的某一个 py 文件内容 那么你可以不用书写前后端交互的形式，而是直接写一个测试脚本即可</p>
 <p>测试环境的准备：</p>
 <p>去 <code>manage.py</code> 中拷贝前四行代码 然后自己写两行</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">​</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    os.environ.setdefault(<span class="string">&quot;DJANGO_SETTINGS_MODULE&quot;</span>, <span class="string">&quot;day64.settings&quot;</span>)</span><br><span class="line">    <span class="keyword">import</span> django</span><br><span class="line">    django.setup()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -319,7 +316,13 @@
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://www.strongforu.top/archives/153">https://www.strongforu.top/archives/153</a></p>
 </blockquote>
-<h1 id="locals-和-globals-以及反射"><a href="#locals-和-globals-以及反射" class="headerlink" title="locals 和 globals 以及反射"></a>locals 和 globals 以及反射</h1>
+<h3 id="celery"><a href="#celery" class="headerlink" title="celery"></a>celery</h3><h3 id="mypy"><a href="#mypy" class="headerlink" title="mypy"></a>mypy</h3><h4 id="json-类型定义"><a href="#json-类型定义" class="headerlink" title="json 类型定义"></a>json 类型定义</h4><p>当 json 结果固定时，使用 <a target="_blank" rel="noopener" href="https://mypy.readthedocs.io/en/latest/more_types.html#typeddict">TypedDicts</a>，当结构不固定时，使用下面方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">List</span>, <span class="type">Union</span>, TypeAlias</span><br><span class="line"></span><br><span class="line">Json: TypeAlias = <span class="type">Union</span>[<span class="type">Dict</span>[<span class="built_in">str</span>, <span class="string">&quot;Json&quot;</span>], <span class="type">List</span>[<span class="string">&quot;Json&quot;</span>], <span class="built_in">str</span>, <span class="built_in">int</span>, <span class="built_in">float</span>, <span class="built_in">bool</span>, <span class="literal">None</span>]</span><br></pre></td></tr></table></figure>
+
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/51291722/define-a-jsonable-type-using-mypy-pep-526">https://stackoverflow.com/questions/51291722/define-a-jsonable-type-using-mypy-pep-526</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/python/typing/issues/182#issuecomment-1320974824">https://github.com/python/typing/issues/182#issuecomment-1320974824</a></p>
+
     </div>
 
     

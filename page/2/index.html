@@ -228,7 +228,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -323,7 +323,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -422,7 +422,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -517,7 +517,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -616,7 +616,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -711,7 +711,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:50" itemprop="dateModified" datetime="2023-10-12T11:47:50+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -805,7 +805,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -827,7 +827,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <h2 id="UNIX域套接字"><a href="#UNIX域套接字" class="headerlink" title="UNIX域套接字"></a>UNIX域套接字</h2><p>UNIX域套接字形式的IPC可以在同一计算机系统上运行的两个进程之间传送打开文<br>件描述符。服务进程可以使它们的打开文件描述符与指定的名字相关联，<br>同一系统上运行的客户进程可以使用这些名字与服务器进程汇聚。</p>
+<p>UNIX 域套接字用于在同一台计算机上运行的进程之间的通信。虽然<br>因特网域套接字可用于同一目的，但 UNIX 域套接字的效率更高。UNIX<br>域套接字仅仅复制数据，它们并不执行协议处理，不需要添加或删除网络<br>报头，无需计算校验和，不要产生顺序号，无需发送确认报文。<br>UNIX 域套接字提供流和数据报两种接口。UNIX 域数据报服务是可<br>靠的，既不会丢失报文也不会传递出错。UNIX 域套接字就像是套接字和<br>管道的混合。可以使用它们面向网络的域套接字接口或者使用socketpair函<br>数来创建一对无命名的、相互连接的UNIX域套接字。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">socketpair</span><span class="params">(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol, <span class="type">int</span></span></span><br><span class="line"><span class="params">sockfd[<span class="number">2</span>])</span>;</span><br></pre></td></tr></table></figure>
+<p>返回值：若成功，返回0；若出错，返回-1<br>虽然接口足够通用，允许socketpair用于其他域，但一般来说操作系统<br>仅对UNIX域提供支持。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B17-%E9%AB%98%E7%BA%A7%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -889,7 +900,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -911,7 +922,19 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <h2 id="套接字描述符"><a href="#套接字描述符" class="headerlink" title="套接字描述符"></a>套接字描述符</h2><p>套接字是通信端点的抽象。正如使用文件描述符访问文件，应用程序用套接字描述符访问套接字。套接字描述符在UNIX系统中被当作是一种文件描述符。事实上，许多处理文件描述符的函数（如read和write）可以用于处理套接字描述符。</p>
+<p>为创建一个套接字，调用socket函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">socket</span> <span class="params">(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回值：<br>若成功，返回文件（套接字）描述符；<br>若出错，返回−1</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B16-%E7%BD%91%E7%BB%9CIPC-%E5%A5%97%E6%8E%A5%E5%AD%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -973,7 +996,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -995,12 +1018,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h1><p>过去，UNIX 系统 IPC 是各种进程通信方式的统称，但是，这些通信方式中极少有能在所有 UNIX 系统实现中进行移植的。随着 POSIX 和 TheOpen Group（以前是 X&#x2F;Open）标准化的推进和影响的扩大，情况已得到改善，但差别仍然存在。</p>
-<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>管道是 UNIX 系统 IPC 的最古老形式，所有 UNIX 系统都提供此种通信机制。管道有以下两种局限性。</p>
+          <p>过去，<code>UNIX</code> 系统 <code>IPC</code> 是各种进程通信方式的统称，但是，这些通信方式中极少有能在所有 <code>UNIX</code> 系统实现中进行移植的。随着 <code>POSIX</code> 和 <code>The Open Group</code>（以前是 <code>X/Open</code>）标准化的推进和影响的扩大，情况已得到改善，但差别仍然存在。</p>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>管道是 <code>UNIX</code> 系统 <code>IPC</code> 的最古老形式，所有 <code>UNIX</code> 系统都提供此种通信机制。管道有以下两种局限性。</p>
 <ul>
 <li>历史上，它们是半双工的（即数据只能在一个方向上流动）。现在，某些系统提供全双工管道，但是为了最佳的可移植性，我们决不应预先假定系统支持全双工管道。</li>
-<li>管道只能在具有公共祖先的两个进程之间使用。通常，一个管道由一个进程创建，在进程调用 fork 之后，这个管道就能在父进程和子进程之间使用了。</li>
+<li>管道只能在具有公共祖先的两个进程之间使用。通常，一个管道由一个进程创建，在进程调用 <code>fork</code> 之后，这个管道就能在父进程和子进程之间使用了。</li>
 </ul>
+<p>尽管有这两种局限性，半双工管道仍是最常用的 <code>IPC</code> 形式。每当在管道中键入一个命令序列，让 <code>shell</code> 执行时，<code>shell</code> 都会为每一条命令单独创建一个进程，然后用管道将前一条命令进程的标准输出与后一条命令的标准输入相连接。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B15-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/#more" rel="contents">
@@ -1070,7 +1094,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-26 09:26:42" itemprop="dateModified" datetime="2023-09-26T09:26:42+00:00">2023-09-26</time>
+      <time title="修改时间：2023-10-12 11:47:49" itemprop="dateModified" datetime="2023-10-12T11:47:49+00:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
