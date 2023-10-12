@@ -5,11 +5,11 @@ tags: Python使用
 category: python
 ---
 
-本文章记录使用 pytho 过程中易忘的知识，方便自己查阅。
+本文章记录使用 python 过程中易忘的知识，方便自己查阅。
 
-# 设置 pypi 镜像
+## 设置 pypi 镜像
 
-## 临时使用
+### 临时使用
 
 ```bash
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
@@ -17,7 +17,7 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
 
 注意，simple 不能少, 是 https 而不是 http
 
-## 设为默认
+### 设为默认
 
 升级 pip 到最新的版本 (>=10.0.0) 后进行配置：
 
@@ -36,7 +36,53 @@ pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple
 pip config set global.index-url http://pypi.douban.com/simple/
 ```
 
-# Python 中 join 函数和 os.path.join 用法
+## pycharm
+
+### pycharm 设置忽略大小写进行自动补齐
+
+进入下列设置
+
+> settings -> Editor -> General -> Code Completion
+
+将 `Match case` 不勾选就可以忽略大小写进行自动补齐了。
+
+### pycharm 设置 python 代码模板
+
+设置 File > Settings > File and Code Template > Python Script
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# File Name : ${NAME}
+# Created by ${USER} on $DATE
+
+__author__ = '${USER}'
+
+if __name__ == '__main__':
+    pass
+```
+
+一些模板变量含义
+
+```python
+${PROJECT_NAME} - 当前Project名称;
+ ${NAME} - 在创建文件的对话框中指定的文件名;
+ ${USER} - 当前用户名;
+ ${DATE} - 当前系统日期;
+ ${TIME} - 当前系统时间;
+ ${YEAR} - 年;
+ ${MONTH} - 月;
+ ${DAY} - 日;
+ ${HOUR} - 小时;
+ ${MINUTE} - 分钟；
+ ${PRODUCT_NAME} - 创建文件的IDE名称;
+ ${MONTH_NAME_SHORT} - 英文月份缩写, 如: Jan, Feb, etc;
+ ${MONTH_NAME_FULL} - 英文月份全称, 如: January, February, etc；
+```
+
+## python知识点
+
+### Python 中 join 函数和 os.path.join 用法
 
 > join ： 连接字符串数组。将字符串、元组、列表中的元素以指定的字符(分隔符)连接生成一个新的字符串
 
@@ -70,55 +116,9 @@ hello world 世界 你好
 home/me/mypath
 ```
 
-# pycharm 设置忽略大小写进行自动补齐
 
-进入下列设置
 
-> settings -> Editor -> General -> Code Completion
-
-将 `Match case` 不勾选就可以忽略大小写进行自动补齐了。
-
-# pycharm 设置 python 代码模板
-
-设置 File > Settings > File and Code Template > Python Script
-
-```
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# File Name : ${NAME}
-# Created by ${USER} on $DATE
-
-__author__ = '${USER}'
-
-if __name__ == '__main__':
-    pass
-```
-
-一些模板变量含义
-
-```
-${PROJECT_NAME} - 当前Project名称;
- ${NAME} - 在创建文件的对话框中指定的文件名;
- ${USER} - 当前用户名;
- ${DATE} - 当前系统日期;
- ${TIME} - 当前系统时间;
- ${YEAR} - 年;
- ${MONTH} - 月;
- ${DAY} - 日;
- ${HOUR} - 小时;
- ${MINUTE} - 分钟；
- ${PRODUCT_NAME} - 创建文件的IDE名称;
- ${MONTH_NAME_SHORT} - 英文月份缩写, 如: Jan, Feb, etc;
- ${MONTH_NAME_FULL} - 英文月份全称, 如: January, February, etc；
-```
-
-# pycharm 打开虚拟环境时，代码无法补全
-
-打开设置，按如下图所示添加对应的 python 虚拟环境
-
-![](python使用记录/2020-01-27-13-31-34.png)
-
-# PYTHONPATH 作用
+### PYTHONPATH 作用
 
 `PYTHONPATH` 是 Python 搜索路径，默认我们 `import` 的模块都会从 `PYTHONPATH` 里面寻找。
 
@@ -144,7 +144,13 @@ os.environ['PYTHONPATH']
 
 使用 `python -m` 执行python命令时， Python 将会在 `PYTHONPATH` 中添加当前目录。
 
-# Django 测试脚本
+### locals 和 globals 以及反射
+
+## python 第三方库
+
+### Django
+
+#### Django 测试脚本
 
 当你只是想测试 django 中的某一个 py 文件内容 那么你可以不用书写前后端交互的形式，而是直接写一个测试脚本即可
 
@@ -167,4 +173,26 @@ if __name__ == "__main__":
 
 > https://www.strongforu.top/archives/153
 
-# locals 和 globals 以及反射
+
+
+### celery
+
+
+
+### mypy
+
+#### json 类型定义
+
+当 json 结果固定时，使用 [TypedDicts](https://mypy.readthedocs.io/en/latest/more_types.html#typeddict)，当结构不固定时，使用下面方法：
+
+```python
+from typing import Dict, List, Union, TypeAlias
+
+Json: TypeAlias = Union[Dict[str, "Json"], List["Json"], str, int, float, bool, None]
+```
+
+参考：
+
+https://stackoverflow.com/questions/51291722/define-a-jsonable-type-using-mypy-pep-526
+
+https://github.com/python/typing/issues/182#issuecomment-1320974824
