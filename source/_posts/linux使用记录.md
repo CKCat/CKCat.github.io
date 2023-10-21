@@ -118,7 +118,7 @@ export LD_LIBRARY_PATH=/home/public/software_install/protobuf-3.1.0/lib:$LD_LIBR
 
 可以参考下面的仓库内容：
 
-https://github.com/snowdream/51-android 
+https://github.com/snowdream/51-android
 
 **https://github.com/M0Rf30/android-udev-rules （推荐）**
 
@@ -753,7 +753,6 @@ $ sudo apt install gnome-tweaks
 https://zzqcn.github.io/misc/vmware/reduce-disk-size.html#vmware
 https://blog.csdn.net/Michael__One/article/details/103850274
 
-
 ### 共享文件夹不显示
 
 内核版本大于 4.0 的虚拟机，使用下列命令。
@@ -771,6 +770,53 @@ $ sudo service network-manager stop
 $ sudo rm /var/lib/NetworkManager/NetworkManager.state
 $ sudo service network-manager start
 ```
+
+### 安装 IDA pro
+
+首先安装 [wine](https://wiki.winehq.org/Ubuntu),直接根据文档进行安装：
+
+```bash
+$ sudo dpkg --add-architecture i386
+$ sudo mkdir -pm755 /etc/apt/keyrings
+$ sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+# 根据自己的系统版本进行选择
+$ sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/focal/winehq-focal.sources
+# 安装稳定版
+$ sudo apt install --install-recommends winehq-stable
+$ wine --version
+wine-8.0.2
+```
+
+整个安装过程没有出现问题，接下来安装 python，这里需要注意的是可能需要使用 python310 的版本，因为我使用 python39 安装后，启动 IDA 一直出现异常，使用 python310 就没有问题，具体原因未知。
+
+使用 python 官方的安装包无法安装，这里使用的是 github 上的一个项目 [PythonWin7](https://github.com/adang1345/PythonWin7)，直接下载 `python-3.10.9-amd64-full.exe` 进行安装。
+
+```bash
+$ wine python-3.10.9-amd64-full.exe
+```
+
+运行上面的命令后，安装图形界面进行安装，这里需要勾选添加到环境变量中的选项，我这里的安装目录为 `C:\python310`，实际对应的目录为 `~/.wine/drive_c/Python310` 。
+
+接下来运行 `idapyswitch.exe`，选择 python 环境。
+
+```bash
+$ wine tools/IDA7.7_Portable/idapyswitch.exe # 根据自己的实际位置进行修改
+```
+
+上面的命令实际上就是添加了注册表：`HKEY_CURRENT_USER\Software\Hex-Rays\IDA` 中的 `Python3TargetDLL` 的值，这里需要注意的是该值被修改为了 `C:\python310\python310.dll`，但是实际上却没有这个 dll 文件，需要手动修改为 `C:\python310\python3.dll`，否则启动 IDA pro 时会出现异常。到这里 IDApython 的环境就安装完成了。
+
+接下来启动 IDA，完美的启动起来了，所有的 IDApython 插件也完美的加载了。
+
+```bash
+$ wine tools/IDA7.7_Portable/ida.exe # 根据自己的实际位置进行修改
+```
+
+如果需要安装 python 库，也可以直接使用pip 进行安装，例如安装 `yara-python==4.2.0`。
+```bash
+wine pip install yara-python==4.2.0
+```
+
+参考：https://www.debugwar.com/article/activate-IDAPython-with-wine-IDA-under-linux
 
 ### 其他
 
