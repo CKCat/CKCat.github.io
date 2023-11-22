@@ -16,13 +16,12 @@ Frida 官网：https://frida.re/
 在安装 `Frida` 之前最好创建一个 `python` 虚拟环境，这样可以避免与其他环境产生干扰
 
 ```bash
-$ mkvirtualenv -p python3 frida_12.8.7    # pyenv 创建虚拟环境
 $ conda create -n frida_12.8.7 python=3.9 # miniconda 创建虚拟环境
 ```
 
-上面有两种方式创建虚拟环境，推荐使用 miniconda，接下来就可以安装 [Frida](https://github.com/frida/frida) 了。
+荐使用 miniconda 创建虚拟环境，接下来就可以安装 [Frida](https://github.com/frida/frida) 了。
 
-1. 安装最新版 Frida
+1. **安装最新版 Frida**
 
    进入虚拟环境，直接运行下来命令即可安装完成
 
@@ -36,7 +35,7 @@ $ conda create -n frida_12.8.7 python=3.9 # miniconda 创建虚拟环境
 
    ![](frida使用记录/2020-01-19-16-20-36.png)
 
-2. 安装特定版本的 Frida
+2. **安装特定版本的 Frida**
 
    通过 [Frida Releases](https://github.com/frida/frida/releases) 页面找到需要安装的 `frida-tools` 版本，使用 `pip` 指定版本安装，这里以 `Frida 12.11.18` 为例。
 
@@ -75,9 +74,9 @@ https://github.com/Ylarod/Florida/releases
 
 为了在开发 Frida 脚本时有代码补全提示，我们可以使用下面两种方式进行环境配置。
 
-1. 使用 `TypeScript`（推荐）
+1. **使用 `TypeScript`（推荐）**
 
-   使用 `Frida` 作者提供的开发环境 [frida-agent-example](https://github.com/oleavr/frida-agent-example) ，该环境需要使用 `TypeScript` 开发。
+   使用 `Frida` 官方提供的开发环境 [frida-agent-example](https://github.com/oleavr/frida-agent-example) ，该环境需要使用 `TypeScript` 开发。
 
    构建开发环境
 
@@ -97,7 +96,7 @@ https://github.com/Ylarod/Florida/releases
 
    后续直接使用 `index.ts` 开发即可实现代码补全提示。
 
-2. 引用 `frida-gum.d.ts`
+2. **引用 `frida-gum.d.ts`**
 
    在 `Frida` 源码中获取 [frida-gum.d.ts](https://github.com/frida/frida-gum/tree/6e36eebe1aad51c37329242cf07ac169fc4a62c4/bindings/gumjs/types/frida-gum) 文件，该文件包含了所有的 API 。
 
@@ -119,13 +118,13 @@ https://github.com/Ylarod/Florida/releases
 
 首先使用 `Frida` 命令或者 `python` 脚本以调试模式加载 `js` 脚本。
 
-1. Frida 命令:
+1. **Frida 命令:**
 
    ```bash
    $ frida -U com.example.android -l _agent.js --debug --runtime=v8 <port/name>
    ```
 
-2. python 脚本:
+2. **python 脚本:**
 
    ```python
    session = dev.attach(app.pid)
@@ -135,7 +134,7 @@ https://github.com/Ylarod/Florida/releases
 
 启动后会回显 `Inspector` 正在监听 `9229` 默认端口，下面就可以使用 chome 或 pycharm 进行调试了。
 
-1. chome
+1. **chome 调试**
    打开 `chrome://inspect` 页面, 点击 `Open dedicated DevTools for Node` 。
 
    ![](frida使用记录/2021-09-07-17-53-36.png)
@@ -144,7 +143,7 @@ https://github.com/Ylarod/Florida/releases
 
    ![](frida使用记录/2021-09-07-17-56-47.png)
 
-2. pycharm
+2. **pycharm 调试**
    首先安装 `Node.js` 插件，重启。然后添加调试器 `Attaching to Node.js/Chrome`，端口默认即可。
 
    ![](frida使用记录/2021-09-08-14-51-43.png)
@@ -161,9 +160,10 @@ https://github.com/Ylarod/Florida/releases
 
 # Frida 使用
 
-## Frida 启动
+## 执行 Frida 脚本
 
-通过运行 `frida -h` 可以查看 frida 支持的命令。可以发现有两种
+通过运行 `frida -h` 可以查看 frida 支持的命令，其中可以使用 attach 和 spawn 两种方式执行 frida 脚本。
+
 ```bash
 $ frida -h
 usage: frida [options] target
@@ -242,77 +242,68 @@ optional arguments:
   --no-auto-reload      Disable auto reload of provided scripts and c module
 ```
 
+1. **attach 方式**
 
+   `attach` 到已经存在的进程，核心原理是 `ptrace` 修改进程内存，如果进程处于调试状态（ `traceid` 不等于 `0` ），则 `attach` 失败。启动命令如下：
 
-1. attach 启动
+   ```bash
+   $ frida -UN com.example.android -l _agent.js
+   ```
 
-`attach` 到已经存在的进程，核心原理是 `ptrace` 修改进程内存，如果进程处于调试状态（ `traceid` 不等于 `0` ），则 `attach` 失败。启动命令如下：
+   以上命令对应的 `python` 脚本如下：
 
-```bash
-$ frida -U com.example.android --no-pause -l _agent.js
-# 或者
-$ frida -UF --no-pause -l _agent.js
-```
+   ```python
+   import sys
+   import time
+   import frida
 
-- `-U` : 连接 USB 设备。
-- `-l` : 加载脚本。
-- `--no-pause` : 启动后自动启动主线程。
-- `-F` : 附加当前运行的应用。
+   def on_message(message,data):
+       print("message",message)
+       print("data",data)
 
-以上命令对应的 `python` 脚本如下：
+   device = frida.get_usb_device()
+   session = device.attach("com.example.android")
 
-```python
-import sys
-import time
-import frida
+   with open("_agent.js","r", encoding = "utf8") as f:
+       script = session.create_script(f.read())
 
-def on_message(message,data):
-    print("message",message)
-    print("data",data)
+   script.on("message",on_message)
+   script.load()
+   sys.stdin.read()
+   ```
 
-device = frida.get_usb_device()
-session = device.attach("com.example.android")
+2. spawn 方式
 
-with open("_agent.js","r", encoding = "utf8") as f:
-    script = session.create_script(f.read())
+   启动一个新的进程并挂起，在启动的同时注入 `frida` 代码，适用于在进程启动前的一些 `hook` ，如 `hook RegisterNative` 等，注入完成后调用 `resume` 恢复进程。启动命令如下：
 
-script.on("message",on_message)
-script.load()
-sys.stdin.read()
-```
+   ```bash
+   frida -U -f com.example.android -l _agent.js
+   ```
 
-2. spawn 启动
+   对应的 `python` 脚本如下：
 
-启动一个新的进程并挂起，在启动的同时注入 `frida` 代码，适用于在进程启动前的一些 `hook` ，如 `hook RegisterNative` 等，注入完成后调用 `resume` 恢复进程。启动命令如下：
+   ```python
+   import sys
+   import time
+   import frida
 
-```bash
-frida -U -f com.example.android --no-pause  -l _agent.js
-```
+   def on_message(message,data):
+       print("message",message)
+       print("data",data)
 
-对应的 `python` 脚本如下：
+   device = frida.get_usb_device()
+   pid = device.spawn(["com.example.android"])
+   device.resume(pid)
+   session = device.attach(pid)
 
-```python
-import sys
-import time
-import frida
+   with open("_agent.js",'r', encoding = "utf8") as f:
+       script = session.create_script(f.read())
 
-def on_message(message,data):
-    print("message",message)
-    print("data",data)
+   script.on("message",on_message)
+   script.load()
 
-device = frida.get_usb_device()
-pid = device.spawn(["com.example.android"])
-device.resume(pid)
-session = device.attach(pid)
-
-with open("_agent.js",'r', encoding = "utf8") as f:
-    script = session.create_script(f.read())
-
-script.on("message",on_message)
-script.load()
-
-sys.stdin.read()
-```
+   sys.stdin.read()
+   ```
 
 ## Frida 自定义端口
 
@@ -1170,8 +1161,6 @@ function main() {
 setImmediate(main);
 ```
 
-###
-
 # Frida 代码片段
 
 Hook StringBuilder and print data only from a specific class
@@ -1264,5 +1253,4 @@ npm i -g @types/frida-gum
 ```bash
 https://kevinspider.github.io/fridahookjava/
 https://zyzling.gitee.io/2020/05/12/Frida%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
-
 ```

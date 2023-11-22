@@ -194,7 +194,7 @@ https://juejin.im/post/5bed2b45f265da61530457ee
 
 1. 安装仓库中包含的最新版本
 
-   ```
+   ```bash
    $ sudo apt update
    $ sudo apt install nodejs
    $ sudo apt install npm     # 安装npm管理工具
@@ -202,14 +202,14 @@ https://juejin.im/post/5bed2b45f265da61530457ee
 
 2. 升级 node 版本为长服务版（lts）
 
-   ```
+   ```bash
    $ sudo npm install -g n
    $ sudo n lts
    ```
 
 3. 切换版本
 
-   ```
+   ```bash
    $ sudo n            # 将显示本机的可用版本列表，通过上下键来选择对应的版本
    $ sudo n 10.13.0    # 如果对版本比较熟悉，可直接指定版本
    $ sudo n -v         # 查看node版本
@@ -217,164 +217,10 @@ https://juejin.im/post/5bed2b45f265da61530457ee
 
 4. 升级 npm
 
-   ```
+   ```bash
    $ sudo npm i -g npm
    ```
 
-### ubuntu 安装 Metasploit Framework
-
-首先打开终端输入
-
-`curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall`
-
-之后如果你不是 root 用户登录的话你要输入 root 密码，接着你要做的是就是等待安装完成。
-
-```bash
-$ curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  5394  100  5394    0     0   3105      0  0:00:01  0:00:01 --:--:--  3107
-Switching to root user to update the package
-[sudo] bboysoul 的密码：
-Adding metasploit-framework to your repository list..OK
-Updating package cache..OK
-Checking for and installing update..
-正在读取软件包列表... 完成
-正在分析软件包的依赖关系树
-正在读取状态信息... 完成
-下列【新】软件包将被安装：
-  metasploit-framework
-升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 1 个软件包未被升级。
-需要下载 177 MB 的归档。
-解压缩后会消耗 423 MB 的额外空间。
-获取:1 http://downloads.metasploit.com/data/releases/metasploit-framework/apt lucid/main amd64 metasploit-framework amd64 4.16.16+20171109102640.git.1.c5fd027~1rapid7-1 [177 MB]
-已下载 177 MB，耗时 2分 8秒 (1,373 kB/s)
-正在选中未选择的软件包 metasploit-framework。
-(正在读取数据库 ... 系统当前共安装有 208821 个文件和目录。)
-正准备解包 .../metasploit-framework_4.16.16+20171109102640.git.1.c5fd027~1rapid7-1_amd64.deb  ...
-正在解包 metasploit-framework (4.16.16+20171109102640.git.1.c5fd027~1rapid7-1) ...
-正在设置 metasploit-framework (4.16.16+20171109102640.git.1.c5fd027~1rapid7-1) ...
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfbinscan 来在自动模式中提供 /usr/bin/msfbinscan (msfbinscan)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfconsole 来在自动模式中提供 /usr/bin/msfconsole (msfconsole)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfd 来在自动模式中提供 /usr/bin/msfd (msfd)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfdb 来在自动模式中提供 /usr/bin/msfdb (msfdb)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfelfscan 来在自动模式中提供 /usr/bin/msfelfscan (msfelfscan)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfmachscan 来在自动模式中提供 /usr/bin/msfmachscan (msfmachscan)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfpescan 来在自动模式中提供 /usr/bin/msfpescan (msfpescan)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfrop 来在自动模式中提供 /usr/bin/msfrop (msfrop)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfrpc 来在自动模式中提供 /usr/bin/msfrpc (msfrpc)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfrpcd 来在自动模式中提供 /usr/bin/msfrpcd (msfrpcd)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfupdate 来在自动模式中提供 /usr/bin/msfupdate (msfupdate)
-update-alternatives: 使用 /opt/metasploit-framework/bin/msfvenom 来在自动模式中提供 /usr/bin/msfvenom (msfvenom)
-update-alternatives: 使用 /opt/metasploit-framework/bin/metasploit-aggregator 来在自动模式中提供 /usr/bin/metasploit-aggregator (metasploit-aggregator)
-Run msfconsole to get started
-W: --force-yes 已经被废弃，请使用以 --allow 开头的选项来代替。
-安装完成
-```
-
-接着输入`msfconsole`
-
-会提示你是否建立一个 database，你输入 yes 就好
-
-```bash
-$ msfconsole
-
- ** Welcome to Metasploit Framework Initial Setup **
-    Please answer a few questions to get started.
-
-
-Would you like to use and setup a new database (recommended)? yes
-Creating database at /home/bboysoul/.msf4/db
-Starting database at /home/bboysoul/.msf4/db...success
-Creating database users
-Creating initial database schema
-
- ** Metasploit Framework Initial Setup Complete **
-
-
-  +-------------------------------------------------------+
-  |  METASPLOIT by Rapid7                                 |
-  +---------------------------+---------------------------+
-  |      __________________   |                           |
-  |  ==c(______(o(______(_()  | |""""""""""""|======[***  |
-  |             )=\           | |  EXPLOIT   \            |
-  |            // \\          | |_____________\_______    |
-  |           //   \\         | |==[msf >]============\   |
-  |          //     \\        | |______________________\  |
-  |         // RECON \\       | \(@)(@)(@)(@)(@)(@)(@)/   |
-  |        //         \\      |  *********************    |
-  +---------------------------+---------------------------+
-  |      o O o                |        \'\/\/\/'/         |
-  |              o O          |         )======(          |
-  |                 o         |       .'  LOOT  '.        |
-  | |^^^^^^^^^^^^^^|l___      |      /    _||__   \       |
-  | |    PAYLOAD     |""\___, |     /    (_||_     \      |
-  | |________________|__|)__| |    |     __||_)     |     |
-  | |(@)(@)"""**|(@)(@)**|(@) |    "       ||       "     |
-  |  = = = = = = = = = = = =  |     '--------------'      |
-  +---------------------------+---------------------------+
-
-
-       =[ metasploit v4.16.16-dev-                        ]
-+ -- --=[ 1702 exploits - 969 auxiliary - 299 post        ]
-+ -- --=[ 503 payloads - 40 encoders - 10 nops            ]
-+ -- --=[ Free Metasploit Pro trial: http://r-7.co/trymsp ]
-
-msf >
-```
-
-接着我们建立`Module database`，如果不建立那么你在`search`一些模块的时候会提示
-`[!] Module database cache not built yet, using slow search`
-
-在此之前我们首先要安装 `postgresql`。
-
-```bash
-$ sudo apt install postgresql
-```
-
-安装完成之后确认下服务是否开启，如果没有开启它。
-
-```bash
-$  sudo service postgresql status
-● postgresql.service - PostgreSQL RDBMS
-   Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
-   Active: active (exited) since 五 2017-11-10 14:59:02 CST; 29s ago
- Main PID: 27540 (code=exited, status=0/SUCCESS)
-   CGroup: /system.slice/postgresql.service
-
-11月 10 14:59:02 bboysoul systemd[1]: Starting PostgreSQL RDBMS...
-11月 10 14:59:02 bboysoul systemd[1]: Started PostgreSQL RDBMS.
-11月 10 14:59:08 bboysoul systemd[1]: Started PostgreSQL RDBMS.
-```
-
-接着进入 metasploit 中，输入
-
-```bash
-msf > msfdb init
-[*] exec: msfdb init
-
-Found a database at /home/bboysoul/.msf4/db, checking to see if it is started
-Database already started at /home/bboysoul/.msf4/db
-```
-
-之后输入
-
-```bash
-msf > db_rebuild_cache
-[*] Purging and rebuilding the module cache in the background...
-```
-
-等几分钟之后执行
-
-```bash
-search ms10
-```
-
-看看是不是还有 `[!] Module database cache not built yet, using slow search` 这个警告。
-
-如果还有那么再等一段时间再次执行，如果十分钟以后还是出现这个警告，那么可能你的步骤错了。
-
-来源：https://www.jianshu.com/p/fdecffd6083c
 
 ### 解决 Ubuntu 下 KeePass2 中文显示为方块的问题
 
@@ -441,10 +287,10 @@ $ sudo chgrp wireshark /usr/bin/dumpcap
 $ sudo chmod 4755 /usr/bin/dumpcap
 ```
 
-将需要使用的普通用户名加入 wireshark 用户组，我的用户是 `cackt` ，则需要使用命令：
+将需要使用的普通用户名加入 wireshark 用户组，我的用户是 `ckcat` ，则需要使用命令：
 
 ```bash
-$ sudo gpasswd -a dengyi wireshark
+$ sudo gpasswd -a ckcat wireshark
 ```
 
 ### 安装 Albert
