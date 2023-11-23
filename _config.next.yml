@@ -50,10 +50,10 @@ darkmode: true
 # ---------------------------------------------------------------
 
 favicon:
-  small: /images/favicon-16x16-next.png
-  medium: /images/favicon-32x32-next.png
-  apple_touch_icon: /images/apple-touch-icon-next.png
-  safari_pinned_tab: /images/logo.svg
+  small: https://github.com/ckcat.png?size=16
+  medium: https://github.com/ckcat.png?size=32
+  apple_touch_icon: /https://github.com/ckcat.png
+  safari_pinned_tab: https://github.com/ckcat.png
   #android_manifest: /manifest.json
 
 # Custom Logo (Warning: Do not support scheme Mist)
@@ -102,6 +102,8 @@ menu:
   archives: /archives/ || fa fa-archive
   #schedule: /schedule/ || fa fa-calendar
   #sitemap: /sitemap.xml || fa fa-sitemap
+  gena-nav: https://ckcat.github.io/CKCat-gena-nav/ || fa fa-navicon
+  aibard: https://aibard123.com/?github || fa fa-eye
   commonweal: /404/ || fa fa-heartbeat
 
 # Enable / Disable menu icons / item badges.
