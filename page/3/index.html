@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -192,7 +192,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/01/28/JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" class="post-title-link" itemprop="url">unix环境高级编程13-守护进程</a>
+          <a href="/2021/01/28/JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">JebAndroidSigPlugin使用记录</a>
         </h2>
 
         <div class="post-meta-container">
@@ -221,14 +221,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:22:51" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:51+00:00">2023-04-10</time>
+      <time title="创建时间：2021-01-28 18:13:01" itemprop="dateCreated datePublished" datetime="2021-01-28T18:13:01+00:00">2021-01-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -236,7 +236,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
         </span>
     </span>
 
@@ -250,12 +250,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关闭时才终止。因为它们没有控制终端，所以说它们是在后台运行的。UNIX 系统有很多守护进程，它们执行日常事务活动。</p>
-<h2 id="守护进程的特征"><a href="#守护进程的特征" class="headerlink" title="守护进程的特征"></a>守护进程的特征</h2><p>使用下列命令查看系统中各个进程的状态。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ ps -axj</span><br><span class="line">  PPID    PID   PGID    SID TTY       TPGID STAT   UID   TIME COMMAND</span><br><span class="line">     0      1      1      1 ?            -1 Ss       0   0:06 /sbin/init auto automatic-ubiquity noprompt</span><br><span class="line">     0      2      0      0 ?            -1 S        0   0:00 [kthreadd]</span><br><span class="line">     2      4      0      0 ?            -1 I&lt;       0   0:00 [kworker/0:0H]</span><br><span class="line">     2      6      0      0 ?            -1 I&lt;       0   0:00 [mm_percpu_wq]</span><br><span class="line">     2      7      0      0 ?            -1 S        0   0:00 [ksoftirqd/0]</span><br><span class="line">     2      8      0      0 ?            -1 I        0   3:16 [rcu_sched]</span><br><span class="line">     2      9      0      0 ?            -1 I        0   0:00 [rcu_bh]</span><br><span class="line">     2     10      0      0 ?            -1 S        0   0:00 [migration/0]</span><br><span class="line">     2     11      0      0 ?            -1 S        0   0:00 [watchdog/0]</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+          <p>最近使用了一下 JebAndroidSigPlugin 插件，感觉效果还可以，记录一下使用过程。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>直接去 <a target="_blank" rel="noopener" href="https://github.com/pnfsoftware/jeb2-androsig">https://github.com/pnfsoftware/jeb2-androsig</a> 下载编译好的 jar 包， 丢到 <code>jeb/coreplugins</code> 目录下，正常情况下 JEB 应该自带该插件</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>使用过程主要参考下面两篇文章：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/2021/01/28/JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -286,7 +286,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B12-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -304,7 +304,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B12-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">unix环境高级编程12-线程控制</a>
+          <a href="/2020/12/30/Android%E6%8A%93%E5%8C%85/" class="post-title-link" itemprop="url">Android抓包</a>
         </h2>
 
         <div class="post-meta-container">
@@ -315,14 +315,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:22:37" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:37+00:00">2023-04-10</time>
+      <time title="创建时间：2020-12-30 14:53:08" itemprop="dateCreated datePublished" datetime="2020-12-30T14:53:08+00:00">2020-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -330,7 +330,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
         </span>
     </span>
 
@@ -344,79 +344,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="线程限制"><a href="#线程限制" class="headerlink" title="线程限制"></a>线程限制</h2><p>线程限制和 <code>sysconf</code> 的 name 参数</p>
-<table>
-<thead>
-<tr>
-<th>限制名称</th>
-<th>描述</th>
-<th>name 参数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>PTHREAD_DESTRUCTOR_ITERATIONS</code></td>
-<td>线程退出时操作系统实现试图销毁线程特定数据的最大次数</td>
-<td><code>_SC_THREAD_DESTRUCTOR_ITERATIONS</code></td>
-</tr>
-<tr>
-<td><code>PTHREAD_KEYS_MAX</code></td>
-<td>进程可以创建的键的最大数目</td>
-<td><code>_SC_THREAD_KEYS_MAX</code></td>
-</tr>
-<tr>
-<td><code>PTHREAD_STACK_MIN</code></td>
-<td>一个线程的栈可用的最小字节数</td>
-<td><code>_SC_THREAD_STACK_MIN</code></td>
-</tr>
-<tr>
-<td><code>PTHREAD_THREADS_MAX</code></td>
-<td>进程可以创建的最大线程数</td>
-<td><code>_SC_THREAD_THREADS_MAX</code></td>
-</tr>
-</tbody></table>
-<p>线程配置限制的实例</p>
-<table>
-<thead>
-<tr>
-<th>限制名称</th>
-<th>FreeBSD 8.0</th>
-<th>Linux 3.2.0</th>
-<th>Mac OS X 10.6.8</th>
-<th>Solaris 10</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>PTHREAD_DESTRUCTOR_ITERATIONS</code></td>
-<td>4</td>
-<td>4</td>
-<td>4</td>
-<td>没有确定的限制</td>
-</tr>
-<tr>
-<td><code>PTHREAD_KEYS_MAX</code></td>
-<td>256</td>
-<td>1024</td>
-<td>512</td>
-<td>没有确定的限制</td>
-</tr>
-<tr>
-<td><code>PTHREAD_STACK_MIN</code></td>
-<td>2048</td>
-<td>16384</td>
-<td>8192</td>
-<td>8192</td>
-</tr>
-<tr>
-<td><code>PTHREAD_THREADS_MAX</code></td>
-<td>没有确定的限制</td>
-<td>没有确定的限制</td>
-<td>没有确定的限制</td>
-<td>没有确定的限制</td>
-</tr>
-</tbody></table>
+          <h1 id="Android-抓包"><a href="#Android-抓包" class="headerlink" title="Android 抓包"></a>Android 抓包</h1><h2 id="使用-Charles-抓包"><a href="#使用-Charles-抓包" class="headerlink" title="使用 Charles 抓包"></a>使用 Charles 抓包</h2><ol>
+<li>PC 端共享无线网络，使用 ipconfig 命令查看 ip 地址：</li>
+</ol>
+<img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-09-26.png" class>
+
+<ol start="2">
+<li>手机端设置代理</li>
+</ol>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B12-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/#more" rel="contents">
+              <a class="btn" href="/2020/12/30/Android%E6%8A%93%E5%8C%85/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -447,7 +385,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B11-%E7%BA%BF%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/12/29/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -465,7 +403,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B11-%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">unix环境高级编程11-线程</a>
+          <a href="/2020/12/29/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/" class="post-title-link" itemprop="url">学习资源</a>
         </h2>
 
         <div class="post-meta-container">
@@ -476,14 +414,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:22:18" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:18+00:00">2023-04-10</time>
+      <time title="创建时间：2020-12-29 09:43:11" itemprop="dateCreated datePublished" datetime="2020-12-29T09:43:11+00:00">2020-12-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -491,7 +429,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
         </span>
     </span>
 
@@ -505,12 +443,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h2><p>每个线程都包含有表示执行环境所必需的信息，其中包括进程中标识线程的线程 ID、一组寄存器值、栈、调度优先级和策略、信号屏蔽字、<code>errno</code> 变量以及线程私有数据。<strong>一个进程的所有信息对该进程的所有线程都是共享的，包括可执行程序的代码、程序的全局内存和堆内存、栈以及文件描述符。</strong></p>
-<h2 id="线程标识"><a href="#线程标识" class="headerlink" title="线程标识"></a>线程标识</h2><p>就像每个进程有一个进程 ID 一样，每个线程也有一个线程 ID。线程 ID 是用 <code>pthread_t</code> 数据类型来表示的，实现的时候可以用一个结构来代表 <code>pthread_t</code> 数据类型，所以可移植的操作系统实现不能把它作为整数处理。因此必须使用一个函数 <code>pthread_equal</code> 来对两个线程 ID 进行比较。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">pthread_equal</span><span class="params">(<span class="type">pthread_t</span> tid1, <span class="type">pthread_t</span> tid2)</span>;</span><br></pre></td></tr></table></figure>
+          <p><a target="_blank" rel="noopener" href="https://github.com/bkerler/exploit_me">exploit_me</a> - Very vulnerable ARM&#x2F;AARCH64 application (CTF style exploitation tutorial with 14 vulnerability techniques).</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/citra-emu/dynarmic-android">dynarmic-android</a> - A dynamic recompiler for ARM.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0wlsec/Poc-Exp">Poc-Exp</a> - 记录在漏洞研究过程中编写的 PoC&#x2F;Exp.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/shining1984/PL-Compiler-Resource">PL-Compiler-Resource</a> - 程序语言与编译技术相关资料（持续更新中）.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub">vulhub</a> - Pre-Built Vulnerable Environments Based on Docker-Compose.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B11-%E7%BA%BF%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/2020/12/29/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -541,7 +481,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/12/02/IDA-%E6%8F%92%E4%BB%B6%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -559,7 +499,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/" class="post-title-link" itemprop="url">unix环境高级编程10-信号</a>
+          <a href="/2020/12/02/IDA-%E6%8F%92%E4%BB%B6%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">IDA 插件环境配置</a>
         </h2>
 
         <div class="post-meta-container">
@@ -570,14 +510,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:22:08" itemprop="dateCreated datePublished" datetime="2023-04-10T17:22:08+00:00">2023-04-10</time>
+      <time title="创建时间：2020-12-02 14:03:56" itemprop="dateCreated datePublished" datetime="2020-12-02T14:03:56+00:00">2020-12-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -585,7 +525,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
         </span>
     </span>
 
@@ -599,18 +539,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="信号概念"><a href="#信号概念" class="headerlink" title="信号概念"></a>信号概念</h2><ul>
-<li>信号是软件中断。</li>
-<li>很多比较重要的应用程序都需处理信号。</li>
-<li>信号提供了一种处理异步事件的方法。</li>
-<li><code>POSIX.1</code> 对可靠信号例程进行了标准化。</li>
-</ul>
-<p>每个信号都有一个名字，这些名字都以 3 个字符 <code>SIG</code> 开头。在头文件 <code>&lt;signal.h&gt;</code> 中，<strong>信号名都被定义为正整数常量。</strong></p>
-<p>信号的实现定义在另一个头文件中，内核包括对用户级应用程序有意义的头文件，这被认为是一种不好的形式，所以如若应用程序和内核两者都需使用同一定义，那么就将有关信息放置在内核头文件中，然后用户级头文件再包括该内核头文件。</p>
-<p>不存在编号为 0 的信号，<code>POSIX.1</code> 将此种信号编号值称为空信号，<code>kill</code> 函数对信号编号 0 有特殊的应用。</p>
+          <blockquote>
+<p>环境：vs2019,ida7.3</p>
+</blockquote>
+<h1 id="使用-VS-配置-IDA-C-插件环境"><a href="#使用-VS-配置-IDA-C-插件环境" class="headerlink" title="使用 VS 配置 IDA C++ 插件环境"></a>使用 VS 配置 IDA C++ 插件环境</h1><ol>
+<li>使用 VS2019 新建一个 C++ 空工程，添加 C++ 文件 <code>myplugin.cpp</code> , 添加如下代码：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ida.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;idp.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;loader.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;kernwin.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//以上是导入的SDK头文件</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> idaapi <span class="title">init</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//IDA在启动的时候会调用每个插件的init函数。</span></span><br><span class="line">	<span class="comment">//返回值有三种选项:</span></span><br><span class="line">	<span class="comment">//PLUGIN_SKIP适合那些不支持的插件，IDA将不会加载该插件</span></span><br><span class="line">	<span class="comment">//PLUGIN_OK适合那些执行一次性功能的插件</span></span><br><span class="line">	<span class="comment">//PLUGIN_KEEP适合那些需要一直保持功能的插件</span></span><br><span class="line">	<span class="keyword">return</span> PLUGIN_OK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> idaapi <span class="title">term</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//当结束插件时，一般您可以在此添加一点任务清理的代码。</span></span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> idaapi <span class="title">run</span><span class="params">(<span class="type">size_t</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//当按下热键时候,执行功能的入口函数</span></span><br><span class="line">	<span class="built_in">warning</span>(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">char</span> comment[] = <span class="string">&quot;It&#x27;s a plugin to show Hello world!&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">plugin_t</span> PLUGIN =</span><br><span class="line">&#123;</span><br><span class="line">  IDP_INTERFACE_VERSION,</span><br><span class="line">  <span class="number">0</span>,                    <span class="comment">// 插件的一些属性,一般为0即可</span></span><br><span class="line">  init,                 <span class="comment">// initialize</span></span><br><span class="line">  term,                 <span class="comment">// terminate. this pointer may be NULL.</span></span><br><span class="line">  run,                  <span class="comment">// invoke plugin</span></span><br><span class="line">  comment,              <span class="comment">// 插件的说明,会显示在IDA下方的状态栏中</span></span><br><span class="line">  <span class="string">&quot;&quot;</span>,                   <span class="comment">// multiline help about the plugin</span></span><br><span class="line">  <span class="string">&quot;Hello, world&quot;</span>,		<span class="comment">// 插件在列表中显示的名称</span></span><br><span class="line">  <span class="string">&quot;Alt-F1&quot;</span>              <span class="comment">// 插件想要注册的功能快捷键</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>进入项目属性选项，进行如下配置</li>
+</ol>
+<p>配置属性 -&gt; 常规 -&gt; 配置类型： 选中 <strong>动态库(.dll)。</strong></p>
+<img src="/2020/12/02/IDA-%E6%8F%92%E4%BB%B6%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/2020-12-02-16-46-38.png" class>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B10-%E4%BF%A1%E5%8F%B7/#more" rel="contents">
+              <a class="btn" href="/2020/12/02/IDA-%E6%8F%92%E4%BB%B6%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -641,7 +581,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/10/27/IDA%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -659,7 +599,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">unix环境高级编程09-进程关系</a>
+          <a href="/2020/10/27/IDA%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">IDA使用技巧</a>
         </h2>
 
         <div class="post-meta-container">
@@ -670,14 +610,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:21:51" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:51+00:00">2023-04-10</time>
+      <time title="创建时间：2020-10-27 13:22:30" itemprop="dateCreated datePublished" datetime="2020-10-27T13:22:30+00:00">2020-10-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -685,7 +625,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
         </span>
     </span>
 
@@ -699,12 +639,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="终端登录"><a href="#终端登录" class="headerlink" title="终端登录"></a>终端登录</h2><p>在早期的 UNIX 系统中，用户用哑终端（用硬连接连到主机）进行登录。终端或者是本地的或者是远程的。在这两种情况下，登录都经由内核中的终端设备驱动程序。</p>
-<h3 id="BSD-终端登录"><a href="#BSD-终端登录" class="headerlink" title="BSD 终端登录"></a>BSD 终端登录</h3><p><code>init</code> 进程读取文件 <code>/etc/ttys</code>，对每一个允许登录的终端设备，<code>init</code> 调用一次 <code>fork</code>，它所生成的子进程则 <code>exec getty</code> 程序。</p>
-<p><code>getty</code> 对终端设备调用 <code>open</code> 函数，以读、写方式将端打开。一旦设备被打开，则文件描述符 0、1、2 就被设置到该设备。然后 <code>getty</code> 输出“login:”之类的信息，并等待用户键入用户名。</p>
+          <h1 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h1><p>可以使用 IDA 菜单栏 <code>Options &gt; Shortcuts</code> 来查看、修改、添加快捷键。 </p>
+<h2 id="文本输入框"><a href="#文本输入框" class="headerlink" title="文本输入框"></a>文本输入框</h2><p>使用 <code>Ctrl+Enter</code> 进行确认，使用 <code>ESC</code> 取消，使用 <code>F1</code> 查看帮助。使用所有的文本输入框，如注释、编辑本地类型等。</p>
+<img src="/2020/10/27/IDA%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/2020-10-27-13-34-19.png" class>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/#more" rel="contents">
+              <a class="btn" href="/2020/10/27/IDA%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -735,7 +675,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/09/14/GDB%E7%BC%96%E8%AF%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -753,7 +693,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">unix环境高级编程08-进程控制</a>
+          <a href="/2020/09/14/GDB%E7%BC%96%E8%AF%91/" class="post-title-link" itemprop="url">编译GDB</a>
         </h2>
 
         <div class="post-meta-container">
@@ -764,14 +704,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:21:38" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:38+00:00">2023-04-10</time>
+      <time title="创建时间：2020-09-14 13:11:38" itemprop="dateCreated datePublished" datetime="2020-09-14T13:11:38+00:00">2020-09-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -779,7 +719,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
         </span>
     </span>
 
@@ -793,13 +733,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="进程标识"><a href="#进程标识" class="headerlink" title="进程标识"></a>进程标识</h2><p>每个进程都有一个非负整型表示的唯一进程 ID。因为进程 ID 标识符总是唯一的，常将其用作其他标识符的一部分以保证其唯一性。</p>
-<p>ID 为 0 的进程通常是调度进程，常常被称为交换进程（swapper）。该进程是内核的一部分，它并不执行任何磁盘上的程序，因此也被称为系统进程。</p>
-<p>ID 为 1 的进程通常是 <code>init</code> 进程，在自举过程结束时由内核调用。该进程的程序文件在 UNIX 的早期版本中是 <code>/etc/init</code>，在较新版本中是 <code>/sbin/init</code>。<code>init</code> 进程不会终止。</p>
-<p>除了进程 ID，每个进程还有一些其他标识符。下列函数返回这些标识符。</p>
+          <h1 id="编译-gdb-和-gdbserver"><a href="#编译-gdb-和-gdbserver" class="headerlink" title="编译 gdb 和 gdbserver"></a>编译 gdb 和 gdbserver</h1><h2 id="Download-gdb-source-code"><a href="#Download-gdb-source-code" class="headerlink" title="Download gdb source code:"></a>Download gdb source code:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget ftp://sourceware.org/pub/gdb/releases/gdb-9.1.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="Extract-file"><a href="#Extract-file" class="headerlink" title="Extract file:"></a>Extract file:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xzvf gdb-9.1.tar.gz</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B08-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/#more" rel="contents">
+              <a class="btn" href="/2020/09/14/GDB%E7%BC%96%E8%AF%91/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -830,7 +769,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -848,7 +787,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">unix环境高级编程07-进程环境</a>
+          <a href="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/" class="post-title-link" itemprop="url">Binder从入门到放弃（细节篇）</a>
         </h2>
 
         <div class="post-meta-container">
@@ -859,14 +798,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:21:23" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:23+00:00">2023-04-10</time>
+      <time title="创建时间：2020-08-24 12:38:26" itemprop="dateCreated datePublished" datetime="2020-08-24T12:38:26+00:00">2020-08-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -874,7 +813,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
         </span>
     </span>
 
@@ -888,14 +827,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="main-函数"><a href="#main-函数" class="headerlink" title="main 函数"></a>main 函数</h2><p>C 程序总是从 main 函数开始执行。main 函数的原型是：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span>;</span><br></pre></td></tr></table></figure>
-
-<p>其中，<code>argc</code> 是命令行参数的数目，<code>argv</code> 是指向参数的各个指针所构成的数组。</p>
-<p>当内核执行 C 程序时（使用一个 <code>exec</code> 函数），在调用 <code>main</code> 前先调用一个特殊的启动例程。启动例程从内核取得命令行参数和环境变量值，然后参数传递给 <code>main</code> 函数执行。</p>
+          <blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://blog.csdn.net/feelabclihu/article/details/105534146">https://blog.csdn.net/feelabclihu/article/details/105534146</a></p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>Binder</code> 从入门到放弃包括了上下篇，上篇是框架部分，下篇通过几个典型的 <code>binder</code> 通信过程来呈现其实现细节，即本文。</p>
+<h1 id="一、启动-service-manager"><a href="#一、启动-service-manager" class="headerlink" title="一、启动 service manager"></a>一、启动 service manager</h1><h2 id="1-流程"><a href="#1-流程" class="headerlink" title="1. 流程"></a>1. 流程</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B07-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/#more" rel="contents">
+              <a class="btn" href="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E7%BB%86%E8%8A%82%E7%AF%87%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -926,7 +865,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B06-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E6%A1%86%E6%9E%B6%E7%AF%87%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -944,7 +883,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B06-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/" class="post-title-link" itemprop="url">unix环境高级编程06-系统数据文件和信息</a>
+          <a href="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E6%A1%86%E6%9E%B6%E7%AF%87%EF%BC%89/" class="post-title-link" itemprop="url">Binder从入门到放弃（框架篇）</a>
         </h2>
 
         <div class="post-meta-container">
@@ -955,14 +894,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:21:08" itemprop="dateCreated datePublished" datetime="2023-04-10T17:21:08+00:00">2023-04-10</time>
+      <time title="创建时间：2020-08-24 12:20:10" itemprop="dateCreated datePublished" datetime="2020-08-24T12:20:10+00:00">2020-08-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -970,7 +909,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
         </span>
     </span>
 
@@ -984,104 +923,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="口令文件"><a href="#口令文件" class="headerlink" title="口令文件"></a>口令文件</h2><p>UNIX 系统口令文件包含了图中所示的各字段，这些字段包含在 <code>&lt;pwd.h&gt;</code> 中定义的 <code>passwd</code> 结构中。</p>
-<p><code>/etc/passwd</code> 文件中的字段：</p>
-<table>
-<thead>
-<tr>
-<th>说明</th>
-<th>struct passwd 成员</th>
-<th align="center">POSIX.1</th>
-<th align="center">FreeBSD8.0</th>
-<th align="center">Linux3.2.0</th>
-<th align="center">Mac OSX 10.6.8</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>用户名</td>
-<td><code>char *pw_name</code></td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>加密口令</td>
-<td><code>char *pw_passwd</code></td>
-<td align="center"></td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>数值用户 ID</td>
-<td><code>uid_t pw_uid</code></td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>数值组 ID</td>
-<td><code>gid_t pw_gid</code></td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>注释字段</td>
-<td><code>char *pw_gecos</code></td>
-<td align="center"></td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>初始工作目录</td>
-<td><code>char *pw_dir</code></td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>初始 shell (用户程序)</td>
-<td><code>char *pw_shell</code></td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>用户访问类</td>
-<td><code>char *pw_class</code></td>
-<td align="center"></td>
-<td align="center">•</td>
-<td align="center"></td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>下次更改口令时间</td>
-<td><code>time_t pw_change</code></td>
-<td align="center"></td>
-<td align="center">•</td>
-<td align="center"></td>
-<td align="center">•</td>
-</tr>
-<tr>
-<td>账户有效期时间</td>
-<td><code>time_t pw_expire</code></td>
-<td align="center"></td>
-<td align="center">•</td>
-<td align="center"></td>
-<td align="center">•</td>
-</tr>
-</tbody></table>
-<p>由于历史原因，口令文件是 <code>/etc/passwd</code>，而且是一个 ASCII 文件。每一行包含图中所示的各字段，字段之间用冒号分隔。</p>
+          <blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://blog.csdn.net/feelabclihu/article/details/105534145">https://blog.csdn.net/feelabclihu/article/details/105534145</a></p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>Binder</code> 从入门到放弃包括了上下篇，上篇是框架部分，即本文。下篇通过几个典型的 <code>binder</code> 通信过程来呈现其实现细节，稍后发布，敬请期待。</p>
+<h1 id="一、什么是Binder？"><a href="#一、什么是Binder？" class="headerlink" title="一、什么是Binder？"></a>一、什么是Binder？</h1><p><code>Binder</code> 是安卓平台上的一种 <code>IPC framework</code> ，其整体的架构如下：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B06-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/#more" rel="contents">
+              <a class="btn" href="/2020/08/24/Binder%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E6%94%BE%E5%BC%83%EF%BC%88%E6%A1%86%E6%9E%B6%E7%AF%87%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1112,7 +961,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/24/Android%E5%AF%B9%E6%8A%97%E6%89%8B%E6%B3%95%E6%94%B6%E9%9B%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1130,7 +979,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/" class="post-title-link" itemprop="url">unix环境高级编程05-标准IO库</a>
+          <a href="/2020/08/24/Android%E5%AF%B9%E6%8A%97%E6%89%8B%E6%B3%95%E6%94%B6%E9%9B%86/" class="post-title-link" itemprop="url">Android对抗手法收集</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1141,14 +990,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:20:55" itemprop="dateCreated datePublished" datetime="2023-04-10T17:20:55+00:00">2023-04-10</time>
+      <time title="创建时间：2020-08-24 09:48:04" itemprop="dateCreated datePublished" datetime="2020-08-24T09:48:04+00:00">2020-08-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1156,7 +1005,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
         </span>
     </span>
 
@@ -1170,13 +1019,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="流和-FILE-对象"><a href="#流和-FILE-对象" class="headerlink" title="流和 FILE 对象"></a>流和 FILE 对象</h2><p>标准 <code>I/O</code> 库的操作是围绕流（stream）进行的，当用标准 <code>I/O</code> 库打开或创建一个文件时，我们已使一个流与一个文件相关联。</p>
-<p>标准 <code>I/O</code> 文件流可用于单字节或多字节字符集。流的定向（stream’s orientation）决定了所读、写的字符是单字节还是多字节的。</p>
-<p>只有两个函数可改变流的定向。<code>freopen</code> 函数清除一个流的定向；<code>fwide</code> 函数可用于设置流的定向。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;wchar.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fwide</span><span class="params">(FILE *fp, <span class="type">int</span> mode)</span>;</span><br></pre></td></tr></table></figure>
+          <h1 id="检测ROOT"><a href="#检测ROOT" class="headerlink" title="检测ROOT"></a>检测ROOT</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/sbin/su</span><br><span class="line">/system/bin/su</span><br><span class="line">/system/xbin/su</span><br><span class="line">/data/local/xbin/su</span><br><span class="line">/data/local/bin/su</span><br><span class="line">/system/sd/xbin/su</span><br><span class="line">/system/bin/failsafe/su</span><br><span class="line">/data/local/su</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://github.com/lamster2018/EasyProtector">https://github.com/lamster2018/EasyProtector</a><br><a target="_blank" rel="noopener" href="https://www.coolapk.com/apk/io.github.vvb2060.mahoshojo">https://www.coolapk.com/apk/io.github.vvb2060.mahoshojo</a></p>
+<h1 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h1><h2 id="VPN"><a href="#VPN" class="headerlink" title="VPN"></a>VPN</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B05-%E6%A0%87%E5%87%86IO%E5%BA%93/#more" rel="contents">
+              <a class="btn" href="/2020/08/24/Android%E5%AF%B9%E6%8A%97%E6%89%8B%E6%B3%95%E6%94%B6%E9%9B%86/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1207,7 +1055,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B04-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89App-%E5%90%AF%E5%8A%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1225,7 +1073,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B04-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/" class="post-title-link" itemprop="url">unix环境高级编程04-文件和目录</a>
+          <a href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89App-%E5%90%AF%E5%8A%A8/" class="post-title-link" itemprop="url">Android 双开沙箱 VirtualApp 源码分析（三）App 启动</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1236,14 +1084,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:20:43" itemprop="dateCreated datePublished" datetime="2023-04-10T17:20:43+00:00">2023-04-10</time>
+      <time title="创建时间：2020-08-08 17:22:07" itemprop="dateCreated datePublished" datetime="2020-08-08T17:22:07+00:00">2020-08-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1251,7 +1099,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
         </span>
     </span>
 
@@ -1265,17 +1113,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="函数-stat、fstat、fstatat-和-lstat"><a href="#函数-stat、fstat、fstatat-和-lstat" class="headerlink" title="函数 stat、fstat、fstatat 和 lstat"></a>函数 stat、fstat、fstatat 和 lstat</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">stat</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">struct</span> stat *<span class="keyword">restrict</span> buf)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">fstat</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> stat *buf)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">lstat</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">struct</span> stat *<span class="keyword">restrict</span> buf)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">fstatat</span><span class="params">(<span class="type">int</span> fd, <span class="type">const</span> <span class="type">char</span> *<span class="keyword">restrict</span> pathname, <span class="keyword">struct</span> stat *<span class="keyword">restrict</span> buf, <span class="type">int</span> flag)</span>;</span><br></pre></td></tr></table></figure>
-
-<p>返回值：</p>
-<ul>
-<li>若成功；返回 0；</li>
-<li>若出错，返回-1</li>
-</ul>
-<p>函数的作用：</p>
+          <blockquote>
+<p>转载 : <a target="_blank" rel="noopener" href="https://blog.csdn.net/ganyao939543405/article/details/76177392">https://blog.csdn.net/ganyao939543405/article/details/76177392</a></p>
+</blockquote>
+<p>在这之前，我们还是要先了解一下 VA Client Framework 和 VAService 之间的通讯方式</p>
+<h1 id="VAService-与通讯"><a href="#VAService-与通讯" class="headerlink" title="VAService 与通讯"></a>VAService 与通讯</h1><h2 id="VAService"><a href="#VAService" class="headerlink" title="VAService"></a>VAService</h2><p>首先 <code>VAService</code> 是指 <code>VA</code> 仿造 <code>Android</code> 原生 <code>framework</code> 层 <code>Service</code> 实现的一套副本，举例有 <code>VActivityManagerService</code> ，它和系统 <code>AMS</code> 一样，只不过他管理的是 <code>VA</code> 内部 <code>Client App</code> 的组件会话。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B04-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/#more" rel="contents">
+              <a class="btn" href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89App-%E5%90%AF%E5%8A%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1299,7 +1144,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1311,7 +1156,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

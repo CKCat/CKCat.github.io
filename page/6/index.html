@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -192,7 +192,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/31/Python-%E5%BA%93%E6%89%93%E5%8C%85%E5%88%86%E5%8F%91-setup-py-%E7%BC%96%E5%86%99-%E7%AE%80%E6%98%93%E6%8C%87%E5%8D%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/" class="post-title-link" itemprop="url">window下编译Frida</a>
+          <a href="/2019/12/31/Python-%E5%BA%93%E6%89%93%E5%8C%85%E5%88%86%E5%8F%91-setup-py-%E7%BC%96%E5%86%99-%E7%AE%80%E6%98%93%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">Python 库打包分发(setup.py 编写)简易指南</a>
         </h2>
 
         <div class="post-meta-container">
@@ -221,14 +221,111 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-08-17 22:01:45" itemprop="dateCreated datePublished" datetime="2021-08-17T22:01:45+00:00">2021-08-17</time>
+      <time title="创建时间：2019-12-31 16:53:46" itemprop="dateCreated datePublished" datetime="2019-12-31T16:53:46+00:00">2019-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>转载 <a target="_blank" rel="noopener" href="http://blog.konghy.cn/2018/04/29/setup-dot-py/">http://blog.konghy.cn/2018/04/29/setup-dot-py/</a></p>
+</blockquote>
+<p>Python 有非常丰富的第三方库可以使用，很多开发者会向 <a target="_blank" rel="noopener" href="https://pypi.org/">pypi</a> 上提交自己的 Python 包。要想向 pypi 包仓库提交自己开发的包，首先要将自己的代码打包，才能上传分发。</p>
+<h2 id="distutils-简介"><a href="#distutils-简介" class="headerlink" title="distutils 简介"></a>distutils 简介</h2><p><code>distutils</code> 是标准库中负责建立 Python 第三方库的安装器，使用它能够进行 Python 模块的安装和发布。<code>distutils</code> 对于简单的分发很有用，但功能缺少。大部分 Python 用户会使用更先进的 <code>setuptools</code> 模块.</p>
+<h2 id="setuptools-简介"><a href="#setuptools-简介" class="headerlink" title="setuptools 简介"></a>setuptools 简介</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/31/Python-%E5%BA%93%E6%89%93%E5%8C%85%E5%88%86%E5%8F%91-setup-py-%E7%BC%96%E5%86%99-%E7%AE%80%E6%98%93%E6%8C%87%E5%8D%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/21/r2Frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/12/21/r2Frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">r2Frida环境配置及使用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-21 23:54:06" itemprop="dateCreated datePublished" datetime="2019-12-21T23:54:06+00:00">2019-12-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -250,14 +347,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><p>安装 <code>VS2019</code> 选择 使用 <code>C++</code> 的桌面开发 ，并选择 对 <code>VS2017</code>（v141） 工具的 C++ Window XP 支持[已弃用] 组件，如下图所示。</p>
-<img src="/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/2021-08-17-22-08-29.png" class>
-
-<p>安装 <code>git</code> 和 <code>nodejs</code> , 并加入环境变量。</p>
-<p>安装 <code>python3.8</code> ，安装目录为 <code>C:\Program Files (x86)\Python 3.8\</code> ，安装选项如下图所示。</p>
+          <blockquote>
+<p>本机环境：ubuntu 18.04</p>
+</blockquote>
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><h2 id="安装-redare2"><a href="#安装-redare2" class="headerlink" title="安装 redare2"></a>安装 <a target="_blank" rel="noopener" href="https://github.com/radareorg/radare2">redare2</a></h2><p>参考 github 使用下列命令安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/radare/radare2.git</span><br><span class="line">$ cd radare2</span><br><span class="line">$ ./sys/user.sh</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/08/17/window%E4%B8%8B%E7%BC%96%E8%AF%91Frida/#more" rel="contents">
+              <a class="btn" href="/2019/12/21/r2Frida%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%BF%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -288,7 +385,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/06/14/GCC%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/20/learn-cpp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -306,7 +403,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/06/14/GCC%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96/" class="post-title-link" itemprop="url">GCC内联汇编</a>
+          <a href="/2019/12/20/learn-cpp/" class="post-title-link" itemprop="url">learn-cpp</a>
         </h2>
 
         <div class="post-meta-container">
@@ -317,14 +414,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-06-14 17:49:29" itemprop="dateCreated datePublished" datetime="2021-06-14T17:49:29+00:00">2021-06-14</time>
+      <time title="创建时间：2019-12-20 16:19:10" itemprop="dateCreated datePublished" datetime="2019-12-20T16:19:10+00:00">2019-12-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:06" itemprop="dateModified" datetime="2023-11-23T10:26:06+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -346,14 +443,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>本文主要参考 <a target="_blank" rel="noopener" href="https://www.linuxprobe.com/gcc-how-to.html">https://www.linuxprobe.com/gcc-how-to.html</a></p>
-</blockquote>
-<h1 id="GCC-汇编语法"><a href="#GCC-汇编语法" class="headerlink" title="GCC 汇编语法"></a>GCC 汇编语法</h1><p><code>Linux</code> 上的 <code>GNU C</code> 编译器 <code>GCC</code> ，使用 <code>AT&amp;T/UNIX</code> 汇编语法。在这里，我们将使用 <code>AT&amp;T</code> 语法 进行汇编编码。<code>AT&amp;T</code> 语法和 <code>Intel</code> 语法的差别很大。</p>
-<h2 id="源操作数和目的操作数顺序"><a href="#源操作数和目的操作数顺序" class="headerlink" title="源操作数和目的操作数顺序"></a>源操作数和目的操作数顺序</h2><p><code>AT&amp;T</code> 语法的操作数方向和 <code>Intel</code> 语法的刚好相反。</p>
+          <h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h2 id="const、引用和函数默认参数的使用及注意事项"><a href="#const、引用和函数默认参数的使用及注意事项" class="headerlink" title="const、引用和函数默认参数的使用及注意事项"></a><code>const</code>、引用和函数默认参数的使用及注意事项</h2><ol>
+<li><code>const</code> 的作用<ul>
+<li>取代无参宏，增加类型检查功能。</li>
+<li>对指针类型做一些限定。</li>
+</ul>
+</li>
+</ol>
+<p><code>const</code> 主要是语法层面的限定，实际上可以通过内存修改 <code>const</code> 变量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PI 3.14f</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;PI: %f\r\n&quot;</span>, PI);   <span class="comment">// 3.140000</span></span><br><span class="line">    <span class="comment">// const 取代无参宏，方便调试，增加类型检查。</span></span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> CPI = <span class="number">3.14f</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;CPI: %f\r\n&quot;</span>, CPI);  <span class="comment">// 3.140000</span></span><br><span class="line">    *(<span class="type">float</span>*)&amp;CPI = <span class="number">2.14f</span>;</span><br><span class="line">    <span class="comment">// 编译中直接替换为常量了，所以修改了CPI的值输出也是3.140000。</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;CPI: %f\r\n&quot;</span>, CPI);  <span class="comment">// 3.140000</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// const 指针</span></span><br><span class="line">    <span class="comment">// const 在 * 前面，则指针指向的内容无法修改。</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* pbuffer = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    pbuffer = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="comment">// pbuffer[0] = &#x27;H&#x27;;  这条语句会出错，表达式必须是可修改的左值。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// const 在 * 后面，则指针变量的值无法修改。</span></span><br><span class="line">    <span class="type">char</span> szBuffer[] = <span class="string">&quot;world&quot;</span>;  <span class="comment">// 等价于  char * const szBuffer = &quot;hello&quot;</span></span><br><span class="line">    <span class="type">char</span>* <span class="type">const</span> cbuffer = szBuffer;</span><br><span class="line">    <span class="comment">// cbuffer = NULL; 表达式必须是可修改的左值。</span></span><br><span class="line">    cbuffer[<span class="number">0</span>] = <span class="string">&#x27;W&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// const 在 * 前后都有，则指向的内容和指针的值都无法修改。</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* <span class="type">const</span> ccbuffer = szBuffer;</span><br><span class="line">    <span class="comment">// ccbuffer = NULL; 表达式必须是可修改的左值。</span></span><br><span class="line">    <span class="comment">// ccbuffer[0] = &#x27;h&#x27;;表达式必须是可修改的左值。</span></span><br><span class="line">    szBuffer[<span class="number">1</span>] = <span class="string">&#x27;O&#x27;</span>; <span class="comment">// 语法上不可修改，实际上可以通过内存修改</span></span><br><span class="line">    <span class="comment">// printf(&quot;pbuffer: %s\r\n&quot;, pbuffer);</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;cbuffer: %s\r\n&quot;</span>, cbuffer);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ccbuffer: %s\r\n&quot;</span>, ccbuffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/06/14/GCC%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96/#more" rel="contents">
+              <a class="btn" href="/2019/12/20/learn-cpp/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -384,7 +485,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/05/13/gnu-linux-proc-pid-intro/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -402,7 +503,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/13/gnu-linux-proc-pid-intro/" class="post-title-link" itemprop="url">gnu-linux-proc-pid-intro</a>
+          <a href="/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">MySQL的安装和配置</a>
         </h2>
 
         <div class="post-meta-container">
@@ -413,14 +514,206 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-05-13 09:35:17" itemprop="dateCreated datePublished" datetime="2021-05-13T09:35:17+00:00">2021-05-13</time>
+      <time title="创建时间：2019-12-15 11:31:55" itemprop="dateCreated datePublished" datetime="2019-12-15T11:31:55+00:00">2019-12-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="MySQL-服务其安装与配置"><a href="#MySQL-服务其安装与配置" class="headerlink" title="MySQL 服务其安装与配置"></a>MySQL 服务其安装与配置</h1><blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04">https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04</a></p>
+</blockquote>
+<h2 id="安装-MySQL"><a href="#安装-MySQL" class="headerlink" title="安装 MySQL"></a>安装 MySQL</h2><p>首先运行下面命令更新软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt update</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/15/MySQL%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/14/MySQL%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/12/14/MySQL%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">MySQL基本使用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-14 22:52:45" itemprop="dateCreated datePublished" datetime="2019-12-14T22:52:45+00:00">2019-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>推荐使用 <a target="_blank" rel="noopener" href="https://github.com/dbcli/mycli">mycli</a> 操作 MySQL 数据库.</p>
+</blockquote>
+<h1 id="MySQL-使用"><a href="#MySQL-使用" class="headerlink" title="MySQL 使用"></a>MySQL 使用</h1><h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>命令行连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -uroot -p <span class="comment">#回车后输入密码。</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/14/MySQL%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">ssh基本使用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-14 10:50:02" itemprop="dateCreated datePublished" datetime="2019-12-14T10:50:02+00:00">2019-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -443,14 +736,32 @@
     
     <div class="post-body" itemprop="articleBody">
           <blockquote>
-<p>转载：<a target="_blank" rel="noopener" href="https://github.com/NanXiao/gnu-linux-proc-pid-intro">https://github.com/NanXiao/gnu-linux-proc-pid-intro</a></p>
+<p>转载：<a target="_blank" rel="noopener" href="https://abcdabcd987.com/ssh/">https://abcdabcd987.com/ssh/</a></p>
 </blockquote>
-<p><a href="#auxv">&#x2F;proc&#x2F;[pid]&#x2F;auxv</a><br><a href="#cmdline">&#x2F;proc&#x2F;[pid]&#x2F;cmdline</a><br><a href="#comm">&#x2F;proc&#x2F;[pid]&#x2F;comm</a><br><a href="#cwd">&#x2F;proc&#x2F;[pid]&#x2F;cwd</a><br><a href="#environ">&#x2F;proc&#x2F;[pid]&#x2F;environ</a><br><a href="#exe">&#x2F;proc&#x2F;[pid]&#x2F;exe</a><br><a href="#fd">&#x2F;proc&#x2F;[pid]&#x2F;fd</a><br><a href="#latency">&#x2F;proc&#x2F;[pid]&#x2F;latency</a><br><a href="#limits">&#x2F;proc&#x2F;[pid]&#x2F;limits</a><br><a href="#maps">&#x2F;proc&#x2F;[pid]&#x2F;maps</a><br><a href="#root">&#x2F;proc&#x2F;[pid]&#x2F;root</a><br><a href="#stack">&#x2F;proc&#x2F;[pid]&#x2F;stack</a><br><a href="#statm">&#x2F;proc&#x2F;[pid]&#x2F;statm</a><br><a href="#status">&#x2F;proc&#x2F;[pid]&#x2F;status</a><br><a href="#syscall">&#x2F;proc&#x2F;[pid]&#x2F;syscall</a><br><a href="#wchan">&#x2F;proc&#x2F;[pid]&#x2F;wchan</a>  </p>
-<h2 id="auxv"><a href="#auxv" class="headerlink" title="auxv"></a>auxv</h2><p><code>/proc/[pid]/auxv</code>包含传递给进程的<code>ELF</code>解释器信息，格式是每一项都是一个<code>unsigned long</code>长度的<code>ID</code>加上一个<code>unsigned long</code>长度的值。最后一项以连续的两个<code>0x00</code>开头。举例如下：  </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hexdump -x /proc/2948/auxv</span></span><br><span class="line">0000000    0021    0000    0000    0000    0000    1a82    7ffd    0000</span><br><span class="line">0000010    0010    0000    0000    0000    dbf5    1fc9    0000    0000</span><br><span class="line">0000020    0006    0000    0000    0000    1000    0000    0000    0000</span><br><span class="line">0000030    0011    0000    0000    0000    0064    0000    0000    0000</span><br><span class="line">0000040    0003    0000    0000    0000    2040    4326    7f4a    0000</span><br><span class="line">0000050    0004    0000    0000    0000    0038    0000    0000    0000</span><br><span class="line">0000060    0005    0000    0000    0000    0009    0000    0000    0000</span><br><span class="line">0000070    0007    0000    0000    0000    f000    4303    7f4a    0000</span><br><span class="line">0000080    0008    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">0000090    0009    0000    0000    0000    8e67    4327    7f4a    0000</span><br><span class="line">00000a0    000b    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000b0    000c    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000c0    000d    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000d0    000e    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000e0    0017    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">00000f0    0019    0000    0000    0000    3de9    1a80    7ffd    0000</span><br><span class="line">0000100    001f    0000    0000    0000    4fe5    1a80    7ffd    0000</span><br><span class="line">0000110    000f    0000    0000    0000    3df9    1a80    7ffd    0000</span><br><span class="line">0000120    0000    0000    0000    0000    0000    0000    0000    0000</span><br><span class="line">0000130</span><br></pre></td></tr></table></figure>
+<!-- TOC -->
+
+<ul>
+<li><a href="#%E7%BA%A6%E5%AE%9A">约定</a></li>
+<li><a href="#%E5%9F%BA%E7%A1%80">基础</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-openssh-server">安装 OpenSSH Server</a></li>
+<li><a href="#%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%85%A5">免密码登入</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E5%88%AB%E5%90%8D">配置别名</a></li>
+<li><a href="#%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6">传输文件</a></li>
+<li><a href="#%E4%BF%9D%E6%8C%81%E7%A8%8B%E5%BA%8F%E5%9C%A8%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C">保持程序在后台运行</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%901">反向端口转发：例子1</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%902">反向端口转发：例子2</a></li>
+<li><a href="#%E5%8F%8D%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%BE%8B%E5%AD%903">反向端口转发：例子3</a></li>
+<li><a href="#%E6%AD%A3%E5%90%91%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91">正向端口转发</a></li>
+<li><a href="#%E7%94%A8%E4%BD%9C-socks5-%E4%BB%A3%E7%90%86">用作 SOCKS5 代理</a></li>
+<li><a href="#%E4%BC%A0%E9%80%92%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2">传递图形界面</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h1><p>本文不讲解 Linux 使用方法，只讲解机器之间的通信方法。<br>下文中行首的 local$ 以及 remote$ 等为命令行的提示符，不是输入的内容，用于区分当前是在哪台机子上。</p>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/05/13/gnu-linux-proc-pid-intro/#more" rel="contents">
+              <a class="btn" href="/2019/12/14/ssh%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -481,7 +792,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9505/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/12/11/learn-python/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -499,7 +810,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9505/" class="post-title-link" itemprop="url">ARMv8学习记录05</a>
+          <a href="/2019/12/11/learn-python/" class="post-title-link" itemprop="url">python使用记录</a>
         </h2>
 
         <div class="post-meta-container">
@@ -510,14 +821,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-04-10 13:23:52" itemprop="dateCreated datePublished" datetime="2021-04-10T13:23:52+00:00">2021-04-10</time>
+      <time title="创建时间：2019-12-11 17:22:25" itemprop="dateCreated datePublished" datetime="2019-12-11T17:22:25+00:00">2019-12-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:06" itemprop="dateModified" datetime="2023-11-23T10:26:06+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -525,7 +836,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
         </span>
     </span>
 
@@ -539,13 +850,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h1><h2 id="加法和减法"><a href="#加法和减法" class="headerlink" title="加法和减法"></a>加法和减法</h2><p>例子：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add_sub.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> <span class="type">const</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> n = <span class="number">123</span>;</span><br><span class="line">    <span class="comment">// 使用 argc 防止编译器优化</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;n + argc = %d\n&quot;</span>, n + argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;n + (argc++) = %d\n&quot;</span>, n + (argc++));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;n + (++argc) = %d\n&quot;</span>, n + (++argc));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(argc--) = %d\n&quot;</span>, (argc--));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;(--argc) = %d\n&quot;</span>, (--argc));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;argc = %d\n&quot;</span>, argc);</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> pi = <span class="number">3.14</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pi + argc = %f\n&quot;</span>, pi + argc);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pi - argc = %f\n&quot;</span>, pi - argc);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>本文章记录使用 python 过程中易忘的知识，方便自己查阅。</p>
+<h2 id="设置-pypi-镜像"><a href="#设置-pypi-镜像" class="headerlink" title="设置 pypi 镜像"></a>设置 pypi 镜像</h2><h3 id="临时使用"><a href="#临时使用" class="headerlink" title="临时使用"></a>临时使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package</span><br></pre></td></tr></table></figure>
 
-<h3 id="ARMv7"><a href="#ARMv7" class="headerlink" title="ARMv7"></a>ARMv7</h3>
+<p>注意，simple 不能少, 是 https 而不是 http</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/04/10/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9505/#more" rel="contents">
+              <a class="btn" href="/2019/12/11/learn-python/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -576,7 +887,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -594,7 +905,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/" class="post-title-link" itemprop="url">ARMv8学习记录04</a>
+          <a href="/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">gradle学习</a>
         </h2>
 
         <div class="post-meta-container">
@@ -605,14 +916,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-03-18 09:46:39" itemprop="dateCreated datePublished" datetime="2021-03-18T09:46:39+00:00">2021-03-18</time>
+      <time title="创建时间：2019-11-20 20:54:41" itemprop="dateCreated datePublished" datetime="2019-11-20T20:54:41+00:00">2019-11-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:06" itemprop="dateModified" datetime="2023-11-23T10:26:06+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -620,7 +931,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/ARMv8%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">ARMv8汇编</span></a>
+          <a href="/categories/gradle/" itemprop="url" rel="index"><span itemprop="name">gradle</span></a>
         </span>
     </span>
 
@@ -634,13 +945,54 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><h2 id="main-函数"><a href="#main-函数" class="headerlink" title="main 函数"></a>main 函数</h2><p>一般情况下，IDA 会自动将 main 函数标记出来，但是还是有部分应用 IDA 无法自动标记，需要我们手动确认 main 函数。首先找到 start 函数，然后查找 <code>__libc_init</code> 的第 3 个参数 R2，该参数即为 main 函数的地址。</p>
-<img src="/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/2021-04-18-16-23-38.png" class>
+          <!-- TOC -->
 
-<p>可以通过 Android 源码进行验证，在 <a target="_blank" rel="noopener" href="http://androidxref.com/">http://androidxref.com/</a> 网站上搜索 <code>__libc_init</code> 调用位置，可以发现其第三个参数为 main 函数的地址。</p>
+<ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85gradle">1. 安装<code>gradle</code></a></li>
+<li><a href="#2-%E5%85%A5%E9%97%A8%E5%89%8D%E5%A5%8F">2. 入门前奏</a><ul>
+<li><a href="#21-%E5%AE%9E%E7%8E%B0-hello-world">2.1. 实现 <code>hello world</code></a></li>
+<li><a href="#22-gradle-%E7%9A%84%E4%BB%BB%E5%8A%A1">2.2. <code>gradle</code> 的任务</a><ul>
+<li><a href="#221-%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1">2.2.1. 创建任务</a><ul>
+<li><a href="#2211-%E7%9B%B4%E6%8E%A5%E7%94%A8%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E5%88%9B%E5%BB%BA">2.2.1.1. 直接用任务名称创建</a></li>
+<li><a href="#2212-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE%E5%88%9B%E5%BB%BA">2.2.1.2. 任务名称+任务配置创建</a></li>
+<li><a href="#2213-taskcontainer%E7%9A%84create%E6%96%B9%E6%B3%95%E5%88%9B%E5%BB%BA">2.2.1.3. TaskContainer的create方法创建</a></li>
+</ul>
+</li>
+<li><a href="#222-%E4%BB%BB%E5%8A%A1%E4%BE%9D%E8%B5%96">2.2.2. 任务依赖</a><ul>
+<li><a href="#2221-%E5%8A%A8%E6%80%81%E5%AE%9A%E4%B9%89%E4%BB%BB%E5%8A%A1">2.2.2.1. 动态定义任务</a></li>
+</ul>
+</li>
+<li><a href="#223-%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%88%86%E7%BB%84%E5%92%8C%E6%8F%8F%E8%BF%B0">2.2.3. 任务的分组和描述</a></li>
+</ul>
+</li>
+<li><a href="#23-gradle-%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB">2.3. <code>Gradle</code> 日志级别</a></li>
+<li><a href="#24-gradle-%E5%91%BD%E4%BB%A4%E8%A1%8C">2.4. <code>Gradle</code> 命令行</a><ul>
+<li><a href="#241-%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E4%BB%BB%E5%8A%A1%E4%BF%A1%E6%81%AF">2.4.1. 获取所有任务信息</a></li>
+<li><a href="#242-%E6%8E%92%E9%99%A4%E4%BB%BB%E5%8A%A1">2.4.2. 排除任务</a></li>
+<li><a href="#243-%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%B0%83%E7%94%A8">2.4.3. 多任务调用</a></li>
+<li><a href="#244-%E4%BB%BB%E5%8A%A1%E5%90%8D%E7%A7%B0%E7%BC%A9%E5%86%99">2.4.4. 任务名称缩写</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#3-groovy-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97">3. Groovy 快速入门指南</a><ul>
+<li><a href="#groovy-%E6%A6%82%E8%BF%B0">Groovy 概述</a></li>
+<li><a href="#groovy%E7%BC%96%E5%86%99%E5%92%8C%E8%B0%83%E8%AF%95">Groovy编写和调试</a></li>
+<li><a href="#%E5%8F%98%E9%87%8F">变量</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95">方法</a></li>
+<li><a href="#%E7%B1%BB">类</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+
+<h1 id="1-安装gradle"><a href="#1-安装gradle" class="headerlink" title="1. 安装gradle"></a>1. 安装<code>gradle</code></h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ sudo apt install gradle</span><br><span class="line"></span><br><span class="line">➜  ~ gradle -v</span><br><span class="line">WARNING: An illegal reflective access operation has occurred</span><br><span class="line">WARNING: Illegal reflective access by org.codehaus.groovy.reflection.CachedClass (file:/usr/share/java/groovy-all.jar) to method java.lang.Object.finalize()</span><br><span class="line">WARNING: Please consider reporting this to the maintainers of org.codehaus.groovy.reflection.CachedClass</span><br><span class="line">WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations</span><br><span class="line">WARNING: All illegal access operations will be denied in a future release</span><br><span class="line"></span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Gradle 4.4.1</span><br><span class="line">------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Build time:   2012-12-21 00:00:00 UTC</span><br><span class="line">Revision:     none</span><br><span class="line"></span><br><span class="line">Groovy:       2.4.16</span><br><span class="line">Ant:          Apache Ant(TM) version 1.10.5 compiled on March 28 2019</span><br><span class="line">JVM:          11.0.4 (Ubuntu 11.0.4+11-post-Ubuntu-1ubuntu218.04.3)</span><br><span class="line">OS:           Linux 5.0.0-36-generic amd64</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="2-入门前奏"><a href="#2-入门前奏" class="headerlink" title="2. 入门前奏"></a>2. 入门前奏</h1><h2 id="2-1-实现-hello-world"><a href="#2-1-实现-hello-world" class="headerlink" title="2.1. 实现 hello world"></a>2.1. 实现 <code>hello world</code></h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/03/18/ARMv8%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%9504/#more" rel="contents">
+              <a class="btn" href="/2019/11/20/gradle%E5%AD%A6%E4%B9%A0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -671,7 +1023,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/02/22/IDA%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/17/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-dlopen/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -689,7 +1041,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/22/IDA%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/" class="post-title-link" itemprop="url">IDA动态调试so</a>
+          <a href="/2019/11/17/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-dlopen/" class="post-title-link" itemprop="url">Android源码阅读-dlopen</a>
         </h2>
 
         <div class="post-meta-container">
@@ -700,14 +1052,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-02-22 20:54:30" itemprop="dateCreated datePublished" datetime="2021-02-22T20:54:30+00:00">2021-02-22</time>
+      <time title="创建时间：2019-11-17 14:45:44" itemprop="dateCreated datePublished" datetime="2019-11-17T14:45:44+00:00">2019-11-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:06" itemprop="dateModified" datetime="2023-11-23T10:26:06+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -715,7 +1067,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
         </span>
     </span>
 
@@ -729,16 +1081,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="动态调试送给最好的-TA"><a href="#动态调试送给最好的-TA" class="headerlink" title="动态调试送给最好的 TA"></a>动态调试送给最好的 TA</h1><blockquote>
-<p>如果手机系统是 android 10 以上，那么需要 IDA 的版本大于 7.3，并且需要设置一下 <code>IDA_LIBC_PATH</code> 的环境变量。</p>
+          <blockquote>
+<p>本次阅读源码来自aosp Android 8.1.0_r1，在阅读过程中根据阅读的进度随手记录</p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so   <span class="comment"># 32 位</span></span><br><span class="line">$ <span class="built_in">export</span> IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so <span class="comment"># 64 位</span></span><br></pre></td></tr></table></figure>
-
-<p>参考：<a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-258103.htm">https://bbs.pediy.com/thread-258103.htm</a></p>
-<p>本文使用以下调试环境测试均未发现问题：</p>
+<p>有过 <code>linux</code> 编成经验的都应该知道使用 <code>dlopen</code> 需要包含 <code>dlfcn.h</code> 头文件，所以直接去<code>aosp/bionic/libc/include/dlfcn.h</code> 中找到 <code>dlopen</code> 的函数定义。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span>* <span class="title">dlopen</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* filename, <span class="type">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>通过<code>dlopen</code>的定义找到其实现在 <code>aosp/bionic/libdl/libdl.c</code> 中，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// Proxy calls to bionic loader</span><br><span class="line">void* dlopen(const char* filename, int flag) &#123;</span><br><span class="line">    /*</span><br><span class="line">  __builtin_return_address(0)的含义是，得到当前函数返回地址，即此函数被别的函数调用，然后此函数执行完毕后，返回，所谓返回地址就是那时候的地址。</span><br><span class="line">  __builtin_return_address(1)的含义是，得到当前函数的调用者的返回地址。注意是调用者的返回地址，而不是函数起始地址。 </span><br><span class="line">    */</span><br><span class="line">  const void* caller_addr = __builtin_return_address(0);//可以理解为汇编 MOV R0, LR</span><br><span class="line">  return __loader_dlopen(filename, flag, caller_addr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/02/22/IDA%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95so/#more" rel="contents">
+              <a class="btn" href="/2019/11/17/Android%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-dlopen/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -769,7 +1121,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2019/11/13/VSCode%E6%8F%92%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -787,7 +1139,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">git使用记录</a>
+          <a href="/2019/11/13/VSCode%E6%8F%92%E4%BB%B6/" class="post-title-link" itemprop="url">VSCode插件</a>
         </h2>
 
         <div class="post-meta-container">
@@ -798,14 +1150,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-02-22 20:30:08" itemprop="dateCreated datePublished" datetime="2021-02-22T20:30:08+00:00">2021-02-22</time>
+      <time title="创建时间：2019-11-13 21:39:00" itemprop="dateCreated datePublished" datetime="2019-11-13T21:39:00+00:00">2019-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -813,7 +1165,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
         </span>
     </span>
 
@@ -827,304 +1179,25 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>本文主要记录 git 使用过程中需要搜索的一些命令。</p>
-<h1 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h1><h2 id="配置-git-用户名和邮箱"><a href="#配置-git-用户名和邮箱" class="headerlink" title="配置 git 用户名和邮箱"></a>配置 git 用户名和邮箱</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;你的名字&quot;</span></span><br><span class="line"></span><br><span class="line">git config --global user.email “邮箱@邮箱.com”</span><br></pre></td></tr></table></figure>
-
-<p>这里的名字和邮箱决定了你在创建 <code>commit</code> 时的作者信息，与 <code>git</code> 托管平台的账号和邮箱没有关系。github 只认邮箱，也就是说 <code>user.email</code> 决定了在 github 的网页上要显示谁的用户名和头像。</p>
+          <h1 id="记录以下自己常用的-VSCode-插件"><a href="#记录以下自己常用的-VSCode-插件" class="headerlink" title="记录以下自己常用的 VSCode 插件"></a>记录以下自己常用的 VSCode 插件</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=dan-c-underwood.arm">Arm Assembly</a> - ARM 汇编语法高亮。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=RalfZhang.filetemplate">File Template</a> - 一个自动生成文件模板的 ode 扩展。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=jebbs.markdown-extended">Markdown Extended</a> - markdown 扩展。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=huntertran.auto-markdown-toc">Markdown TOC</a> - 自动生成 toc 。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=mushan.vscode-paste-image">Paste Image</a> - 将图像直接从剪贴板粘贴到 kdown&#x2F;asciidoc 。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=LoyieKing.smalise">Smalise</a> : smali 语法高亮插件。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=TabNine.tabnine-vscode">TabNine</a> : AI 代码神器。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons">vscode-icons</a> : - Icons for ual Studio Code。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=infosec-intern.yara">YARA</a> - yara 语法高亮。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=kiteco.kite">kite</a> - AI 代码神奇。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=cschlosser.doxdocgen">Doxygen Documentation Generator</a> - ygen 文档注释生成。</li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=rsbondi.highlight-words">highlight-words</a> - 选中高亮</li>
+</ul>
+<h1 id="修改-terminal-默认为-cmder"><a href="#修改-terminal-默认为-cmder" class="headerlink" title="修改 terminal 默认为 cmder"></a>修改 terminal 默认为 cmder</h1><p>打开终端设置 <code>terminal.integrated.env.windows</code> 配置文件，添加下列配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;terminal.integrated.defaultProfile.windows&quot;</span>: <span class="string">&quot;Cmder&quot;</span>,</span><br><span class="line"><span class="string">&quot;terminal.integrated.profiles.windows&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;Cmder&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;path&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;<span class="variable">$&#123;env:windir&#125;</span>\\Sysnative\\cmd.exe&quot;</span>,</span><br><span class="line">            <span class="string">&quot;<span class="variable">$&#123;env:windir&#125;</span>\\System32\\cmd.exe&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="string">&quot;args&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;/k D:\\Downloads\\cmder\\vendor\\init.bat&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="string">&quot;icon&quot;</span>: <span class="string">&quot;terminal-cmd&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/02/22/git%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/02/03/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/03/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">WhatsAppWrom分析过程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-02-03 15:13:46" itemprop="dateCreated datePublished" datetime="2021-02-03T15:13:46+00:00">2021-02-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>关于 WhatsAppWrom 的相关报告可以参考:</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blogs.360.cn/post/Alert_new_Android_malware_spreads_through_WhatsApp.html">https://blogs.360.cn/post/Alert_new_Android_malware_spreads_through_WhatsApp.html</a></p>
-</blockquote>
-<p>样本md5: <a href="JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/huawei.apk">121AB9F7C0F439274478099D9E550473</a>。</p>
-<p>使用 JEB 打开该样本，可以发现混淆比较严重，代码实现在 <code>com.jan.flixonlines.NotificationService.onNotificationPosted</code> 方法中实现，如下图所示：</p>
-<img src="/2021/02/03/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/2021-02-03-15-29-46.png" class>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/03/WhatsAppWrom%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/01/28/JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/01/28/JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">JebAndroidSigPlugin使用记录</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-01-28 18:13:01" itemprop="dateCreated datePublished" datetime="2021-01-28T18:13:01+00:00">2021-01-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:06" itemprop="dateModified" datetime="2023-11-23T10:26:06+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>最近使用了一下 JebAndroidSigPlugin 插件，感觉效果还可以，记录一下使用过程。</p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>直接去 <a target="_blank" rel="noopener" href="https://github.com/pnfsoftware/jeb2-androsig">https://github.com/pnfsoftware/jeb2-androsig</a> 下载编译好的 jar 包， 丢到 <code>jeb/coreplugins</code> 目录下，正常情况下 JEB 应该自带该插件</p>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>使用过程主要参考下面两篇文章：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/28/JebAndroidSigPlugin%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/12/30/Android%E6%8A%93%E5%8C%85/" class="post-title-link" itemprop="url">Android抓包</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-12-30 14:53:08" itemprop="dateCreated datePublished" datetime="2020-12-30T14:53:08+00:00">2020-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:06" itemprop="dateModified" datetime="2023-11-23T10:26:06+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Android-抓包"><a href="#Android-抓包" class="headerlink" title="Android 抓包"></a>Android 抓包</h1><h2 id="使用-Charles-抓包"><a href="#使用-Charles-抓包" class="headerlink" title="使用 Charles 抓包"></a>使用 Charles 抓包</h2><ol>
-<li>PC 端共享无线网络，使用 ipconfig 命令查看 ip 地址：</li>
-</ol>
-<img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-09-26.png" class>
-
-<ol start="2">
-<li>手机端设置代理</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/30/Android%E6%8A%93%E5%8C%85/#more" rel="contents">
+              <a class="btn" href="/2019/11/13/VSCode%E6%8F%92%E4%BB%B6/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1148,7 +1221,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1160,7 +1233,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

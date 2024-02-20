@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -192,7 +192,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B03-%E6%96%87%E4%BB%B6IO/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B03-%E6%96%87%E4%BB%B6IO/" class="post-title-link" itemprop="url">unix环境高级编程03-文件IO</a>
+          <a href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">Android 双开沙箱 VirtualApp 源码分析（二）</a>
         </h2>
 
         <div class="post-meta-container">
@@ -221,401 +221,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-04-10 17:20:28" itemprop="dateCreated datePublished" datetime="2023-04-10T17:20:28+00:00">2023-04-10</time>
+      <time title="创建时间：2020-08-08 15:18:04" itemprop="dateCreated datePublished" datetime="2020-08-08T15:18:04+00:00">2020-08-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>UNIX 系统中的大多数文件 <code>I/O</code> 只需用到 5 个函数：<code>open</code>、<code>read</code>、<code>write</code>、<code>lseek</code> 以及 <code>close</code>。这些函数为不带缓冲的 <code>I/O</code>，是 <code>POSIX.1 </code>和 <code>Single UNIX Specification</code> 的组成部分。</p>
-<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>对于内核而言，所有打开的文件都通过文件描述符引用。<strong>文件描述符是一个非负整数。</strong>文件描述符的变化范围是 <code>0 ~ OPEN_MAX-1</code>。<strong>现代操作系统文件描述符的变化范围几乎是无限的。</strong></p>
-<p>文件描述符 0、1、2 分别表示标准输入、标准输出和标准错误。其对应的符号常量 <code>STDIN_FILENO</code>、<code>STDOUT_FILENO</code> 和 <code>STDERR_FILENO</code>，需要包含 <code>&lt;unistd.h&gt;</code> 头文件。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B03-%E6%96%87%E4%BB%B6IO/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B02-UNIX%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B02-UNIX%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">unix环境高级编程02-UNIX标准及实现</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:20:15" itemprop="dateCreated datePublished" datetime="2023-04-10T17:20:15+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Unix-标准化"><a href="#Unix-标准化" class="headerlink" title="Unix 标准化"></a>Unix 标准化</h2><ul>
-<li><code>ANSI</code> 是美国国家标准学会（American National Standards Institute）的缩写。</li>
-<li><code>ISO</code> 是国际标准化组织（International Organization for Standardization）的缩写。</li>
-<li><code>IEC</code> 是国际电子技术委员会（International Electrotechnical Commission）的缩写。</li>
-<li><code>IEEE</code> 是电气和电子工程师学会（Institute of Electrical and Electronics Engineers）的缩写。</li>
-<li><code>POSIX</code> 指的是可移植操作系统接口（Portable Operating System Interface）。</li>
-<li><code>XSI</code> 是 X&#x2F;Open 系统接口（X&#x2F;Open System Interface，XSI）的缩写。</li>
-<li><code>SUS</code> 是单一 UNIX 规范（Single UNIX Specification）的缩写。</li>
-<li><code>FIPS</code> 代表的是联邦信息处理标准（Federal Information Processing Standard）。</li>
-</ul>
-<h3 id="ISO-C"><a href="#ISO-C" class="headerlink" title="ISO C"></a>ISO C</h3><p><code>ISO C</code> 标准的意图是提供 C 程序的可移植性，使其能适合于大量不同的操作系统，而不只是适合 UNIX 系统。现今的 UNIX 系统都提供 C 标准中定义的库函数，所以该标准库非常重要。</p>
-<p><code>ISO C</code> 标准定义的头文件：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B02-UNIX%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B01-UNIX%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B01-UNIX%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="post-title-link" itemprop="url">unix环境高级编程01-UNIX基础知识</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-04-10 17:19:59" itemprop="dateCreated datePublished" datetime="2023-04-10T17:19:59+00:00">2023-04-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">unix环境高级编程</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="UNIX-体系结构"><a href="#UNIX-体系结构" class="headerlink" title="UNIX 体系结构"></a>UNIX 体系结构</h2><p>从严格意义上说，可将操作系统定义为一种软件，它控制计算机硬件资源，提供程序运行环境，通常将这种软件称为内核。</p>
-<img src="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B01-UNIX%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/UNIX%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png" class>
-
-<p>内核的接口被称为系统调用（system call），公用函数库构建在系统调用接口之上，应用程序既可使用公用函数库，也可使用系统调用。shell 是一个特殊的应用程序，为运行其他应用程序提供了一个接口。</p>
-<p>从广义上说，操作系统包括了内核和一些其他软件，这些软件使得计算机能够发挥作用，并使计算机具有自己的特性。这里所说的其他软件包括系统实用程序（system utility）、应用程序、shell 以及公用函数库等。例如，Linux 是 GNU 操作系统使用的内核。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/04/10/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B01-UNIX%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2023/02/16/xmake%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/16/xmake%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">xmake使用记录</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-16 17:56:23" itemprop="dateCreated datePublished" datetime="2023-02-16T17:56:23+00:00">2023-02-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>xmake 是一个基于 Lua 的轻量级跨平台构建工具，使用 xmake.lua 维护项目构建，相比 makefile&#x2F;CMakeLists.txt，配置语法更加简洁直观，对新手非常友好，短时间内就能快速入门，能够让用户把更多的精力集中在实际的项目开发上。</p>
-<p>其官网为：<a target="_blank" rel="noopener" href="https://xmake.io/">https://xmake.io</a> 。</p>
-<h1 id="xmake-基础"><a href="#xmake-基础" class="headerlink" title="xmake 基础"></a>xmake 基础</h1><h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p><code>xmake</code> 可以使用 <code>create</code> 选项创建一个 <code>xmake</code> 项目，例如创建一个名为 <code>helloxmake</code> 的项目。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/16/xmake%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2022/05/30/AndroidStudio%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/05/30/AndroidStudio%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">AndroidStudio环境配置</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-05-30 18:37:31" itemprop="dateCreated datePublished" datetime="2022-05-30T18:37:31+00:00">2022-05-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:06" itemprop="dateModified" datetime="2023-11-23T10:26:06+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -637,23 +250,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="Android-Studio-修改-android-gradle-AndroidStudio-文件夹位置"><a href="#Android-Studio-修改-android-gradle-AndroidStudio-文件夹位置" class="headerlink" title="Android Studio 修改 .android .gradle .AndroidStudio 文件夹位置"></a>Android Studio 修改 <code>.android</code> <code>.gradle</code> <code>.AndroidStudio</code> 文件夹位置</h1><h2 id="android-文件夹的修改"><a href="#android-文件夹的修改" class="headerlink" title=".android 文件夹的修改"></a><code>.android</code> 文件夹的修改</h2><p>首先，需要添加一个系统的环境变量 <code>ANDROID_SDK_HOME</code> 模拟器环境变量</p>
-<p>默认情况下，模拟器会将配置文件存储在 <code>$HOME/.android/</code> 下，将 AVD 数据存储在 <code>$HOME/.android/avd/</code> 下。您可以通过设置以下环境变量来替换默认设置。</p>
-<table>
-<thead>
-<tr>
-<th>ANDROID_EMULATOR_HOME</th>
-<th>设置特定于用户的模拟器配置目录的路径。默认位置是 <code>$ANDROID_SDK_HOME/.android/</code>。</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ANDROID_AVD_HOME</td>
-<td>设置包含所有 AVD 特定文件的目录的路径，这些文件大多由非常大的磁盘映像组成。默认位置是 <code>$ANDROID_EMULATOR_HOME/avd/</code>。如果默认位置的磁盘空间不足，您可能需要指定新位置。</td>
-</tr>
-</tbody></table>
+          <blockquote>
+<p>转载 : <a target="_blank" rel="noopener" href="https://blog.csdn.net/ganyao939543405/article/details/76150725">https://blog.csdn.net/ganyao939543405/article/details/76150725</a></p>
+</blockquote>
+<h1 id="VA-初始化"><a href="#VA-初始化" class="headerlink" title="VA 初始化"></a>VA 初始化</h1><h2 id="VirtualCore-startup"><a href="#VirtualCore-startup" class="headerlink" title="VirtualCore.startup"></a>VirtualCore.startup</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public void startup(Context context) throws Throwable &#123;</span><br><span class="line">    if (!isStartUp) &#123;</span><br><span class="line">        // 确保 MainThread</span><br><span class="line">        if (Looper.myLooper() != Looper.getMainLooper()) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;VirtualCore.startup() must called in main thread.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        VASettings.STUB_CP_AUTHORITY = context.getPackageName() + &quot;.&quot; + VASettings.STUB_DEF_AUTHORITY;</span><br><span class="line">        ServiceManagerNative.SERVICE_CP_AUTH = context.getPackageName() + &quot;.&quot; + ServiceManagerNative.SERVICE_DEF_AUTH;</span><br><span class="line">        this.context = context;</span><br><span class="line">        // 获取 ActivityThread 实例</span><br><span class="line">        mainThread = ActivityThread.currentActivityThread.call();</span><br><span class="line">        unHookPackageManager = context.getPackageManager();</span><br><span class="line">        hostPkgInfo = unHookPackageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_PROVIDERS);</span><br><span class="line">        detectProcessType();</span><br><span class="line">        // hook 系统类</span><br><span class="line">        InvocationStubManager invocationStubManager = InvocationStubManager.getInstance();</span><br><span class="line">        invocationStubManager.init();</span><br><span class="line">        invocationStubManager.injectAll();</span><br><span class="line">        // 修复权限管理</span><br><span class="line">        ContextFixer.fixContext(context);</span><br><span class="line">        isStartUp = true;</span><br><span class="line">        if (initLock != null) &#123;</span><br><span class="line">            initLock.open();</span><br><span class="line">            initLock = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>整个 <code>VA</code> 会运行在四种进程, 分别是前面提到的 <code>VAService</code> 进程、<code>Client App</code> 进程、 <code>VA</code> 自身的 App 主进程、子进程。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/05/30/AndroidStudio%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
+              <a class="btn" href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -684,7 +289,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2022/05/10/%E5%A0%86%E6%BA%A2%E5%87%BA%E5%88%A9%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/06/awesome-adb/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -702,7 +307,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/05/10/%E5%A0%86%E6%BA%A2%E5%87%BA%E5%88%A9%E7%94%A8/" class="post-title-link" itemprop="url">堆溢出利用</a>
+          <a href="/2020/08/06/awesome-adb/" class="post-title-link" itemprop="url">awesome-adb</a>
         </h2>
 
         <div class="post-meta-container">
@@ -713,14 +318,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-05-10 09:34:16" itemprop="dateCreated datePublished" datetime="2022-05-10T09:34:16+00:00">2022-05-10</time>
+      <time title="创建时间：2020-08-06 15:46:23" itemprop="dateCreated datePublished" datetime="2020-08-06T15:46:23+00:00">2020-08-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -728,7 +333,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">漏洞分析</span></a>
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
         </span>
     </span>
 
@@ -742,8 +347,159 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="堆的数据结构和管理策略"><a href="#堆的数据结构和管理策略" class="headerlink" title="堆的数据结构和管理策略"></a>堆的数据结构和管理策略</h1><h2 id="空表"><a href="#空表" class="headerlink" title="空表"></a>空表</h2><p>空闲堆块的块首中包含一对重要的指针，这对指针用于将空闲堆块组织成双向链表。按照堆块的大小不同，空表总共被分为 128条。</p>
-<h2 id="块表"><a href="#块表" class="headerlink" title="块表"></a>块表</h2>
+          <blockquote>
+<p>转载：<a target="_blank" rel="noopener" href="https://github.com/mzlogin/awesome-adb">https://github.com/mzlogin/awesome-adb</a></p>
+</blockquote>
+<!-- vim-markdown-toc GFM -->
+
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">基本用法</a><ul>
+<li><a href="#%E5%91%BD%E4%BB%A4%E8%AF%AD%E6%B3%95">命令语法</a></li>
+<li><a href="#%E4%B8%BA%E5%91%BD%E4%BB%A4%E6%8C%87%E5%AE%9A%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%A4%87">为命令指定目标设备</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E5%81%9C%E6%AD%A2">启动&#x2F;停止</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B-adb-%E7%89%88%E6%9C%AC">查看 adb 版本</a></li>
+<li><a href="#%E4%BB%A5-root-%E6%9D%83%E9%99%90%E8%BF%90%E8%A1%8C-adbd">以 root 权限运行 adbd</a></li>
+<li><a href="#%E6%8C%87%E5%AE%9A-adb-server-%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3">指定 adb server 的网络端口</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AE%BE%E5%A4%87%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86">设备连接管理</a><ul>
+<li><a href="#%E6%9F%A5%E8%AF%A2%E5%B7%B2%E8%BF%9E%E6%8E%A5%E8%AE%BE%E5%A4%87%E6%A8%A1%E6%8B%9F%E5%99%A8">查询已连接设备&#x2F;模拟器</a></li>
+<li><a href="#usb-%E8%BF%9E%E6%8E%A5">USB 连接</a></li>
+<li><a href="#%E6%97%A0%E7%BA%BF%E8%BF%9E%E6%8E%A5%E9%9C%80%E8%A6%81%E5%80%9F%E5%8A%A9-usb-%E7%BA%BF">无线连接（需要借助 USB 线）</a></li>
+<li><a href="#%E6%97%A0%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%97%A0%E9%9C%80%E5%80%9F%E5%8A%A9-usb-%E7%BA%BF">无线连接（无需借助 USB 线）</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BA%94%E7%94%A8%E7%AE%A1%E7%90%86">应用管理</a><ul>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%BA%94%E7%94%A8%E5%88%97%E8%A1%A8">查看应用列表</a><ul>
+<li><a href="#%E6%89%80%E6%9C%89%E5%BA%94%E7%94%A8">所有应用</a></li>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E5%BA%94%E7%94%A8">系统应用</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%94%E7%94%A8">第三方应用</a></li>
+<li><a href="#%E5%8C%85%E5%90%8D%E5%8C%85%E5%90%AB%E6%9F%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%BA%94%E7%94%A8">包名包含某字符串的应用</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%89%E8%A3%85-apk">安装 APK</a></li>
+<li><a href="#%E5%8D%B8%E8%BD%BD%E5%BA%94%E7%94%A8">卸载应用</a></li>
+<li><a href="#%E6%B8%85%E9%99%A4%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E4%B8%8E%E7%BC%93%E5%AD%98">清除应用数据与缓存</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%89%8D%E5%8F%B0-activity">查看前台 Activity</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84-services">查看正在运行的 Services</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%BA%94%E7%94%A8%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF">查看应用详细信息</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%BA%94%E7%94%A8%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84">查看应用安装路径</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%8E%E5%BA%94%E7%94%A8%E4%BA%A4%E4%BA%92">与应用交互</a><ul>
+<li><a href="#%E5%90%AF%E5%8A%A8%E5%BA%94%E7%94%A8-%E8%B0%83%E8%B5%B7-activity">启动应用&#x2F; 调起 Activity</a></li>
+<li><a href="#%E8%B0%83%E8%B5%B7-service">调起 Service</a></li>
+<li><a href="#%E5%81%9C%E6%AD%A2-service">停止 Service</a></li>
+<li><a href="#%E5%8F%91%E9%80%81%E5%B9%BF%E6%92%AD">发送广播</a></li>
+<li><a href="#%E5%BC%BA%E5%88%B6%E5%81%9C%E6%AD%A2%E5%BA%94%E7%94%A8">强制停止应用</a></li>
+<li><a href="#%E6%94%B6%E7%B4%A7%E5%86%85%E5%AD%98">收紧内存</a></li>
+</ul>
+</li>
+<li><a href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86">文件管理</a><ul>
+<li><a href="#%E5%A4%8D%E5%88%B6%E8%AE%BE%E5%A4%87%E9%87%8C%E7%9A%84%E6%96%87%E4%BB%B6%E5%88%B0%E7%94%B5%E8%84%91">复制设备里的文件到电脑</a></li>
+<li><a href="#%E5%A4%8D%E5%88%B6%E7%94%B5%E8%84%91%E9%87%8C%E7%9A%84%E6%96%87%E4%BB%B6%E5%88%B0%E8%AE%BE%E5%A4%87">复制电脑里的文件到设备</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A8%A1%E6%8B%9F%E6%8C%89%E9%94%AE%E8%BE%93%E5%85%A5">模拟按键&#x2F;输入</a><ul>
+<li><a href="#%E7%94%B5%E6%BA%90%E9%94%AE">电源键</a></li>
+<li><a href="#%E8%8F%9C%E5%8D%95%E9%94%AE">菜单键</a></li>
+<li><a href="#home-%E9%94%AE">HOME 键</a></li>
+<li><a href="#%E8%BF%94%E5%9B%9E%E9%94%AE">返回键</a></li>
+<li><a href="#%E9%9F%B3%E9%87%8F%E6%8E%A7%E5%88%B6">音量控制</a></li>
+<li><a href="#%E5%AA%92%E4%BD%93%E6%8E%A7%E5%88%B6">媒体控制</a></li>
+<li><a href="#%E7%82%B9%E4%BA%AE%E7%86%84%E7%81%AD%E5%B1%8F%E5%B9%95">点亮&#x2F;熄灭屏幕</a></li>
+<li><a href="#%E6%BB%91%E5%8A%A8%E8%A7%A3%E9%94%81">滑动解锁</a></li>
+<li><a href="#%E8%BE%93%E5%85%A5%E6%96%87%E6%9C%AC">输入文本</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97">查看日志</a><ul>
+<li><a href="#android-%E6%97%A5%E5%BF%97">Android 日志</a><ul>
+<li><a href="#%E6%8C%89%E7%BA%A7%E5%88%AB%E8%BF%87%E6%BB%A4%E6%97%A5%E5%BF%97">按级别过滤日志</a></li>
+<li><a href="#%E6%8C%89-tag-%E5%92%8C%E7%BA%A7%E5%88%AB%E8%BF%87%E6%BB%A4%E6%97%A5%E5%BF%97">按 tag 和级别过滤日志</a></li>
+<li><a href="#%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F">日志格式</a></li>
+<li><a href="#%E6%B8%85%E7%A9%BA%E6%97%A5%E5%BF%97">清空日志</a></li>
+</ul>
+</li>
+<li><a href="#%E5%86%85%E6%A0%B8%E6%97%A5%E5%BF%97">内核日志</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E8%AE%BE%E5%A4%87%E4%BF%A1%E6%81%AF">查看设备信息</a><ul>
+<li><a href="#%E5%9E%8B%E5%8F%B7">型号</a></li>
+<li><a href="#%E7%94%B5%E6%B1%A0%E7%8A%B6%E5%86%B5">电池状况</a></li>
+<li><a href="#%E5%B1%8F%E5%B9%95%E5%88%86%E8%BE%A8%E7%8E%87">屏幕分辨率</a></li>
+<li><a href="#%E5%B1%8F%E5%B9%95%E5%AF%86%E5%BA%A6">屏幕密度</a></li>
+<li><a href="#%E6%98%BE%E7%A4%BA%E5%B1%8F%E5%8F%82%E6%95%B0">显示屏参数</a></li>
+<li><a href="#android_id">android_id</a></li>
+<li><a href="#imei">IMEI</a></li>
+<li><a href="#android-%E7%B3%BB%E7%BB%9F%E7%89%88%E6%9C%AC">Android 系统版本</a></li>
+<li><a href="#ip-%E5%9C%B0%E5%9D%80">IP 地址</a></li>
+<li><a href="#mac-%E5%9C%B0%E5%9D%80">Mac 地址</a></li>
+<li><a href="#cpu-%E4%BF%A1%E6%81%AF">CPU 信息</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E4%BF%A1%E6%81%AF">内存信息</a></li>
+<li><a href="#%E6%9B%B4%E5%A4%9A%E7%A1%AC%E4%BB%B6%E4%B8%8E%E7%B3%BB%E7%BB%9F%E5%B1%9E%E6%80%A7">更多硬件与系统属性</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E8%AE%BE%E7%BD%AE">修改设置</a><ul>
+<li><a href="#%E5%88%86%E8%BE%A8%E7%8E%87">分辨率</a></li>
+<li><a href="#%E5%B1%8F%E5%B9%95%E5%AF%86%E5%BA%A6-1">屏幕密度</a></li>
+<li><a href="#%E6%98%BE%E7%A4%BA%E5%8C%BA%E5%9F%9F">显示区域</a></li>
+<li><a href="#%E5%85%B3%E9%97%AD-usb-%E8%B0%83%E8%AF%95%E6%A8%A1%E5%BC%8F">关闭 USB 调试模式</a></li>
+<li><a href="#%E5%85%81%E8%AE%B8%E7%A6%81%E6%AD%A2%E8%AE%BF%E9%97%AE%E9%9D%9E-sdk-api">允许&#x2F;禁止访问非 SDK API</a></li>
+<li><a href="#%E7%8A%B6%E6%80%81%E6%A0%8F%E5%92%8C%E5%AF%BC%E8%88%AA%E6%A0%8F%E7%9A%84%E6%98%BE%E7%A4%BA%E9%9A%90%E8%97%8F">状态栏和导航栏的显示隐藏</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9E%E7%94%A8%E5%8A%9F%E8%83%BD">实用功能</a><ul>
+<li><a href="#%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE">屏幕截图</a></li>
+<li><a href="#%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95">录制屏幕</a></li>
+<li><a href="#%E9%87%8D%E6%96%B0%E6%8C%82%E8%BD%BD-system-%E5%88%86%E5%8C%BA%E4%B8%BA%E5%8F%AF%E5%86%99">重新挂载 system 分区为可写</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E8%BF%9E%E6%8E%A5%E8%BF%87%E7%9A%84-wifi-%E5%AF%86%E7%A0%81">查看连接过的 WiFi 密码</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E7%B3%BB%E7%BB%9F%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4">设置系统日期和时间</a></li>
+<li><a href="#%E9%87%8D%E5%90%AF%E6%89%8B%E6%9C%BA">重启手机</a></li>
+<li><a href="#%E6%A3%80%E6%B5%8B%E8%AE%BE%E5%A4%87%E6%98%AF%E5%90%A6%E5%B7%B2-root">检测设备是否已 root</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8-monkey-%E8%BF%9B%E8%A1%8C%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95">使用 Monkey 进行压力测试</a></li>
+<li><a href="#%E5%BC%80%E5%90%AF%E5%85%B3%E9%97%AD-wifi">开启&#x2F;关闭 WiFi</a></li>
+</ul>
+</li>
+<li><a href="#%E5%88%B7%E6%9C%BA%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4">刷机相关命令</a><ul>
+<li><a href="#%E9%87%8D%E5%90%AF%E5%88%B0-recovery-%E6%A8%A1%E5%BC%8F">重启到 Recovery 模式</a></li>
+<li><a href="#%E4%BB%8E-recovery-%E9%87%8D%E5%90%AF%E5%88%B0-android">从 Recovery 重启到 Android</a></li>
+<li><a href="#%E9%87%8D%E5%90%AF%E5%88%B0-fastboot-%E6%A8%A1%E5%BC%8F">重启到 Fastboot 模式</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87-sideload-%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F">通过 sideload 更新系统</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4">安全相关命令</a><ul>
+<li><a href="#%E5%90%AF%E7%94%A8%E7%A6%81%E7%94%A8-selinux">启用&#x2F;禁用 SELinux</a></li>
+<li><a href="#%E5%90%AF%E7%94%A8%E7%A6%81%E7%94%A8-dm_verity">启用&#x2F;禁用 dm_verity</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9B%B4%E5%A4%9A-adb-shell-%E5%91%BD%E4%BB%A4">更多 adb shell 命令</a><ul>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B">查看进程</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%AE%9E%E6%97%B6%E8%B5%84%E6%BA%90%E5%8D%A0%E7%94%A8%E6%83%85%E5%86%B5">查看实时资源占用情况</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B-uid">查看进程 UID</a></li>
+<li><a href="#%E5%85%B6%E5%AE%83">其它</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a><ul>
+<li><a href="#%E5%90%AF%E5%8A%A8-adb-server-%E5%A4%B1%E8%B4%A5">启动 adb server 失败</a></li>
+<li><a href="#comandroidddmlibadbcommandrejectedexception">com.android.ddmlib.AdbCommandRejectedException</a></li>
+</ul>
+</li>
+<li><a href="#adb-%E7%9A%84%E9%9D%9E%E5%AE%98%E6%96%B9%E5%AE%9E%E7%8E%B0">adb 的非官方实现</a></li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4">相关命令</a></li>
+<li><a href="#%E8%87%B4%E8%B0%A2">致谢</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5">参考链接</a></li>
+</ul>
+<!-- vim-markdown-toc -->
+
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><h3 id="命令语法"><a href="#命令语法" class="headerlink" title="命令语法"></a>命令语法</h3><p>adb 命令的基本语法如下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/06/awesome-adb/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -769,7 +525,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2022/04/06/%E5%BC%80%E5%8F%91shellcode%E7%9A%84%E8%89%BA%E6%9C%AF/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -787,7 +543,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/06/%E5%BC%80%E5%8F%91shellcode%E7%9A%84%E8%89%BA%E6%9C%AF/" class="post-title-link" itemprop="url">开发shellcode的艺术</a>
+          <a href="/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">Android 双开沙箱 VirtualApp 源码分析（一）</a>
         </h2>
 
         <div class="post-meta-container">
@@ -798,14 +554,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-04-06 20:50:20" itemprop="dateCreated datePublished" datetime="2022-04-06T20:50:20+00:00">2022-04-06</time>
+      <time title="创建时间：2020-08-03 17:03:51" itemprop="dateCreated datePublished" datetime="2020-08-03T17:03:51+00:00">2020-08-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -813,7 +569,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">漏洞分析</span></a>
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
         </span>
     </span>
 
@@ -827,18 +583,656 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="shellcode-概述"><a href="#shellcode-概述" class="headerlink" title="shellcode 概述"></a>shellcode 概述</h1><p>shellcode 攻击中植入进程的代码。</p>
-<p>exploit 漏洞利用就是代码植入的过程。</p>
-<p>在 shellcode 的开发中，一般需要解决下面几个问题。</p>
+          <blockquote>
+<p>转载 : <a target="_blank" rel="noopener" href="https://blog.csdn.net/ganyao939543405/article/details/76146760">https://blog.csdn.net/ganyao939543405/article/details/76146760</a></p>
+</blockquote>
+<p>最近发现了一个非常好的开源项目，基本实现了一个 Android 上的沙箱环境，不过应用场景最多的还是应用双开。</p>
+<ul>
+<li>VA github: <a target="_blank" rel="noopener" href="https://github.com/asLody/VirtualApp">https://github.com/asLody/VirtualApp</a> </li>
+<li>VA 的源码注释: <a target="_blank" rel="noopener" href="https://github.com/ganyao114/VA_Doc">https://github.com/ganyao114/VA_Doc</a></li>
+</ul>
+<p>本文主要是分析一下项目的整体结构。</p>
+<h1 id="包结构"><a href="#包结构" class="headerlink" title="包结构"></a>包结构</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/03/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/" class="post-title-link" itemprop="url">移植FART到Adnroid 9.0</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-17 09:16:34" itemprop="dateCreated datePublished" datetime="2020-07-17T09:16:34+00:00">2020-07-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近有点时间就尝试着移植 FART 到 Android 9.0 ，本文记录一下的整个过程。</p>
+<h1 id="获取-cloassloader-执行主动调用"><a href="#获取-cloassloader-执行主动调用" class="headerlink" title="获取 cloassloader 执行主动调用"></a>获取 cloassloader 执行主动调用</h1><p>首先修改 <code>frameworks/base/core/java/android/app/ActivityThread.java</code> 文件，添加以下内容。其中主要思想就是获取 apk 的 classloader 然后通过反射获取 dumpMethodCode 方法，执行主动调用，下面添加 dumpMethodCode 方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br></pre></td><td class="code"><pre><span class="line">// add start</span><br><span class="line">import android.os.Build;</span><br><span class="line">import android.util.ArrayMap;</span><br><span class="line">import android.util.Log;</span><br><span class="line">import java.io.BufferedReader;</span><br><span class="line">import java.io.File;</span><br><span class="line">import java.io.FileInputStream;</span><br><span class="line">import java.io.FileWriter;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.InputStreamReader;</span><br><span class="line">import java.lang.ref.WeakReference;</span><br><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import java.lang.reflect.InvocationTargetException;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line">import java.lang.reflect.Modifier;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.lang.reflect.Constructor;</span><br><span class="line">import dalvik.system.BaseDexClassLoader;</span><br><span class="line">import dalvik.system.DexClassLoader;</span><br><span class="line">// add end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// add start</span><br><span class="line">    public static String CKCatTAG = &quot;CKCatUnPack&quot;;</span><br><span class="line">    public static Field getClassField(ClassLoader classloader, String className,</span><br><span class="line">        String fieldName)&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            Class clazz = classloader.loadClass(className);</span><br><span class="line">            Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">            field.setAccessible(true);</span><br><span class="line">            return field;</span><br><span class="line"></span><br><span class="line">        &#125;catch(SecurityException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (NoSuchFieldException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (IllegalArgumentException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Object getClassFieldObject(ClassLoader classloader, String className, </span><br><span class="line">        Object obj, String fieldName)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Class clazz = classloader.loadClass(className);</span><br><span class="line">            Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">            field.setAccessible(true);</span><br><span class="line">            Object result = null;</span><br><span class="line">            result = field.get(obj);</span><br><span class="line">            return result;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Object invokeStaticMethod(String className, String methodName,</span><br><span class="line">        Class[] pareType, Object[] pareValues)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Class clazz = Class.forName(className);</span><br><span class="line">            Method method = clazz.getMethod(methodName, pareType);</span><br><span class="line">            return method.invoke(null, pareValues);</span><br><span class="line">        &#125; catch(Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; </span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Object getFieldObject(String className, Object obj,</span><br><span class="line">        String fieldName)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Class clazz = Class.forName(className);</span><br><span class="line">            Field field = clazz.getDeclaredField(fieldName);</span><br><span class="line">            field.setAccessible(true);</span><br><span class="line">            return field.get(obj);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static ClassLoader getClassLoader()&#123;</span><br><span class="line">        ClassLoader classloader = null;</span><br><span class="line">        Object currentActivityThread = invokeStaticMethod(&quot;android.app.ActivityThread&quot;,</span><br><span class="line">            &quot;currentActivityThread&quot;, new Class[]&#123;&#125;, new Object[]&#123;&#125;);</span><br><span class="line">        Object mBoundApplication = getFieldObject(&quot;android.app.ActivityThread&quot;, </span><br><span class="line">            currentActivityThread, &quot;mBoundApplication&quot;);</span><br><span class="line">        Object loadedApkInfo = getFieldObject(&quot;android.app.ActivityThread$AppBindData&quot;,</span><br><span class="line">            mBoundApplication, &quot;info&quot;);</span><br><span class="line">        Application mApplication = (Application)getFieldObject(&quot;android.app.loadedApk&quot;,</span><br><span class="line">            loadedApkInfo, &quot;mApplication&quot;);</span><br><span class="line">        classloader = mApplication.getClassLoader();</span><br><span class="line">        return classloader;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void loadClassAndInvoke(ClassLoader appClassloader, String eachClassName, </span><br><span class="line">        Method dumpMethodCode_method)&#123;</span><br><span class="line">        Log.i(CKCatTAG, &quot;go into loadClassAndInvoke-&gt;&quot; + &quot;classname:&quot; + eachClassName);</span><br><span class="line"></span><br><span class="line">        Class retClass = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            retClass = appClassloader.loadClass(eachClassName);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            return;</span><br><span class="line">        &#125; catch (Error e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            return;</span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        if (retClass != null) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Constructor&lt;?&gt; cons[] = retClass.getDeclaredConstructors();</span><br><span class="line">                for (Constructor&lt;?&gt; constructor : cons)&#123;</span><br><span class="line">                    if (dumpMethodCode_method != null) &#123;</span><br><span class="line">                        try &#123;</span><br><span class="line">                            dumpMethodCode_method.invoke(null, constructor);</span><br><span class="line">                        &#125; catch (Exception e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                            continue;</span><br><span class="line">                        &#125; catch (Error e) &#123;</span><br><span class="line">                            e.printStackTrace();</span><br><span class="line">                            continue;</span><br><span class="line">                        &#125; </span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        Log.e(CKCatTAG, &quot;dumpMethodCode_method is null &quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;  catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; catch (Error e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; </span><br><span class="line"></span><br><span class="line">            try &#123;</span><br><span class="line">                Method[] methods = retClass.getDeclaredMethods();</span><br><span class="line">                if (methods != null) &#123;</span><br><span class="line">                    for (Method m : methods) &#123;</span><br><span class="line">                        if (dumpMethodCode_method != null) &#123;</span><br><span class="line">                            try &#123;</span><br><span class="line">                               dumpMethodCode_method.invoke(null, m);</span><br><span class="line">                             &#125; catch (Exception e) &#123;</span><br><span class="line">                                e.printStackTrace();</span><br><span class="line">                                continue;</span><br><span class="line">                            &#125; catch (Error e) &#123;</span><br><span class="line">                                e.printStackTrace();</span><br><span class="line">                                continue;</span><br><span class="line">                            &#125; </span><br><span class="line">                        &#125; else &#123;</span><br><span class="line">                            Log.e(CKCatTAG, &quot;dumpMethodCode_method is null &quot;);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; catch (Error e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void fart()&#123;</span><br><span class="line">        //获取当前 classloader</span><br><span class="line">        ClassLoader appClassloader = getClassLoader();</span><br><span class="line">        List&lt;Object&gt; dexFieldsArray = new ArrayList&lt;Object&gt;();</span><br><span class="line"></span><br><span class="line">        // 获取 pathList 字段</span><br><span class="line">        Field pathList_Field = (Field)getClassField(appClassloader, </span><br><span class="line">            &quot;dalvik.system.BaseDexClassLoader&quot;, &quot;pathList&quot;);</span><br><span class="line">        Object pathList_object = getFieldObject(&quot;dalvik.system.BaseDexClassLoader&quot;, </span><br><span class="line">            appClassloader, &quot;pathList&quot;);</span><br><span class="line"></span><br><span class="line">        // 获取 dexElements</span><br><span class="line">        Object[] dexElements = (Object[]) getFieldObject(&quot;dalvik.system.DexPathList&quot;, </span><br><span class="line">            pathList_object, &quot;dexElements&quot;);</span><br><span class="line"></span><br><span class="line">        Field dexFile_Field = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            dexFile_Field = (Field)getClassField(appClassloader, </span><br><span class="line">                &quot;dalvik.system.DexPathList$Element&quot;, &quot;dexFile&quot;);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Class dexFileClazz = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            dexFileClazz = appClassloader.loadClass(&quot;dalvik.system.DexFile&quot;);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Method getClassNameList_Method = null;</span><br><span class="line">        Method defineClass_Method = null;</span><br><span class="line">        Method dumpMethodCode_Method = null;</span><br><span class="line">        // 通过反射获取获取 dumpMethodCode </span><br><span class="line">        for (Method method : dexFileClazz.getDeclaredMethods())&#123;</span><br><span class="line">            if (method.getName().equals(&quot;getClassNameList&quot;)) &#123;</span><br><span class="line">                getClassNameList_Method = method;</span><br><span class="line">                getClassNameList_Method.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line">            if (method.getName().equals(&quot;defineClassNative&quot;)) &#123;</span><br><span class="line">                defineClass_Method = method;</span><br><span class="line">                defineClass_Method.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line">            if (method.getName().equals(&quot;dumpMethodCode&quot;)) &#123;</span><br><span class="line">                dumpMethodCode_Method = method;</span><br><span class="line">                dumpMethodCode_Method.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 获取 mCookie</span><br><span class="line">        Field mCookieField = getClassField(appClassloader, &quot;dalvik.system.DexFile&quot;, &quot;mCookie&quot;);</span><br><span class="line">        for (int i = 0; i &lt; dexElements.length; i++) &#123;</span><br><span class="line">            Object element = dexElements[i];</span><br><span class="line">            Object dexfile = null;</span><br><span class="line">            try &#123;</span><br><span class="line">                dexfile = (Object)dexFile_Field.get(element);</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (dexfile == null) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if(dexfile != null)&#123;</span><br><span class="line">                dexFieldsArray.add(dexfile);</span><br><span class="line">                Object mCookie = getClassFieldObject(appClassloader, </span><br><span class="line">                    &quot;dalvik.system.DexFile&quot;, dexfile, &quot;mCookie&quot;);</span><br><span class="line">                if (mCookie == null) &#123;</span><br><span class="line">                    continue;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                String[] classNames = null;</span><br><span class="line">                try &#123;</span><br><span class="line">                    classNames = (String[])getClassNameList_Method.invoke(dexfile, mCookie);</span><br><span class="line">                &#125; catch (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                    continue;</span><br><span class="line">                &#125; catch (Error e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                    continue;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                if (classNames != null) &#123;</span><br><span class="line">                    for(String eachClassName: classNames)&#123;</span><br><span class="line">                        // 执行主动调用</span><br><span class="line">                        loadClassAndInvoke(appClassloader, eachClassName, dumpMethodCode_Method);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void fartthread()&#123;</span><br><span class="line">        new Thread(new Runnable()&#123;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void run()&#123;</span><br><span class="line">                try&#123;</span><br><span class="line">                    Log.e(CKCatTAG, &quot;start sleep,wait for fartthread start......&quot;);</span><br><span class="line">                    Thread.sleep(1*60*1000);</span><br><span class="line">                &#125;catch(InterruptedException e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                Log.e(CKCatTAG, &quot;sleep over and start fartthread&quot;);</span><br><span class="line">                fart();</span><br><span class="line">                Log.e(CKCatTAG, &quot;fart run over&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    // add end</span><br><span class="line"></span><br><span class="line">    /**  Core implementation of activity launch. */</span><br><span class="line">    private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) &#123;</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">        // add start</span><br><span class="line">        fartthread();</span><br><span class="line">        // add end</span><br><span class="line">        return activity;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="添加-dumpMethodCode-方法"><a href="#添加-dumpMethodCode-方法" class="headerlink" title="添加 dumpMethodCode 方法"></a>添加 dumpMethodCode 方法</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/07/17/%E7%A7%BB%E6%A4%8DFART%E5%88%B0Adnroid-9-0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/20/%E4%BB%8EActivityThread-main%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90android%E5%BA%94%E7%94%A8%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/06/20/%E4%BB%8EActivityThread-main%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90android%E5%BA%94%E7%94%A8%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">从ActivityThread.main开始分析android应用的启动过程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-20 17:13:11" itemprop="dateCreated datePublished" datetime="2020-06-20T17:13:11+00:00">2020-06-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近准备学习一下 <a target="_blank" rel="noopener" href="https://github.com/hanbinglengyue/FART">FART</a> 的源码及其相关文章的过程中发现绕不开 Android 应用的启动过程，所以准备阅读一下 android 的源码，了解一下相关知识。</p>
+<p>本文研究的源码为 Android 9 。</p>
+<!-- TOC -->
+
+<ul>
+<li><a href="#activitythreadmain">ActivityThread.main</a></li>
+<li><a href="#activitythreadattach">ActivityThread.attach</a></li>
+<li><a href="#activitymanagerserviceattachapplication">ActivityManagerService.attachApplication</a></li>
+<li><a href="#activitymanagerserviceattachapplicationlocked">ActivityManagerService.attachApplicationLocked</a></li>
+<li><a href="#activitythreadapplicationthreadbindapplication">ActivityThread.ApplicationThread.bindApplication</a></li>
+<li><a href="#activitythreadhandlebindapplication">ActivityThread.handleBindApplication</a></li>
+<li><a href="#activitymanagerserviceattachapplicationlocked-1">ActivityManagerService.attachApplicationLocked</a></li>
+<li><a href="#activitystacksupervisorrealstartactivitylocked">ActivityStackSupervisor.realStartActivityLocked</a></li>
+<li><a href="#transactionexecutorexecute">TransactionExecutor.execute</a></li>
+<li><a href="#activitythreadhandlelaunchactivity">ActivityThread.handleLaunchActivity</a></li>
+<li><a href="#instrumentationcallactivityoncreate">Instrumentation.callActivityOnCreate</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="ActivityThread-main"><a href="#ActivityThread-main" class="headerlink" title="ActivityThread.main"></a>ActivityThread.main</h1><p>在 <code>ActivityThread.main</code> 方法中对 <code>ActivityThread</code> 进行了初始化，创建了主线程的 <code>Looper</code> 对象并调用 <code>Looper.loop()</code> 方法启动 Looper，把自定义 Handler 类 H 的对象作为主线程的 handler 。接下来跳转到 <code>ActivityThread.attach</code> 方法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/20/%E4%BB%8EActivityThread-main%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90android%E5%BA%94%E7%94%A8%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">CMake的使用记录</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-11 13:04:32" itemprop="dateCreated datePublished" datetime="2020-06-11T13:04:32+00:00">2020-06-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h1><ul>
+<li><p>依赖CMakeLists.txt文件，项目主目标一个，主目录中可指定包含的子目录；</p>
+</li>
+<li><p>在项目CMakeLists.txt中使用project指定项目名称，add_subdirectory添加子目录</p>
+</li>
+<li><p>子目录CMakeLists.txt将从父目录CMakeLists.txt继承设置（TBD，待检验）</p>
+</li>
+</ul>
+<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>使用 <code>#</code> 表示注释</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/07/WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/06/07/WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">WSL2折腾记录</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-07 09:44:07" itemprop="dateCreated datePublished" datetime="2020-06-07T09:44:07+00:00">2020-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近看到很多大佬对于wsl2的推崇，于是就想体验一番，将系统升级到2004，下面记录以下折腾过程。</p>
+<!-- TOC -->
+
+<ul>
+<li><a href="#1-%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7">1. 系统升级</a><ul>
+<li><a href="#11-%E9%97%AE%E9%A2%98%E6%88%91%E4%BB%AC%E6%97%A0%E6%B3%95%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E4%BF%9D%E7%95%99%E7%9A%84%E5%88%86%E5%8C%BA">1.1. 问题：我们无法更新系统保留的分区</a></li>
+<li><a href="#12-%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95">1.2. 解决办法</a><ul>
+<li><a href="#121-%E5%A4%87%E4%BB%BDefi%E5%88%86%E5%8C%BA">1.2.1. 备份EFI分区</a></li>
+<li><a href="#122-%E5%88%A0%E9%99%A4efiesp-%E5%88%86%E5%8C%BA">1.2.2. 删除EFI&#x2F;ESP 分区</a></li>
+<li><a href="#123-%E6%89%A9%E5%A4%A7-efi-%E5%88%86%E5%8C%BA">1.2.3. 扩大 EFI 分区</a></li>
+<li><a href="#124-%E6%96%B0%E5%BB%BAespmsr%E5%88%86%E5%8C%BA">1.2.4. 新建ESP&#x2F;MSR分区</a></li>
+<li><a href="#125-%E8%BF%98%E5%8E%9F-efi-%E5%88%86%E5%8C%BA%E9%95%9C%E5%83%8F">1.2.5. 还原 EFI 分区镜像</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#2-%E5%AE%89%E8%A3%85-wsl2">2. 安装 WSL2</a><ul>
+<li><a href="#21-%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%90%AF%E7%94%A8%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%B9%B3%E5%8F%B0%E5%92%8C-linux-%E5%AD%90%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD">2.1. 第一步：启用虚拟机平台和 Linux 子系统功能</a></li>
+<li><a href="#22-%E5%90%AF%E7%94%A8-wsl2-%E5%B9%B6%E5%AE%89%E8%A3%85-linux-%E5%AD%90%E7%B3%BB%E7%BB%9F">2.2. 启用 WSL2 并安装 linux 子系统</a></li>
+<li><a href="#23-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85%E4%BD%8D%E7%BD%AE">2.3. 自定义安装位置</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+
+<h1 id="1-系统升级"><a href="#1-系统升级" class="headerlink" title="1. 系统升级"></a>1. 系统升级</h1><h2 id="1-1-问题：我们无法更新系统保留的分区"><a href="#1-1-问题：我们无法更新系统保留的分区" class="headerlink" title="1.1. 问题：我们无法更新系统保留的分区"></a>1.1. 问题：我们无法更新系统保留的分区</h2><p>首先进行系统升级就出现了问题“我们无法更新系统保留的分区”，对于这个问题，网上很多人给的答案是 MSR(Microsoft Reserved)分区太小的问题，然而实际问题是ESP(EFI System Partition)分区 “EFI系统分区” 太小的原因，微软在这里所提示的系统保留的分区实际上是指“EFI系统分区”。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/07/WSL2%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/05/%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/06/05/%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro/" class="post-title-link" itemprop="url">使用Idea调试jebPro</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-05 17:44:09" itemprop="dateCreated datePublished" datetime="2020-06-05T17:44:09+00:00">2020-06-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>参考:</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://scz.617.cn:8/misc/202006051232.txt">http://scz.617.cn:8/misc/202006051232.txt</a></p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ms509.com/2020/03/19/Java-Debug/">https://www.ms509.com/2020/03/19/Java-Debug/</a></p>
+</blockquote>
+<!-- TOC -->
+
+<ul>
+<li><a href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87">前期准备</a></li>
+<li><a href="#%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95">开始调试</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="1-前期准备"><a href="#1-前期准备" class="headerlink" title="1. 前期准备"></a>1. 前期准备</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/05/%E4%BD%BF%E7%94%A8Idea%E8%B0%83%E8%AF%95jebPro/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">ART的函数运行机制</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-03 19:25:03" itemprop="dateCreated datePublished" datetime="2020-06-03T19:25:03+00:00">2020-06-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android%E6%BA%90%E7%A0%81/" itemprop="url" rel="index"><span itemprop="name">Android源码</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="ART的函数运行机制"><a href="#ART的函数运行机制" class="headerlink" title="ART的函数运行机制"></a>ART的函数运行机制</h1><h2 id="类的加载"><a href="#类的加载" class="headerlink" title="类的加载"></a>类的加载</h2><p><code>dalvik</code> 的类加载的主要过程如下：</p>
 <ol>
-<li>让程序能够自动定位到 shellcode 的起始地址。</li>
-<li>写出比较通用版的 shellcode 。</li>
-<li>shellcode 编码。</li>
-<li>shellcode 需要短小精悍。</li>
+<li><p><code>app_process</code> 作为 <code>zygote server</code> 通过 <code>local socket</code> 处理进程创建请求，<code>zygote server</code> 是在 <code>ZygoteInit.main</code> 函数里调用 <code>ZygoteInit.runSelectLoop</code> 监听。</p>
+</li>
+<li><p>接收到 <code>zygote client</code> 的 <code>fork</code> 请求之后，调用 <code>ZygoteConnection.runOnce</code> ，调用 <code>Zygote.forkAndSpecialize</code> 创建新进程</p>
+</li>
+<li><p>进程创建之后，由 <code>ZygoteConnection.handleParentProc</code> 来初始化进程，最终会调用 <code>ActivityThread.main</code> 函数</p>
+</li>
+<li><p><code>ActivityThread.main -&gt; ActivityThread.attach -&gt;  ActivityThread.bindApplication -&gt; Activity.handleBindApplication，handleBindApplication</code> 会初始化 <code>BaseDexClassLoader</code> 。</p>
+</li>
+<li><p>类的加载经过了 <code>ClassLoader.loadClass-&gt;BaseDexClassLoader.findClass-&gt;DexPathList.findClass-&gt;DexFile.loadClassBinaryName-&gt;DexFile.defineClassNative-&gt;DexFile_defineClassNative</code> (<code>runtime/native/dalvik_system_DexFile.cc</code>) 。</p>
+</li>
 </ol>
+<p>这个初始化过程， <code>art</code> 和 <code>dalvik</code> 都是一样的。 <code>art</code> 的 <code>DexFile_defineClassNative</code> 由 <code>ClassLinker</code> 的 <code>DefineClass</code> 来加载类。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/04/06/%E5%BC%80%E5%8F%91shellcode%E7%9A%84%E8%89%BA%E6%9C%AF/#more" rel="contents">
+              <a class="btn" href="/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -869,7 +1263,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/24/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9812-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/05/05/GDB%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8Fbug%E6%97%A0%E5%A4%84%E8%BA%B2%E8%97%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -887,7 +1281,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/24/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9812-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">操作系统实战12-文件系统</a>
+          <a href="/2020/05/05/GDB%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8Fbug%E6%97%A0%E5%A4%84%E8%BA%B2%E8%97%8F/" class="post-title-link" itemprop="url">GDB命令基础，让你的程序bug无处躲藏</a>
         </h2>
 
         <div class="post-meta-container">
@@ -898,14 +1292,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-11-24 09:08:42" itemprop="dateCreated datePublished" datetime="2021-11-24T09:08:42+00:00">2021-11-24</time>
+      <time title="创建时间：2020-05-05 00:23:42" itemprop="dateCreated datePublished" datetime="2020-05-05T00:23:42+00:00">2020-05-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -913,7 +1307,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
         </span>
     </span>
 
@@ -927,183 +1321,61 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
+          <blockquote>
+<p>转载: <a target="_blank" rel="noopener" href="https://deepzz.com/post/gdb-debug.html">https://deepzz.com/post/gdb-debug.html</a></p>
+</blockquote>
+<!-- TOC -->
 
-    
-    
-    
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8gdb">使用GDB</a><ul>
+<li><a href="#%E5%90%AF%E5%8A%A8">启动</a></li>
+<li><a href="#%E8%BF%90%E8%A1%8C">运行</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E6%9F%A5%E7%9C%8B%E6%96%AD%E7%82%B9breakpoint">设置&#x2F;查看断点(breakpoint)</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E6%9F%A5%E7%9C%8B%E8%A7%82%E5%AF%9F%E7%82%B9watchpoint">设置&#x2F;查看观察点(watchpoint)</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E6%9F%A5%E7%9C%8B%E6%8D%95%E6%8D%89%E7%82%B9catchpoint">设置&#x2F;查看捕捉点(catchpoint)</a></li>
+<li><a href="#%E7%BB%B4%E6%8A%A4%E5%81%9C%E6%AD%A2%E7%82%B9">维护停止点</a></li>
+<li><a href="#%E7%BB%B4%E6%8A%A4%E6%9D%A1%E4%BB%B6%E5%81%9C%E6%AD%A2%E7%82%B9">维护条件停止点</a></li>
+<li><a href="#%E5%81%9C%E6%AD%A2%E7%82%B9%E8%AE%BE%E7%BD%AE%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4">停止点设置运行命令</a></li>
+<li><a href="#%E6%96%AD%E7%82%B9%E8%8F%9C%E5%8D%95">断点菜单</a></li>
+<li><a href="#%E6%81%A2%E5%A4%8D%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E5%92%8C%E5%8D%95%E6%AD%A5%E8%B0%83%E8%AF%95">恢复程序运行和单步调试</a></li>
+<li><a href="#%E4%BF%A1%E5%8F%B7">信号</a></li>
+<li><a href="#%E4%BA%A7%E7%94%9F%E4%BF%A1%E5%8F%B7%E9%87%8F">产生信号量</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B">线程</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E6%A0%88%E4%BF%A1%E6%81%AF">查看栈信息</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E6%BA%90%E7%A0%81">查看源码</a></li>
+<li><a href="#%E6%90%9C%E7%B4%A2%E6%BA%90%E4%BB%A3%E7%A0%81">搜索源代码</a></li>
+<li><a href="#%E6%8C%87%E5%AE%9A%E6%BA%90%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84">指定源文件路径</a></li>
+<li><a href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E5%86%85%E5%AD%98">源代码内存</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE">查看运行时数据</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AD%98">查看内存</a></li>
+<li><a href="#%E8%87%AA%E5%8A%A8%E6%98%BE%E7%A4%BA">自动显示</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E6%98%BE%E7%A4%BA%E9%80%89%E9%A1%B9">设置显示选项</a></li>
+<li><a href="#%E5%8E%86%E5%8F%B2%E7%BA%AA%E5%BD%95">历史纪录</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">环境变量</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E5%AF%84%E5%AD%98%E5%99%A8">查看寄存器</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C">修改程序的执行</a></li>
+<li><a href="#%E8%B7%B3%E8%BD%AC%E6%89%A7%E8%A1%8C">跳转执行</a></li>
+<li><a href="#%E5%BC%BA%E5%88%B6%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E">强制函数返回</a></li>
+<li><a href="#%E5%BC%BA%E5%88%B6%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0">强制调用函数</a></li>
+<li><a href="#gdb%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83">GDB语言环境</a></li>
+<li><a href="#%E9%80%80%E5%87%BA">退出</a></li>
+<li><a href="#%E6%8A%80%E5%B7%A7">技巧</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
 
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/24/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9811-%E8%AE%BE%E5%A4%87IO/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/24/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9811-%E8%AE%BE%E5%A4%87IO/" class="post-title-link" itemprop="url">操作系统实战11-设备IO</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-11-24 09:08:25" itemprop="dateCreated datePublished" datetime="2021-11-24T09:08:25+00:00">2021-11-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9810-%E8%BF%9B%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9810-%E8%BF%9B%E7%A8%8B/" class="post-title-link" itemprop="url">操作系统实战10-进程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-11-23 12:51:02" itemprop="dateCreated datePublished" datetime="2021-11-23T12:51:02+00:00">2021-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 进程结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_THREAD</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">spinlock_t</span>  td_lock;                    <span class="comment">// 进程的自旋锁         </span></span><br><span class="line">    <span class="type">list_h_t</span>    td_list;                    <span class="comment">// 进程链表 </span></span><br><span class="line">    <span class="type">uint_t</span>      td_flgs;                    <span class="comment">// 进程的标志</span></span><br><span class="line">    <span class="type">uint_t</span>      td_stus;                    <span class="comment">// 进程的状态</span></span><br><span class="line">    <span class="type">uint_t</span>      td_cpuid;                   <span class="comment">// 进程所在的 CPU 的 id</span></span><br><span class="line">    <span class="type">uint_t</span>      td_id;                      <span class="comment">// 进程的 id</span></span><br><span class="line">    <span class="type">uint_t</span>      td_tick;                    <span class="comment">// 进程运行了多少 tick</span></span><br><span class="line">    <span class="type">uint_t</span>      td_sumtick;                 </span><br><span class="line">    <span class="type">uint_t</span>      td_privilege;               <span class="comment">// 进程的权限</span></span><br><span class="line">    <span class="type">uint_t</span>      td_priority;                <span class="comment">// 进程的优先级</span></span><br><span class="line">    <span class="type">uint_t</span>      td_runmode;                 <span class="comment">// 进程的运行模式</span></span><br><span class="line">    <span class="type">adr_t</span>       td_krlstktop;               <span class="comment">// 应用程序内核栈顶地址</span></span><br><span class="line">    <span class="type">adr_t</span>       td_krlstkstart;             <span class="comment">// 应用程序内核栈开始地址</span></span><br><span class="line">    <span class="type">adr_t</span>       td_usrstktop;               <span class="comment">// 应用程序栈顶地址</span></span><br><span class="line">    <span class="type">adr_t</span>       td_usrstkstart;             <span class="comment">// 应用程序栈开始地址</span></span><br><span class="line">    <span class="type">mmadrsdsc_t</span>* td_mmdsc;                  <span class="comment">// 地址空间结构</span></span><br><span class="line">    <span class="type">void</span>*       td_resdsc;</span><br><span class="line">    <span class="type">void</span>*       td_privtep;</span><br><span class="line">    <span class="type">void</span>*       td_extdatap;</span><br><span class="line">    <span class="type">char_t</span>*     td_appfilenm;</span><br><span class="line">    <span class="type">uint_t</span>      td_appfilenmlen;            <span class="comment">//</span></span><br><span class="line">    <span class="type">context_t</span>   td_context;                 <span class="comment">// 机器上下文件结构</span></span><br><span class="line">    <span class="type">objnode_t</span>*  td_handtbl[TD_HAND_MAX];    <span class="comment">// 打开的对象数组，可以理解为进程打开资源的描述符数组</span></span><br><span class="line">    <span class="type">char_t</span>      td_name[THREAD_NAME_MAX];   <span class="comment">//</span></span><br><span class="line">&#125;<span class="type">thread_t</span>;</span><br></pre></td></tr></table></figure>
-
-<p>进程的地址空间</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 进程的内存地址空间，它包含 virmemadrs_t 结构和 mmudsc_t 结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MMADRSDSC</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">spinlock_t</span> msd_lock;		<span class="comment">// 保护自身的自旋锁</span></span><br><span class="line">	<span class="type">list_h_t</span> msd_list;			<span class="comment">// 链表</span></span><br><span class="line">	<span class="type">uint_t</span> msd_flag;			<span class="comment">// 状态和标志</span></span><br><span class="line">	<span class="type">uint_t</span> msd_stus;</span><br><span class="line">	<span class="type">uint_t</span> msd_scount;			<span class="comment">// 计数，该结构可能被共享</span></span><br><span class="line">	<span class="type">thread_t</span>* msd_thread;	</span><br><span class="line">	<span class="type">sem_t</span>  msd_sem;				<span class="comment">// 信号量</span></span><br><span class="line">	<span class="type">mmudsc_t</span> msd_mmu;			<span class="comment">// MMU相关的信息</span></span><br><span class="line">	<span class="type">virmemadrs_t</span> msd_virmemadrs;<span class="comment">// 虚拟地址空间</span></span><br><span class="line">	<span class="type">adr_t</span> msd_stext;			<span class="comment">// 应用的指令区的开始、结束地址</span></span><br><span class="line">	<span class="type">adr_t</span> msd_etext;</span><br><span class="line">	<span class="type">adr_t</span> msd_sdata;			<span class="comment">// 应用的数据区的开始、结束地址</span></span><br><span class="line">	<span class="type">adr_t</span> msd_edata;</span><br><span class="line">	<span class="type">adr_t</span> msd_sbss;				<span class="comment">// 应用初始化为 0 的区域开始、结束地址</span></span><br><span class="line">	<span class="type">adr_t</span> msd_ebss;</span><br><span class="line">	<span class="type">adr_t</span> msd_sbrk;				<span class="comment">// 应用的堆区的开始、结束地址</span></span><br><span class="line">	<span class="type">adr_t</span> msd_ebrk;</span><br><span class="line">&#125;<span class="type">mmadrsdsc_t</span>;</span><br></pre></td></tr></table></figure>
-
-<p>进程的机器上下文</p>
+<p>软件开发，或多或少会走上调试这条路。调试工具可以帮你更加深入了解整个程序的运行状态，对程序运行有更多的主动权。你可以随心所欲的改变程序运行流程，如：有变量a，你需要不断改变该a的值，让程序运行出理想的结果，那么你可以在调试工具中轻易的实现。</p>
+<ul>
+<li>运行你的程序，设置所有的能影响程序运行的东西。</li>
+<li>保证你的程序在指定的条件下停止。</li>
+<li>当你程序停止时，让你检查发生了什么。</li>
+<li>改变你的程序。那样你可以试着修正某个bug引起的问题，然后继续查找另一 个bug</li>
+</ul>
+<p>今天给大家带来的gdb调试工具。GDB是GNU开源组织发布的一个强大的UNIX下的程序调试工具。GDB可以调试C、C++、D、Go、python、pascal、assemble(ANSI 汇编标准)等等语言。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/11/23/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9810-%E8%BF%9B%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/2020/05/05/GDB%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8Fbug%E6%97%A0%E5%A4%84%E8%BA%B2%E8%97%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1127,7 +1399,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1139,7 +1411,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

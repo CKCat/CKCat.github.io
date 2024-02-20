@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -192,7 +192,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9809-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/04/21/%E5%A4%A9%E6%B6%AFkkndme%E7%A5%9E%E8%B4%B4%E8%81%8A%E6%88%BF%E4%BB%B7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9809-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="post-title-link" itemprop="url">操作系统实战09-虚拟内存</a>
+          <a href="/2020/04/21/%E5%A4%A9%E6%B6%AFkkndme%E7%A5%9E%E8%B4%B4%E8%81%8A%E6%88%BF%E4%BB%B7/" class="post-title-link" itemprop="url">天涯kkndme神贴聊房价</a>
         </h2>
 
         <div class="post-meta-container">
@@ -221,14 +221,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-11-19 23:00:21" itemprop="dateCreated datePublished" datetime="2021-11-19T23:00:21+00:00">2021-11-19</time>
+      <time title="创建时间：2020-04-21 11:29:13" itemprop="dateCreated datePublished" datetime="2020-04-21T11:29:13+00:00">2020-04-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -236,7 +236,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
         </span>
     </span>
 
@@ -250,305 +250,167 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><p>虚拟地址区间</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 虚拟地址空间</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">KMVARSDSC</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">spinlock_t</span> kva_lock;	<span class="comment">// 保护自身自旋锁</span></span><br><span class="line">	<span class="type">u32_t</span>  kva_maptype;		<span class="comment">// 映射类型</span></span><br><span class="line">	<span class="type">list_h_t</span> kva_list;		<span class="comment">// 链表</span></span><br><span class="line">	<span class="type">u64_t</span>  kva_flgs;		<span class="comment">// 相关标志</span></span><br><span class="line">	<span class="type">u64_t</span>  kva_limits;</span><br><span class="line">	<span class="type">vaslknode_t</span> kva_lknode;</span><br><span class="line">	<span class="type">void</span>*  kva_mcstruct;	<span class="comment">// 指向它的上层结构</span></span><br><span class="line">	<span class="type">adr_t</span>  kva_start;		<span class="comment">// 虚拟地址的开始</span></span><br><span class="line">	<span class="type">adr_t</span>  kva_end;			<span class="comment">// 虚拟地址的结束</span></span><br><span class="line">	<span class="type">kvmemcbox_t</span>* kva_kvmbox;<span class="comment">// 管理这个结构映射的物理页面</span></span><br><span class="line">	<span class="type">void</span>*  kva_kvmcobj;</span><br><span class="line">&#125;<span class="type">kmvarsdsc_t</span>;</span><br></pre></td></tr></table></figure>
-
-<p>虚拟地址空间描述结构</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 虚拟地址空间描述结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_VIRMEMADRS</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">spinlock_t</span> vs_lock;			<span class="comment">// 保护自身的自旋锁</span></span><br><span class="line">	<span class="type">u32_t</span>  vs_resalin;</span><br><span class="line">	<span class="type">list_h_t</span> vs_list;			<span class="comment">// 链表，链接虚拟地址区间</span></span><br><span class="line">	<span class="type">uint_t</span> vs_flgs;				<span class="comment">// 标志</span></span><br><span class="line">	<span class="type">uint_t</span> vs_kmvdscnr;			<span class="comment">// 多少个虚拟地址区间</span></span><br><span class="line">	<span class="type">mmadrsdsc_t</span>* vs_mm;			<span class="comment">// 指向它的上层的数据结构</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_startkmvdsc;<span class="comment">// 开始的虚拟地址区间</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_endkmvdsc;	<span class="comment">// 结束的虚拟地址区间</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_currkmvdsc;	<span class="comment">// 当前的虚拟地址区间</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_krlmapdsc;	<span class="comment">// 能分配的开始虚拟地址</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_krlhwmdsc;	<span class="comment">// 能分配的结束虚拟地址</span></span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_krlolddsc;	</span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_heapkmvdsc;</span><br><span class="line">	<span class="type">kmvarsdsc_t</span>* vs_stackkmvdsc;</span><br><span class="line">	<span class="type">adr_t</span> vs_isalcstart;</span><br><span class="line">	<span class="type">adr_t</span> vs_isalcend;</span><br><span class="line">	<span class="type">void</span>* vs_privte;			<span class="comment">// 私有数据指针</span></span><br><span class="line">	<span class="type">void</span>* vs_ext;				<span class="comment">// 扩展数据指针</span></span><br><span class="line">&#125;<span class="type">virmemadrs_t</span>;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9809-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">操作系统实战08-内存对象管理</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-11-18 17:38:24" itemprop="dateCreated datePublished" datetime="2021-11-18T17:38:24+00:00">2021-11-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="内存对象管理数据结构"><a href="#内存对象管理数据结构" class="headerlink" title="内存对象管理数据结构"></a>内存对象管理数据结构</h1><p>用 freobjh_t 结构表示一个对象了，如下所示。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_FREOBJH</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> oh_list;     <span class="comment">// 内存对象链表</span></span><br><span class="line">    <span class="type">uint_t</span> oh_stus;       <span class="comment">// 内存对象状态</span></span><br><span class="line">    <span class="type">void</span>* oh_stat;        <span class="comment">// 内存对象的开始地址</span></span><br><span class="line">&#125;<span class="type">freobjh_t</span>;</span><br></pre></td></tr></table></figure>
-
-<p>kmsob_t 用于表示内存对象容器，kmbext_t 用于表示内存对象容器的扩展内存，msomdc_t 和 msclst_t 用于管理内存对象容器占用的物理内存页面。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//管理内存对象容器占用的内存页面所对应的msadsc_t结构</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSCLST</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">uint_t</span> ml_msanr;  <span class="comment">//多少个msadsc_t</span></span><br><span class="line">    <span class="type">uint_t</span> ml_ompnr;  <span class="comment">//一个msadsc_t对应的连续的物理内存页面数</span></span><br><span class="line">    <span class="type">list_h_t</span> ml_list; <span class="comment">//挂载msadsc_t的链表</span></span><br><span class="line">&#125;<span class="type">msclst_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//管理内存对象容器占用的内存</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_MSOMDC</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//msclst_t结构数组mc_lst[0]=1个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[1]=2个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[2]=4个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[3]=8个连续页面的msadsc_t</span></span><br><span class="line">    <span class="comment">//               mc_lst[4]=16个连续页面的msadsc_t</span></span><br><span class="line">    <span class="type">msclst_t</span> mc_lst[MSCLST_MAX];</span><br><span class="line">    <span class="type">uint_t</span> mc_msanr;   <span class="comment">//总共多个msadsc_t结构</span></span><br><span class="line">    <span class="type">list_h_t</span> mc_list;</span><br><span class="line">    <span class="comment">//内存对象容器第一个占用msadsc_t</span></span><br><span class="line">    <span class="type">list_h_t</span> mc_kmobinlst;</span><br><span class="line">    <span class="comment">//内存对象容器第一个占用msadsc_t对应的连续的物理内存页面数</span></span><br><span class="line">    <span class="type">uint_t</span> mc_kmobinpnr;</span><br><span class="line">&#125;<span class="type">msomdc_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//管理内存对象容器扩展容量</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KMBEXT</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> mt_list;        <span class="comment">//链表</span></span><br><span class="line">    <span class="type">adr_t</span> mt_vstat;          <span class="comment">//内存对象容器扩展容量开始地址</span></span><br><span class="line">    <span class="type">adr_t</span> mt_vend;           <span class="comment">//内存对象容器扩展容量结束地址</span></span><br><span class="line">    <span class="type">kmsob_t</span>* mt_kmsb;        <span class="comment">//指向内存对象容器结构</span></span><br><span class="line">    <span class="type">uint_t</span> mt_mobjnr;        <span class="comment">//内存对象容器扩展容量的内存中有多少对象</span></span><br><span class="line">&#125;<span class="type">kmbext_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 内存对象容器</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">s_KMSOB</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">list_h_t</span> so_list;        <span class="comment">//链表</span></span><br><span class="line">    <span class="type">spinlock_t</span> so_lock;      <span class="comment">//保护结构自身的自旋锁</span></span><br><span class="line">    <span class="type">uint_t</span> so_stus;          <span class="comment">//状态与标志</span></span><br><span class="line">    <span class="type">uint_t</span> so_flgs;</span><br><span class="line">    <span class="type">adr_t</span> so_vstat;          <span class="comment">//内存对象容器的开始地址</span></span><br><span class="line">    <span class="type">adr_t</span> so_vend;           <span class="comment">//内存对象容器的结束地址</span></span><br><span class="line">    <span class="type">size_t</span> so_objsz;         <span class="comment">//内存对象大小</span></span><br><span class="line">    <span class="type">size_t</span> so_objrelsz;      <span class="comment">//内存对象实际大小</span></span><br><span class="line">    <span class="type">uint_t</span> so_mobjnr;        <span class="comment">//内存对象容器中总共的对象个数</span></span><br><span class="line">    <span class="type">uint_t</span> so_fobjnr;        <span class="comment">//内存对象容器中空闲的对象个数</span></span><br><span class="line">    <span class="type">list_h_t</span> so_frelst;      <span class="comment">//内存对象容器中空闲的对象链表头</span></span><br><span class="line">    <span class="type">list_h_t</span> so_alclst;      <span class="comment">//内存对象容器中分配的对象链表头</span></span><br><span class="line">    <span class="type">list_h_t</span> so_mextlst;     <span class="comment">//内存对象容器扩展kmbext_t结构链表头</span></span><br><span class="line">    <span class="type">uint_t</span> so_mextnr;        <span class="comment">//内存对象容器扩展kmbext_t结构个数</span></span><br><span class="line">    <span class="type">msomdc_t</span> so_mc;          <span class="comment">//内存对象容器占用内存页面管理结构</span></span><br><span class="line">    <span class="type">void</span>* so_privp;          <span class="comment">//本结构私有数据指针</span></span><br><span class="line">    <span class="type">void</span>* so_extdp;          <span class="comment">//本结构扩展数据指针</span></span><br><span class="line">&#125;<span class="type">kmsob_t</span>;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/18/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9808-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">操作系统实战07-内存管理</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-11-15 09:41:17" itemprop="dateCreated datePublished" datetime="2021-11-15T09:41:17+00:00">2021-11-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="内存页"><a href="#内存页" class="headerlink" title="内存页"></a>内存页</h2><p>我们使用分页模式来管理内存，把物理内存空间分成 4KB 大小页，称为内存页。</p>
-<p>由于使用 4KB 进行分页，因此每一个页的起始地址都应该是 0x1000 的倍数，即地址的低 12 位可以可以另作它用。</p>
-<p>为了使内存管理高效，我们需要一个结构存放页的状态、页的地址、页的分配记数、页的类型、页的链表，如下所示。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/11/15/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9807-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/" class="post-title-link" itemprop="url">编译x64dbg</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-11-09 22:01:34" itemprop="dateCreated datePublished" datetime="2021-11-09T22:01:34+00:00">2021-11-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>编译环境：VS2019 + QT5.15.2</p>
-<p>参考： <a target="_blank" rel="noopener" href="https://github.com/x64dbg/x64dbg/wiki/Compiling-the-whole-project">https://github.com/x64dbg/x64dbg/wiki/Compiling-the-whole-project</a></p>
-<h1 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h1><ol>
-<li><p>下载源码</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recurse-submodules -b development https://github.com/x64dbg/x64dbg.git</span><br></pre></td></tr></table></figure>
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/shenzhengfang/kkndme_tianya/blob/master/README.md">https://github.com/shenzhengfang/kkndme_tianya/blob/master/README.md</a></p>
+</blockquote>
+<h1 id="kkndme-tianya（持续更新中…）"><a href="#kkndme-tianya（持续更新中…）" class="headerlink" title="kkndme_tianya（持续更新中…）"></a>kkndme_tianya（持续更新中…）</h1><blockquote>
+<p>天涯神贴<a target="_blank" rel="noopener" href="http://bbs.tianya.cn/post-house-252774-1.shtml">「2010年的房地产调控，我们收获了什么？写在房价暴涨前」</a>脱水版，内容时间顺序和原贴保持一致，原贴中的优质非楼主写的内容，添加了引用格式便于区分。</p>
+<p>「2010年的房地产调控，我们收获了什么？写在房价暴涨前」里面写的内容，相信每一个站在 2019 年的我们看过后都会觉得怎么没有早点看到这个帖子。</p>
+<p><strong>欢迎关注微信公众号：沈正方</strong>，我会在我的<strong>个人微信公众号「沈正方」</strong> 里写一些我对这篇帖子内容的思考，欢迎一起讨论。</p>
+</blockquote>
+<ul>
+<li><a href="#%E6%88%BF%E5%9C%B0%E4%BA%A7%E8%B0%83%E6%8E%A7%E8%A1%A8%E9%9D%A2%E4%B8%8A%E7%9C%8B%E8%B5%B7%E6%9D%A5%E7%9A%84%E7%90%86%E7%94%B1%E6%9C%89%E4%B8%89%E6%9D%A1">房地产调控表面上看起来的理由有三条</a><ul>
+<li><a href="#1%E4%BA%BA%E4%BA%BA%E9%83%BD%E6%9C%89%E5%B1%85%E4%BD%8F%E6%9D%83">1、人人都有居住权</a></li>
+<li><a href="#2%E6%88%BF%E5%AD%90%E6%98%AF%E7%94%A8%E6%9D%A5%E4%BD%8F%E7%9A%84%E4%B8%8D%E6%98%AF%E7%94%A8%E6%9D%A5%E7%82%92%E7%9A%84">2、房子是用来住的，不是用来炒的</a></li>
+<li><a href="#3%E6%88%BF%E5%AD%90%E5%A4%AA%E8%B4%B5%E4%BA%86">3、房子太贵了</a><ul>
+<li><a href="#%E6%9C%80%E8%A2%AB%E6%8F%90%E5%8F%8A%E4%B8%8E%E6%B3%A1%E6%B2%AB%E6%9C%89%E5%85%B3%E7%9A%84%E6%98%AF%E4%BB%A5%E4%B8%8B%E4%B8%A4%E7%82%B9">最被提及与泡沫有关的是以下两点：</a><ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E4%B8%AD%E5%9B%BD%E7%9A%84%E6%88%BF%E4%BB%B7%E7%94%9A%E8%87%B3%E9%AB%98%E4%BA%8E%E6%9F%90%E4%BA%9B%E5%8F%91%E8%BE%BE%E5%9B%BD%E5%AE%B6%E7%9A%84%E6%88%BF%E4%BB%B7">第一：中国的房价甚至高于某些发达国家的房价。</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E7%A7%9F%E5%94%AE%E6%AF%94%E4%B8%A5%E9%87%8D%E4%B8%8D%E5%90%88%E7%90%86%E7%A9%BA%E7%BD%AE%E7%8E%87%E5%A4%AA%E9%AB%98%E4%BA%BA%E5%9D%87%E6%94%B6%E5%85%A5%E5%A4%AA%E4%BD%8E%E6%97%A9%E6%99%9A%E8%A6%81%E5%B4%A9%E7%9B%98">第二：租售比严重不合理，空置率太高，人均收入太低，早晚要崩盘。</a></li>
+</ul>
 </li>
-<li><p>配置好 VS2019 + QT5.15.2 的环境。</p>
+</ul>
 </li>
-</ol>
-<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1>
+<li><a href="#4%E6%88%BF%E4%BB%B7%E4%B8%8A%E6%B6%A8%E9%80%A0%E6%88%90%E7%89%A9%E4%BB%B7%E4%B8%8A%E6%B6%A8%E4%BA%BA%E6%B0%91%E7%94%9F%E6%B4%BB%E5%8F%98%E5%BE%97%E5%9B%B0%E9%9A%BE">4、房价上涨造成物价上涨，人民生活变得困难</a></li>
+</ul>
+</li>
+<li><a href="#%E6%88%BF%E5%9C%B0%E4%BA%A7%E8%B0%83%E6%8E%A7%E7%9A%84%E7%9C%9F%E6%AD%A3%E6%84%8F%E5%9B%BE%E9%80%9A%E8%BF%87%E5%9E%84%E6%96%AD%E8%8E%B7%E5%8F%96%E5%88%A9%E7%9B%8A%E6%9C%80%E5%A4%A7%E5%8C%96%E5%9B%BD%E5%AF%8C%E6%B0%91%E7%A9%B7">房地产调控的真正意图（通过垄断获取利益最大化：国富民穷）</a></li>
+<li><a href="#%E8%AF%B4%E5%88%B0%E6%88%BF%E4%BA%A7%E6%B3%A1%E6%B2%AB%E7%9A%84%E9%97%AE%E9%A2%98">说到房产泡沫的问题</a><ul>
+<li><a href="#1%E5%85%88%E8%AF%B4%E8%AF%B4%E5%AE%98%E6%96%B9%E7%9A%84%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%80%89%E6%8B%A9%E6%80%A7%E5%A4%B1%E6%98%8E">1、先说说官方的统计数据。(选择性失明)</a></li>
+</ul>
+</li>
+<li><a href="#%E6%88%BF%E5%9C%B0%E4%BA%A7%E8%B0%83%E6%8E%A7%E5%B7%A5%E5%85%B7%E6%88%BF%E4%BA%A7%E7%A8%8E">房地产调控工具：房产税？</a></li>
+<li><a href="#%E5%9E%84%E6%96%AD%E8%BF%98%E5%8F%AF%E4%BB%A5%E8%A7%A3%E5%86%B3%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%E7%A4%BE%E4%BC%9A%E7%A8%B3%E5%AE%9A">垄断还可以解决一个问题：社会稳定。</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E5%9E%84%E6%96%AD%E6%88%BF%E5%B1%8B%E6%88%BF%E7%A7%9F">如何垄断房屋、房租？</a></li>
+<li><a href="#%E5%9B%BD%E5%AE%B6%E5%9E%84%E6%96%AD%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%BD%B1%E5%93%8D">国家垄断带来的影响</a></li>
+<li><a href="#%E5%85%AC%E7%A7%9F%E6%88%BF%E9%97%AE%E9%A2%98">公租房问题</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%BB%BA%E5%85%AC%E7%A7%9F%E6%88%BF%E7%9A%84%E9%92%B1%E4%BB%8E%E5%93%AA%E5%84%BF%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98">如何解决建公租房的钱从哪儿来的问题？</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87%E5%BE%81%E7%A8%8E%E8%B0%83%E8%8A%82%E8%B4%AB%E5%AF%8C%E5%B7%AE%E8%B7%9D%E6%98%AF%E8%80%8D%E6%B5%81%E6%B0%93%E5%9B%A0%E4%B8%BA%E5%AF%8C%E7%9A%84%E4%BA%BA%E8%B4%9F%E8%B4%A3%E5%88%B6%E5%AE%9A%E6%94%BF%E7%AD%96%E5%AF%8C%E7%9A%84%E4%BA%BA%E4%B8%8D%E4%BC%9A%E8%AE%A9%E6%94%BF%E7%AD%96%E9%92%88%E5%AF%B9%E8%87%AA%E5%B7%B1">通过征税调节贫富差距是耍流氓（因为富的人负责制定政策，富的人不会让政策针对自己）</a></li>
+<li><a href="#%E6%88%BF%E4%BB%B7%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E6%B6%A8">房价什么时候会涨</a></li>
+<li><a href="#%E4%B8%BA%E4%BA%BA%E6%B0%91%E6%9C%8D%E5%8A%A1%E5%B0%B1%E6%98%AF%E7%9E%8E%E6%8E%B0">为人民服务就是瞎掰</a></li>
+<li><a href="#%E6%88%BF%E7%A7%9F%E9%97%AE%E9%A2%98">房租问题</a></li>
+<li><a href="#%E7%B2%AE%E9%A3%9F%E9%97%AE%E9%A2%98">粮食问题</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%82%BB%E7%A9%BA">什么是傻空？</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%9C%9F%E4%B9%B0%E4%B8%8D%E8%B5%B7%E6%88%BF">什么是真买不起房？</a></li>
+<li><a href="#%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98%E8%A6%81%E6%B7%B1%E5%85%A5">分析问题要深入</a></li>
+<li><a href="#%E4%BB%8E%E8%B4%B5%E9%98%B3%E7%9A%84%E7%8E%B0%E7%8A%B6%E7%9C%8B%E4%B8%AD%E5%9B%BD%E7%9A%84%E6%9C%AA%E6%9D%A5">从贵阳的现状看中国的未来</a></li>
+<li><a href="#%E8%B4%A7%E5%B8%81%E8%B4%AC%E5%80%BC">货币贬值</a></li>
+<li><a href="#%E6%88%BF%E4%BB%B7%E5%8F%AF%E8%83%BD%E7%9A%84%E4%B8%8B%E8%B7%8C%E6%96%B9%E5%BC%8F">房价可能的下跌方式</a></li>
+<li><a href="#%E6%88%BF%E4%BA%A7%E6%8A%95%E8%B5%84%E7%9A%84%E9%97%AE%E9%A2%98">房产投资的问题</a></li>
+<li><a href="#%E4%B9%B0%E6%88%BF%E6%97%B6%E6%9C%BA">买房时机</a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E8%B0%83%E6%8E%A7">关于调控</a></li>
+<li><a href="#%E6%99%AE%E9%80%9A%E4%BA%BA%E8%AF%A5%E6%80%8E%E4%B9%88%E5%8A%9E">普通人该怎么办？</a></li>
+<li><a href="#%E4%BD%93%E5%88%B6%E5%A4%96%E4%BA%BA%E5%91%98%E5%85%BB%E8%80%81%E7%A1%AE%E5%AE%9E%E6%98%AF%E4%B8%AA%E9%97%AE%E9%A2%98">体制外人员养老确实是个问题</a></li>
+<li><a href="#%E6%87%82%E6%94%BF%E7%AD%96%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7">懂政策的重要性</a></li>
+<li><a href="#%E5%AD%98%E9%92%B1%E4%B8%8D%E5%A6%82%E5%AD%98%E6%88%BF%E5%AD%90%E5%AD%98%E6%9C%A8%E5%A4%B4%E5%AD%98%E6%A0%91">存钱不如存房子、存木头、存树</a></li>
+<li><a href="#%E6%94%BF%E5%BA%9C%E4%B8%8D%E8%80%83%E8%99%91%E6%B0%91%E7%94%9F">政府不考虑民生</a></li>
+<li><a href="#%E5%86%8D%E8%B0%88%E4%B9%B0%E6%88%BF%E6%97%B6%E6%9C%BA">再谈买房时机</a></li>
+<li><a href="#%E5%88%A9%E7%9B%8A%E6%89%8D%E6%98%AFzf%E8%A1%8C%E4%B8%BA%E7%9A%84%E6%8C%87%E6%8C%A5%E6%A3%92">利益才是zf行为的指挥棒</a></li>
+<li><a href="#%E4%B9%B0%E6%88%BF%E5%BA%94%E8%AF%A5%E5%85%B3%E6%B3%A8%E4%BB%80%E4%B9%88">买房应该关注什么？</a></li>
+<li><a href="#%E6%B5%81%E6%B0%93%E6%97%A0%E4%BA%A7%E8%80%85">流氓无产者</a></li>
+<li><a href="#%E6%94%BF%E5%BA%9C%E8%B0%83%E6%8E%A7%E7%9A%84%E7%9B%AE%E7%9A%84%E4%B8%8E%E5%90%AF%E7%A4%BA">政府调控的目的与启示</a></li>
+<li><a href="#%E4%B8%AA%E4%BA%BA%E7%9A%84%E6%99%BA%E6%85%A7%E5%92%8C%E6%89%8D%E5%B9%B2%E5%86%B3%E5%AE%9A%E4%BA%86%E4%B8%AA%E4%BA%BA%E7%9A%84%E5%91%BD%E8%BF%90">个人的智慧和才干决定了个人的命运</a></li>
+<li><a href="#%E9%87%91%E9%92%B1%E8%87%B3%E4%B8%8A">金钱至上</a></li>
+<li><a href="#%E4%BE%9B%E6%B1%82%E5%85%B3%E7%B3%BB">供求关系</a></li>
+<li><a href="#%E6%8B%86%E8%BF%81%E8%A1%A5%E5%81%BF">拆迁补偿</a></li>
+<li><a href="#%E6%89%A7%E6%94%BF%E8%80%85%E5%A6%82%E4%BD%95%E6%B2%BB%E5%9B%BD">执政者如何治国</a></li>
+<li><a href="#10-%E5%B9%B4%E6%88%BF%E5%9C%B0%E4%BA%A7%E8%B0%83%E6%8E%A7">10 年房地产调控</a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E6%88%BF%E8%B4%B7">关于房贷</a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E5%95%86%E9%93%BA%E6%8A%95%E8%B5%84">关于商铺投资</a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E6%88%BF%E4%BA%A7%E7%A8%8E">关于房产税</a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E%E6%8B%86%E8%BF%81">关于拆迁</a></li>
+<li><a href="#%E4%B9%B0%E6%88%BF%E5%92%8C%E4%B8%8D%E4%B9%B0%E6%88%BF%E7%9A%84%E5%B7%AE%E8%B7%9D">买房和不买房的差距</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%8E%B0%E5%9C%A8%E7%A7%9F%E5%94%AE%E6%AF%94%E8%BF%99%E4%B9%88%E4%BD%8E">为什么现在租售比这么低？</a></li>
+<li><a href="#%E6%88%BF%E4%BA%A7%E4%BA%A4%E6%98%93%E5%8E%86%E5%8F%B2">房产交易历史</a></li>
+<li><a href="#%E5%A5%91%E7%A8%8E%E7%9A%84%E5%8E%86%E5%8F%B2">契税的历史</a></li>
+<li><a href="#%E5%BB%89%E7%A7%9F%E6%88%BF%E7%9A%84%E5%8E%86%E5%8F%B2">廉租房的历史</a></li>
+<li><a href="#%E5%8E%86%E5%8F%B2%E4%B8%8A%E4%B9%B0%E6%88%BF%E6%9C%80%E5%A5%BD%E7%9A%84%E6%9C%9D%E4%BB%A3">历史上买房最好的朝代</a></li>
+<li><a href="#%E6%9C%AA%E6%9D%A5%E6%88%BF%E5%9C%B0%E4%BA%A7%E5%B8%82%E5%9C%BA%E7%9A%84%E5%8F%91%E5%B1%95">未来房地产市场的发展</a></li>
+<li><a href="#%E6%88%BF%E4%BA%A7%E5%88%B0%E6%9C%9F">房产到期</a></li>
+<li><a href="#%E4%B9%B0%E5%AD%A6%E5%8C%BA%E6%88%BF%E9%97%AE%E9%A2%98">买学区房问题</a></li>
+<li><a href="#%E4%BA%BA%E5%8F%A3%E6%99%AE%E6%9F%A5">人口普查</a></li>
+<li><a href="#%E6%98%86%E5%B1%B1">昆山</a></li>
+<li><a href="#%E4%B9%B0%E6%88%BF%E4%BA%89%E5%8F%96%E4%B8%80%E6%AD%A5%E5%88%B0%E4%BD%8D">买房争取一步到位</a></li>
+<li><a href="#%E6%94%B6%E5%85%A5%E7%A8%B3%E5%AE%9A%E7%9A%84%E5%AE%B6%E5%BA%AD%E5%A6%82%E4%BD%95%E4%B9%B0%E6%88%BF">收入稳定的家庭如何买房</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BA%BA%E5%8F%A3%E7%BA%A2%E5%88%A9%E6%B6%88%E5%A4%B1%E6%9C%AA%E6%9D%A5%E7%9A%84%E6%88%BF%E5%AD%90%E8%BF%98%E7%9C%8B%E6%B6%A8">为什么人口红利消失，未来的房子还看涨</a></li>
+<li><a href="#%E6%84%8F%E5%A4%A7%E5%88%A9%E7%9A%84%E4%BD%8F%E6%88%BF%E6%A8%A1%E5%BC%8F">意大利的住房模式</a></li>
+<li><a href="#%E4%B8%AD%E5%9B%BD%E7%9A%84%E5%AD%A6%E6%9C%AF">中国的学术</a></li>
+<li><a href="#%E7%B2%BE%E8%8B%B1%E7%9A%84%E8%B4%A2%E4%BA%A7">精英的财产</a></li>
+<li><a href="#%E4%B8%AD%E5%9B%BD%E7%9A%84%E6%96%B0%E9%97%BB%E4%B8%8D%E5%8F%AF%E4%BF%A1">中国的新闻不可信</a></li>
+<li><a href="#%E9%80%9A%E8%B4%A7%E8%86%A8%E8%83%80%E5%92%8C%E6%88%BF%E4%BB%B7%E7%9A%84%E5%85%B3%E7%B3%BB">通货膨胀和房价的关系</a></li>
+<li><a href="#%E8%87%AA%E4%BD%8F%E4%B9%B0%E6%88%BF">自住买房</a></li>
+<li><a href="#%E4%B8%AD%E5%9B%BD%E7%9A%84%E6%9C%9D%E4%BB%A3%E6%9B%B4%E6%9B%BF">中国的朝代更替</a></li>
+<li><a href="#%E8%81%8A%E8%81%8A%E4%BF%84%E7%BD%97%E6%96%AF">聊聊俄罗斯</a></li>
+<li><a href="#%E6%AF%9B%E5%A4%AA%E9%98%B3%E7%9A%84%E5%BE%80%E4%BA%8B">毛太阳的往事</a></li>
+<li><a href="#%E5%AF%8C%E4%BA%BA%E8%B6%8A%E5%AF%8C%E7%A9%B7%E4%BA%BA%E8%B6%8A%E7%A9%B7">富人越富、穷人越穷</a></li>
+<li><a href="#%E9%80%9A%E8%B4%A7%E8%86%A8%E8%83%80%E7%9A%84%E5%BD%A2%E6%88%90%E5%8E%9F%E5%9B%A0">通货膨胀的形成原因</a></li>
+<li><a href="#%E6%9C%89%E5%A4%96%E6%9D%A5%E4%BA%BA%E5%8F%A3%E5%92%8C%E6%B2%A1%E6%9C%89%E5%A4%96%E6%9D%A5%E4%BA%BA%E5%8F%A3%E7%9A%84%E5%8C%BA%E5%88%AB">有外来人口和没有外来人口的区别</a></li>
+<li><a href="#%E9%A6%96%E4%BB%98%E6%8F%90%E9%AB%98%E7%9A%84%E9%80%BB%E8%BE%91">首付提高的逻辑</a></li>
+<li><a href="#%E6%94%BF%E5%BA%9C%E6%90%AC%E8%BF%81">政府搬迁</a></li>
+<li><a href="#kkndme%E8%81%8A%E5%8C%97%E5%AE%8B%E5%94%90%E6%9C%9D">kkndme聊北宋、唐朝</a></li>
+<li><a href="#%E7%8E%8B%E5%AE%89%E7%9F%B3%E7%9A%84%E9%9D%92%E8%8B%97%E6%B3%95%E4%B9%8B%E5%9B%BD%E5%AE%B6%E5%87%BA%E6%94%BF%E7%AD%96%E7%9A%84%E5%8A%A8%E6%9C%BA">王安石的青苗法之国家出政策的动机</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A4%BE%E4%BC%9A%E5%85%AC%E5%B9%B3">什么是社会公平</a></li>
+<li><a href="#%E8%BF%98%E6%98%AF%E6%9C%89%E5%BE%88%E5%A4%9A%E6%9C%89%E9%92%B1%E4%BA%BA">还是有很多有钱人</a></li>
+<li><a href="#%E5%8F%8C%E8%BD%A8%E5%88%B6%E4%B9%8B%E4%BD%93%E5%88%B6%E5%86%85%E7%9A%84%E7%A6%8F%E5%88%A9">双轨制之体制内的福利</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E5%95%86%E6%80%9D%E7%BB%B4">开发商思维</a></li>
+<li><a href="#%E5%86%9C%E6%B0%91%E6%94%BF%E6%9D%83%E7%9A%84%E7%BC%BA%E7%82%B9">农民政权的缺点</a></li>
+<li><a href="#%E9%83%91%E5%B7%9E%E6%9C%89%E5%89%8D%E6%99%AF">郑州有前景</a></li>
+<li><a href="#%E5%85%AC%E5%9B%AD%E5%9C%B0%E4%BA%A7%E6%98%AF%E7%A8%80%E7%BC%BA%E8%B5%84%E6%BA%90">公园地产是稀缺资源</a></li>
+<li><a href="#%E5%BC%A0%E7%8C%AE%E5%BF%A0%E5%B1%A0%E5%B7%9D">张献忠屠川</a></li>
+<li><a href="#%E6%B4%AA%E7%A7%80%E5%85%A8%E9%BB%84%E5%B7%A2%E6%9D%8E%E8%87%AA%E6%88%90">洪秀全、黄巢、李自成</a></li>
+<li><a href="#%E6%9C%B1%E5%85%83%E7%92%8B">朱元璋</a></li>
+<li><a href="#%E6%9B%B9%E5%8F%82%E6%B2%BB%E5%9B%BD">曹参治国</a></li>
+<li><a href="#%E6%99%81%E9%94%99">晁错</a></li>
+<li><a href="#%E6%B0%91%E8%90%A5%E5%B0%8F%E4%BC%81%E4%B8%9A%E7%9A%84%E8%80%81%E6%9D%BF%E5%92%8C%E6%89%93%E5%B7%A5%E8%80%85">民营小企业的老板和打工者</a></li>
+<li><a href="#%E9%83%AD%E8%A7%A3">郭解</a></li>
+<li><a href="#2010%E5%B9%B4%E7%9A%84%E4%B8%AD%E5%9B%BD%E6%88%BF%E5%9C%B0%E4%BA%A7">2010年的中国房地产</a></li>
+<li><a href="#%E7%B2%BE%E8%8B%B1%E4%BA%BA%E7%BE%A4%E7%9A%84%E5%B9%B3%E5%9D%87%E6%94%B6%E5%85%A5%E5%86%B3%E5%AE%9A%E6%88%BF%E4%BB%B7">精英人群的平均收入决定房价</a></li>
+<li><a href="#%E5%86%85%E5%9C%B0%E4%B8%8D%E6%98%AF%E9%A6%99%E6%B8%AF%E6%B5%B7%E5%8D%97">内地不是香港、海南</a></li>
+<li><a href="#%E5%8E%86%E5%8F%B2%E6%98%AF%E4%B8%80%E9%9D%A2%E9%95%9C%E5%AD%90">历史是一面镜子</a></li>
+<li><a href="#%E4%B9%B0%E6%88%BF%E4%B8%80%E6%AC%A1%E6%80%A7%E5%88%B0%E4%BD%8D%E6%AF%94%E8%BE%83%E5%A5%BD">买房一次性到位比较好</a></li>
+<li><a href="#%E5%A4%96%E6%B1%87%E7%AE%A1%E5%88%B6">外汇管制</a></li>
+<li><a href="#%E4%B8%80%E7%BA%BF%E5%92%8C%E4%BA%8C%E7%BA%BF">一线和二线</a></li>
+<li><a href="#%E5%90%95%E5%90%8E%E7%AF%A1%E6%9D%83">吕后篡权</a></li>
+<li><a href="#%E5%B0%8F%E4%BA%A7%E6%9D%83%E6%88%BF">小产权房</a></li>
+<li><a href="#%E5%95%86%E9%93%BA%E5%92%8C%E4%BD%8F%E5%AE%85">商铺和住宅</a></li>
+<li><a href="#%E4%BD%93%E5%88%B6%E5%86%85%E5%A4%96">体制内外</a></li>
+<li><a href="#2010%E5%B9%B4%E7%9A%84%E4%B8%8A%E6%B5%B7">2010年的上海</a></li>
+<li><a href="#%E4%B9%B0%E6%88%BF%E7%89%A9%E4%B8%9A%E4%B8%8E%E6%88%BF%E8%B4%B7">买房：物业与房贷</a></li>
+<li><a href="#%E6%94%B6%E7%B4%A7%E4%BD%8F%E6%88%BF%E8%B4%B7%E6%AC%BE">收紧住房贷款</a></li>
+<li><a href="#%E5%A5%B8%E8%87%A3%E8%94%A1%E4%BA%AC">奸臣蔡京</a></li>
+<li><a href="#%E4%BD%93%E5%88%B6%E5%86%85%E7%9A%8428%E5%8E%9F%E5%88%99">体制内的28原则</a></li>
+<li><a href="#%E8%B4%BE%E8%B0%8A">贾谊</a></li>
+<li><a href="#kkndme-%E6%8E%A8%E8%8D%90%E7%9A%84%E5%8E%86%E5%8F%B2%E4%B9%A6">kkndme 推荐的历史书</a></li>
+<li><a href="#%E5%B9%B4%E8%BD%BB%E4%BA%BA%E8%A6%81%E6%97%A9%E4%B9%B0%E6%88%BF">年轻人要早买房</a></li>
+<li><a href="#%E4%B8%8D%E8%A6%81%E4%BD%8E%E4%BC%B0%E9%80%9A%E8%B4%A7%E8%86%A8%E8%83%80">不要低估通货膨胀</a></li>
+<li><a href="#%E4%BA%8C%E4%B8%89%E7%BA%BF%E5%9F%8E%E5%B8%82%E4%B8%8E%E9%87%8D%E5%BA%86">二三线城市与重庆</a></li>
+<li><a href="#%E5%9F%8E%E5%8C%BA%E5%92%8C%E9%83%8A%E5%8C%BA">城区和郊区</a></li>
+<li><a href="#%E5%AE%88%E7%9D%80%E9%87%91%E7%A2%97%E8%A6%81%E9%A5%AD%E5%90%83">守着金碗要饭吃</a></li>
+<li><a href="#%E4%BA%BA%E5%88%B6%E7%9A%84%E7%A4%BE%E4%BC%9A%E4%BA%BA%E5%B0%B1%E6%98%AF%E5%88%B6%E5%BA%A6">人制的社会，人就是制度</a></li>
+<li><a href="#%E5%87%86%E5%85%AC%E5%8A%A1%E5%91%98%E7%9A%84%E5%A5%BD%E5%A4%84">准公务员的好处</a></li>
+<li><a href="#%E4%BA%8C%E4%B8%89%E7%BA%BF%E5%9F%8E%E5%B8%82%E7%9A%84%E5%8F%91%E5%B1%95%E9%9D%A0%E6%8B%86%E8%BF%81">二三线城市的发展靠拆迁</a></li>
+<li><a href="#%E4%B8%80%E4%B8%AA%E5%BF%BD%E6%82%A0%E4%BA%86%E5%87%A0%E4%BA%BF%E4%B8%AD%E5%9B%BD%E4%BA%BA%E7%9A%84%E4%BC%AA%E6%A6%82%E5%BF%B5%E6%89%80%E8%B0%93%E4%B8%AD%E5%9B%BD%E6%88%BF%E5%9C%B0%E4%BA%A7%E6%B3%A1%E6%B2%AB">一个忽悠了几亿中国人的伪概念：所谓“中国房地产泡沫”</a></li>
+<li><a href="#%E6%8B%86%E8%BF%81%E8%A1%A5%E5%81%BF">拆迁补偿</a></li>
+<li><a href="#%E5%9F%8E%E5%B8%82%E5%BA%95%E5%B1%82">城市底层</a></li>
+<li><a href="#%E5%9E%84%E6%96%AD%E4%BC%81%E4%B8%9A">垄断企业</a></li>
+<li><a href="#%E5%86%9C%E6%9D%91%E8%87%AA%E6%9D%A5%E6%B0%B4">农村自来水</a></li>
+<li><a href="#%E8%A2%81%E7%9B%8E">袁盎</a></li>
+<li><a href="#%E4%BA%8C%E4%B8%89%E7%BA%BF%E5%9F%8E%E5%B8%82%E9%80%89%E6%96%B0%E5%9F%8E%E8%BF%98%E6%98%AF%E8%80%81%E5%9F%8E">二三线城市，选新城还是老城</a></li>
+<li><a href="#%E5%9C%A8%E4%B8%AD%E5%9B%BD%E6%99%AE%E9%80%9A%E4%BA%BA%E6%89%8B%E4%B8%8A%E9%97%B2%E9%92%B1%E4%B8%8D%E5%A4%9A%E7%9A%84%E4%BA%BA%E8%A2%AB%E5%89%A5%E5%89%8A">在中国，普通人手上闲钱不多的人被剥削</a></li>
+<li><a href="#%E4%B8%89%E5%88%86%E5%A4%A9%E6%B3%A8%E5%AE%9A%E4%B8%83%E5%88%86%E9%9D%A0%E6%89%93%E6%8B%BC">三分天注定七分靠打拼</a></li>
+<li><a href="#%E4%BA%BA%E7%9A%84%E5%89%8D%E7%A8%8B%E6%9C%89%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%8D%E6%8E%8C%E6%8F%A1%E5%9C%A8%E8%87%AA%E5%B7%B1%E6%89%8B%E9%87%8C">人的前程有的时候不掌握在自己手里</a></li>
+<li><a href="#%E6%B2%B3%E5%8D%97%E9%83%91%E5%B7%9E-%E4%B8%8E-%E6%B4%9B%E9%98%B3">河南郑州 与 洛阳</a></li>
+<li><a href="#%E6%9D%AD%E5%B7%9E">杭州</a></li>
+<li><a href="#%E8%A5%BF%E5%AE%89-%E4%B8%8E-%E9%87%8D%E5%BA%86">西安 与 重庆</a></li>
+<li><a href="#%E8%B0%A2%E5%9B%BD%E4%B8%AD%E7%A9%BA%E7%BD%AE%E7%8E%87">谢国中「空置率」</a></li>
+<li><a href="#%E6%89%93%E5%B7%A5%E4%B8%8D%E5%A6%82%E6%9C%89%E4%B8%80%E6%8A%80%E4%B9%8B%E9%95%BF%E7%9A%84%E5%B0%8F%E8%80%81%E6%9D%BF">打工不如有一技之长的小老板</a></li>
+<li><a href="#%E4%B8%80%E7%BA%BF%E3%80%81%E4%BA%8C%E7%BA%BF%E7%9A%84%E7%94%9F%E6%B4%BB">一线、二线的生活</a></li>
+<li><a href="#%E6%88%BF%E5%AD%90%E4%B8%8D%E5%B1%9E%E4%BA%8E%E5%B8%82%E5%9C%BA%E7%BB%8F%E6%B5%8E%EF%BC%88%E9%98%B4%E8%B0%8B%E8%AE%BA%E7%9A%84%E8%A7%92%E5%BA%A6%EF%BC%89">房子不属于市场经济（阴谋论的角度）</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A5%BD%E7%9A%84%E6%94%BF%E7%AD%96">什么是好的政策</a></li>
+</ul>
+<h2 id="房地产调控表面上看起来的理由有三条："><a href="#房地产调控表面上看起来的理由有三条：" class="headerlink" title="房地产调控表面上看起来的理由有三条："></a>房地产调控表面上看起来的理由有三条：</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/11/09/%E7%BC%96%E8%AF%91x64dbg/#more" rel="contents">
+              <a class="btn" href="/2020/04/21/%E5%A4%A9%E6%B6%AFkkndme%E7%A5%9E%E8%B4%B4%E8%81%8A%E6%88%BF%E4%BB%B7/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -579,7 +441,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -597,7 +459,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/" class="post-title-link" itemprop="url">操作系统实战06-实现hal层初始化</a>
+          <a href="/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">vim插件安装使用整理记录</a>
         </h2>
 
         <div class="post-meta-container">
@@ -608,14 +470,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-11-09 14:48:33" itemprop="dateCreated datePublished" datetime="2021-11-09T14:48:33+00:00">2021-11-09</time>
+      <time title="创建时间：2020-03-21 19:23:57" itemprop="dateCreated datePublished" datetime="2020-03-21T19:23:57+00:00">2020-03-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -623,7 +485,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
         </span>
     </span>
 
@@ -637,13 +499,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="第一个-C-函数总体概述"><a href="#第一个-C-函数总体概述" class="headerlink" title="第一个 C 函数总体概述"></a>第一个 C 函数总体概述</h1><p>第一个 C 函数 hal_start 首先初始化 hal 层，其中执行了平台初始化，hal层的内存初始化、中断初始化，最后进入到内核初始化。下面展示了整个执行时序图，先有一个宏观的感官。</p>
-<img src="http://www.plantuml.com/plantuml/svg/dPNDJjj04CVlFCM-G7j0RTNsK56fKjLxxv4JEuc5dKIEG-cDKd0215m-aWP2gYP298W6p8V0E2OyJ3Dh-zHNwDhhO0USblQsCvx_RsRsOpoLbnb9BeZ2H9eHOfxnE84UlK9XysLW8TXRiBuehWF1oJoOSz1UWU8rhcW_v-PH18NFy9JXBcAUhjHmHUNga4AK4q4abUK4Havc9N54Ifo2vmqOS7K6gkOJGg9n5959fEF3LbQXT34mofRH1hC2noPiT_3MXLDNh9q5l6iGSt3Jn9-EhTuc_hOmkDwCp1DdPtYMomOvV4Ueo7eVhbkurhVs3EVW19OxBYZGHK7Of9oIc5pw7gMYuTKZMj4li-mKoqwZXRVwU7V93-WqmLJ99oWfThzZhHNTjVU9vgR7XSj5PwFqzphYASOl0NdBOIkmsYIxz6-icJWtP7dB_sGbUK68qSt1-g9rOC292bULWMuulNLxwVIFuZmdnn9fHigpin-IGY6VHkDZtTiSPnBJAIbRoB287g3zkOotZqdjrb8nwkRUNdWnEyF5U34rAJApEOQL46WA8ZQosZtt64gQSrY3NGqQSsxtoY9qQwGPv-kvUwwrKznjsQr3Ur-nwjMeHEBeun33hyA3-I9HZ9JaqXz5aP5It5qPN5tWjGqmrEZkv49kz45JLq0Pw5rSxTwA_VXeESlb4nAVaxDIQ2oyVVCUOLMrRpJhnpwQVVOabc9bz30Wpuw1lhi79Q68xBJLMuUZdO6XqBejimhg9QZBrAJpxdR2FQI2Z9mKP3QVkBiZOCw3hjlD3dA740rp2y0hb_Pv8oYWhiFY6Hqy4HdvvvDFNuIokMQeJTTyZIW9hxN9W2DJpCUCd-yUQbeIHgu2_gxxmtcAox3a7_4R">
-<p>下面在从微观角度看一下每一个功能的实现。</p>
-<h1 id="hal-层初始化"><a href="#hal-层初始化" class="headerlink" title="hal 层初始化"></a>hal 层初始化</h1>
+          <h1 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍:"></a>介绍:</h2><p>安装需要Git，触发git clone,默认将每一个指定特定格式插件的仓库复制到~&#x2F;.vim&#x2F;bundle&#x2F;. 搜索需要Curl支持。</p>
+<p>Windows用户请直接访问Windows setup. 如果有任何问题, 请参考 FAQ. 查看 Tips 获取相关高级配置。</p>
+<p>使用 non-POSIX shells, 比如比较流行对 Fish shell, 需要额外对步骤。 请查看 FAQ.</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/11/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9806-%E5%AE%9E%E7%8E%B0hal%E5%B1%82%E5%88%9D%E5%A7%8B%E5%8C%96/#more" rel="contents">
+              <a class="btn" href="/2020/03/21/vim%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%B4%E7%90%86%E8%AE%B0%E5%BD%95/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -674,7 +535,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -692,7 +553,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">操作系统实战04-程序中的地址如何转换</a>
+          <a href="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/" class="post-title-link" itemprop="url">dexsim插件-Geost</a>
         </h2>
 
         <div class="post-meta-container">
@@ -703,14 +564,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-11-08 17:49:59" itemprop="dateCreated datePublished" datetime="2021-11-08T17:49:59+00:00">2021-11-08</time>
+      <time title="创建时间：2020-03-13 14:39:46" itemprop="dateCreated datePublished" datetime="2020-03-13T14:39:46+00:00">2020-03-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -718,7 +579,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
         </span>
     </span>
 
@@ -732,12 +593,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="虚拟地址和物理地址"><a href="#虚拟地址和物理地址" class="headerlink" title="虚拟地址和物理地址"></a>虚拟地址和物理地址</h2><h3 id="虚拟地址"><a href="#虚拟地址" class="headerlink" title="虚拟地址"></a>虚拟地址</h3><p>正如其名，这个地址是虚拟的，自然而然地和具体环境进行了解耦，这个环境包括系统软件环境和硬件环境。</p>
-<p>虚拟地址是逻辑上存在的一个数据值，比如 0<del>100 就有 101 个整数值，这个 0</del>100 的区间就可以说是一个虚拟地址空间，该虚拟地址空间有 101 个地址。</p>
-<h3 id="物理地址"><a href="#物理地址" class="headerlink" title="物理地址"></a>物理地址</h3>
+          <p>最近分析Geost家族银行木马，记录一下该木马字符串解密插件编写。</p>
+<blockquote>
+<p>样本来源：<a target="_blank" rel="noopener" href="https://blog.trendmicro.com/trendlabs-security-intelligence/dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks/">https://blog.trendmicro.com/trendlabs-security-intelligence/dissecting-geost-exposing-the-anatomy-of-the-android-trojan-targeting-russian-banks/</a></p>
+</blockquote>
+<p><a href="dexsim%E6%8F%92%E4%BB%B6-Geost/92394e82d9cf5de5cb9c7ac072e774496bd1c7e2944683837d30b188804c1810">样本下载</a></p>
+<h1 id="分析字符串解密特点"><a href="#分析字符串解密特点" class="headerlink" title="分析字符串解密特点"></a>分析字符串解密特点</h1><p>首先查看样本中解密字符串方法的特点</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9804-%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%9C%B0%E5%9D%80%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2/#more" rel="contents">
+              <a class="btn" href="/2020/03/13/dexsim%E6%8F%92%E4%BB%B6-Geost/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -768,7 +632,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9803-CPU%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -786,7 +650,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9803-CPU%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">操作系统实战03-CPU工作模式</a>
+          <a href="/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">史上最优雅的NDK加载pass方案</a>
         </h2>
 
         <div class="post-meta-container">
@@ -797,14 +661,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-11-08 17:43:40" itemprop="dateCreated datePublished" datetime="2021-11-08T17:43:40+00:00">2021-11-08</time>
+      <time title="创建时间：2020-03-07 00:18:47" itemprop="dateCreated datePublished" datetime="2020-03-07T00:18:47+00:00">2020-03-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -812,7 +676,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/OLLVM/" itemprop="url" rel="index"><span itemprop="name">OLLVM</span></a>
         </span>
     </span>
 
@@ -826,11 +690,31 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="CPU工作模式"><a href="#CPU工作模式" class="headerlink" title="CPU工作模式"></a>CPU工作模式</h1><h2 id="实模式"><a href="#实模式" class="headerlink" title="实模式"></a>实模式</h2><p>实模式又称实地址模式，在该模式下可以执行所有的指令，并且可以直接访问物理内存。计算机每次通电或重置都会进入到实模式。</p>
-<h3 id="实模式寄存器"><a href="#实模式寄存器" class="headerlink" title="实模式寄存器"></a>实模式寄存器</h3><p>x86 CPU 在实模式下的寄存器如下表所示，表中所有的寄存器都是 16 位的。</p>
+          <blockquote>
+<p>转载 : <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6643">https://xz.aliyun.com/t/6643</a></p>
+</blockquote>
+<p>关键词：</p>
+<ul>
+<li>不需要编译llvm</li>
+<li>仅依赖NDK，不需要额外的其他环境</li>
+<li>不会遇到配置引起的符号NotFound问题</li>
+<li>不污染NDK<!-- TOC --></li>
+</ul>
+<ul>
+<li><a href="#%E4%B8%80%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D">一、背景介绍</a></li>
+<li><a href="#%E4%BA%8C%E4%BD%BF%E7%94%A8ndk%E7%9A%84%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91%E4%B8%80%E4%B8%AApass">二、使用NDK的环境编译一个pass</a></li>
+<li><a href="#%E4%B8%89%E4%BD%BF%E7%94%A8ndk%E7%9A%84%E7%8E%AF%E5%A2%83%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AApass">三、使用NDK的环境加载一个pass</a></li>
+<li><a href="#%E5%9B%9B%E5%BD%93%E6%88%91%E4%BB%AC%E6%9D%A5%E5%88%B0macos%E4%B8%8A">四、当我们来到macOS上</a></li>
+<li><a href="#%E4%BA%94%E5%BD%93%E6%88%91%E4%BB%AC%E6%9D%A5%E5%88%B0windows">五、当我们来到Windows</a></li>
+<li><a href="#%E5%85%AD%E5%85%B6%E4%BB%96">六、其他</a></li>
+</ul>
+<!-- /TOC -->
+
+
+<h1 id="一、背景介绍"><a href="#一、背景介绍" class="headerlink" title="一、背景介绍"></a>一、背景介绍</h1>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/11/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9803-CPU%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+              <a class="btn" href="/2020/03/07/%E5%8F%B2%E4%B8%8A%E6%9C%80%E4%BC%98%E9%9B%85%E7%9A%84NDK%E5%8A%A0%E8%BD%BDpass%E6%96%B9%E6%A1%88/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -861,7 +745,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/11/01/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9805-%E5%BB%BA%E9%80%A0%E4%BA%8C%E7%BA%A7%E5%BC%95%E5%AF%BC%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -879,7 +763,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/11/01/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9805-%E5%BB%BA%E9%80%A0%E4%BA%8C%E7%BA%A7%E5%BC%95%E5%AF%BC%E5%99%A8/" class="post-title-link" itemprop="url">操作系统实战05-建造二级引导器</a>
+          <a href="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">github项目搜索技巧</a>
         </h2>
 
         <div class="post-meta-container">
@@ -890,14 +774,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-11-01 16:19:00" itemprop="dateCreated datePublished" datetime="2021-11-01T16:19:00+00:00">2021-11-01</time>
+      <time title="创建时间：2020-03-05 21:44:32" itemprop="dateCreated datePublished" datetime="2020-03-05T21:44:32+00:00">2020-03-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -905,7 +789,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
         </span>
     </span>
 
@@ -919,13 +803,37 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>二级引导器作为操作系统的先驱，它需要收集机器信息，确定这个计算机能不能运行我们的操作系统，对 CPU、内存、显卡进行一些初级的配置，放置好内核相关的文件。</p>
-<h1 id="二级引导器"><a href="#二级引导器" class="headerlink" title="二级引导器"></a>二级引导器</h1><p>我们的二级引导器不是执行具体的加载任务，而是解析内核文件、收集机器环境信息。</p>
-<p>二级引导器作为操作系统的先驱，它需要收集机器信息，确定这个计算机能不能运行我们的操作系统，对 CPU、内存、显卡进行一些初级的配置，放置好内核相关的文件。</p>
-<h2 id="设计机器信息结构"><a href="#设计机器信息结构" class="headerlink" title="设计机器信息结构"></a>设计机器信息结构</h2>
+          <!-- TOC -->
+
+<ul>
+<li><a href="#github-%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7">github 搜索技巧</a><ul>
+<li><a href="#%E6%A1%88%E4%BE%8B">案例</a><ul>
+<li><a href="#%E6%99%AE%E9%80%9A%E6%90%9C">普通搜</a></li>
+</ul>
+</li>
+<li><a href="#%E6%90%AD%E9%85%8D%E6%8A%80%E5%B7%A7%E6%90%9C">搭配技巧搜</a></li>
+<li><a href="#%E9%99%90%E5%AE%9A%E8%AF%8D">限定词</a><ul>
+<li><a href="#%E6%9F%A5%E6%89%BE%E6%9F%90%E4%B8%AA%E7%94%A8%E6%88%B7%E6%88%96%E7%BB%84%E7%BB%87%E7%9A%84%E9%A1%B9%E7%9B%AE">查找某个用户或组织的项目</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BE%85%E5%8A%A9%E9%99%90%E5%AE%9A%E8%AF%8D">辅助限定词</a></li>
+<li><a href="#%E8%BF%98%E6%B2%A1%E6%90%9E%E6%87%82%E7%9A%84%E5%85%B3%E4%BA%8E-forksmirrorissues">还没搞懂的（关于 forks、mirror、issues）</a></li>
+<li><a href="#%E6%8E%92%E5%BA%8F%E6%94%BE%E7%9A%84%E6%98%AF%E5%AE%98%E7%BD%91%E7%9A%84%E9%93%BE%E6%8E%A5">排序（放的是官网的链接）</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97">使用指南</a><ul>
+<li><a href="#%E7%BB%83%E4%B9%A0%E6%A1%88%E4%BE%8B">练习案例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="github-搜索技巧"><a href="#github-搜索技巧" class="headerlink" title="github 搜索技巧"></a>github 搜索技巧</h1><p>参考自 B站 up 主 CodeSheep 的视频【<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av75587104">如何高效地在网上找开源项目做！在职程序员实际演示一波视频教程操作</a>】，然后写着写着一好奇就去看文档了</p>
+<p>现在这篇博客相当于官方文档的翻译版😂</p>
+<p>当然，你也可以去看【<a target="_blank" rel="noopener" href="https://help.github.com/en/github/searching-for-information-on-github/searching-on-github">官方文档</a>】体验原汁原味的教程</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/11/01/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9805-%E5%BB%BA%E9%80%A0%E4%BA%8C%E7%BA%A7%E5%BC%95%E5%AF%BC%E5%99%A8/#more" rel="contents">
+              <a class="btn" href="/2020/03/05/github%E9%A1%B9%E7%9B%AE%E6%90%9C%E7%B4%A2%E6%8A%80%E5%B7%A7/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -956,7 +864,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9802-%E8%AE%BE%E7%BD%AE%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%8E%AF%E5%A2%83/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/16/dexsim%E6%B5%85%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -974,7 +882,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9802-%E8%AE%BE%E7%BD%AE%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">操作系统实战02-设置工作模式与环境</a>
+          <a href="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/" class="post-title-link" itemprop="url">dexsim浅析</a>
         </h2>
 
         <div class="post-meta-container">
@@ -985,14 +893,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-10-28 16:01:02" itemprop="dateCreated datePublished" datetime="2021-10-28T16:01:02+00:00">2021-10-28</time>
+      <time title="创建时间：2020-02-16 13:46:57" itemprop="dateCreated datePublished" datetime="2020-02-16T13:46:57+00:00">2020-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1000,7 +908,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
         </span>
     </span>
 
@@ -1014,15 +922,21 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="建立虚拟电脑"><a href="#建立虚拟电脑" class="headerlink" title="建立虚拟电脑"></a>建立虚拟电脑</h1><p>首先允许硬件虚拟化，选中 ubuntu18.04 虚拟机，虚拟机设置-&gt;硬件-&gt;处理器-&gt;虚拟化引擎，这里一般会有三个选项，全都勾上即可。</p>
-<p>然后直接在 ubuntu18.04 的 Ubuntu Software 应用中搜索并安装 VirtualBox（版本号为 5.2.42），然后启动它，新建一个虚拟机，设置如下图所示。</p>
-<img src="/2021/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9802-%E8%AE%BE%E7%BD%AE%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%8E%AF%E5%A2%83/%E6%96%B0%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA.png" class>
+          <!-- TOC -->
 
+<ul>
+<li><a href="#dexsim%E7%AE%80%E4%BB%8B">dexsim简介</a><ul>
+<li><a href="#dexsim-%E6%BA%90%E7%A0%81%E6%B5%85%E6%9E%90">dexsim 源码浅析</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
 
-<h2 id="生产虚拟硬盘"><a href="#生产虚拟硬盘" class="headerlink" title="生产虚拟硬盘"></a>生产虚拟硬盘</h2>
+<h1 id="dexsim简介"><a href="#dexsim简介" class="headerlink" title="dexsim简介"></a>dexsim简介</h1><p><a target="_blank" rel="noopener" href="https://github.com/mikusjelly/dexsim">dexsim</a> 是利用动态调用实现字符串解密的工具，需要配合 <a target="_blank" rel="noopener" href="https://github.com/mikusjelly/DSS">DSS</a> 使用。作者为 <code>mikusjelly</code> 。</p>
+<h2 id="dexsim-源码浅析"><a href="#dexsim-源码浅析" class="headerlink" title="dexsim 源码浅析"></a>dexsim 源码浅析</h2><p><code>dexsim</code> 源码结构如下图所示，</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/10/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9802-%E8%AE%BE%E7%BD%AE%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%8E%AF%E5%A2%83/#more" rel="contents">
+              <a class="btn" href="/2020/02/16/dexsim%E6%B5%85%E6%9E%90/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1053,7 +967,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2021/10/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9801-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%86%85%E6%A0%B8/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1071,7 +985,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/10/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9801-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%86%85%E6%A0%B8/" class="post-title-link" itemprop="url">操作系统实战01-实现一个最简单的内核</a>
+          <a href="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">xposde源码分析</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1082,14 +996,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-10-19 17:15:04" itemprop="dateCreated datePublished" datetime="2021-10-19T17:15:04+00:00">2021-10-19</time>
+      <time title="创建时间：2020-02-12 01:16:03" itemprop="dateCreated datePublished" datetime="2020-02-12T01:16:03+00:00">2020-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-23 10:26:07" itemprop="dateModified" datetime="2023-11-23T10:26:07+00:00">2023-11-23</time>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1097,7 +1011,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">操作系统实战</span></a>
+          <a href="/categories/Android%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">Android逆向</span></a>
         </span>
     </span>
 
@@ -1111,12 +1025,320 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="HelloOS"><a href="#HelloOS" class="headerlink" title="HelloOS"></a>HelloOS</h1><p>这里所有的测试环境都在 Ubuntu18.04 虚拟机中。</p>
-<h2 id="HelloOS-构成"><a href="#HelloOS-构成" class="headerlink" title="HelloOS 构成"></a>HelloOS 构成</h2><p>这里使用的是第二讲的<a target="_blank" rel="noopener" href="https://github.com/CKCat/learnOS/tree/master/lesson02/HelloOS">代码</a>，代码结构如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜  HelloOS tree</span><br><span class="line">.</span><br><span class="line">├── entry.asm</span><br><span class="line">├── floppy.img</span><br><span class="line">├── hello.lds</span><br><span class="line">├── main.c</span><br><span class="line">├── Makefile</span><br><span class="line">├── vgastr.c</span><br><span class="line">└── vgastr.h</span><br></pre></td></tr></table></figure>
+          <!-- TOC -->
+
+<ul>
+<li><a href="#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E6%A6%82%E8%BF%B0">Xposed源码剖析——概述</a><ul>
+<li><a href="#xposedinstaller%E7%9A%84%E6%9E%84%E6%88%90">XposedInstaller的构成</a></li>
+<li><a href="#xposed%E5%8E%9F%E7%90%86">Xposed原理</a></li>
+<li><a href="#xposed%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88">Xposed的实现方案</a></li>
+</ul>
+</li>
+<li><a href="#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90--app_process-%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3">Xposed 源码剖析 —— app_process 作用详解</a><ul>
+<li><a href="#app_maincpp-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%AF%B9%E6%AF%94">app_main.cpp 源码阅读与对比</a></li>
+<li><a href="#xposedbridgejava">XposedBridge.java</a></li>
+</ul>
+</li>
+<li><a href="#xposed%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90xposed%E5%88%9D%E5%A7%8B%E5%8C%96">Xposed源码剖析——Xposed初始化</a><ul>
+<li><a href="#xposedinitialize%E5%88%9D%E5%A7%8B%E5%8C%96">xposed::initialize初始化</a></li>
+<li><a href="#onvmcreated-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%90%8E%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">onVmCreated 初始化后的准备工作</a></li>
+<li><a href="#libxposed_dalvikcpp-hook-%E7%8E%AF%E5%A2%83%E5%88%9D%E5%A7%8B%E5%8C%96">libxposed_dalvik.cpp hook 环境初始化</a></li>
+<li><a href="#jni%E6%96%B9%E6%B3%95%E6%B3%A8%E5%86%8C%E9%80%BB%E8%BE%91">JNI方法注册逻辑</a></li>
+</ul>
+</li>
+<li><a href="#xposed-%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-hook-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0">Xposed 源码剖析—— hook 具体实现</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="Xposed源码剖析——概述"><a href="#Xposed源码剖析——概述" class="headerlink" title="Xposed源码剖析——概述"></a>Xposed源码剖析——概述</h1><p>XPosed 是与 Cydia 其名的工具，它能够让 Android 设备在没有修改源码的情况下修改系统中的 API 运行结果。我们通常称之为：God Mode（上帝模式）。</p>
+<p>之前享大家分享了 Xposed 的基础，Xposed 的作用和最简单的用法。那么，它的原理和它的内部构造是如何构成的？下面，我们从 Github 上看看，rovo89 大神是如何制作的。</p>
+<p>rovo89的github地址：<a target="_blank" rel="noopener" href="https://github.com/rovo89">https://github.com/rovo89</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/10/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%9801-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%86%85%E6%A0%B8/#more" rel="contents">
+              <a class="btn" href="/2020/02/12/xposed%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/02/02/%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/02/02/%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">工具</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-02-02 04:49:50" itemprop="dateCreated datePublished" datetime="2020-02-02T04:49:50+00:00">2020-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Anroid-逆向工具"><a href="#Anroid-逆向工具" class="headerlink" title="Anroid 逆向工具"></a>Anroid 逆向工具</h1><h2 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h2><p><a target="_blank" rel="noopener" href="https://www.pnfsoftware.com/">JEB</a> - The Interactive Android Decompiler.</p>
+<p><a target="_blank" rel="noopener" href="http://www.gda.wiki:9090/">GDA</a> - GGJoy Dex Analysizer(GDA)，国内第一款也是唯一一款全交互式反编译器，同时也是世界上最早实现的 dalvik 字节码反编译器。</p>
+<p><a target="_blank" rel="noopener" href="https://www.hex-rays.com/products/ida/">IDA</a> - The IDA Disassembler and Debugger is an interactive, programmable, extensible, multi-processor disassembler hosted on Windows, Linux, or Mac OS X. IDA has become the de-facto standard for the analysis of hostile code, vulnerability research and commercial-off-the-shelf validation.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/02/02/%E5%B7%A5%E5%85%B7/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/29/learn-Flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/01/29/learn-Flask/" class="post-title-link" itemprop="url">Flask简单学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-01-29 13:55:27" itemprop="dateCreated datePublished" datetime="2020-01-29T13:55:27+00:00">2020-01-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>由于是学习，所以直接在django的虚拟环境中安装Flask。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">指定Flask版本安装</span><br><span class="line">$ pip install flask==0.10.1</span><br></pre></td></tr></table></figure>
+
+<h1 id="从-Hello-World-开始"><a href="#从-Hello-World-开始" class="headerlink" title="从 Hello World 开始"></a>从 Hello World 开始</h1><h2 id="Flask程序运行过程："><a href="#Flask程序运行过程：" class="headerlink" title="Flask程序运行过程："></a>Flask程序运行过程：</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/29/learn-Flask/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/01/19/learn-frida/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/01/19/learn-frida/" class="post-title-link" itemprop="url">frida环境配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-01-19 16:10:09" itemprop="dateCreated datePublished" datetime="2020-01-19T16:10:09+00:00">2020-01-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frida/" itemprop="url" rel="index"><span itemprop="name">frida</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Frida 源码地址：<a target="_blank" rel="noopener" href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
+<p>Frida 官网：<a target="_blank" rel="noopener" href="https://frida.re/">https://frida.re/</a></p>
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><h2 id="安装-Frida"><a href="#安装-Frida" class="headerlink" title="安装 Frida"></a>安装 Frida</h2><p>在安装 <code>Frida</code> 之前最好创建一个 <code>python</code> 虚拟环境，这样可以避免与其他环境产生干扰</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/19/learn-frida/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1140,7 +1362,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1152,7 +1374,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
