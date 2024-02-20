@@ -5,7 +5,7 @@ tags: xmake
 category: C++
 ---
 
-xmake 是一个基于 Lua 的轻量级跨平台构建工具，使用 xmake.lua 维护项目构建，相比 makefile/CMakeLists.txt，配置语法更加简洁直观，对新手非常友好，短时间内就能快速入门，能够让用户把更多的精力集中在实际的项目开发上。
+xmake 是一个基于 Lua 的轻量级跨平台构建工具，使用 xmake.lua 维护项目构建，相比 `makefile/CMakeLists.txt`，配置语法更加简洁直观，对新手非常友好，短时间内就能快速入门，能够让用户把更多的精力集中在实际的项目开发上。
 
 其官网为：https://xmake.io 。
 
@@ -114,8 +114,7 @@ target("usepackge")
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv){
     int n = add(1, 2);
     printf("%d\n", n);
     cout << "hello world!" << endl;
@@ -157,6 +156,7 @@ target("usepackge")
 ### 使用官方提供的远程包
 
 首先创建一个项目，修改 `xmake.lua` 内容，使用 `add_requires("apr")` 添加官方提供的 [xrepo](https://xrepo.xmake.io) 远程包。
+
 ```lua
 add_rules("mode.debug", "mode.release")
 
@@ -169,6 +169,7 @@ target("testapr")
 ```
 
 `main.cpp` 内容如下：
+
 ```cpp
 #include <iostream>
 #include <apr_general.h>
@@ -186,9 +187,9 @@ int main(int argc, char** argv)
 
 然后运行 `xmake` 命令，将会自动下载对应的包，并编译。
 
-
 ### 使用本地远程包
-由于 apr 最新版本为 1.7.2，而 [xrepo](https://xrepo.xmake.io) 提供的最新版本为1.7.0，我们可以参考 [xrepo](https://xrepo.xmake.io) 对应的 xmake.lua，使用本地远程包。
+
+由于 apr 最新版本为 1.7.2，而 [xrepo](https://xrepo.xmake.io) 提供的最新版本为 1.7.0，我们可以参考 [xrepo](https://xrepo.xmake.io) 对应的 xmake.lua，使用本地远程包。
 
 ```lua
 package("apr")
@@ -259,14 +260,47 @@ target("testapr")
     add_files("src/main.cpp")
     add_packages("apr")
 ```
+
 然后运行 `xmake` 命令，将会自动下载对应源码进行编译打包，最终编译成可执行程序。
 
+# 常用的选项
+
+## 设置编译和链接选项
+
+我们也可以根据实际情况通过额外配置一些编译和链接选项。
+
+- `--cflags/add_cflags`: 指定 `c` 编译参数。
+- `--cxxflags/add_cxxflags`: 指定 `c++` 编译参数。
+- `--cxflags/add_cxflags`: 指定 `c/c++` 编译参数。
+- `--asflags/add_asflags`: 指定汇编器编译参数。
+- `--ldflags/add_ldflags`: 指定可执行程序链接参数。
+- `--shflags/add_shflags`: 指定动态库程序链接参数。
+- `--arflags/add_arflags`: 指定静态库的生成参数。
+
+前者为 `xmake` 命令行参数，后者为函数。
+
+## 添加头文件目录
+
+```lua
+add_includedirs("include")
+```
+
+## 添加链接目录与链接库
+
+```lua
+add_linkdirs("ext/lib")
+add_links("myext")
+add_syslinks("pthread", "m")
+```
 
 
 
 # 参考
+
 https://github.com/myuanz/getting-started-with-xmake-package
 
 https://xmake.io/#/zh-cn/guide/installation
 
 https://xrepo.xmake.io/#/zh-cn/getting_started
+
+https://zhuanlan.zhihu.com/p/640701847

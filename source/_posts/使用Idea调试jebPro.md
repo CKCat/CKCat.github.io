@@ -53,3 +53,15 @@ java -jar -Xdebug -Xrunjdwp:transport=dt_socket,address=9000,server=y,suspend=n 
 
 
 可以很清楚的看到和修改各变量的值，剩下的就自我发挥了。
+
+
+## Jeb 配置
+
+1. 禁止自动展开包结构
+
+- jeb 5.x 
+
+进入下面设置面板 `Edit -> Options -> Back-end Properties... -> parsers -> dex` 滚动进度条至 `Well known library packages` GroupBox 控件，将该控件中编辑框内容修改为 `*` 。
+
+
+

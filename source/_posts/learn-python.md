@@ -60,6 +60,7 @@ custom_channels:
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 ```
+
 运行 `conda clean -i` 清除索引缓存，保证用的是镜像站提供的索引。
 
 ### 管理 Conda
@@ -83,7 +84,7 @@ conda env list
 
 conda create --name py35 python=3.5                   # 创建一个名为 py35 的虚拟环境, 安装 python3.5
 conda create -n py35 python=3.5
-conda create --yes -n py35 python=3.5              
+conda create --yes -n py35 python=3.5
 conda create --clone py35 --name py35-2               # clone 一个已存在的环境
 
 conda list                                            # 显示当前环境的所有包信息
@@ -151,7 +152,6 @@ ${MONTH_NAME_FULL} - 英文月份全称, 如: January, February, etc；
 
 ## python cheat sheet
 
-
 ### PYTHONPATH 作用
 
 `PYTHONPATH` 是 Python 搜索路径，默认我们 `import` 的模块都会从 `PYTHONPATH` 里面寻找。
@@ -182,7 +182,7 @@ os.environ['PYTHONPATH']
 
 ## python 第三方库
 
-### Django 
+### Django
 
 #### Django 测试脚本
 
@@ -212,7 +212,6 @@ if __name__ == "__main__":
 ### mypy cheat sheet
 
 禁用特定行或代码库中特定文件内的类型检查。为此，您可以使用 `# type: ignore` 注释。
-
 
 #### 基本类型
 
@@ -265,6 +264,7 @@ print(x.upper())
 ```
 
 #### 函数
+
 ```python
 from typing import Callable, Iterator, Union, Optional
 
@@ -322,6 +322,7 @@ def call(self, *args: str, **kwargs: str) -> str:
 ```
 
 #### 类
+
 ```python
 class BankAccount:
     # The "__init__" method doesn't return anything, so it gets return
@@ -402,7 +403,6 @@ https://stackoverflow.com/questions/51291722/define-a-jsonable-type-using-mypy-p
 
 https://github.com/python/typing/issues/182#issuecomment-1320974824
 
-
 ### pydantic
 
 ### poetry-cheatsheet
@@ -465,5 +465,14 @@ poetry config virtualenvs.create false    # Disable virtual environment creation
 poetry config --list                      # List configuratiom
 ```
 
+# python 打包工具
 
+⭐⭐⭐⭐⭐[PyInstaller](https://github.com/pyinstaller/pyinstaller): 支持 Windows、Mac 和 Linux 上的 Python 3.8-3.12，比较容易使用。
 
+⭐⭐⭐[cx_Freeze](https://github.com/marcelotduarte/cx_Freeze): 支持 Windows、Mac 和 Linux 上的 Python 3.7-3.11，易用程度一般。
+
+⭐⭐[py2exe](https://github.com/py2exe/py2exe): 仅支持 Windows 上的 Python 3.7 - 3.10。
+
+⭐⭐[py2app](https://github.com/ronaldoussoren/py2app): 仅在 Mac 上支持 Python 3.6 - 3.10。
+
+⭐[Nuitka](https://github.com/kayhayen/Nuitka): Nuitka 会逐字编译您的 Python 代码并生成一个应用来尝试加速您的代码。支持 Windows、Mac 和 Linux 上的 Python 2.6 - 2.7 和 Python 3.4 - 3.11。

@@ -655,7 +655,7 @@ C. 构造自己
 
 析构顺序:与构造顺序相反。
 
-# 异常
+## 异常
 
 异常处理程序是在 `try` 块的右大括号后立即使用 `catch` 关键字声明的。 `catch` 的语法类似于具有一个参数的常规函数 ​​。此参数的类型非常重要，因为会根据它检查 `throw` 表达式传递的参数类型，只有在它们匹配的情况下，异常才会被该处理程序捕获。
 
@@ -709,385 +709,244 @@ int main(int argc, char** argv) {
 
 ## auto & decltype
 
-关于 C++11 新特性，最先提到的肯定是类型推导，C++11 引入了 auto 和 decltype 关键字，使用他们可以在编译期就推导出变量或者表达式的类型，方便开发者编码也简化了代码。
+关于 C++11 新特性，最先提到的肯定是类型推导，C++11 引入了 `auto` 和 `decltype` 关键字，使用他们可以在编译期就推导出变量或者表达式的类型，方便开发者编码也简化了代码。
 
-auto：让编译器在编译器就推导出变量的类型，可以通过=右边的类型推导出变量的类型。
-
-auto 推导规则
-
-在不声明为引用或指针时，auto 会忽略等号右边的引用类型和 cv 限定
-在声明为引用或者指针时，auto 会保留等号右边的引用和 cv 属性
-这里的 cv 是指 const 和 volatile
-
-auto 的限制：
-
-auto 的使用必须马上初始化，否则无法推导出类型
-auto 在一行定义多个变量时，各个变量的推导不能产生二义性，否则编译失败
-auto 不能用作函数参数
-在类中 auto 不能用作非静态成员变量
-auto 不能定义数组，可以定义指针
-auto 无法推导出模板参数
-decltype：相对于 auto 用于推导变量类型，而 decltype 则用于推导表达式类型，这里只用于编译器分析表达式的类型，表达式实际不会进行运算。
-
-decltype 推导规则
-
-exp 是表达式，decltype(exp)和 exp 类型相同
-exp 是函数调用，decltype(exp)和函数返回值类型相同
-其它情况，若 exp 是左值，decltype(exp)是 exp 类型的左值引用
-
-直接看代码
+- `auto`：让编译器在编译器就推导出变量的类型，可以通过=右边的类型推导出变量的类型。
+- `decltype`：相对于 auto 用于推导变量类型，而 `decltype` 则用于推导表达式类型，这里只用于编译器分析表达式的类型，表达式实际不会进行运算。
 
 ```cpp
-// auto会忽略等号右边的引用类型和cv限定
-int i = 0;
-auto *a = &i; // a是int*
-auto &b = i; // b是int&
-auto c = b; // c是int，忽略了引用
+auto a = 10; // 10 是 int 型，可以自动推导出 a 是 int
 
-const auto d = i; // d是const int
-auto e = d; // e是int
-
-const auto& f = e; // f是const int&
-auto &g = f; // g是const int&
-
-// decltype会保留表达式的引用和cv属性
-int func() { return 0; }
-decltype(func()) i; // i为int类型
-
-int x = 0;
-decltype(x) y; // y是int类型
-decltype(x + y) z; // z是int类型
-
-const int &i = 1;
+cont int &i = 1;
 int a = 2;
-decltype(i) b = 2; // b是const int&
-
-// auto和decltype的配合使用
-// 返回值后置类型语法解决了函数返回值类型依赖于参数但却难以确定返回值类型的问题。
-template<typename T, typename U>
-auto add(T t, U u) -> decltype(t + u) {
-    return t + u;
-}
+decltype(i) b = 2; // b 是 const int&
 ```
-
-委托构造函数
 
 ## 左值右值
 
 众所周知 C++11 新增了右值引用，这里涉及到很多概念：
 
-左值：可以取地址并且有名字的东西就是左值。
-右值：不能取地址的没有名字的东西就是右值。
-纯右值：运算表达式产生的临时变量、不和对象关联的原始字面量、非引用返回的临时变量、lambda 表达式等都是纯右值。
-将亡值：可以理解为即将要销毁的值。
-左值引用：对左值进行引用的类型。
-右值引用：对右值进行引用的类型。
-移动语义：转移资源所有权，类似于转让或者资源窃取的意思，对于那块资源，转为自己所拥有，别人不再拥有也不会再使用。
-完美转发：可以写一个接受任意实参的函数模板，并转发到其它函数，目标函数会收到与转发函数完全相同的实参。
-返回值优化：当函数需要返回一个对象实例时候，就会创建一个临时对象并通过复制构造函数将目标对象复制到临时对象，这里有复制构造函数和析构函数会被多余的调用到，有代价，而通过返回值优化，C++标准允许省略调用这些复制构造函数。
+- 左值：可以取地址并且有名字的东西就是左值。
+- 右值：不能取地址的没有名字的东西就是右值。
+- 纯右值：运算表达式产生的临时变量、不和对象关联的原始字面量、非引用返回的临时变量、`lambda` 表达式等都是纯右值。
+- 将亡值：可以理解为即将要销毁的值。
+- 左值引用：对左值进行引用的类型。
+- 右值引用：对右值进行引用的类型。
+- 移动语义：转移资源所有权，类似于转让或者资源窃取的意思，对于那块资源，转为自己所拥有，别人不再拥有也不会再使用。
+- 完美转发：可以写一个接受任意实参的函数模板，并转发到其它函数，目标函数会收到与转发函数完全相同的实参。
+- 返回值优化：当函数需要返回一个对象实例时候，就会创建一个临时对象并通过复制构造函数将目标对象复制到临时对象，这里有复制构造函数和析构函数会被多余的调用到，有代价，而通过返回值优化，C++标准允许省略调用这些复制构造函数。
 
-这里的详细介绍请看：左值引用、右值引用、移动语义、完美转发，你知道的不知道的都在这里
+## 列表初始化
 
-列表初始化
+在 C++11 中可以直接在变量名后面加上初始化列表来进行对象的初始化。
 
-在 C++11 中可以直接在变量名后面加上初始化列表来进行对象的初始化，详细介绍一定要看这篇文章：学会 C++11 列表初始化
+## std::function & std::bind & lambda 表达式
 
-std::function & std::bind & lambda 表达式
+c++11 新增了 std::function、std::bind、lambda 表达式等封装使函数调用更加方便。
 
-c++11 新增了 std::function、std::bind、lambda 表达式等封装使函数调用更加方便，详细介绍请看：搞定 c++11 新特性 std::function 和 lambda 表达式
-
-模板的改进
+## 模板的改进
 
 C++11 关于模板有一些细节的改进：
 
-模板的右尖括号
-模板的别名
-函数模板的默认模板参数
+- 模板的右尖括号
+- 模板的别名
+- 函数模板的默认模板参数
 
-详细介绍请看：C++11 的模板改进
-
-并发
+## 并发
 
 c++11 关于并发引入了好多好东西，有：
 
-std::thread 相关
-std::mutex 相关
-std::lock 相关
-std::atomic 相关
-std::call_once 相关
-volatile 相关
-std::condition_variable 相关
-std::future 相关
-async 相关
+- `std::thread` 相关
+- `std::mutex` 相关
+- `std::lock` 相关
+- `std::atomic` 相关
+- `std::call_once` 相关
+- `volatile` 相关
+- `std::condition_variable` 相关
+- `std::future` 相关
+- `async` 相关
 
-详细介绍请看：c++11 新特性之线程相关所有知识点
-
-这里也使用 c++11 来实现的线程池和定时器，可以看：
-
-C++线程池的实现之格式修订版
-
-C++定时器的实现之格式修订版
-
-智能指针
-
-很多人谈到 c++，说它特别难，可能有一部分就是因为 c++的内存管理吧，不像 java 那样有虚拟机动态的管理内存，在程序运行过程中可能就会出现内存泄漏，然而这种问题其实都可以通过 c++11 引入的智能指针来解决，相反我还认为这种内存管理还是 c++语言的优势，因为尽在掌握。
+## 智能指针
 
 c++11 引入了三种智能指针：
 
-std::shared_ptr
-std::weak_ptr
-std::unique_ptr
+- `std::shared_ptr`
+- `std::weak_ptr`
+- `std::unique_ptr`
 
-详细介绍请看：c++11 新特性之智能指针
-
-基于范围的 for 循环
+## 基于范围的 for 循环
 
 直接看代码
+
+```cpp
 
 vector<int> vec;
 
 for (auto iter = vec.begin(); iter != vec.end(); iter++) { // before c++11
-cout << \*iter << endl;
+   cout << *iter << endl;
 }
 
-for (int i : vec) { // c++11 基于范围的 for 循环
+for (int i : vec) { // c++11基于范围的for循环
 cout << "i" << endl;
 }
-委托构造函数
+```
+
+## 委托构造函数
 
 委托构造函数允许在同一个类中一个构造函数调用另外一个构造函数，可以在变量初始化时简化操作，通过代码来感受下委托构造函数的妙处吧：
 
-不使用委托构造函数：
+```cpp
+struct A {
+   A(){}
+   A(int a) { a_ = a; }
 
-structA {
-A(){}
-A(int a) { a\_ = a; }
+   A(int a, int b) : A(a) { b_ = b; }
 
-A(int a, int b) { // 好麻烦
-a* = a;
-b* = b;
-}
+   A(int a, int b, int c) : A(a, b) { c_ = c; }
 
-A(int a, int b, int c) { // 好麻烦
-a* = a;
-b* = b;
-c\_ = c;
-}
-
-int a*;
-int b*;
-int c\_;
+   int a_;
+   int b_;
+   int c_;
 };
-
-使用委托构造函数：
-
-structA {
-A(){}
-A(int a) { a\_ = a; }
-
-A(int a, int b) : A(a) { b\_ = b; }
-
-A(int a, int b, int c) : A(a, b) { c\_ = c; }
-
-int a*;
-int b*;
-int c\_;
-};
+```
 
 初始化变量是不是方便了许多。
 
-继承构造函数
+## 继承构造函数
 
 继承构造函数可以让派生类直接使用基类的构造函数，如果有一个派生类，我们希望派生类采用和基类一样的构造方式，可以直接使用基类的构造函数，而不是再重新写一遍构造函数，老规矩，看代码：
 
-不使用继承构造函数：
+```cpp
 
-structBase {
-Base() {}
-Base(int a) { a\_ = a; }
+struct Base {
+   Base() {}
+   Base(int a) { a_ = a; }
 
-Base(int a, int b) : Base(a) { b\_ = b; }
+   Base(int a, int b) : Base(a) { b_ = b; }
 
-Base(int a, int b, int c) : Base(a, b) { c\_ = c; }
+   Base(int a, int b, int c) : Base(a, b) { c_ = c; }
 
-int a*;
-int b*;
-int c\_;
+   int a_;
+   int b_;
+   int c_;
 };
 
-structDerived : Base {
-Derived() {}
-Derived(int a) : Base(a) {} // 好麻烦
-Derived(int a, int b) : Base(a, b) {} // 好麻烦
-Derived(int a, int b, int c) : Base(a, b, c) {} // 好麻烦
-};
-intmain(){
-Derived a(1, 2, 3);
-return0;
-}
-
-使用继承构造函数：
-
-structBase {
-Base() {}
-Base(int a) { a\_ = a; }
-
-Base(int a, int b) : Base(a) { b\_ = b; }
-
-Base(int a, int b, int c) : Base(a, b) { c\_ = c; }
-
-int a*;
-int b*;
-int c\_;
+struct Derived : Base {
+   using Base::Base;
 };
 
-structDerived : Base {
-using Base::Base;
+int main() {
+   Derived a(1, 2, 3);
+   return 0;
+}
+```
+
+只需要使用 `using Base::Base` 继承构造函数，就免去了很多重写代码的麻烦。
+
+## nullptr
+
+`nullptr` 是 c++11 用来表示空指针新引入的常量值，在 c++中如果表示空指针语义时建议使用 `nullptr` 而不要使用 `NULL`，因为 `NULL` 本质上是个 `int` 型的 0，其实不是个指针。举例：
+
+```cpp
+void func(void *ptr) {
+   cout << "func ptr" << endl;
+}
+
+void func(int i) {
+   cout << "func i" << endl;
+}
+
+int main() {
+   func(NULL); // 编译失败，会产生二义性
+   func(nullptr); // 输出func ptr
+   return 0;
+}
+```
+
+## final & override
+
+c++11 关于继承新增了两个关键字，`final` 用于修饰一个类，表示禁止该类进一步派生和虚函数的进一步重载，`override` 用于修饰派生类中的成员函数，标明该函数重写了基类函数，如果一个函数声明了 `override` 但父类却没有这个虚函数，编译报错，使用 `override` 关键字可以避免开发者在重写基类函数时无意产生的错误。
+
+```cpp
+
+struct Base {
+   virtual void func() {
+       cout << "base" << endl;
+  }
 };
 
-intmain(){
-Derived a(1, 2, 3);
-return0;
-}
+struct Derived : public Base{
+   void func() override { // 确保func被重写
+       cout << "derived" << endl;
+  }
 
-只需要使用 using Base::Base 继承构造函数，就免去了很多重写代码的麻烦。
+   void fu() override { // error，基类没有fu()，不可以被重写
 
-nullptr
-
-nullptr 是 c++11 用来表示空指针新引入的常量值，在 c++中如果表示空指针语义时建议使用 nullptr 而不要使用 NULL，因为 NULL 本质上是个 int 型的 0，其实不是个指针。举例：
-
-voidfunc(void \*ptr){
-cout << "func ptr" << endl;
-}
-
-voidfunc(int i){
-cout << "func i" << endl;
-}
-
-intmain(){
-func(NULL); // 编译失败，会产生二义性
-func(nullptr); // 输出 func ptr
-return0;
-}
-final & override
-
-c++11 关于继承新增了两个关键字，final 用于修饰一个类，表示禁止该类进一步派生和虚函数的进一步重载，override 用于修饰派生类中的成员函数，标明该函数重写了基类函数，如果一个函数声明了 override 但父类却没有这个虚函数，编译报错，使用 override 关键字可以避免开发者在重写基类函数时无意产生的错误。
-
-示例代码 1：
-
-structBase {
-virtualvoidfunc(){
-cout << "base" << endl;
-}
+  }
 };
 
-structDerived :public Base{
-voidfunc() override { // 确保 func 被重写
-cout << "derived" << endl;
-}
 
-voidfu() override { // error，基类没有 fu()，不可以被重写
-}
+struct Base final {
+   virtual void func() {
+       cout << "base" << endl;
+  }
 };
 
-示例代码 2：
-
-structBasefinal {
-virtualvoidfunc(){
-cout << "base" << endl;
-}
-};
-
-structDerived :public Base{ // 编译失败，final 修饰的类不可以被继承
-voidfunc() override {
-cout << "derived" << endl;
-}
+struct Derived : public Base{ // 编译失败，final修饰的类不可以被继承
+   void func() override {
+       cout << "derived" << endl;
+  }
 
 };
-default
+```
 
-c++11 引入 default 特性，多数时候用于声明构造函数为默认构造函数，如果类中有了自定义的构造函数，编译器就不会隐式生成默认构造函数，如下代码：
+## default
 
-structA {
-int a;
-A(int i) { a = i; }
+c++11 引入 `default` 特性，多数时候用于声明构造函数为默认构造函数，如果类中有了自定义的构造函数，编译器就不会隐式生成默认构造函数，而通过 `default`，程序员只需在函数声明后加上`=default;`，就可将该函数声明为 `defaulted` 函数，编译器将为显式声明的 `defaulted` 函数自动生成函数体，如下：
+
+```cpp
+
+struct A {
+   A() = default;
+   int a;
+   A(int i) { a = i; }
 };
 
-intmain(){
-A a; // 编译出错
-return0;
+int main() {
+   A a;
+   return 0;
 }
+```
 
-上面代码编译出错，因为没有匹配的构造函数，因为编译器没有生成默认构造函数，而通过 default，程序员只需在函数声明后加上“=default;”，就可将该函数声明为 defaulted 函数，编译器将为显式声明的 defaulted 函数自动生成函数体，如下：
+## delete
 
-structA {
-A() = default;
-int a;
-A(int i) { a = i; }
+c++中，如果开发人员没有定义特殊成员函数，那么编译器在需要特殊成员函数时候会隐式自动生成一个默认的特殊成员函数，例如拷贝构造函数或者拷贝赋值操作符，而我们有时候想禁止对象的拷贝与赋值，可以使用 `delete` 修饰，如下：
+
+```cpp
+
+struct A {
+   A() = default;
+   A(const A&) = delete;
+   A& operator=(const A&) = delete;
+   int a;
+   A(int i) { a = i; }
 };
 
-intmain(){
-A a;
-return0;
+int main() {
+   A a1;
+   A a2 = a1;  // 错误，拷贝构造函数被禁用
+   A a3;
+   a3 = a1;  // 错误，拷贝赋值操作符被禁用
 }
+```
 
-编译通过。
+`delele` 函数在 c++11 中很常用，`std::unique_ptr` 就是通过 `delete` 修饰来禁止对象的拷贝的。
 
-delete
+## explicit
 
-c++中，如果开发人员没有定义特殊成员函数，那么编译器在需要特殊成员函数时候会隐式自动生成一个默认的特殊成员函数，例如拷贝构造函数或者拷贝赋值操作符，如下代码：
+`explicit` 专用于修饰构造函数，表示只能显式构造，不可以被隐式转换，根据代码看 `explicit` 的作用：
 
-structA {
-A() = default;
-int a;
-A(int i) { a = i; }
-};
-
-intmain(){
-A a1;
-A a2 = a1; // 正确，调用编译器隐式生成的默认拷贝构造函数
-A a3;
-a3 = a1; // 正确，调用编译器隐式生成的默认拷贝赋值操作符
-}
-
-而我们有时候想禁止对象的拷贝与赋值，可以使用 delete 修饰，如下：
-
-structA {
-A() = default;
-A(const A&) = delete;
-A& operator=(const A&) = delete;
-int a;
-A(int i) { a = i; }
-};
-
-intmain(){
-A a1;
-A a2 = a1; // 错误，拷贝构造函数被禁用
-A a3;
-a3 = a1; // 错误，拷贝赋值操作符被禁用
-}
-
-delele 函数在 c++11 中很常用，std::unique_ptr 就是通过 delete 修饰来禁止对象的拷贝的。
-
-explicit
-
-explicit 专用于修饰构造函数，表示只能显式构造，不可以被隐式转换，根据代码看 explicit 的作用：
-
-不用 explicit：
-
-structA {
-A(int value) { // 没有 explicit 关键字
-cout << "value" << endl;
-}
-};
-
-intmain(){
-A a = 1; // 可以隐式转换
-return0;
-}
-
-使用 explicit:
-
+```cpp
 structA {
 explicitA(int value){
 cout << "value" << endl;
@@ -1099,492 +958,977 @@ A a = 1; // error，不可以隐式转换
 A aa(2); // ok
 return0;
 }
-const
+```
 
-因为要讲后面的 constexpr，所以这里简单介绍下 const。
+## const
 
-const 字面意思为只读，可用于定义变量，表示变量是只读的，不可以更改，如果更改，编译期间就会报错。
+因为要讲后面的 `constexpr`，所以这里简单介绍下 `const`。
+
+`const` 字面意思为只读，可用于定义变量，表示变量是只读的，不可以更改，如果更改，编译期间就会报错。
 
 主要用法如下：
 
-用于定义常量，const 的修饰的变量不可更改。
-constintvalue = 5;
-指针也可以使用 const，这里有个小技巧，从右向左读，即可知道 const 究竟修饰的是指针还是指针所指向的内容。
-char _const ptr; // 指针本身是常量
-constchar_ ptr; // 指针指向的变量为常量
-在函数参数中使用 const，一般会传递类对象时会传递一个 const 的引用或者指针，这样可以避免对象的拷贝，也可以防止对象被修改。
-classA{};
-voidfunc(const A& a);
-const 修饰类的成员变量，表示是成员常量，不能被修改，可以在初始化列表中被赋值。
-classA {
-constintvalue = 5;
-};
-classB {
-constintvalue;
-B(int v) : value(v){}
-};
-修饰类成员函数，表示在该函数内不可以修改该类的成员变量。
-classA{
-voidfunc() const;
-};
-修饰类对象，类对象只能调用该对象的 const 成员函数。
-classA {
-voidfunc() const;
-};
-const A a;
-a.func();
-constexpr
+- 用于定义常量，`const` 的修饰的变量不可更改。
+- 指针也可以使用 `const`，这里有个小技巧，从右向左读，即可知道 `const` 究竟修饰的是指针还是指针所指向的内容。
+- 在函数参数中使用 `const`，一般会传递类对象时会传递一个 `const` 的引用或者指针，这样可以避免对象的拷贝，也可以防止对象被修改。
+- `const` 修饰类的成员变量，表示是成员常量，不能被修改，可以在初始化列表中被赋值。
+- 修饰类成员函数，表示在该函数内不可以修改该类的成员变量。
+- 修饰类对象，类对象只能调用该对象的 `const` 成员函数。
 
-constexpr 是 c++11 新引入的关键字，用于编译时的常量和常量函数，这里直接介绍 constexpr 和 const 的区别：
+## constexpr
 
-两者都代表可读，const 只表示 read only 的语义，只保证了运行时不可以被修改，但它修饰的仍然有可能是个动态变量，而 constexpr 修饰的才是真正的常量，它会在编译期间就会被计算出来，整个运行过程中都不可以被改变，constexpr 可以用于修饰函数，这个函数的返回值会尽可能在编译期间被计算出来当作一个常量，但是如果编译期间此函数不能被计算出来，那它就会当作一个普通函数被处理。如下代码：
+`constexpr` 是 c++11 新引入的关键字，用于编译时的常量和常量函数，这里直接介绍 `constexpr` 和 `const` 的区别：
 
-#include<iostream>
-usingnamespacestd;
+两者都代表可读，`const` 只表示 read only 的语义，只保证了运行时不可以被修改，但它修饰的仍然有可能是个动态变量，而 `constexpr` 修饰的才是真正的常量，它会在编译期间就会被计算出来，整个运行过程中都不可以被改变，`constexpr` 可以用于修饰函数，这个函数的返回值会尽可能在编译期间被计算出来当作一个常量，但是如果编译期间此函数不能被计算出来，那它就会当作一个普通函数被处理。
 
-constexprintfunc(int i){
-return i + 1;
-}
+## enum class
 
-intmain(){
-int i = 2;
-func(i);// 普通函数
-func(2);// 编译期间就会被计算出来
-}
-enum class
-
-c++11 新增有作用域的枚举类型，看代码
-
-不带作用域的枚举代码：
-
-enum AColor {
-kRed,
-kGreen,
-kBlue
-};
-
-enum BColor {
-kWhite,
-kBlack,
-kYellow
-};
-
-intmain(){
-if (kRed == kWhite) {
-cout << "red == white" << endl;
-}
-return0;
-}
-
-如上代码，不带作用域的枚举类型可以自动转换成整形，且不同的枚举可以相互比较，代码中的红色居然可以和白色比较，这都是潜在的难以调试的 bug，而这种完全可以通过有作用域的枚举来规避。
-
-有作用域的枚举代码：
-
-enumclassAColor {
-kRed,
-kGreen,
-kBlue
-};
-
-enumclassBColor {
-kWhite,
-kBlack,
-kYellow
-};
-
-intmain(){
-if (AColor::kRed == BColor::kWhite) { // 编译失败
-cout << "red == white" << endl;
-}
-return0;
-}
-
-使用带有作用域的枚举类型后，对不同的枚举进行比较会导致编译失败，消除潜在 bug，同时带作用域的枚举类型可以选择底层类型，默认是 int，可以改成 char 等别的类型。
-
-enumclassAColor :char {
-kRed,
-kGreen,
-kBlue
-};
+c++11 新增有作用域的枚举类型，不带作用域的枚举类型可以自动转换成整形，且不同的枚举可以相互比较；带作用域的枚举类型可以选择底层类型，默认是 `int`，可以改成 `char` 等别的类型。
 
 我们平时编程过程中使用枚举，一定要使用有作用域的枚举取代传统的枚举。
 
-非受限联合体
+## 非受限联合体
 
-c++11 之前 union 中数据成员的类型不允许有非 POD 类型，而这个限制在 c++11 被取消，允许数据成员类型有非 POD 类型，看代码：
+c++11 之前 `union` 中数据成员的类型不允许有非 POD 类型，而这个限制在 c++11 被取消，允许数据成员类型有非 POD 类型。
 
-structA {
-int a;
-int \*b;
-};
+对于什么是 POD 类型，大家可以自行查下资料，大体上可以理解为对象可以直接 `memcpy` 的类型。
 
-union U {
-A a; // 非 POD 类型 c++11 之前不可以这样定义联合体
-int b;
-};
+## sizeof
 
-对于什么是 POD 类型，大家可以自行查下资料，大体上可以理解为对象可以直接 memcpy 的类型。
+c++11 中 `sizeof` 可以用的类的数据成员上，想知道类中数据成员的大小在 c++11 中方便了许多，而不需要定义一个对象，在计算对象的成员大小。
 
-sizeof
+## assertion
 
-c++11 中 sizeof 可以用的类的数据成员上，看代码：
+c++11 引入 `static_assert` 声明，用于在编译期间检查，如果第一个参数值为 `false`，则打印 `message`，编译失败。
 
-c++11 前：
+## 自定义字面量
 
-structA {
-int data[10];
-int a;
-};
+c++11 可以自定义字面量。
 
-intmain(){
-A a;
-cout << "size " << sizeof(a.data) << endl;
-return0;
-}
+## 内存对齐
 
-c++11 后：
-
-structA {
-int data[10];
-int a;
-};
-
-intmain(){
-cout << "size " << sizeof(A::data) << endl;
-return0;
-}
-
-想知道类中数据成员的大小在 c++11 中是不是方便了许多，而不需要定义一个对象，在计算对象的成员大小。
-
-assertion
-static_assert(true/false, message);
-
-c++11 引入 static_assert 声明，用于在编译期间检查，如果第一个参数值为 false，则打印 message，编译失败。
-
-自定义字面量
-
-c++11 可以自定义字面量，我们平时 c++中都或多或少使用过 chrono 中的时间，例如：
-
-std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 100ms
-std::this_thread::sleep_for(std::chrono::seconds(100)); // 100s
-
-其实没必要这么麻烦，也可以这么写：
-
-std::this_thread::sleep_for(100ms); // c++14 里可以这么使用，这里只是举个自定义字面量使用的例子
-std::this_thread::sleep_for(100s);
-
-这就是自定义字面量的使用，示例如下：
-
-structmytype {
-unsignedlonglong value;
-};
-constexpr mytype operator"" \_mytype ( unsignedlonglong n ) {
-return mytype{n};
-}
-mytype mm = 123_mytype;
-cout << mm.value << endl;
-
-关于自定义字面量，可以看下 chrono 的源代码，相信大家会有很大收获，需要源码分析 chrono 的话，可以留言给我。
-
-内存对齐
 什么是内存对齐
 
 理论上计算机对于任何变量的访问都可以从任意位置开始，然而实际上系统会对这些变量的存放地址有限制，通常将变量首地址设为某个数 N 的倍数，这就是内存对齐。
 
 为什么要内存对齐
+
 硬件平台限制，内存以字节为单位，不同硬件平台不一定支持任何内存地址的存取，一般可能以双字节、4 字节等为单位存取内存，为了保证处理器正确存取数据，需要进行内存对齐。
 提高 CPU 内存访问速度，一般处理器的内存存取粒度都是 N 的整数倍，假如访问 N 大小的数据，没有进行内存对齐，有可能就需要两次访问才可以读取出数据，而进行内存对齐可以一次性把数据全部读取出来，提高效率。
 
-在 c++11 之前如果想创建内存对齐需要：
+## thread_local
 
-voidalign_cpp11_before()
-{
-staticchar data[sizeof(void *) + sizeof(A)];
-constuintptr_t kAlign = sizeof(void *) - 1;
-char *align_ptr =
-reinterpret_cast<char *>(reinterpret_cast<uintptr_t>(data + kAlign) & ~kAlign);
-A *attr = new (align_ptr) A;
+c++11 引入 `thread_local`，用 `thread_local` 修饰的变量具有 `thread` 周期，每一个线程都拥有并只拥有一个该变量的独立实例，一般用于需要保证线程安全的函数中。
+
+## 基础数值类型
+
+c++11 新增了几种数据类型：`long long`、`char16_t`、`char32_t` 等
+
+## 随机数功能
+
+c++11 关于随机数功能则较之前丰富了很多，典型的可以选择概率分布类型。
+
+## 正则表达式
+
+c++11 引入了 regex 库更好的支持正则表达式。
+
+## chrono
+
+c++11 关于时间引入了 `chrono` 库，源于 boost，功能强大，`chrono` 主要有三个点：
+
+- duration: 表示一段时间，常见的单位有 s、ms 等
+- time_point: 表示一个具体时间点，如 2020 年 5 月 10 日 10 点 10 分 10 秒
+- clocks:时钟，chrono 里面提供了三种时钟：
+  - steady_clock: 稳定的时间间隔，表示相对时间，相对于系统开机启动的时间，无论系统时间如何被更改，后一次调用 now()肯定比前一次调用 now()的数值大，可用于计时。
+  - system_clock: 表示当前的系统时钟，可以用于获取当前时间。
+  - high_resolution_clock: 表示系统可用的最高精度的时钟。
+
+## 新增数据结构
+
+- `std::forward_list`：单向链表，只可以前进，在特定场景下使用，相比于 std::list 节省了内存，提高了性能
+- `std::unordered_set`：基于 hash 表实现的 set，内部不会排序，使用方法和 set 类似
+- `std::unordered_map`：基于 hash 表实现的 map，内部不会排序，使用方法和 set 类似
+- `std::array`：数组，在越界访问时抛出异常，建议使用 std::array 替代普通的数组
+- `std::tuple`：元组类型，类似 pair，但比 pair 扩展性好
+
+## 新增算法
+
+- `all_of`：检测表达式是否对范围 `[first, last)` 中所有元素都返回 true，如果都满足，则返回 true
+- `any_of`：检测表达式是否对范围 `[first, last)` 中至少一个元素返回 true，如果满足，则返回 true，否则返回 false，用法和上面一样
+- `none_of`：检测表达式是否对范围 `[first, last)` 中所有元素都不返回 true，如果都不满足，则返回 true，否则返回 false，用法和上面一样
+- `find_if_not`：找到第一个不符合要求的元素迭代器，和 find_if 相反
+- `copy_if`：复制满足条件的元素
+- `itoa`：对容器内的元素按序递增
+- `minmax_element`：返回容器内最大元素和最小元素位置
+- `is_sorted`、`is_sorted_until`：返回容器内元素是否已经排好序。
+
+# C++14 新特性
+
+## 函数返回值类型推导
+
+C++14 对函数返回类型推导规则做了优化，返回值类型推导也可以用在模板中。
+
+## lambda 参数 auto
+
+## 变量模板
+
+## 别名模板
+
+## `[[deprecated]]`标记
+
+C++14 中增加了 deprecated 标记，修饰类、变、函数等，当程序中使用到了被其修饰的代码时，编译时被产生警告，用户提示开发者该标记修饰的内容将来可能会被丢弃，尽量不要使用。
+
+## 二进制字面量与整形字面量分隔符
+
+## 新增下列标准函数：
+
+- `std::make_unique`
+- `std::shared_timed_mutex` 与 `std::shared_lock`
+- `std::integer_sequence`
+- `std::exchange`
+- `std::quoted`
+
+# C++17 新特性
+
+## 构造函数模板推导
+
+C++17 就不需要构造一个模板类对象需要指明类型，直接可以推导出类型。
+
+```cpp
+
+pair p(1, 2.2); // c++17 自动推导
+vector v = {1, 2, 3}; // c++17
+```
+
+## 结构化绑定
+
+通过结构化绑定，对于 tuple、map 等类型，获取相应值会方便很多。
+
+```cpp
+std::pair a(1, 2.3f);
+auto[i, f] = a;
+
+map<int, string> m = {
+{0, "a"},
+{1, "b"},
+};
+for (const auto &[i, s] : m) {
+    cout << i << " " << s << endl;
+}
+```
+
+## if-switch 语句初始化
+
+```cpp
+// if (init; condition)
+
+if (int a = GetValue()); a < 101) {
+   cout << a;
 }
 
-c++11 关于内存对齐新增了一些函数：
+string str = "Hi World";
+if (auto [pos, size] = pair(str.find("Hi"), str.size()); pos != string::npos) {
+   std::cout << pos << " Hello, size is " << size;
+}
+```
 
-voidalign_cpp11_after()
-{
-staticstd::aligned_storage<sizeof(A),
-alignof(A)>::type data;
-A \*attr = new (&data) A;
+使用这种方式可以尽可能约束作用域，让代码更简洁，但是可读性略有下降。
+
+## 内联变量
+
+C++17 前只有内联函数，现在有了内联变量，我们印象中 C++类的静态成员变量在头文件中是不能初始化的，但是有了内联变量，就可以达到此目的：
+
+```cpp
+
+// header file
+struct A {
+   static const int value;
+};
+inline int const A::value = 10;
+
+// ==========或者========
+struct A {
+   inline static const int value = 10;
+}
+```
+
+## 折叠表达式
+
+C++17 引入了折叠表达式使可变参数模板编程更方便：
+
+```cpp
+template <typename ... Ts>
+auto sum(Ts ... ts) {
+   return (ts + ...);
+}
+int a {sum(1, 2, 3, 4, 5)}; // 15
+std::string a{"hello "};
+std::string b{"world"};
+cout << sum(a, b) << endl; // hello world
+```
+
+## constexpr lambda 表达式
+
+C++17 前 lambda 表达式只能在运行时使用，C++17 引入了 constexpr lambda 表达式，可以用于在编译期进行计算。
+
+## namespace 嵌套
+
+```cpp
+
+namespace A {
+   namespace B {
+       namespace C {
+           void func();
+      }
+  }
 }
 
-还有：alignof()、std::alignment_of()、alignas()，关于内存对齐详情可以看这篇文章：内存对齐之格式修订版
+// c++17，更方便更舒适
+namespace A::B::C {
+   void func();)
+}
+```
 
-thread_local
+## `__has_include` 预处理表达式
 
-c++11 引入 thread_local，用 thread_local 修饰的变量具有 thread 周期，每一个线程都拥有并只拥有一个该变量的独立实例，一般用于需要保证线程安全的函数中。
+`__has_include` 预处理表达式可以判断是否有某个头文件，代码可能会在不同编译器下工作，不同编译器的可用头文件有可能不同，所以可以使用此来判断。
 
-#include<iostream>
-#include<thread>
+```cpp
+#if defined __has_include
+#if __has_include(<charconv>)
+#define has_charconv 1
+#include <charconv>
+#endif
+#endif
 
-classA {
+std::optional<int> ConvertToInt(const std::string& str) {
+   int value{};
+#ifdef has_charconv
+   const auto last = str.data() + str.size();
+   const auto res = std::from_chars(str.data(), last, value);
+   if (res.ec == std::errc{} && res.ptr == last) return value;
+#else
+   // alternative implementation...
+   其它方式实现
+#endif
+   return std::nullopt;
+}
+```
+
+## 在 lambda 表达式用 `*this` 捕获对象副本
+
+正常情况下，lambda 表达式中访问类的对象成员变量需要捕获 this，但是这里捕获的是 this 指针，指向的是对象的引用，正常情况下可能没问题，但是如果多线程情况下，函数的作用域超过了对象的作用域，对象已经被析构了，还访问了成员变量，就会有问题。
+
+所以 C++17 增加了新特性，捕获\*this，不持有 this 指针，而是持有对象的拷贝，这样生命周期就与对象的生命周期不相关啦。
+
+## 新增 Attribute
+
+我们可能平时在项目中见过 `__declspec__` , `__attribute__` , `#pragma` 指示符，使用它们来给编译器提供一些额外的信息，来产生一些优化或特定的代码，也可以给其它开发者一些提示信息。
+
+```cpp
+struct A { short f[3]; } __attribute__((aligned(8)));
+
+void fatal() __attribute__((noreturn));
+```
+
+在 C++11 和 C++14 中有更方便的方法：
+
+- `[[carries_dependency]]` 让编译期跳过不必要的内存栅栏指令
+- `[[noreturn]]` 函数不会返回
+- `[[deprecated]]` 函数将弃用的警告
+
+```cpp
+[[noreturn]] void terminate() noexcept;
+[[deprecated("use new func instead")]] void func() {}
+```
+
+- `[[fallthrough]]`：用在 switch 中提示可以直接落下去，不需要 break，让编译期忽略警告
+- `[[nodiscard]]` ：表示修饰的内容不能被忽略，可用于修饰函数，标明返回值一定要被处理
+- `[[maybe_unused]]` ：提示编译器修饰的内容可能暂时没有使用，避免产生警告
+
+## 新增下列标准
+
+`file_system`
+`std::variant`
+`std::optional`
+`std::any`
+`std::apply`
+`std::make_from_tuple`
+`as_const`
+`std::string_view`
+`std::shared_mutex`
+
+# Effective Modern C++
+
+## 条款一：理解模板类型推导
+
+`auto` 是建立在模板类型推导的基础上的，所以理解模板类型推导对于使用 `auto` 非常重要。
+
+在后续进行类型推导时，都是基于下面的伪代码。
+
+```cpp
+template<typename T>
+void f(ParamType param);
+
+f(expr); // 从 expr 中推导 T 和 ParamType
+```
+
+在编译期间，编译器使用 `expr` 进行两个类型推导：一个是针对 `T` 的，另一个是针对 `ParamType` 的。这两个类型通常是不同的，因为 `ParamType` 包含一些修饰，比如 `const` 和引用修饰符。
+
+`T` 的类型推导不仅取决于 `expr` 的类型，也取决于 `ParamType` 的类型。
+
+### ParamType 是一个指针或引用，但不是通用引用
+
+如果 `expr` 的类型是一个引用，忽略引用部分，然后 `expr` 的类型与 `ParamType` 进行模式匹配来决定 `T`。
+
+```cpp
+#include <iostream>
+
+template<typename T>
+void f(T& param){
+    // 下面的代码用来测试 param 的类型是否为 const。如果是，那么就会编译失败。
+    param = 10;
+    std::cout << param << std::endl;
+}
+
+template<typename T>
+void f(T* param){
+    *param = 10;
+    std::cout << *param << std::endl;
+}
+
+int main(int argc, char const *argv[]){
+    int x=27;                       // x 是 int
+    const int cx=x;                 // cx 是 const int
+    const int& rx=x;                // rx 是指向作为 const int 的 x 的引用
+
+    f(x);                           // T 是 int，param 的类型是 int&
+    f(cx);                          // T 是 const int，param 的类型是 const int&
+    f(rx);                          // T 是 const int，param 的类型是 const int&
+
+    f(&x);                           // T 是 int，param 的类型是 int*
+    f(&cx);                          // T 是 const int，param 的类型是 const int*
+    f(&rx);                          // T 是 const int，param 的类型是 const int*
+
+    return 0;
+}
+```
+
+### ParamType 是一个通用引用
+
+- 如果 `expr` 是左值，`T` 和 `ParamType` 都会被推导为左值引用。 -**这是模板类型推导中唯一一种 `T` 被推导为引用的情况。**
+  - **当通用引用被使用时，类型推导会区分左值实参和右值实参，但是对非通用引用时不会区分。虽然 ParamType 被声明为右值引用类型，但是最后推导的结果是左值引用。**
+- 如果 expr 是右值，就使用正常的推导规则。
+
+```cpp
+#include <iostream>
+void reference(int& v) {
+    std::cout << "lelft" << std::endl;
+}
+void reference(int&& v) {
+    std::cout << "right" << std::endl;
+}
+
+template<typename T>
+void bar(T&& param){    //param现在是一个通用引用类型
+    reference(std::forward<T>(param)); //std::forward用来保持param的左值或右值属性
+}
+
+int main(int argc, char const *argv[]){
+    int x=27;                       // x 是 int
+    const int cx=x;                 // cx 是 const int
+    const int& rx=x;                // rx 是指向作为 const int 的 x 的引用
+    int && rrx = std::move(12);     // rrx 是右值引用变量，所以是一个左值
+
+    bar(x);                           // x 是左值，所以 T 是 int&，param 类型也是 int&
+    bar(cx);                          // cx 是左值，所以 T 是 const int&，param 类型也是 const int&
+    bar(rx);                          // rx 是左值，所以 T 是 const int&，param 类型也是 const int&
+    bar(rrx);                         // rrx 是右值引用，但是同时也是左值，所以 T 是 int&，param 类型也是 int&
+    bar(27);                          // 27 是右值，所以 T 是int，param类型就是int&&
+
+    return 0;
+}
+```
+
+### ParamType 既不是指针也不是引用
+
+当 `ParamType` 既不是指针也不是引用时，我们通过传值（pass-by-value）的方式处理。这意味着无论传递什么 `param` 都会成为它的一份拷贝——一个完整的新对象。事实上 `param` 成为一个新对象这一行为会影响 `T` 如何从 `expr` 中推导出结果。
+
+- 如果 `expr` 的类型是一个引用，忽略这个引用部分。
+- 如果忽略 `expr` 的引用性之后，`expr` 是一个 `const`，那就再忽略 `const`。如果它是 `volatile`，也忽略 `volatile`。
+
+```cpp
+#include <iostream>
+
+template<typename T>
+void foo(T param){    //以传值的方式处理param
+
+}
+
+int main(int argc, char const *argv[]){
+    int x=27;                       // x 是 int
+    const int cx=x;                 // cx 是 const int
+    const int& rx=x;                // rx 是指向作为 const int 的 x 的引用
+    const char* const ptr = "Fun with pointers";  //ptr是一个常量指针，指向常量对象
+
+    foo(x);                           // T 和 param 的类型都是 int
+    foo(cx);                          // T 和 param 的类型都是 int
+    foo(rx);                          // T 和 param 的类型都是 int
+    foo(ptr);                         // T 和 param 的类型都是 const char* ，
+                                      // ptr 作为实参时，ptr自身的值会被传给形参，拷贝 ptr 来创造一个新指针 param，所以 ptr的常量性将会被忽略。
+    return 0;
+}
+```
+
+### 数组实参和函数实参
+
+在模板类型推导时，数组名或者函数名实参会退化为指针，除非它们被用于初始化引用。
+
+数组被用于初始化为引用时，`T` 被推导为了真正的数组，这个类型包括了数组的大小。
+
+```cpp
+#include <iostream>
+
+template<typename T>
+void f(T& param){
+}
+
+// 利用数组被用于初始化引用的这个特新，将一个函数声明为 constexpr 使得结果在编译期间可用。
+template<typename T, std::size_t N>
+constexpr std::size_t arraySize(T (&)[N]) noexcept{
+    return N;
+}
+
+// fun是一个函数，类型是void(int, double)
+void fun(int, double){}
+
+template<typename T>
+void f1(T param){}
+
+template<typename T>
+void f2(T & param){
+
+int main(int argc, char const *argv[]){
+    const char name[] = "CKCat";
+    f(name);                           // T 是 const char[6]，param 的类型是 const char(&)[6]
+
+    f1(fun);                           // T 是 void(int, double)，param 的类型是 void(*)(int, double)
+    f2(fun);                           // T 是 void(int, double)，param 的类型是 void(&)(int, double)
+    return 0;
+}
+```
+
+### 总结
+
+- 在模板类型推导时，有引用的实参会被视为无引用，他们的引用会被忽略。
+- 对于通用引用的推导，**左值实参**会被特殊对待。
+- 对于传值类型推导，const 和/或 volatile 实参会被认为是 non-const 的和 non-volatile 的。
+- 在模板类型推导时，数组名或者函数名实参会退化为指针，除非它们被用于初始化引用。
+
+## 条款二：理解 auto 类型推导
+
+`auto` 类型推导和模板类型推导有一个直接的映射关系。它们之间可以通过一个非常规范非常系统化的转换流程来转换彼此。在模板类型推到中使用下面这个函数模板和调用来解释。
+
+```cpp
+template<typename T>
+void f(ParmaType param);
+
+f(expr);                        //使用一些表达式调用f
+```
+
+当一个变量使用 `auto` 进行声明时，`auto` 扮演了模板中 `T` 的角色，变量的类型说明符扮演了 `ParamType` 的角色。
+
+在使用 `auto` 作为类型说明符的变量声明中，类型说明符代替了 ParamTyp，因此模板类型推导描述的三个情景稍作修改就能适用于 `auto`：
+
+- 情景一：类型说明符是一个指针或引用但不是通用引用。
+- 情景二：类型说明符一个通用引用。
+- 情景三：类型说明符既不是指针也不是引用。
+
+```cpp
+auto x = 27;                    //情景三（x既不是指针也不是引用）
+const auto cx = x;              //情景三（cx也一样）
+const auto & rx=cx;             //情景一（rx是非通用引用）
+
+auto&& uref1 = x;               //x是int左值，所以uref1类型为int&
+auto&& uref2 = cx;              //cx是const int左值，所以uref2类型为const int&
+auto&& uref3 = 27;              //27是int右值，所以uref3类型为int&&
+
+const char name[] = "R. N. Briggs"; //name的类型是const char[13]
+auto arr1 = name;               //arr1的类型是const char*
+auto& arr2 = name;              //arr2的类型是const char (&)[13]
+
+void someFunc(int, double);     //someFunc是一个函数，类型为void(int, double)
+
+auto func1 = someFunc;          //func1的类型是void (*)(int, double)
+auto& func2 = someFunc;         //func2的类型是void (&)(int, double)
+```
+
+`auto` 类型推导和模板类型推导几乎一样的工作，它们就像一个硬币的两面。但是当用 `auto` 声明的变量使用花括号进行初始化，`auto` 类型推导推出的类型则为 `std::initializer_list`。
+
+对于花括号的处理是 `auto` 类型推导和模板类型推导唯一不同的地方。当使用 `auto` 声明的变量使用花括号的语法进行初始化的时候，会推导出 `std::initializer_list<T>` 的实例化，但是对于模板类型推导这样就行不通。
+
+```cpp
+auto x = { 11, 23, 9 };         //x的类型是std::initializer_list<int>
+
+template<typename T>            //带有与x的声明等价的
+void f(T param);                //形参声明的模板
+
+f({ 11, 23, 9 });               //错误！不能推导出T
+
+template<typename T>
+void f(std::initializer_list<T> initList);
+
+f({ 11, 23, 9 });               //T被推导为int，initList的类型为
+                                //std::initializer_list<int>
+```
+
+C++14 允许 `auto` 用于函数返回值并会被推导，而且 C++14 的 `lambda` 函数也允许在形参声明中使用 `auto`。但是在这些情况下 `auto` 实际上使用模板类型推导的那一套规则在工作，而不是 `auto` 类型推导，即不能推导 `std::initializer_list<T>` 的实例化。
+
+```cpp
+auto createInitList()
+{
+    return { 1, 2, 3 };         //错误！不能推导{ 1, 2, 3 }的类型
+}
+
+std::vector<int> v;
+auto resetV =
+    [&v](const auto& newValue){ v = newValue; };        //C++14
+
+resetV({ 1, 2, 3 });            //错误！不能推导{ 1, 2, 3 }的类型
+```
+
+### 总结
+
+- `auto` 类型推导通常和模板类型推导相同，但是 `auto` 类型推导假定花括号初始化代表 `std::initializer_list`，而模板类型推导不这样做
+- 在 C++14 中 `auto` 允许出现在函数返回值或者 `lambda` 函数形参中，但是它的工作机制是模板类型推导那一套方案，而不是 `auto` 类型推导
+
+## 条款三：理解 decltype
+
+在 C++11 中，`decltype` 最主要的用途就是用于声明函数模板，而这个函数返回类型依赖于形参类型。相比模板类型推导和 `auto` 类型推导，`decltype` 只是简单的返回名字或者表达式的类型。
+
+```cpp
+const int i = 0;                //decltype(i)是const int
+
+bool f(const Widget& w);        //decltype(w)是const Widget&
+                                //decltype(f)是bool(const Widget&)
+
+struct Point{
+    int x,y;                    //decltype(Point::x)是int
+};                              //decltype(Point::y)是int
+
+Widget w;                       //decltype(w)是Widget
+
+if (f(w))…                      //decltype(f(w))是bool
+
+template<typename T>            //std::vector的简化版本
+class vector{
 public:
-A() {}
-~A() {}
-
-voidtest(conststd::string &name){
-thread_localint count = 0;
-++count;
-std::cout << name << ": " << count << std::endl;
-}
+    T& operator[](std::size_t index);
 };
 
-voidfunc(conststd::string &name){
-A a1;
-a1.test(name);
-a1.test(name);
-A a2;
-a2.test(name);
-a2.test(name);
+vector<int> v;                  //decltype(v)是vector<int>
+
+if (v[0] == 0)                  //decltype(v[0])是int&
+```
+
+C++ 期望在某些情况下当类型被暗示时需要使用 `decltype` 类型推导的规则，C++14 通过使用 `decltype(auto)` 说明符使得这成为可能。`auto` 说明符表示这个类型将会被推导，`decltype` 说明 `decltype` 的规则将会被用到这个推导过程中。
+
+```cpp
+template<typename Containter, typename Index>
+decltype(auto) authAndAccess(Container&& c, Index i){
+    return std::forward<Container>(c)[i];
+}
+```
+
+将 `decltype` 应用于变量名会产生该变量名的声明类型。虽然变量名都是左值表达式，但这不会影响 `decltype` 的行为。然而，**对于比单纯的变量名更复杂的左值表达式，`decltype` 可以确保报告的类型始终是左值引用**。也就是说，如果一个不是单纯变量名的左值表达式的类型是 `T`，那么 `decltype` 会把这个表达式的类型报告为 `T&`。
+
+```cpp
+int x = 0;
+decltype((x)) rx = x;    // (x)会产生一个比名字更复杂的表达式，所以 decltype((x)) 是 int&
+```
+
+### 总结
+
+- `decltype` 总是不加修改的产生变量或者表达式的类型。
+- 对于 `T` 类型的不是单纯的变量名的左值表达式，`decltype` 总是产出 `T` 的引用即 `T&`。
+- C++14 支持 `decltype(auto)`，就像 `auto` 一样，推导出类型，但是它使用 `decltype` 的规则进行推导。
+
+## 条款四：学会查看类型推导结果
+
+- IDE 编辑器：在 IDE 中的代码编辑器通常可以显示程序代码中变量，函数，参数的类型。
+- 编译器诊断：利用编译器出错时提供的错误消息查看类型推导结果。
+- 运行时输出：使用 `typeid(x).name()` 或者 `Boost.TypeIndex` 查看类型。
+
+**上面列举的工具可能既不准确也无帮助，所以理解 C++ 类型推导规则才是最重要的。**
+
+## 条款五：优先考虑 auto 而非显式类型声明
+
+- `auto` 变量必须初始化，通常它可以避免一些移植性和效率性的问题，也使得重构更方便，还能让你少打几个字。
+- `auto` 类型的变量可能会踩到一些陷阱。
+  - `auto` 类型推导假定花括号表示 `std::initializer_list`。
+  - 不可见的代理类可能会使 `auto` 从表达式中推导出“错误的”类型，例如：`std::vector<bool>` 。
+
+```cpp
+auto derefUPLess =
+    [](const std::unique_ptr<Widget> &p1,       //用于std::unique_ptr
+       const std::unique_ptr<Widget> &p2)       //指向的Widget类型的
+    { return *p1 < *p2; };                      //比较函数
+
+auto derefLess =                                //C++14版本
+    [](const auto& p1,                          //被任何像指针一样的东西
+       const auto& p2)                          //指向的值的比较函数
+    { return *p1 < *p2; };
+
+std::vector<int> v;
+unsigned sz = v.size();  // v.size() 的标准返回类型是 std::vector<int>::size_type ，该值的大小跟平台相关。
+
+std::unordered_map<std::string, int> m;
+
+for(const std::pair<std::string, int>& p : m){ // p 应该声明为 const std::pair<const std::string, int>
+    // 用 p 做一些事，但是 p 实际上是一个临时对象，这个临时变量在每次迭代完成时会被销毁。
+}   // 使用 auto 声明目标变量你就不必担心这个问题。
+```
+
+**`auto` 是可选项，不是命令，在某些情况下如果你的专业判断告诉你使用显式类型声明比 `auto` 要更清晰更易维护，那你就不必再坚持使用 `auto`。**
+
+## 条款六：auto 推导若非己愿，使用显式类型初始化惯用法
+
+不可见的代理类通常不适用于 auto，不可见的代理类可能会使 auto 从表达式中推导出“错误的”类型。
+
+```cpp
+#include <iostream>
+#include <vector>
+
+std::vector<bool>  features(){
+    return {true, false, true, true, false};
 }
 
-intmain(){
-std::thread(func, "thread1").join();
-std::thread(func, "thread2").join();
-return0;
+void process(std::vector<bool>& v, bool & highPriority){
+    if (highPriority){
+        highPriority = true;
+    }
 }
 
-输出：
-
-thread1: 1
-thread1: 2
-thread1: 3
-thread1: 4
-thread2: 1
-thread2: 2
-thread2: 3
-thread2: 4
-
-验证上述说法，对于一个线程私有变量，一个线程拥有且只拥有一个该实例，类似于 static。
-
-基础数值类型
-
-c++11 新增了几种数据类型：long long、char16_t、char32_t 等
-
-随机数功能
-
-c++11 关于随机数功能则较之前丰富了很多，典型的可以选择概率分布类型，先看如下代码：
-
-#include<time.h>
-
-#include<iostream>
-#include<random>
-
-usingnamespacestd;
-
-intmain(){
-std::default_random_engine random(time(nullptr));
-
-std::uniform_int_distribution<int> int_dis(0, 100); // 整数均匀分布
-std::uniform_real_distribution<float> real_dis(0.0, 1.0); // 浮点数均匀分布
-
-for (int i = 0; i < 10; ++i) {
-cout << int_dis(random) << ' ';
+int main(int argc, char const *argv[])
+{
+    std::vector<bool> v = {true, false, true, true, false};
+    auto highPriority = features()[1]; // highPriority 行为类似于 bool& 的对象 std::vector<bool>::reference
+    // process(v, highPriority); // 这里会报错，因为 highPriority 的类型是 std::vector<bool>::reference
+    return 0;
 }
-cout << endl;
+```
 
-for (int i = 0; i < 10; ++i) {
-cout << real_dis(random) << ' ';
+如果遇到上面的情况，解决方案是强制使用一个不同的类型推导形式，这种方法我通常称之为显式类型初始器惯用法。
+
+```cpp
+    auto highPriority = static_cast<bool>(features()[1]);
+    process(v, highPriority);
+```
+
+显式类型初始器惯用法不限制初始化表达式产生一个代理类。它也可以用于强调你声明了一个变量类型，它的类型不同于初始化表达式的类型。
+
+```cpp
+double calcEpsilon(){};
+auto ep = static_cast<float>(calcEpsilon()); // 减少函数返回值的精度
+
+auto index = static_cast<int>(ep * size()); // 强制转换为 int
+```
+
+### 总结
+
+- 不可见的代理类可能会使 auto 从表达式中推导出“错误的”类型
+- 显式类型初始器惯用法强制 auto 推导出你想要的结果
+
+## 条款七：区别使用()和{}创建对象
+
+C++11 对象初始化的语法可能会让你觉得丰富的让人难以选择，亦或是乱的一塌糊涂。“乱的一塌糊涂”是指在初始化中使用"="可能会误导 C++新手，使他们以为这里发生了赋值运算，然而实际并没有。
+
+C++11 使用统一初始化（uniform initialization）来整合这些混乱且不适于所有情景的初始化语法，所谓统一初始化是指在任何涉及初始化的地方都使用单一的初始化语法。它基于花括号，出于这个原因我更喜欢称之为花括号初始化。统一初始化是一个概念上的东西，而花括号初始化是一个具体语法结构。
+
+花括号初始化也能被用于为非静态数据成员指定默认初始值。C++11 允许"="初始化不加花括号也拥有这种能力。
+
+```cpp
+class Widget{
+    …
+
+private:
+    int x{ 0 };                 //没问题，x初始值为0
+    int y = 0;                  //也可以
+    int z(0);                   //错误！
 }
-cout << endl;
+```
 
-return0;
+不可拷贝的对象可以使用花括号初始化或者圆括号初始化，但是不能使用"="初始化。
+
+```cpp
+std::atomic<int> ai1{ 0 };      //没问题
+std::atomic<int> ai2(0);        //没问题
+std::atomic<int> ai3 = 0;       //错误！
+```
+
+在 C++中这三种方式都被看做是初始化表达式，但是只有花括号任何地方都能被使用。
+
+括号表达式还有一个少见的特性，即它不允许内置类型间隐式的变窄转换（narrowing conversion）。
+
+```cpp
+double x, y, z;
+int sum1{ x + y + z };          //错误！double的和可能不能表示为int
+```
+
+C++规定任何可以被解析为一个声明的东西必须被解析为声明。这个规则的副作用是让很多程序员备受折磨：他们可能想创建一个使用默认构造函数构造的对象，却不小心变成了函数声明。
+
+```cpp
+Widget w1(10);                  //使用实参10调用Widget的一个构造函数。
+Widget w2();                    //尝试使用相似的语法调用Widget无参构造函数，它就会变成函数声明，函数名为w2，返回Widget。
+Widget w3{};                    //使用花括号初始化表明你想调用默认构造函数构造对象就没有问题，调用没有参数的构造函数构造对象。
+```
+
+编译器一遇到括号初始化就选择带 `std::initializer_list` 的构造函数，普通构造函数和移动构造函数也会受此影响，只有当没办法把括号初始化中实参的类型转化为 `std::initializer_list` 时，编译器才会回到正常的函数决议流程中。
+
+```cpp
+class Widget {
+public:
+    Widget(int i, bool b);                      //同之前一样
+    Widget(int i, double d);                    //同之前一样
+    Widget(std::initializer_list<bool> il);     //现在元素类型为bool
+    …                                           //没有隐式转换函数
+};
+
+Widget w{10, 5.0};              //错误！要求变窄转换
+
+class Widget {
+public:
+    Widget(int i, bool b);                              //同之前一样
+    Widget(int i, double d);                            //同之前一样
+    //现在std::initializer_list元素类型为std::string
+    Widget(std::initializer_list<std::string> il);
+    …                                                   //没有隐式转换函数
+};
+
+Widget w1(10, true);     // 使用圆括号初始化，调用第一个构造函数
+Widget w2{10, true};     // 使用花括号初始化，现在调用第一个构造函数
+Widget w3(10, 5.0);      // 使用圆括号初始化，调用第二个构造函数
+Widget w4{10, 5.0};      // 使用花括号初始化，现在调用第二个构造函数
+```
+
+使用的花括号初始化，最终会调用默认构造函数。空的花括号意味着没有实参，不是一个空的 `std::initializer_list`。
+
+```cpp
+class Widget {
+public:
+    Widget();                                   //默认构造函数
+    Widget(std::initializer_list<int> il);      //std::initializer_list构造函数
+
+    …                                           //没有隐式转换函数
+};
+
+Widget w1;                      //调用默认构造函数
+Widget w2{};                    //也调用默认构造函数
+Widget w3();                    //最令人头疼的解析！声明一个函数
+```
+
+如果你想用空 `std::initializer` 来调用 `std::initializer_list` 构造函数，你就得创建一个空花括号作为函数实参——把空花括号放在圆括号或者另一个花括号内来界定你想传递的东西。
+
+```cpp
+Widget w4({});                  //使用空花括号列表调用std::initializer_list构造函数
+Widget w5{{}};                  //同上
+```
+
+`std::vector` 有一个非 `std::initializer_list` 构造函数允许你去指定容器的初始大小，以及使用一个值填满你的容器。但它也有一个 `std::initializer_list` 构造函数允许你使用花括号里面的值初始化容器。如果你创建一个数值类型的 `std::vector`（比如 `std::vector<int>` ），然后你传递两个实参，把这两个实参放到圆括号和放到花括号中有天壤之别
+
+```cpp
+std::vector<int> v1(10, 20);    //使用非std::initializer_list构造函数
+                                //创建一个包含10个元素的std::vector，
+                                //所有的元素的值都是20
+std::vector<int> v2{10, 20};    //使用std::initializer_list构造函数
+                                //创建包含两个元素的std::vector，
+                                //元素的值为10和20
+```
+
+默认使用花括号初始化的开发者主要被适用面广、禁止变窄转换、免疫 C++最令人头疼的解析这些优点所吸引。这些开发者知道在一些情况下要使用圆括号。
+默认使用圆括号初始化的开发者主要被 C++98 语法一致性、避免 `std::initializer_list` 自动类型推导、避免不会不经意间调用 `std::initializer_list` 构造函数。
+
+### 总结
+
+- 花括号初始化是最广泛使用的初始化语法，它防止变窄转换，并且对于 C++最令人头疼的解析有天生的免疫性。
+- 在构造函数重载决议中，编译器会尽最大努力将括号初始化与 `std::initializer_list` 参数匹配，即便其他构造函数看起来是更好的选择。
+- 对于数值类型的 `std::vector` 来说使用花括号初始化和圆括号初始化会造成巨大的不同。
+- 在模板类选择使用圆括号初始化或使用花括号初始化创建对象是一个挑战。
+
+## 条款八：优先考虑 nullptr 而非 0 和 NULL
+
+nullptr 的优点是它不是整型。老实说它也不是一个指针类型，但是你可以把它认为是所有类型的指针。nullptr 的真正类型是 std::nullptr_t，在一个完美的循环定义以后，std::nullptr_t 又被定义为 nullptr。std::nullptr_t 可以隐式转换为指向任何内置类型的指针，这也是为什么 nullptr 表现得像所有类型的指针。
+
+模板类型推导将 0 和 NULL 推导为一个错误的类型（即它们的实际类型，而不是作为空指针的隐含意义），这就导致在当你想要一个空指针时，它们的替代品 nullptr 很吸引人。使用 nullptr，模板不会有什么特殊的转换。另外，使用 nullptr 不会让你受到同重载决议特殊对待 0 和 NULL 一样的待遇。当你想用一个空指针，使用 nullptr，不用 0 或者 NULL。
+
+### 记住
+
+- 优先考虑 nullptr 而非 0 和 NULL
+- 避免重载指针和整型
+
+## 条款九：优先考虑别名声明而非 typedef
+
+typedef 是 C++98 的东西。虽然它可以在 C++11 中工作，但是 C++11 也提供了一个别名声明（alias declaration）：
+
+```cpp
+typedef
+    std::unique_ptr<std::unordered_map<std::string, std::string>>
+    UPtrMapSS;
+
+using UPtrMapSS =
+    std::unique_ptr<std::unordered_map<std::string, std::string>>;
+```
+
+上面使用 typedef 和别名声明做的都是完全一样的事情。但是使用别名声明函数指针时会更容易理解：
+
+```cpp
+//FP是一个指向函数的指针的同义词，它指向的函数带有
+//int和const std::string&形参，不返回任何东西
+typedef void (*FP)(int, const std::string&);    //typedef
+
+//含义同上
+using FP = void (*)(int, const std::string&);   //别名声明
+```
+
+名声明可以被模板化（这种情况下称为别名模板 alias templates）但是 typedef 不能。这使得 C++11 程序员可以很直接的表达一些 C++98 中只能把 typedef 嵌套进模板化的 struct 才能表达的东西。
+
+```cpp
+template<typename T>                            //MyAllocList<T>是
+using MyAllocList = std::list<T, MyAlloc<T>>;   //std::list<T, MyAlloc<T>>
+                                                //的同义词
+
+MyAllocList<Widget> lw;                         //用户代码
+
+// 使用typedef，你就只能从头开始：
+template<typename T>                            //MyAllocList<T>是
+struct MyAllocList {                            //std::list<T, MyAlloc<T>>
+    typedef std::list<T, MyAlloc<T>> type;      //的同义词
+};
+
+MyAllocList<Widget>::type lw;                   //用户代码
+
+```
+如果你想使用在一个模板内使用typedef声明一个链表对象，而这个对象又使用了模板形参，你就不得不在typedef前面加上typename：
+
+这里 `MyAllocList<T>::type` 使用了一个类型，这个类型依赖于模板参数T。因此 `MyAllocList<T>::type` 是一个依赖类型（dependent type），在C++很多讨人喜欢的规则中的一个提到必须要在依赖类型名前加上typename。
+
+别名模板一定是一个类型名。因此 `MyAllocList<T>` 就是一个非依赖类型（non-dependent type），就不需要也不允许使用typename修饰符。
+
+当编译器在Widget的模板中看到 `MyAllocList<T>::type`（使用typedef的版本），它不能确定那是一个类型的名称。因为可能存在一个MyAllocList的它们没见到的特化版本，那个版本的 `MyAllocList<T>::type` 指代了一种不是类型的东西。
+
+C++11在type traits（类型特性）中给了你一系列工具去实现类型转换，如果要使用这些模板请包含头文件 `<type_traits>` 。
+```cpp
+std::remove_const<T>::type          //C++11: const T → T 
+std::remove_const_t<T>              //C++14 等价形式
+
+std::remove_reference<T>::type      //C++11: T&/T&& → T 
+std::remove_reference_t<T>          //C++14 等价形式
+
+std::add_lvalue_reference<T>::type  //C++11: T → T& 
+std::add_lvalue_reference_t<T>      //C++14 等价形式
+```
+
+### 总结
+
+请记住：
+
+- typedef 不支持模板化，但是别名声明支持。
+- 别名模板避免了使用“::type”后缀，而且在模板中使用 typedef 还需要在前面加上 typename
+- C++14 提供了 C++11 所有 type traits 转换的别名声明版本
+
+## 条款十：优先考虑限域enum而非未限域enum
+通常来说，在花括号中声明一个名字会限制它的作用域在花括号之内。但这对于C++98风格的enum中声明的枚举名是不成立的。这些枚举名的名字属于包含这个enum的作用域，这意味着作用域内不能含有相同名字的其他东西：
+```cpp
+enum Color { black, white, red };   //black, white, red在
+                                    //Color所在的作用域
+auto white = false;                 //错误! white早已在这个作用
+                                    //域中声明
+```
+这种枚举叫做：未限域枚举(unscoped enum)。在C++11中它们有一个相似物，限域枚举(scoped enum)，限域枚举也被称为枚举类，它不会导致枚举名泄漏：
+```cpp
+enum class Color { black, white, red }; //black, white, red
+                                        //限制在Color域内
+auto white = false;                     //没问题，域内没有其他“white”
+
+Color c = white;                        //错误，域中没有枚举名叫white
+
+Color c = Color::white;                 //没问题
+auto c = Color::white;                  //也没问题（也符合Item5的建议）
+
+```
+使用限域enum来减少命名空间污染，这是一个足够合理使用它而不是它的同胞未限域enum的理由，其实限域enum还有第二个吸引人的优点：在它的作用域中，枚举名是强类型。未限域enum中的枚举名会隐式转换为整型。限域enum可以使用类型转换运算符转换类型。
+```cpp
+enum class Color { black, white, red }; //Color现在是限域enum
+
+Color c = Color::red;                   //和之前一样，只是
+                                        //多了一个域修饰符
+
+if (static_cast<double>(c) < 14.5) {    //奇怪的代码，
+                                        //但是有效
+    auto factors =                                  //有问题，但是
+      primeFactors(static_cast<std::size_t>(c));    //能通过编译
 }
+```
+为了高效使用内存，编译器通常在确保能包含所有枚举值的前提下为enum选择一个最小的底层类型。在一些情况下，编译器将会优化速度，舍弃大小，这种情况下它可能不会选择最小的底层类型，而是选择对优化大小有帮助的类型。为此，C++98只支持enum定义（所有枚举名全部列出来）；enum声明是不被允许的。这使得编译器能在使用之前为每一个enum选择一个底层类型。
 
-输出：
+但是不能前置声明enum也是有缺点的。最大的缺点莫过于它可能增加编译依赖。这种enum很有可能用于整个系统，因此系统中每个包含这个头文件的组件都会依赖它。如果引入一个新状态值，那么可能整个系统都得重新编译，即使只有一个子系统——或者只有一个函数——使用了新添加的枚举名。这是大家都不希望看到的。C++11中的前置声明enums可以解决这个问题。比如这里有一个完全有效的限域enum声明和一个以该限域enum作为形参的函数声明：
 
-38 100 93 7 66 0 68 99 41 7
-0.232202 0.617716 0.959241 0.970859 0.230406 0.430682 0.477359 0.971858 0.0171148 0.64863
+限域enum的底层类型总是已知的，不管怎样，编译器都知道限域enum中的枚举名占用多少字节，所以限域enum可以被前置声明。默认情况下，限域枚举的底层类型是int，而对于非限域enum，你可以指定它，为非限域enum指定底层类型，结果就可以前向声明。
 
-代码中举例的是整数均匀分布和浮点数均匀分布，c++11 提供的概率分布类型还有好多，例如伯努利分布、正态分布等，具体可以见最后的参考资料。
+### 总结
 
-正则表达式
+- C++98的enum即非限域enum。
+- 限域enum的枚举名仅在enum内可见。要转换为其它类型只能使用cast。
+- 非限域/限域enum都支持底层类型说明语法，限域enum底层类型默认是int。非限域enum没有默认底层类型。
+- 限域enum总是可以前置声明。非限域enum仅当指定它们的底层类型时才能前置。
 
-c++11 引入了 regex 库更好的支持正则表达式，见代码：
+## 条款十一：优先考虑使用deleted函数而非使用未定义的私有声明
+在C++98中防止调用这些函数的方法是将它们声明为私有（private）成员函数并且不定义。故意不定义它们意味着假如还是有代码用它们（比如成员函数或者类的友元friend），就会在链接时引发缺少函数定义（missing function definitions）错误。
 
-#include<iostream>
-#include<iterator>
-#include<regex>
-#include<string>
+在C++11中有一种更好的方式达到相同目的：用“= delete”将拷贝构造函数和拷贝赋值运算符标记为deleted函数。deleted函数不能以任何方式被调用，即使你在成员函数或者友元函数里面调用deleted函数也不能通过编译。这是较之C++98行为的一个改进，C++98中不正确的使用这些函数在链接时才被诊断出来。
 
-intmain(){
-std::string s = "I know, I'll use2 regular expressions.";
-// 忽略大小写
-std::regex self_regex("REGULAR EXPRESSIONS", std::regex_constants::icase);
-if (std::regex_search(s, self_regex)) {
-std::cout << "Text contains the phrase 'regular expressions'\n";
-}
+通常，deleted函数被声明为public而不是private，这样可以让编译器产生更好的错误信息。
 
-std::regex word_regex("(\\w+)"); // 匹配字母数字等字符
-auto words_begin = std::sregex_iterator(s.begin(), s.end(), word_regex);
-auto words_end = std::sregex_iterator();
+deleted函数还有一个重要的优势是任何函数都可以标记为deleted，而只有成员函数可被标记为private。
 
-std::cout << "Found " << std::distance(words_begin, words_end) << " words\n";
+虽然deleted函数不能被使用，但它们还是存在于你的程序中。也即是说，重载决议会考虑它们。
 
-constint N = 6;
-std::cout << "Words longer than " << N << " characters:\n";
-for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
-std::smatch match = \*i;
-std::string match_str = match.str();
-if (match_str.size() > N) {
-std::cout << " " << match_str << '\n';
-}
-}
+另一个deleted函数用武之地（private成员函数做不到的地方）是禁止一些模板的实例化。模板特例化必须位于一个命名空间作用域，而不是类作用域。deleted函数不会出现这个问题，因为它不需要一个不同的访问级别，且他们可以在类外被删除。
 
-std::regex long_word_regex("(\\w{7,})");
-// 超过 7 个字符的单词用[]包围
-std::string new_s = std::regex_replace(s, long_word_regex, "[$&]");
-std::cout << new_s << '\n';
-}
-chrono
+### 总结
 
-c++11 关于时间引入了 chrono 库，源于 boost，功能强大，chrono 主要有三个点：
+- 比起声明函数为private但不定义，使用deleted函数更好
+- 任何函数都能被删除（be deleted），包括非成员函数和模板实例（译注：实例化的函数）
 
-duration
-time_point
-clocks
-duration
+## 条款十二：使用override声明重写函数
 
-std::chrono::duration 表示一段时间，常见的单位有 s、ms 等，示例代码：
+要想重写一个函数，必须满足下列要求：
 
-// 拿休眠一段时间举例，这里表示休眠 100ms
-std::this_thread::sleep_for(std::chrono::milliseconds(100));
+- 基类函数必须是virtual
+- 基类和派生类函数名必须完全一样（除非是析构函数)
+- 基类和派生类函数形参类型必须完全一样
+- 基类和派生类函数常量性constness必须完全一样
+- 基类和派生类函数的返回值和异常说明（exception specifications）必须兼容
 
-sleep_for 里面其实就是 std::chrono::duration，表示一段时间，实际是这样：
+除了这些C++98就存在的约束外，C++11又添加了一个：
 
-typedef duration<int64_t, milli> milliseconds;
-typedef duration<int64_t> seconds;
+- 函数的引用限定符（reference qualifiers）必须完全一样。成员函数的引用限定符是C++11很少抛头露脸的特性，所以如果你从没听过它无需惊讶。它可以限定成员函数只能用于左值或者右值。成员函数不需要virtual也能使用它们。
 
-duration 具体模板如下：
+如果基类的虚函数有引用限定符，派生类的重写就必须具有相同的引用限定符。如果没有，那么新声明的函数还是属于派生类，但是不会重写父类的任何函数。
 
-1 template <classRep, classPeriod= ratio<1> > classduration;
+由于正确声明派生类的重写函数很重要，但很容易出错，C++11提供一个方法让你可以显式地指定一个派生类函数是基类版本的重写：将它声明为override。
 
-Rep 表示一种数值类型，用来表示 Period 的数量，比如 int、float、double，Period 是 ratio 类型，用来表示【用秒表示的时间单位】比如 second，常用的 duration<Rep, Period>已经定义好了，在 std::chrono::duration 下：
+C++既有很多关键字，C++11引入了两个上下文关键字（contextual keywords），override和final（向虚函数添加final可以防止派生类重写。final也能用于类，这时这个类不能用作基类）。这两个关键字的特点是它们是保留的，它们只是位于特定上下文才被视为关键字。对于override，它只在成员函数声明结尾处才被视为关键字。这意味着如果你以前写的代码里面已经用过override这个名字，那么换到C++11标准你也无需修改代码。
 
-ratio<3600, 1>：hours
-ratio<60, 1>：minutes
-ratio<1, 1>：seconds
-ratio<1, 1000>：microseconds
-ratio<1, 1000000>：microseconds
-ratio<1, 1000000000>：nanosecons
+### 总结
 
-ratio 的具体模板如下：
+- 为重写函数加上override
+- 成员函数引用限定让我们可以区别对待左值对象和右值对象（即*this)
 
-template <intmax_t N, intmax_t D = 1> class ratio;
+## 条款十三：优先考虑const_iterator而非iterator
 
-N 代表分子，D 代表分母，所以 ratio 表示一个分数，我们可以自定义 Period，比如 ratio<2, 1>表示单位时间是 2 秒。
+STL const_iterator等价于指向常量的指针（pointer-to-const）。它们都指向不能被修改的值。标准实践是能加上const就加上，这也指示我们需要一个迭代器时只要没必要修改迭代器指向的值，就应当使用const_iterator。
 
-time_point
-
-表示一个具体时间点，如 2020 年 5 月 10 日 10 点 10 分 10 秒，拿获取当前时间举例：
-
-std::chrono::time_point<std::chrono::high_resolution_clock> Now() {
-returnstd::chrono::high_resolution_clock::now();
-}
-// std::chrono::high_resolution_clock 为高精度时钟，下面会提到
-
-clocks
-
-时钟，chrono 里面提供了三种时钟：
-
-steady_clock
-system_clock
-high_resolution_clock
-steady_clock
-
-稳定的时间间隔，表示相对时间，相对于系统开机启动的时间，无论系统时间如何被更改，后一次调用 now()肯定比前一次调用 now()的数值大，可用于计时。
-
-system_clock
-
-表示当前的系统时钟，可以用于获取当前时间：
-
-intmain(){
-usingstd::chrono::system_clock;
-system_clock::time_point today = system_clock::now();
-
-std::time_t tt = system_clock::to_time_t(today);
-std::cout << "today is: " << ctime(&tt);
-
-return0;
-}
-// today is: Sun May 10 09:48:36 2020
-
-high_resolution_clock
-
-high_resolution_clock 表示系统可用的最高精度的时钟，实际上就是 system_clock 或者 steady_clock 其中一种的定义，官方没有说明具体是哪个，不同系统可能不一样，我之前看 gcc chrono 源码中 high_resolution_clock 是 steady_clock 的 typedef。
-
-更多关于 chrono 的介绍可以看下我之前的文章：RAII 妙用之计算函数耗时
-
-新增数据结构
-std::forward_list：单向链表，只可以前进，在特定场景下使用，相比于 std::list 节省了内存，提高了性能
-std::forward_list<int> fl = {1, 2, 3, 4, 5};
-for (constauto &elem : fl) {
-cout << elem;
-}
-std::unordered_set：基于 hash 表实现的 set，内部不会排序，使用方法和 set 类似
-std::unordered_map：基于 hash 表实现的 map，内部不会排序，使用方法和 set 类似
-std::array：数组，在越界访问时抛出异常，建议使用 std::array 替代普通的数组
-std::tuple：元组类型，类似 pair，但比 pair 扩展性好
-typedefstd::tuple<int, double, int, double> Mytuple;
-Mytuple t(0, 1, 2, 3);
-std::cout << "0 " << std::get<0>(t);
-std::cout << "1 " << std::get<1>(t);
-std::cout << "2 " << std::get<2>(t);
-std::cout << "3 " << std::get<3>(t);
-
-新增算法
-
-all_of：检测表达式是否对范围[first, last)中所有元素都返回 true，如果都满足，则返回 true
-std::vector<int> v(10, 2);
-if (std::all_of(v.cbegin(), v.cend(), [](int i) { return i % 2 == 0; })) {
-std::cout << "All numbers are even\n";
-}
-any_of：检测表达式是否对范围[first, last)中至少一个元素返回 true，如果满足，则返回 true，否则返回 false，用法和上面一样
-none_of：检测表达式是否对范围[first, last)中所有元素都不返回 true，如果都不满足，则返回 true，否则返回 false，用法和上面一样
-find_if_not：找到第一个不符合要求的元素迭代器，和 find_if 相反
-copy_if：复制满足条件的元素
-itoa：对容器内的元素按序递增
-std::vector<int> l(10);
-std::iota(l.begin(), l.end(), 19); // 19 为初始值
-for (auto n : l) std::cout << n << ' ';
-// 19 20 21 22 23 24 25 26 27 28
-minmax_element：返回容器内最大元素和最小元素位置
-intmain(){
-std::vector<int> v = {3, 9, 1, 4, 2, 5, 9};
-
-auto result = std::minmax*element(v.begin(), v.end());
-std::cout << "min element at: " << *(result.first) << '\n';
-std::cout << "max element at: " << \_(result.second) << '\n';
-return0;
-}
-// min element at: 1
-// max element at: 9
-is_sorted、is_sorted_until：返回容器内元素是否已经排好序。
-
-关于 c++11 的新特性基本上就是这些，相信各位看完一定会有所收获。
-
-参考资料
-https://zh.cppreference.com/w/cpp/language/range-for
-https://juejin.im/post/5dcaa857e51d457f7675360b
-https://zhuanlan.zhihu.com/p/21930436
-https://zh.wikipedia.org/wiki/Nullptr
-https://zh.wikipedia.org/wiki/Constexpr
-https://zh.cppreference.com/w/cpp/language/enum
-https://kheresy.wordpress.com/2019/03/27/using-enum-class/
-https://zh.cppreference.com/w/cpp/language/union
-http://c.biancheng.net/view/7165.html
-https://zhuanlan.zhihu.com/p/77585472
-http://www.cplusplus.com/reference/random/
-https://zh.cppreference.com/w/cpp/regex
-https://www.cnblogs.com/jwk000/p/3560086.html
-https://zh.cppreference.com/w/cpp/algorithm/all_any_none_of
 
 # 其他
 
