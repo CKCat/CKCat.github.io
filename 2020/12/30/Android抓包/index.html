@@ -30,12 +30,13 @@
 <meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-09-26.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-10-42.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-12-38.png">
+<meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2024-02-27-11-34-07.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-52-51.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-01-17.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-01-48.png">
 <meta property="og:image" content="https://ckcat.github.io/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-17-21-25.png">
 <meta property="article:published_time" content="2020-12-30T14:53:08.000Z">
-<meta property="article:modified_time" content="2024-02-20T01:13:07.053Z">
+<meta property="article:modified_time" content="2024-06-12T08:33:15.743Z">
 <meta property="article:author" content="CKCat">
 <meta property="article:tag" content="逆向">
 <meta name="twitter:card" content="summary">
@@ -161,18 +162,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -243,7 +244,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -273,7 +274,7 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="Android-抓包"><a href="#Android-抓包" class="headerlink" title="Android 抓包"></a>Android 抓包</h1><h2 id="使用-Charles-抓包"><a href="#使用-Charles-抓包" class="headerlink" title="使用 Charles 抓包"></a>使用 Charles 抓包</h2><ol>
-<li>PC 端共享无线网络，使用 ipconfig 命令查看 ip 地址：</li>
+<li>PC 端共享无线网络，使用 <code>ipconfig</code> 命令查看 ip 地址：</li>
 </ol>
 <img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-09-26.png" class="">
 
@@ -287,13 +288,14 @@
 </ol>
 <img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2020-12-30-16-12-38.png" class="">
 
+<img src="/2020/12/30/Android%E6%8A%93%E5%8C%85/2024-02-27-11-34-07.png" class="">
+
 <ol start="4">
 <li>安装证书</li>
 </ol>
 <p>手机端访问 <code>chls.pro/ssl</code> 下载证书并安装。其中可以通过 Magisk 插件 <a target="_blank" rel="noopener" href="https://github.com/ys1231/MoveCertificate">MoveCertificate</a> 将证书从用户证书移动到系统证书。后续即可进行抓包了。 <strong>如果无法进行抓包，尝试一下关闭 Windows 防火墙。</strong></p>
-<blockquote>
 <p>brup 配置好代理后，下载证书地址 <a target="_blank" rel="noopener" href="http://burp/">http://burp</a> 。</p>
-</blockquote>
+<p>brup 通过 <code>Proxy Setttings -&gt; Import /export CA certificate</code> 导出 <code>Certificate in DER format</code> 的证书，然后再通过手机安装该证书后却无法抓 https 数据包，提示你的连接不是私密连接 <code>NET::ERR_CERT_AUTHORITY_INVALID</code> 。</p>
 <p>如果系统为 Android 7 以下的版本，可以手动将用户证书移动到系统证书。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 挂载根目录，正常情况下，使其可读写</span></span><br><span class="line">mount -o rw,remount /</span><br><span class="line"><span class="comment"># 将用户证书移入系统证书目录</span></span><br><span class="line"><span class="built_in">mv</span> -f /data/misc/user/0/cacerts-added/123abc456.0 /system/etc/security/cacerts</span><br><span class="line"><span class="comment"># 重新挂载根目录，使其为只读</span></span><br><span class="line">mount -o ro,remount /</span><br></pre></td></tr></table></figure>
 

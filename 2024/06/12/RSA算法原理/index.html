@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/https:/github.com/ckcat.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://github.com/ckcat.png?size=32">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://github.com/ckcat.png?size=16">
+  <link rel="mask-icon" href="https://github.com/ckcat.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ckcat.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="转载： https:&#x2F;&#x2F;www.ruanyifeng.com&#x2F;blog&#x2F;2013&#x2F;06&#x2F;rsa_algorithm_part_one.html  如果你问我，哪一种算法最重要？ 我可能会回答”公钥加密算法”。 因为它是计算机通信安全的基石，保证了加密数据不会被破解。你可以想象一下，信用卡交易被破解的后果。 进入正题之前，我先简单介绍一下，什么是”公钥加密算法”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSA算法原理">
+<meta property="og:url" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="CKCat的博客">
+<meta property="og:description" content="转载： https:&#x2F;&#x2F;www.ruanyifeng.com&#x2F;blog&#x2F;2013&#x2F;06&#x2F;rsa_algorithm_part_one.html  如果你问我，哪一种算法最重要？ 我可能会回答”公钥加密算法”。 因为它是计算机通信安全的基石，保证了加密数据不会被破解。你可以想象一下，信用卡交易被破解的后果。 进入正题之前，我先简单介绍一下，什么是”公钥加密算法”。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-21-39.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-23-11.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-23-49.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-23-56.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-04.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-10.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-18.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-31.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-52.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-59.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-25-09.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-25-24.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-25-49.png">
+<meta property="og:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-34-45.png">
+<meta property="article:published_time" content="2024-06-12T10:11:30.000Z">
+<meta property="article:modified_time" content="2024-06-12T08:33:15.847Z">
+<meta property="article:author" content="CKCat">
+<meta property="article:tag" content="RSA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-21-39.png">
+
+
+<link rel="canonical" href="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/","path":"2024/06/12/RSA算法原理/","title":"RSA算法原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RSA算法原理 | CKCat的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CKCat的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-gena-nav"><a href="https://ckcat.github.io/CKCat-gena-nav/" rel="section"><i class="fa fa-navicon fa-fw"></i>gena-nav</a></li><li class="menu-item menu-item-aibard"><a href="https://aibard123.com/?github" rel="section" target="_blank"><i class="fa fa-eye fa-fw"></i>aibard</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E7%82%B9%E5%8E%86%E5%8F%B2"><span class="nav-number">1.</span> <span class="nav-text">一点历史</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%92%E8%B4%A8%E5%85%B3%E7%B3%BB"><span class="nav-number">2.</span> <span class="nav-text">互质关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">欧拉函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AC%A7%E6%8B%89%E5%AE%9A%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">欧拉定理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%8F%8D%E5%85%83%E7%B4%A0"><span class="nav-number">5.</span> <span class="nav-text">模反元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%86%E9%92%A5%E7%94%9F%E6%88%90%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="nav-number">6.</span> <span class="nav-text">密钥生成的步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RSA-%E7%AE%97%E6%B3%95%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">7.</span> <span class="nav-text">RSA 算法的可靠性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E5%92%8C%E8%A7%A3%E5%AF%86"><span class="nav-number">8.</span> <span class="nav-text">加密和解密</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%81%E9%92%A5%E8%A7%A3%E5%AF%86%E7%9A%84%E8%AF%81%E6%98%8E"><span class="nav-number">9.</span> <span class="nav-text">私钥解密的证明</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CKCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/CKCat" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;CKCat" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:ckcatck@qq.com" title="E-Mail → mailto:ckcatck@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RSA算法原理 | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RSA算法原理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-06-12 10:11:30 / 修改时间：08:33:15" itemprop="dateCreated datePublished" datetime="2024-06-12T10:11:30+00:00">2024-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>转载： <a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html">https://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html</a></p>
+</blockquote>
+<p>如果你问我，哪一种算法最重要？</p>
+<p>我可能会回答”公钥加密算法”。</p>
+<p>因为它是计算机通信安全的基石，保证了加密数据不会被破解。你可以想象一下，信用卡交易被破解的后果。</p>
+<p>进入正题之前，我先简单介绍一下，什么是”公钥加密算法”。</p>
+<h1 id="一点历史"><a href="#一点历史" class="headerlink" title="一点历史"></a>一点历史</h1><p>1976 年以前，所有的加密方法都是同一种模式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">（1）甲方选择某一种加密规则，对信息进行加密；</span><br><span class="line">（2）乙方使用同一种规则，对信息进行解密。</span><br></pre></td></tr></table></figure>
+
+<p>由于加密和解密使用同样规则（简称”密钥”），这被称为”对称加密算法”（Symmetric-key algorithm）。</p>
+<p>这种加密模式有一个最大弱点：甲方必须把加密规则告诉乙方，否则无法解密。保存和传递密钥，就成了最头疼的问题。</p>
+<p>1976 年，两位美国计算机学家 Whitfield Diffie 和 Martin Hellman，提出了一种崭新构思，可以在不直接传递密钥的情况下，完成解密。这被称为”Diffie-Hellman 密钥交换算法”。这个算法启发了其他科学家。人们认识到，加密和解密可以使用不同的规则，只要这两种规则之间存在某种对应关系即可，这样就避免了直接传递密钥。</p>
+<p>这种新的加密模式被称为”非对称加密算法”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">（1）乙方生成两把密钥（公钥和私钥）。公钥是公开的，任何人都可以获得，私钥则是保密的。</span><br><span class="line">（2）甲方获取乙方的公钥，然后用它对信息加密。</span><br><span class="line">（3）乙方得到加密后的信息，用私钥解密。</span><br></pre></td></tr></table></figure>
+
+<p>如果公钥加密的信息只有私钥解得开，那么只要私钥不泄漏，通信就是安全的。</p>
+<p>1977 年，三位数学家 Rivest、Shamir 和 Adleman 设计了一种算法，可以实现非对称加密。这种算法用他们三个人的名字命名，叫做 RSA 算法。从那时直到现在，RSA 算法一直是最广为使用的”非对称加密算法”。毫不夸张地说，只要有计算机网络的地方，就有 RSA 算法。</p>
+<p>这种算法非常可靠，密钥越长，它就越难破解。根据已经披露的文献，目前被破解的最长 RSA 密钥是 768 个二进制位。也就是说，长度超过 768 位的密钥，还无法破解（至少没人公开宣布）。因此可以认为，1024 位的 RSA 密钥基本安全，2048 位的密钥极其安全。</p>
+<p>下面，我就进入正题，解释 RSA 算法的原理。文章共分成两部分，今天是第一部分，介绍要用到的四个数学概念。你可以看到，RSA 算法并不难，只需要一点数论知识就可以理解。</p>
+<h1 id="互质关系"><a href="#互质关系" class="headerlink" title="互质关系"></a>互质关系</h1><p>如果两个正整数，除了 1 以外，没有其他公因子，我们就称这两个数是互质关系（coprime）。比如，15 和 32 没有公因子，所以它们是互质关系。这说明，不是质数也可以构成互质关系。</p>
+<p>关于互质关系，不难得到以下结论：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 任意两个质数构成互质关系，比如 13 和 61。</span><br><span class="line">2. 一个数是质数，另一个数只要不是前者的倍数，两者就构成互质关系，比如 3 和 10。</span><br><span class="line">3. 如果两个数之中，较大的那个数是质数，则两者构成互质关系，比如 97 和 57。</span><br><span class="line">4. 1 和任意一个自然数是都是互质关系，比如 1 和 99。</span><br><span class="line">5. p 是大于 1 的整数，则 p 和 p-1 构成互质关系，比如 57 和 56。</span><br><span class="line">6. p 是大于 1 的奇数，则 p 和 p-2 构成互质关系，比如 17 和 15。</span><br></pre></td></tr></table></figure>
+<h1 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h1><p>请思考以下问题：</p>
+<blockquote>
+<p>任意给定正整数 n，请问在小于等于 n 的正整数之中，有多少个与 n 构成互质关系？（比如，在 1 到 8 之中，有多少个数与 8 构成互质关系？）</p>
+</blockquote>
+<p>计算这个值的方法就叫做欧拉函数，以 φ(n)表示。在 1 到 8 之中，与 8 形成互质关系的是 1、3、5、7，所以 φ(n) &#x3D; 4。</p>
+<p>φ(n) 的计算方法并不复杂，但是为了得到最后那个公式，需要一步步讨论。</p>
+<p><strong>第一种情况</strong></p>
+<p>如果 n&#x3D;1，则 φ(1) &#x3D; 1 。因为 1 与任何数（包括自身）都构成互质关系。</p>
+<p><strong>第二种情况</strong></p>
+<p>如果 n 是质数，则 φ(n)&#x3D;n-1 。因为质数与小于它的每一个数，都构成互质关系。比如 5 与 1、2、3、4 都构成互质关系。</p>
+<p><strong>第三种情况</strong></p>
+<p>如果 n 是质数的某一个次方，即 n &#x3D; p^k (p 为质数，k 为大于等于 1 的整数)，则</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-21-39.png" class="">
+
+<p>比如 φ(8) &#x3D; φ(2^3) &#x3D;2^3 - 2^2 &#x3D; 8 -4 &#x3D; 4。</p>
+<p>这是因为只有当一个数不包含质数 p，才可能与 n 互质。而包含质数 p 的数一共有 p^(k-1)个，即 1×p、2×p、3×p、…、p^(k-1)×p，把它们去除，剩下的就是与 n 互质的数。</p>
+<p>上面的式子还可以写成下面的形式：</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-23-11.png" class="">
+
+<p>可以看出，上面的第二种情况是 k&#x3D;1 时的特例。</p>
+<p><strong>第四种情况</strong></p>
+<p>如果 n 可以分解成两个互质的整数之积，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n = p1 × p2</span><br></pre></td></tr></table></figure>
+
+<p>则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">φ(n) = φ(p1p2) = φ(p1)φ(p2)</span><br></pre></td></tr></table></figure>
+
+<p>即积的欧拉函数等于各个因子的欧拉函数之积。比如，φ(56)&#x3D;φ(8×7)&#x3D;φ(8)×φ(7)&#x3D;4×6&#x3D;24。</p>
+<p>这一条的证明要用到”中国剩余定理”，这里就不展开了，只简单说一下思路：如果 a 与 p1 互质(a&lt;p1)，b 与 p2 互质(b&lt;p2)，c 与 p1p2 互质(c&lt;p1p2)，则 c 与数对 (a,b) 是一一对应关系。由于 a 的值有 φ(p1) 种可能，b 的值有 φ(p2) 种可能，则数对 (a,b) 有 φ(p1)φ(p2) 种可能，而 c 的值有 φ(p1p2) 种可能，所以 φ(p1p2) 就等于 φ(p1)φ(p2)。</p>
+<p><strong>第五种情况</strong></p>
+<p>因为任意一个大于 1 的正整数，都可以写成一系列质数的<br>积。</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-23-49.png" class="">
+
+<p>根据第 4 条的结论，得到</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-23-56.png" class="">
+
+<p>再根据第 3 条的结论，得到</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-04.png" class="">
+
+<p>也就等于</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-10.png" class="">
+
+<p>这就是欧拉函数的通用计算公式。比如，1323 的欧拉函数，计算过程如下：</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-18.png" class="">
+
+<h1 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h1><p>欧拉函数的用处，在于欧拉定理。”欧拉定理”指的是：</p>
+<blockquote>
+<p>如果两个正整数 a 和 n 互质，则 n 的欧拉函数 φ(n) 可以让下面的等式成立：</p>
+</blockquote>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-31.png" class="">
+
+<p>也就是说，a 的 φ(n) 次方被 n 除的余数为 1。或者说，a 的 φ(n) 次方减去 1，可以被 n 整除。比如，3 和 7 互质，而 7 的欧拉函数 φ(7) 等于 6，所以 3 的 6 次方（729）减去 1，可以被 7 整除（728&#x2F;7&#x3D;104）。</p>
+<p>欧拉定理的证明比较复杂，这里就省略了。我们只要记住它的结论就行了。</p>
+<p>欧拉定理可以大大简化某些运算。比如，7 和 10 互质，根据欧拉定理，</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-52.png" class="">
+
+<p>已知 φ(10) 等于 4，所以马上得到 7 的 4 倍数次方的个位数肯定是 1。</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-24-59.png" class="">
+
+<p>因此，7 的任意次方的个位数（例如 7 的 222 次方），心算就可以算出来。</p>
+<p>欧拉定理有一个特殊情况。</p>
+<blockquote>
+<p>假设正整数 a 与质数 p 互质，因为质数 p 的 φ(p)等于 p-1，则欧拉定理可以写成</p>
+</blockquote>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-25-09.png" class="">
+
+<p>这就是著名的费马小定理。它是欧拉定理的特例。</p>
+<p>欧拉定理是 RSA 算法的核心。理解了这个定理，就可以理解 RSA。</p>
+<h1 id="模反元素"><a href="#模反元素" class="headerlink" title="模反元素"></a>模反元素</h1><p>还剩下最后一个概念：</p>
+<blockquote>
+<p>如果两个正整数 a 和 n 互质，那么一定可以找到整数 b，使得 ab-1 被 n 整除，或者说 ab 被 n 除的余数是 1。</p>
+</blockquote>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-25-24.png" class="">
+
+<blockquote>
+<p>这时，b 就叫做 a 的”模反元素”。</p>
+</blockquote>
+<p>比如，3 和 11 互质，那么 3 的模反元素就是 4，因为 (3 × 4)-1 可以被 11 整除。显然，模反元素不止一个， 4 加减 11 的整数倍都是 3 的模反元素 {…,-18,-7,4,15,26,…}，即如果 b 是 a 的模反元素，则 b+kn 都是 a 的模反元素。</p>
+<p>欧拉定理可以用来证明模反元素必然存在。</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-25-49.png" class="">
+
+<p>可以看到，a 的 φ(n)-1 次方，就是 a 的模反元素。</p>
+<hr>
+<p>好了，需要用到的数学工具，全部介绍完了。RSA 算法涉及的数学知识，就是上面这些，下一次我就来介绍公钥和私钥到底是怎么生成的。</p>
+<p>有了这些知识，我们就可以看懂 RSA 算法。这是目前地球上最重要的加密算法。</p>
+<h1 id="密钥生成的步骤"><a href="#密钥生成的步骤" class="headerlink" title="密钥生成的步骤"></a>密钥生成的步骤</h1><p>我们通过一个例子，来理解 RSA 算法。假设爱丽丝要与鲍勃进行加密通信，她该怎么生成公钥和私钥呢？</p>
+<img src="/2024/06/12/RSA%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/2024-06-12-10-34-45.png" class="">
+
+<p><strong>第一步，随机选择两个不相等的质数 p 和 q。</strong></p>
+<p>爱丽丝选择了 61 和 53。（实际应用中，这两个质数越大，就越难破解。）</p>
+<p><strong>第二步，计算 p 和 q 的乘积 n。</strong></p>
+<p>爱丽丝就把 61 和 53 相乘。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n = 61×53 = 3233</span><br></pre></td></tr></table></figure>
+
+<p>n 的长度就是密钥长度。3233 写成二进制是 110010100001，一共有 12 位，所以这个密钥就是 12 位。实际应用中，RSA 密钥一般是 1024 位，重要场合则为 2048 位。</p>
+<p><strong>第三步，计算 n 的欧拉函数 φ(n)。</strong></p>
+<p>根据公式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">φ(n) = (p-1)(q-1)</span><br></pre></td></tr></table></figure>
+
+<p>爱丽丝算出 φ(3233)等于 60×52，即 3120。</p>
+<p><strong>第四步，随机选择一个整数 e，条件是 1&lt; e &lt; φ(n)，且 e 与 φ(n) 互质。</strong></p>
+<p>爱丽丝就在 1 到 3120 之间，随机选择了 17。（实际应用中，常常选择 65537。）</p>
+<p><strong>第五步，计算 e 对于 φ(n)的模反元素 d。</strong></p>
+<p>所谓”模反元素”就是指有一个整数 d，可以使得 ed 被 φ(n)除的余数为 1。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ed ≡ 1 (mod φ(n))</span><br></pre></td></tr></table></figure>
+
+<p>这个式子等价于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ed - 1 = kφ(n)</span><br></pre></td></tr></table></figure>
+
+<p>于是，找到模反元素 d，实质上就是对下面这个二元一次方程求解。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ex + φ(n)y = 1</span><br></pre></td></tr></table></figure>
+
+<p>已知 e&#x3D;17, φ(n)&#x3D;3120，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">17x + 3120y = 1</span><br></pre></td></tr></table></figure>
+
+<p>这个方程可以用”扩展欧几里得算法”求解，此处省略具体过程。总之，爱丽丝算出一组整数解为 (x,y)&#x3D;(2753,-15)，即 d&#x3D;2753。</p>
+<p>至此所有计算完成。</p>
+<p><strong>第六步，将 n 和 e 封装成公钥，n 和 d 封装成私钥。</strong></p>
+<p>在爱丽丝的例子中，n&#x3D;3233，e&#x3D;17，d&#x3D;2753，所以公钥就是 (3233,17)，私钥就是（3233, 2753）。</p>
+<p>实际应用中，公钥和私钥的数据都采用 ASN.1 格式表达（实例）。</p>
+<h1 id="RSA-算法的可靠性"><a href="#RSA-算法的可靠性" class="headerlink" title="RSA 算法的可靠性"></a>RSA 算法的可靠性</h1><p>回顾上面的密钥生成步骤，一共出现六个数字：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">　　p</span><br><span class="line">　　q</span><br><span class="line">　　n</span><br><span class="line">　　φ(n)</span><br><span class="line">　　e</span><br><span class="line">　　d</span><br></pre></td></tr></table></figure>
+
+<p>这六个数字之中，公钥用到了两个（n 和 e），其余四个数字都是不公开的。其中最关键的是 d，因为 n 和 d 组成了私钥，一旦 d 泄漏，就等于私钥泄漏。</p>
+<p><strong>那么，有无可能在已知 n 和 e 的情况下，推导出 d？</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">（1）ed≡1 (mod φ(n))。只有知道 e 和 φ(n)，才能算出 d。</span><br><span class="line"></span><br><span class="line">（2）φ(n)=(p-1)(q-1)。只有知道 p 和 q，才能算出 φ(n)。</span><br><span class="line"></span><br><span class="line">（3）n=pq。只有将 n 因数分解，才能算出 p 和 q。</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：如果 n 可以被因数分解，d 就可以算出，也就意味着私钥被破解。</strong></p>
+<p>可是，大整数的因数分解，是一件非常困难的事情。目前，除了暴力破解，还没有发现别的有效方法。维基百科这样写道：</p>
+<blockquote>
+<p>“对极大整数做因数分解的难度决定了 RSA 算法的可靠性。换言之，对一极大整数做因数分解愈困难，RSA 算法愈可靠。</p>
+</blockquote>
+<blockquote>
+<p>假如有人找到一种快速因数分解的算法，那么 RSA 的可靠性就会极度下降。但找到这样的算法的可能性是非常小的。今天只有短的 RSA 密钥才可能被暴力破解。到 2008 年为止，世界上还没有任何可靠的攻击 RSA 算法的方式。</p>
+</blockquote>
+<blockquote>
+<p>只要密钥长度足够长，用 RSA 加密的信息实际上是不能被解破的。”</p>
+</blockquote>
+<p>举例来说，你可以对 3233 进行因数分解（61×53），但是你没法对下面这个整数进行因数分解。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">　　12301866845301177551304949</span><br><span class="line">　　58384962720772853569595334</span><br><span class="line">　　79219732245215172640050726</span><br><span class="line">　　36575187452021997864693899</span><br><span class="line">　　56474942774063845925192557</span><br><span class="line">　　32630345373154826850791702</span><br><span class="line">　　61221429134616704292143116</span><br><span class="line">　　02221240479274737794080665</span><br><span class="line">　　351419597459856902143413</span><br></pre></td></tr></table></figure>
+
+<p>它等于这样两个质数的乘积：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">　　33478071698956898786044169</span><br><span class="line">　　84821269081770479498371376</span><br><span class="line">　　85689124313889828837938780</span><br><span class="line">　　02287614711652531743087737</span><br><span class="line">　　814467999489</span><br><span class="line">　　　　×</span><br><span class="line">　　36746043666799590428244633</span><br><span class="line">　　79962795263227915816434308</span><br><span class="line">　　76426760322838157396665112</span><br><span class="line">　　79233373417143396810270092</span><br><span class="line">　　798736308917</span><br></pre></td></tr></table></figure>
+
+<p>事实上，这大概是人类已经分解的最大整数（232 个十进制位，768 个二进制位）。比它更大的因数分解，还没有被报道过，因此目前被破解的最长 RSA 密钥就是 768 位。</p>
+<h1 id="加密和解密"><a href="#加密和解密" class="headerlink" title="加密和解密"></a>加密和解密</h1><p>有了公钥和密钥，就能进行加密和解密了。</p>
+<p><strong>（1）加密要用公钥 (n,e)</strong></p>
+<p>假设鲍勃要向爱丽丝发送加密信息 m，他就要用爱丽丝的公钥 (n,e) 对 m 进行加密。这里需要注意，m 必须是整数（字符串可以取 ascii 值或 unicode 值），且 m 必须小于 n。</p>
+<p>所谓”加密”，就是算出下式的 c：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">me ≡ c (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>爱丽丝的公钥是 (3233, 17)，鲍勃的 m 假设是 65，那么可以算出下面的等式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6517 ≡ 2790 (mod 3233)</span><br></pre></td></tr></table></figure>
+
+<p>于是，c 等于 2790，鲍勃就把 2790 发给了爱丽丝。</p>
+<p><strong>（2）解密要用私钥(n,d)</strong></p>
+<p>爱丽丝拿到鲍勃发来的 2790 以后，就用自己的私钥(3233, 2753) 进行解密。可以证明，下面的等式一定成立：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ≡ m (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，c 的 d 次方除以 n 的余数为 m。现在，c 等于 2790，私钥是(3233, 2753)，那么，爱丽丝算出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">27902753 ≡ 65 (mod 3233)</span><br></pre></td></tr></table></figure>
+
+<p>因此，爱丽丝知道了鲍勃加密前的原文就是 65。</p>
+<p>至此，”加密–解密”的整个过程全部完成。</p>
+<p>我们可以看到，如果不知道 d，就没有办法从 c 求出 m。而前面已经说过，要知道 d 就必须分解 n，这是极难做到的，所以 RSA 算法保证了通信安全。</p>
+<p>你可能会问，公钥(n,e) 只能加密小于 n 的整数 m，那么如果要加密大于 n 的整数，该怎么办？有两种解决方法：一种是把长信息分割成若干段短消息，每段分别加密；另一种是先选择一种”对称性加密算法”（比如 DES），用这种算法的密钥加密信息，再用 RSA 公钥加密 DES 密钥。</p>
+<h1 id="私钥解密的证明"><a href="#私钥解密的证明" class="headerlink" title="私钥解密的证明"></a>私钥解密的证明</h1><p>最后，我们来证明，为什么用私钥解密，一定可以正确地得到 m。也就是证明下面这个式子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ≡ m (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>因为，根据加密规则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ｍe ≡ c (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>于是，c 可以写成下面的形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c = me - kn</span><br></pre></td></tr></table></figure>
+
+<p>将 c 代入要我们要证明的那个解密规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(me - kn)d ≡ m (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>它等同于求证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">med ≡ m (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>由于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ed ≡ 1 (mod φ(n))</span><br></pre></td></tr></table></figure>
+
+<p>所以</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ed = hφ(n)+1</span><br></pre></td></tr></table></figure>
+
+<p>将 ed 代入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mhφ(n)+1 ≡ m (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>接下来，分成两种情况证明上面这个式子。</p>
+<p><strong>（1）m 与 n 互质。</strong></p>
+<p>根据欧拉定理，此时</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mφ(n) ≡ 1 (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>得到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(mφ(n))h × m ≡ m (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>原式得到证明。</p>
+<p><strong>（2）m 与 n 不是互质关系。</strong></p>
+<p>此时，由于 n 等于质数 p 和 q 的乘积，所以 m 必然等于 kp 或 kq。</p>
+<p>以 m &#x3D; kp 为例，考虑到这时 k 与 q 必然互质，则根据欧拉定理，下面的式子成立：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(kp)q-1 ≡ 1 (mod q)</span><br></pre></td></tr></table></figure>
+
+<p>进一步得到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(kp)q-1]h(p-1) × kp ≡ kp (mod q)</span><br></pre></td></tr></table></figure>
+
+<p>即</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(kp)ed ≡ kp (mod q)</span><br></pre></td></tr></table></figure>
+
+<p>将它改写成下面的等式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(kp)ed = tq + kp</span><br></pre></td></tr></table></figure>
+
+<p>这时 t 必然能被 p 整除，即 t&#x3D;t’p</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(kp)ed = t&#x27;pq + kp</span><br></pre></td></tr></table></figure>
+
+<p>因为 m&#x3D;kp，n&#x3D;pq，所以</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">med ≡ m (mod n)</span><br></pre></td></tr></table></figure>
+
+<p>原式得到证明。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RSA/" rel="tag"># RSA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/22/%E4%B8%80%E6%AC%A1ROM%E8%A7%A3%E5%8C%85%E4%B9%8B%E6%97%85/" rel="prev" title="一次ROM解包之旅">
+                  <i class="fa fa-chevron-left"></i> 一次ROM解包之旅
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CKCat</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/CKCat" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

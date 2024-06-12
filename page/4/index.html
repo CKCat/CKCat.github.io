@@ -147,18 +147,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,102 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89App-%E5%90%AF%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CKCat">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CKCat的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89App-%E5%90%AF%E5%8A%A8/" class="post-title-link" itemprop="url">Android 双开沙箱 VirtualApp 源码分析（三）App 启动</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-08-08 17:22:07" itemprop="dateCreated datePublished" datetime="2020-08-08T17:22:07+00:00">2020-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>转载 : <a target="_blank" rel="noopener" href="https://blog.csdn.net/ganyao939543405/article/details/76177392">https://blog.csdn.net/ganyao939543405/article/details/76177392</a></p>
+</blockquote>
+<p>在这之前，我们还是要先了解一下 VA Client Framework 和 VAService 之间的通讯方式</p>
+<h1 id="VAService-与通讯"><a href="#VAService-与通讯" class="headerlink" title="VAService 与通讯"></a>VAService 与通讯</h1><h2 id="VAService"><a href="#VAService" class="headerlink" title="VAService"></a>VAService</h2><p>首先 <code>VAService</code> 是指 <code>VA</code> 仿造 <code>Android</code> 原生 <code>framework</code> 层 <code>Service</code> 实现的一套副本，举例有 <code>VActivityManagerService</code> ，它和系统 <code>AMS</code> 一样，只不过他管理的是 <code>VA</code> 内部 <code>Client App</code> 的组件会话。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/08/Android-%E5%8F%8C%E5%BC%80%E6%B2%99%E7%AE%B1-VirtualApp-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89App-%E5%90%AF%E5%8A%A8/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -228,7 +324,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -325,7 +421,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -561,7 +657,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -662,7 +758,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:16" itemprop="dateModified" datetime="2024-06-12T08:33:16+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -758,7 +854,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -833,7 +929,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/06/11/learn-CMake/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -851,7 +947,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">CMake的使用记录</a>
+          <a href="/2020/06/11/learn-CMake/" class="post-title-link" itemprop="url">CMake的使用记录</a>
         </h2>
 
         <div class="post-meta-container">
@@ -869,7 +965,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -891,18 +987,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h1><ul>
-<li><p>依赖CMakeLists.txt文件，项目主目标一个，主目录中可指定包含的子目录；</p>
-</li>
-<li><p>在项目CMakeLists.txt中使用project指定项目名称，add_subdirectory添加子目录</p>
-</li>
-<li><p>子目录CMakeLists.txt将从父目录CMakeLists.txt继承设置（TBD，待检验）</p>
-</li>
-</ul>
-<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>使用 <code>#</code> 表示注释</p>
+          <h1 id="什么是-CMake"><a href="#什么是-CMake" class="headerlink" title="什么是 CMake"></a>什么是 CMake</h1><p><a target="_blank" rel="noopener" href="https://cmake.org/">CMake</a> 是一个开源、跨平台的工具系列，可用于构建、测试和打包软件。它通过一个名为 <code>CMakeLists.txt</code> 的配置文件来管理软件的编译流程，并根据用户所选择的目标平台生成构建软件所需的本地化 makefile 或 workspace。通俗来讲，使用 CMake 可以生成 UNIX-like 上构建软件所需的 Makefile 和 Windows 上构建软件所需的 vcxproj，而无需为它们单独写一份 <code>Makefile/vcxproj</code> 。</p>
+<p><a target="_blank" rel="noopener" href="https://cmake.org/documentation/">CMake 官方文档</a>中有详细的使用手册，可以帮助用户更深入地了解 CMake。另外，还有一个详细的使用教程：<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/guide/tutorial/index.html">CMake Tutorial</a>。</p>
+<h1 id="入门案例"><a href="#入门案例" class="headerlink" title="入门案例"></a>入门案例</h1><h2 id="单个源文件"><a href="#单个源文件" class="headerlink" title="单个源文件"></a>单个源文件</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/06/11/CMake%E7%9A%84%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
+              <a class="btn" href="/2020/06/11/learn-CMake/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -969,7 +1059,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1087,7 +1177,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1194,7 +1284,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
+      <time title="修改时间：2024-06-12 08:33:15" itemprop="dateModified" datetime="2024-06-12T08:33:15+00:00">2024-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1233,149 +1323,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/06/03/ART%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ckcat.github.io/2020/05/05/GDB%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8Fbug%E6%97%A0%E5%A4%84%E8%BA%B2%E8%97%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CKCat">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CKCat的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/05/05/GDB%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8Fbug%E6%97%A0%E5%A4%84%E8%BA%B2%E8%97%8F/" class="post-title-link" itemprop="url">GDB命令基础，让你的程序bug无处躲藏</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-05-05 00:23:42" itemprop="dateCreated datePublished" datetime="2020-05-05T00:23:42+00:00">2020-05-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-20 01:13:07" itemprop="dateModified" datetime="2024-02-20T01:13:07+00:00">2024-02-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>转载: <a target="_blank" rel="noopener" href="https://deepzz.com/post/gdb-debug.html">https://deepzz.com/post/gdb-debug.html</a></p>
-</blockquote>
-<!-- TOC -->
-
-<ul>
-<li><a href="#%E4%BD%BF%E7%94%A8gdb">使用GDB</a><ul>
-<li><a href="#%E5%90%AF%E5%8A%A8">启动</a></li>
-<li><a href="#%E8%BF%90%E8%A1%8C">运行</a></li>
-<li><a href="#%E8%AE%BE%E7%BD%AE%E6%9F%A5%E7%9C%8B%E6%96%AD%E7%82%B9breakpoint">设置&#x2F;查看断点(breakpoint)</a></li>
-<li><a href="#%E8%AE%BE%E7%BD%AE%E6%9F%A5%E7%9C%8B%E8%A7%82%E5%AF%9F%E7%82%B9watchpoint">设置&#x2F;查看观察点(watchpoint)</a></li>
-<li><a href="#%E8%AE%BE%E7%BD%AE%E6%9F%A5%E7%9C%8B%E6%8D%95%E6%8D%89%E7%82%B9catchpoint">设置&#x2F;查看捕捉点(catchpoint)</a></li>
-<li><a href="#%E7%BB%B4%E6%8A%A4%E5%81%9C%E6%AD%A2%E7%82%B9">维护停止点</a></li>
-<li><a href="#%E7%BB%B4%E6%8A%A4%E6%9D%A1%E4%BB%B6%E5%81%9C%E6%AD%A2%E7%82%B9">维护条件停止点</a></li>
-<li><a href="#%E5%81%9C%E6%AD%A2%E7%82%B9%E8%AE%BE%E7%BD%AE%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4">停止点设置运行命令</a></li>
-<li><a href="#%E6%96%AD%E7%82%B9%E8%8F%9C%E5%8D%95">断点菜单</a></li>
-<li><a href="#%E6%81%A2%E5%A4%8D%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E5%92%8C%E5%8D%95%E6%AD%A5%E8%B0%83%E8%AF%95">恢复程序运行和单步调试</a></li>
-<li><a href="#%E4%BF%A1%E5%8F%B7">信号</a></li>
-<li><a href="#%E4%BA%A7%E7%94%9F%E4%BF%A1%E5%8F%B7%E9%87%8F">产生信号量</a></li>
-<li><a href="#%E7%BA%BF%E7%A8%8B">线程</a></li>
-<li><a href="#%E6%9F%A5%E7%9C%8B%E6%A0%88%E4%BF%A1%E6%81%AF">查看栈信息</a></li>
-<li><a href="#%E6%9F%A5%E7%9C%8B%E6%BA%90%E7%A0%81">查看源码</a></li>
-<li><a href="#%E6%90%9C%E7%B4%A2%E6%BA%90%E4%BB%A3%E7%A0%81">搜索源代码</a></li>
-<li><a href="#%E6%8C%87%E5%AE%9A%E6%BA%90%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84">指定源文件路径</a></li>
-<li><a href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E5%86%85%E5%AD%98">源代码内存</a></li>
-<li><a href="#%E6%9F%A5%E7%9C%8B%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE">查看运行时数据</a></li>
-<li><a href="#%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AD%98">查看内存</a></li>
-<li><a href="#%E8%87%AA%E5%8A%A8%E6%98%BE%E7%A4%BA">自动显示</a></li>
-<li><a href="#%E8%AE%BE%E7%BD%AE%E6%98%BE%E7%A4%BA%E9%80%89%E9%A1%B9">设置显示选项</a></li>
-<li><a href="#%E5%8E%86%E5%8F%B2%E7%BA%AA%E5%BD%95">历史纪录</a></li>
-<li><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">环境变量</a></li>
-<li><a href="#%E6%9F%A5%E7%9C%8B%E5%AF%84%E5%AD%98%E5%99%A8">查看寄存器</a></li>
-<li><a href="#%E4%BF%AE%E6%94%B9%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%89%A7%E8%A1%8C">修改程序的执行</a></li>
-<li><a href="#%E8%B7%B3%E8%BD%AC%E6%89%A7%E8%A1%8C">跳转执行</a></li>
-<li><a href="#%E5%BC%BA%E5%88%B6%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E">强制函数返回</a></li>
-<li><a href="#%E5%BC%BA%E5%88%B6%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0">强制调用函数</a></li>
-<li><a href="#gdb%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83">GDB语言环境</a></li>
-<li><a href="#%E9%80%80%E5%87%BA">退出</a></li>
-<li><a href="#%E6%8A%80%E5%B7%A7">技巧</a></li>
-</ul>
-</li>
-</ul>
-<!-- /TOC -->
-
-<p>软件开发，或多或少会走上调试这条路。调试工具可以帮你更加深入了解整个程序的运行状态，对程序运行有更多的主动权。你可以随心所欲的改变程序运行流程，如：有变量a，你需要不断改变该a的值，让程序运行出理想的结果，那么你可以在调试工具中轻易的实现。</p>
-<ul>
-<li>运行你的程序，设置所有的能影响程序运行的东西。</li>
-<li>保证你的程序在指定的条件下停止。</li>
-<li>当你程序停止时，让你检查发生了什么。</li>
-<li>改变你的程序。那样你可以试着修正某个bug引起的问题，然后继续查找另一 个bug</li>
-</ul>
-<p>今天给大家带来的gdb调试工具。GDB是GNU开源组织发布的一个强大的UNIX下的程序调试工具。GDB可以调试C、C++、D、Go、python、pascal、assemble(ANSI 汇编标准)等等语言。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/05/05/GDB%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80%EF%BC%8C%E8%AE%A9%E4%BD%A0%E7%9A%84%E7%A8%8B%E5%BA%8Fbug%E6%97%A0%E5%A4%84%E8%BA%B2%E8%97%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
