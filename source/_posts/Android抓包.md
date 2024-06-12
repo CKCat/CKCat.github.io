@@ -9,7 +9,7 @@ category: Android
 
 ## 使用 Charles 抓包
 
-1. PC 端共享无线网络，使用 ipconfig 命令查看 ip 地址：
+1. PC 端共享无线网络，使用 `ipconfig` 命令查看 ip 地址：
 
 ![](Android抓包/2020-12-30-16-09-26.png)
 
@@ -21,11 +21,15 @@ category: Android
 
 ![](Android抓包/2020-12-30-16-12-38.png)
 
+![](Android抓包/2024-02-27-11-34-07.png)
+
 4. 安装证书
 
 手机端访问 `chls.pro/ssl` 下载证书并安装。其中可以通过 Magisk 插件 [MoveCertificate](https://github.com/ys1231/MoveCertificate) 将证书从用户证书移动到系统证书。后续即可进行抓包了。 **如果无法进行抓包，尝试一下关闭 Windows 防火墙。**
 
-> brup 配置好代理后，下载证书地址 http://burp 。
+brup 配置好代理后，下载证书地址 http://burp 。
+
+brup 通过 `Proxy Setttings -> Import /export CA certificate` 导出 `Certificate in DER format` 的证书，然后再通过手机安装该证书后却无法抓 https 数据包，提示你的连接不是私密连接 `NET::ERR_CERT_AUTHORITY_INVALID` 。
 
 如果系统为 Android 7 以下的版本，可以手动将用户证书移动到系统证书。
 
@@ -187,4 +191,3 @@ https://www.cnblogs.com/lulianqi/p/11380794.html
 https://www.52pojie.cn/thread-1826013-1-1.html
 
 http://91fans.com.cn/post/certificate/#gsc.tab=0
-
