@@ -7,40 +7,74 @@ category: Android逆向
 
 # 动态调试送给最好的 TA
 
-> 如果手机系统是 android 10 以上，那么需要 IDA 的版本大于 7.3，并且需要设置一下 `IDA_LIBC_PATH` 的环境变量。
+如果手机系统是 android 10 以上，那么需要 IDA 的版本大于 7.3，并且需要设置 `IDA_LIBC_PATH` 的环境变量。
 
 ```bash
 $ export IDA_LIBC_PATH=/apex/com.android.runtime/lib/bionic/libc.so   # 32 位
 $ export IDA_LIBC_PATH=/apex/com.android.runtime/lib64/bionic/libc.so # 64 位
 ```
 
-参考：https://bbs.pediy.com/thread-258103.htm
+**开启手机的调试模式**
 
-本文使用以下调试环境测试均未发现问题：
+💡 推荐使用下列方式开启调试模式。
+
+**magisk 版本**
 
 ```bash
-IDA 7.7 + android 9 设置 ro.debuggable 为true 。
-IDA 7.7 + android 10 设置 ro.debuggable 为true 。
+$ adb shell                          # adb进入命令行模式
+$ su                                 # 切换至超级用户
+# magisk resetprop ro.debuggable 1
+# stop;start;                        # 一定要通过该方式重启
 ```
-设置 `ro.debuggable` 为 `true` 使用了这个插件 [MagiskHidePropsConf](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf)
 
-还有一个 xposed 插件 [XAppDebug](https://github.com/Palatis/XAppDebug)，暂时没有使用过，不知道效果如何。
+**kernelSU 版本**
+
+```bash
+$ adb shell                         # adb进入命令行模式
+$ su                                # 切换至超级用户
+# resetprop ro.debuggable 1
+# stop;start;                       # 一定要通过该方式重启
+```
+
+~~可选下面的方式开启调试模式（不推荐）：~~
+
+~~使用 [MagiskHidePropsConf](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf) 插件。~~
+
+~~使用 [XAppDebug](https://github.com/Palatis/XAppDebug) 插件，经测试在 Android 13 上使用该插件没有效果。~~
 
 ## 常规方式
 
-### 1. 使用 IDA 打开需要调试的 so 文件，找到关键的方法，设置断点。
+1. 使用 IDA 打开需要调试的 so 文件，找到关键的方法，设置断点。
 
-![](IDA动态调试so/2021-02-22-20-57-11.png)
+   ![](IDA动态调试so/2021-02-22-20-57-11.png)
 
-### 2. 选择 Android 调试器，设置 hostname 和端口。
+2. 选择 Android 调试器，设置 hostname 和端口，并设置 Debugger options。
 
-![](IDA动态调试so/2021-02-22-20-58-08.png)
+   ![](IDA动态调试so/2021-02-22-20-58-08.png)
 
-### 3. 开始调试
+   ![](IDA动态调试so/2024-06-21-17-23-22.png)
+
+3. 开始调试
 
 - 启动 `android_server` 。
+
+  ```bash
+  $ adb push android_server /data/local/tmp
+  $ adb shell
+  $ su
+  # chmod +x /data/local/tmp/android_server
+  # /data/local/tmp/android_server
+  ```
+
 - 端口转发 `adb forward tcp:23946 tcp:23946` 。
-- 以调试模式启动对应的 Activaty ，`adb shell am start -D -n com.sgzh.dt/com.androlua.Welcome` 。
+
+  ```bash
+  $ adb forward tcp:23946 tcp:23946
+  ```
+
+- 以调试模式启动对应的 Activaty ，`adb shell am start -D -n com.sgzh.dt/com.androlua.Welcome` ，可以使用 `adb shell dumpsys window | findstr mCurrentFocus` 命令获取 `包名/主Activity`。
+
+- 然后点击 `Debugger->Attach to process`，并找到要调试的进程，双击连接。
 
 需要注意的是，在安装 APK 时，检查对应 apk 的属性，需要满足以下两个属性均为 `true`，可以通过使用 `apktool` 解包后修改重新打包实现，也可以使用面具模块或 `xposed` 模块实现。
 
@@ -49,33 +83,36 @@ android:debuggable="true"
 android:extractNativeLibs="true"
 ```
 
-> `android:extractNativeLibs = "true"` 时，gradle 打包时会对工程中的 so 库进行压缩，最终生成 apk 包的体积会减小。但用户在手机端进行 apk 安装时，系统会对压缩后的 so 库进行解压，一般解压到 `/data/app/ `某一目录下，从而造成用户安装 apk 的时间变长。如果为 false 则不会解压到该目录。
+> 💡 `android:extractNativeLibs = "true"` 时，gradle 打包时会对工程中的 so 库进行压缩，最终生成 apk 包的体积会减小。但用户在手机端进行 apk 安装时，系统会对压缩后的 so 库进行解压，一般解压到 `/data/app/ `某一目录下，从而造成用户安装 apk 的时间变长。如果为 false 则不会解压到该目录。
 > `minSdkVersion >= 23` 并且 `Android Gradle plugin >= 3.6.0` 情况下，打包时默认`android:extractNativeLibs=false`， 如果该属性为`false`，虽然 IDA 可以正常附加，但是无法加载对应的 so 进行调试，所以如果未开启 so 压缩会直接导致程序执行的时候 ida 不能够识别到响应的 so 加载，导致无法定位到 so 中的代码从而无法停在断点。对于未开启 so 压缩的情况需要通过重打包来修改该字段以便可以定位到 so。
-> 针对性的，也有相应的模块，用于 Hook 安卓的安装器，让其在安装时将该属性的值设为 true，从而能够正确的调试，例如项目[ForceExtractNativeLibs](https://github.com/AlienwareHe/ForceExtractNativeLibs)即通过 Xposed 进行 Hook 在安装时重置该属性。
+> 针对性的，也有相应的模块，用于 Hook 安卓的安装器，让其在安装时将该属性的值设为 true，从而能够正确的调试，例如项目[ForceExtractNativeLibs](https://github.com/AlienwareHe/ForceExtractNativeLibs)即通过 Xposed 进行 Hook 在安装时重置该属
+> 性。
+
+💡 如果不想这么复杂，直接把 so 复制到 `/data/app/包名/lib` 里面，就会优先加载这个目录里面的 so，或者直接在 IDA 中的 module 中选择 `base.apk`,然后定位到需要调试的地址，然后手动按 P 将其转为 code，然后就可以下断点调试。
 
 执行完以上操作完，使用 IDA 附加对应的 APP 。
 
 ![](IDA动态调试so/2021-02-22-21-02-38.png)
 
-### 4. jdb 连接
+4. jdb 连接
 
 通过执行 `adb forward tcp:<port> jdwp:<pid>` 命令将 host 机器上的 port 端口转发到 Android 上的调试进程，以便调试器通过这个端口连接到目标进程。
 
-> 打开 monitor 应用，使用 DDMS 查看 APP 的调试端口可以达到同样的目的。
-
-这里将转发的 port 指定为 8700，假设进程 ID 为 12345，对应的命令为：
-
 ```bash
-adb forward tcp:8700 jdwp:12345
+$ adb shell ps | findstr com.sgzh.dt    # 获取进程 pid
+u0_a276      19299  9848 15413200 149548 0                  0 S com.sgzh.dt
+$ adb forward tcp:8700 jdwp:19299       # 将 8700 端口转发到调试进程
 ```
+
+> ~~打开 monitor 应用，使用 DDMS 查看 APP 的调试端口可以达到同样的目的（不推荐）。~~
 
 然后使用 `jdb` 命令连接：
 
 ```bash
-jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。
+$ jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700
 ```
 
-此时 APP 将会运行起来，IDA 将会弹出下列界面，点击 same 就可以了。
+在 IDA 中直接 F9 运行，此时 APP 将会运行起来，IDA 将会弹出下列界面，点击 same 就可以了。
 
 ![](IDA动态调试so/2021-02-22-21-07-35.png)
 
@@ -83,7 +120,7 @@ jdb -connect com.sun.jdi.SocketAttach:hostname=127.0.0.1,port=8700` 。
 
 ![](IDA动态调试so/2021-02-22-21-08-20.png)
 
-### 5. 分析并 dump lua 字节码
+5. 分析并 dump lua 字节码
 
 通过参考其他文章可知 luaL_loadbufferx 是关键解密函数，但是也需要我们要分析解密的具体地方。看到有 malloc 就很可疑。我们就需要重点关注这个地方。通过调试发现其申请的空间就是存放解密后的 lua 字节码。
 
@@ -119,7 +156,7 @@ fp.close()
 print "Dump OK"
 ```
 
-### 将字节码转换为 lua 代码
+**将字节码转换为 lua 代码**
 
 在网上找到 `unluac_2015_06_13.jar` ，将 lua 节码转换为 lua 代码。
 
@@ -129,7 +166,7 @@ print "Dump OK"
 
 这种方式主要是探索 IDA 断点的字节码，同样使用于探索其他调试器的断点字节码。
 
-### 修改字节码
+**1. 修改字节码**
 
 使用 IDA 打开需要调试的 so 文件，找到关键的方法，修改字节码，并将修改后的内容保存至文件。
 
@@ -141,10 +178,9 @@ print "Dump OK"
 
 使用的 IDA 插件：
 
-```bash
-下载Keypatch.py复制到插件目录：https://github.com/keystone-engine/keypatch
-下载安装keystone python模块：https://github.com/keystone-engine/keystone/releases/download/0.9.1/keystone-0.9.1-python-win64.msi
-```
+下载 `Keypatch.py` 复制到 IDA 的插件目录，`Keypatch` 项目主页：https://github.com/keystone-engine/keypatch
+
+下载安装 keystone python 模块，keystone 项目主页 ：https://github.com/keystone-engine/keystone
 
 **注意**
 
@@ -152,9 +188,9 @@ print "Dump OK"
 
 最后重打包，按照之前的方式调试即可。
 
-# 如何在 `.init_proc` 和 `init_arrary` 调用下断点
+## 如何在 `.init_proc` 和 `init_arrary` 调用下断点
 
-## `.init_proc` 函数和 `init_arrary` 的产生方法。
+**`.init_proc` 函数和 `init_arrary` 的产生方法。**
 
 `_init` 函数经过编译后就是 `.init_proc` 函数，是目前我所知道的在 so 最早被调用的函数 。`_init` 函数无参，无返回值，其次必须函数名必须是 `_init` ，并且不能名称粉碎。
 
@@ -170,7 +206,7 @@ print "Dump OK"
 
 可以看到先执行的 `.init_proc` 函数，然后执行 `init_arrary` 节里的函数，最后执行 JNI_Onload 。
 
-## 通过源码找到调用的关键位置
+**通过源码找到调用的关键位置**
 
 由于 `.init_proc` 和 `init_arrary` 是在 so 加载完成前调用的，那么就需要知道他们是在何时调用的，这里就需要跟一下 dlopen 的源码，最终会发现调用他们实现在 `linker.cpp `中，这一块大家有兴趣可以自己看看。我这里就直接给 android 7.1.2 源码中的关键点了。
 
@@ -196,7 +232,7 @@ void soinfo::call_function(const char* function_name __unused,
 
 ![](IDA动态调试so/2021-02-24-19-19-27.png)
 
-## 开始调试
+**开始调试**
 
 当在 libc 中断下来直接，ctrl+s 找到 linker 的基址，然后加上偏移 0x6414 。可以发现其基址为 0xF44DC000+0x6414 = F44E2414 最后跳到此处，下断点直接 F9 运行。然后 jdb 连接，最终会断在此处，F7 单步步入，即为 `.init_proc` 函数，继续执行就会又断在此处，F7 步入，则 test_construtor 函数。
 
@@ -214,10 +250,14 @@ void soinfo::call_function(const char* function_name __unused,
 
 [init_proc 相关代码](https://github.com/CKCat/CKCat.github.io/tree/main/source/_posts/IDA动态调试so/ndkcode)
 
-参考：
+# 参考：
+
+https://bbs.pediy.com/thread-258103.htm
 
 https://bbs.pediy.com/thread-254770.htm
 
 https://bbs.kanxue.com/thread-266378.htm
 
 https://blog.lleavesg.top/article/IDA-Androidso
+
+https://showfaker.top/2024/05/18/android-binary-for-beginner
