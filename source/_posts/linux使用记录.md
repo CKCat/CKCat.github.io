@@ -501,10 +501,7 @@ $ im-config     # 打开配置，选择 fcitx 输入法
 然后最小安装 Fcitx 5 ，分别是主程序，中文输入法引擎，图形界面相关。
 
 ```bash
-sudo apt install fcitx5 \
-fcitx5-chinese-addons \
-fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 \
-fcitx5-frontend-qt5 kde-config-fcitx5
+$ sudo apt install -y fcitx5 fcitx5-chinese-addons
 ```
 
 然后安装[中文词库](https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases).
@@ -526,20 +523,6 @@ https://github.com/wuhgit/CustomPinyinDictionary
 $ im-config
 ```
 
-设置环境变量，即将以下配置项写入用户或系统环境变量，这里我写入系统环境变量 `/etc/profile` 中：
-
-```bash
-export XMODIFIERS=@im=fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-```
-
-使用 `Tweaks` 设置 `fcitx5` 为自动启动。如果没有安装 `Tweaks` 可以运行下列命令安装。
-
-```bash
-$ sudo apt install gnome-tweaks
-```
-
 使用命令行命令 `fcitx5-configtool` 打开 `Fcitx5` 配置图形界面，将 `pinyin` 加入默认分组中。
 
 可以在 GitHub [搜索主题](https://github.com/search?q=fcitx5+theme&type=Repositories)，然后在 `Fcitx5 configtool -> Addons -> Classic User Inteface` 中设置即可。
@@ -556,7 +539,7 @@ $ sudo apt install gnome-tweaks
 
    ```bash
    $ cat /dev/zero > zero; sync; sleep 1; rm -f zero
-   $ dd if=/dev/zero of=zero bs=1G count=10000     # 或者使用 dd 命令
+   $ dd if=/dev/zero of=zero bs=1G count=10000; sync; sleep 1; rm -f zero    # 或者使用 dd 命令
    ```
 
    当出现下列错误时，说明虚拟机上的剩余空间已经释放完成。
@@ -604,7 +587,9 @@ https://blog.csdn.net/Michael__One/article/details/103850274
 内核版本大于 4.0 的虚拟机，使用下列命令。
 
 ```bash
-$ sudo vmhgfs-fuse .host:/ /mnt/hgfs -o subtype=vmhgfs-fuse,allow_other
+$ vmware-hgfsclient # 检查是否识别到共享目录
+$ sudo mkdir /mnt/hgfs # 创建共享目录
+$ sudo vmhgfs-fuse .host:/ /mnt/hgfs -o subtype=vmhgfs-fuse,allow_other # 启用共享
 ```
 
 ### ubuntu 重置网络配置

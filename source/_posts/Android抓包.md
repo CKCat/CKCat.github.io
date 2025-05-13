@@ -169,6 +169,22 @@ Charles 安装在物理机上。
 3. 设置 Charles
    在 Charles 菜单栏选择 `Proxy -> SSL Proxying Settings -> SSL Proxying` ，选中 Enable SSL Proxying，并且在 Include 选项添加 Location，Host 和 Port 都设置为 `*`。
 
+##  Chrome访问提示不安全的网站
+
+Chrome浏览器对证书的信任策略一直在变化，比如最新版本的Chrome浏览器会忽略安装到Android系统证书目录的自签CA证书，如果需要对Chrome浏览器进行抓包，请按照下面的方式进行处理：
+
+- 如果是高版本Chrome浏览器，需要将CA证书安装到用户证书目录；
+- 如果是低版本的Chrome浏览器，需要将CA证书安装到系统证书目录。
+
+如果不确定选用那种方式，可以分别尝试下。
+
+## Firefox访问提示不安全的网站
+
+Firefox浏览器使用内置的CA Store，系统安装的CA证书无法生效，需要在Firefox调试菜单中启用信任。
+
+- Firefox设置 -> 关于Firefox -> 点击顶部Logo 5下启用调试菜单。
+- Firefox设置 -> Secret Settings -> 启用 Use third party CA certificates。
+
 # 微信抓包
 
 1. 首先用数据线把手机连接到电脑。
@@ -181,6 +197,9 @@ Charles 安装在物理机上。
    edge 浏览器输入：`edge://inspect/#devices`
 
 打开后稍等片刻，然后在打开的界面中点击 inspect fallback 。
+
+
+
 
 # 参考连接：
 

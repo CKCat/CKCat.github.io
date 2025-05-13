@@ -36,6 +36,17 @@ $ su                                # 切换至超级用户
 # stop;start;                       # 一定要通过该方式重启
 ```
 
+如果是安卓 14 以上的版本，那么 `ro.debuggable` 属性已经没用了。
+
+```bash
+adb shell
+su
+magisk resetprop ro.build.type userdebug
+magisk resetprop persist.debug.dalvik.vm.jdwp.enabled 1
+stop;start
+```
+参考： https://bbs.kanxue.com/thread-286634-1.htm fjqisba 的回答。
+
 ~~可选下面的方式开启调试模式（不推荐）：~~
 
 ~~使用 [MagiskHidePropsConf](https://github.com/Magisk-Modules-Repo/MagiskHidePropsConf) 插件。~~
