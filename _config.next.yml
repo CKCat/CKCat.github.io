@@ -103,7 +103,6 @@ menu:
   #schedule: /schedule/ || fa fa-calendar
   #sitemap: /sitemap.xml || fa fa-sitemap
   gena-nav: https://ckcat.github.io/CKCat-gena-nav/ || fa fa-navicon
-  aibard: https://aibard123.com/?github || fa fa-eye
   commonweal: /404/ || fa fa-heartbeat
 
 # Enable / Disable menu icons / item badges.
