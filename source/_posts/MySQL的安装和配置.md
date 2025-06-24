@@ -317,7 +317,7 @@ alias /var/lib/mysql/ -> ~/.mysqldata/mysql,
 $ sudo systemctl restart apparmor
 ```
 
- 注意：如果跳过 AppArmor 配置步骤，则会遇到以下错误消息：
+注意：如果跳过 AppArmor 配置步骤，则会遇到以下错误消息：
 
 ```bash
 Job for mysql.service failed because the control process
