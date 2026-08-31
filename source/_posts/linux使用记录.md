@@ -221,7 +221,6 @@ https://juejin.im/post/5bed2b45f265da61530457ee
    $ sudo npm i -g npm
    ```
 
-
 ### 解决 Ubuntu 下 KeePass2 中文显示为方块的问题
 
 **推荐安装 [keepassxc](https://keepassxc.org/)**
@@ -423,6 +422,96 @@ $ sudo systemctl restart docker
 ```
 
 参考： https://yeasy.gitbook.io/docker_practice/install/ubuntu
+
+#### 设置代理
+
+https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6
+
+提供一个 linux 环境下比较稳定的方案，修改 systemd server文件，加入代理配置。 执行: `sudo systemctl status docker` 查看 `docker.service`
+
+```bash
+sudo systemctl status docker
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; preset: enabled)
+   Active: active (running) since Fri 2025-01-03 09:54:53 CST; 7h ago
+TriggeredBy: ● docker.socket
+      Docs: https://docs.docker.com
+   Main PID: 2500 (dockerd)
+      Tasks: 295
+   Memory: 68.0G (peak: 73.5G)
+      CPU: 2min 56.308s
+```
+
+比如我的这个 ubuntu24.04 机器上，修改：`/usr/lib/systemd/system/docker.service`，在 `[Service]` 后面加入代理的配置：
+
+```
+Environment="HTTP_PROXY=http://127.0.0.1:7890"
+Environment="HTTPS_PROXY=http://127.0.0.1:7890"
+Environment="ALL_PROXY=socks5://127.0.0.1:7890"
+```
+
+然后重启：
+
+```
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+完整 `docker.service`：
+
+```
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target docker.socket firewalld.service containerd.service time-set.target
+Wants=network-online.target containerd.service
+Requires=docker.socket
+
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+Environment="HTTP_PROXY=http://127.0.0.1:7890"
+Environment="HTTPS_PROXY=http://127.0.0.1:7890"
+Environment="ALL_PROXY=socks5://127.0.0.1:7890"
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+ExecReload=/bin/kill -s HUP $MAINPID
+TimeoutStartSec=0
+RestartSec=2
+Restart=always
+
+# Note that StartLimit* options were moved from "Service" to "Unit" in systemd 229.
+# Both the old, and new location are accepted by systemd 229 and up, so using the old location
+# to make them work for either version of systemd.
+StartLimitBurst=3
+
+# Note that StartLimitInterval was renamed to StartLimitIntervalSec in systemd 230.
+# Both the old, and new name are accepted by systemd 230 and up, so using the old name to make
+# this option work for either version of systemd.
+StartLimitInterval=60s
+
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNPROC=infinity
+LimitCORE=infinity
+
+# Comment TasksMax if your systemd version does not support it.
+# Only systemd 226 and above support this option.
+TasksMax=infinity
+
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+
+# kill only the docker process, not all processes in the cgroup
+KillMode=process
+OOMScoreAdjust=-500
+
+[Install]
+WantedBy=multi-user.target
+```
+
+各种镜像加速服务试了基本都不可用。在自已有代理的情况下，还是这个方法好。
 
 #### 使用 APT 安装
 
@@ -643,6 +732,7 @@ $ wine tools/IDA7.7_Portable/ida.exe # 根据自己的实际位置进行修改
 ```
 
 如果需要安装 python 库，也可以直接使用pip 进行安装，例如安装 `yara-python==4.2.0`。
+
 ```bash
 wine pip install yara-python==4.2.0
 ```
